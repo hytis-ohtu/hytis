@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: backend
+    ports:
+      - "8000:5000"
+  postgres: #WIP
+    image: "postgres:alpine"
+
+  frontend: 
+    build: frontend
+    ports: 
+      - "8000:5000"
