@@ -1,0 +1,13 @@
+#currently copied from materials, placeholder values
+apiVersion: v1
+kind: Service
+metadata:
+  name: hashresponse-svc #WIP
+spec:
+  type: ClusterIP
+  selector:
+    app: hashresponse
+  ports:
+    - port: 2345
+      protocol: TCP
+      targetPort: 3000

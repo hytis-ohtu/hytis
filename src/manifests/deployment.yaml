@@ -1,7 +1,7 @@
 # How to run this deployment:
 #  Run 
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployment #type of the thing, deployment or service. Service helps with networking
 metadata:
   name: sijoittaja-dep
 spec:
