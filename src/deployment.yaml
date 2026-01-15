@@ -1,0 +1,19 @@
+# How to run this deployment:
+#  Run 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sijoittaja-dep
+spec:
+  replicas: 1 #amount of copies of the image
+  selector:
+    matchLabels:
+      app: sijoittaja
+  template:
+    metadata:
+      labels:
+        app: sijoittaja
+    spec:
+      containers: #here is the used docker image
+        - name: sijoittaja
+          image: l0uko/sijoittaja-backend:latest
