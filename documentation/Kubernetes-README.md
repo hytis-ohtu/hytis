@@ -5,4 +5,4 @@
  - ```kubectl delete -f manifests/deployment.yaml```
  
  ### Infokomentoja
- - 
+ - ```kubectl get deployments```

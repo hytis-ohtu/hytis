@@ -9,18 +9,18 @@
 # can use the Ingress as the first stop. If you're familiar with
 # reverse proxies like Nginx, Ingress should seem familiar.
 
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: dwk-material-ingress
-#spec:
-#  rules:
-#  - http:
-#      paths:
-#      - path: /
-#        pathType: Prefix
-#        backend:
-#          service:
-#            name: hashresponse-svc
-#            port:
-#              number: 2345
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dwk-material-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sijoittaja-svc
+            port:
+              number: 2345

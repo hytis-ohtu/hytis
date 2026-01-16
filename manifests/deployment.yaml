@@ -15,10 +15,7 @@ spec:
         app: sijoittaja
     spec:
       containers: #here is the used docker image
-        - name: sijoittaja
-          image: l0uko/sijoittaja-backend:latest
+        - name: sijoittaja-front
+          image: l0uko/sijoittaja-frontend:latest
           #ports:
-          #  - contanerPort: 3000
-          #env: 
-          # - name: DB_URL
-          #   value: #insert value here
+          #  - contanerPort: 4173

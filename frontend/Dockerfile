@@ -1,16 +1,18 @@
-FROM ubuntu:latest
-WORKDIR /usr/local/app
+FROM node:alpine
+WORKDIR /usr/src/app
 
 # Install the application dependencies
 # Depends on language WIP
 
 # Copy in the source code
-COPY . .
 # Expose port WIP
-EXPOSE 8090 
+EXPOSE 4173 
+COPY package.json ./
+RUN npm ci
+COPY . .
 
 # Setup an app user so the container doesn't run as the root user
-RUN useradd app
-USER app
-
-CMD [ "npm" ]
+#RUN useradd app
+#USER app
+RUN npm run build
+CMD [ "npm", "run", "preview"]
