@@ -17,6 +17,3 @@ spec:
           image: l0uko/sijoittaja-frontend:latest
           ports:
             - containerPort: 4173
-          env:
-           - name: DB_URL
-             value: postgresql://ohtuprojektitesti:passwordhere@hostnamehere:5432/ohtuprojekti?targetServerType=primary&ssl=true

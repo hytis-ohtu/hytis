@@ -18,6 +18,6 @@ spec:
     app: sijoittaja
   ports:
     - protocol: TCP
-      port: 80         
-      targetPort: 4173  
+      port: 80
+      targetPort: 4173
   type: ClusterIP
