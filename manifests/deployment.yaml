@@ -15,5 +15,6 @@ spec:
       containers:
         - name: sijoittaja
           image: l0uko/sijoittaja-frontend:staging
+          imagePullPolicy: Always
           ports:
             - containerPort: 4173
