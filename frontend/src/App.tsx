@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import "./App.css";
 import Exactum2 from "./assets/exactum-2.svg?react";
 import pingServer from "./services/pingService";
-import "./App.css";
 
 function App() {
   useEffect(() => {
