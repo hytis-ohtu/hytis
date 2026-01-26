@@ -22,13 +22,39 @@ cd Sijoittaja
 npm run install:all
 ```
 
-4. Start the backend development server (in a new terminal)
+4. Set up environment variables
+
+Create a `.env` file in the `backend` directory with the following contents:
+
+```bash
+DATABASE_URL=YOUR_DATABASE_URL_HERE
+```
+
+**Option A: Using Docker PostgreSQL (recommended for development)**
+
+If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
+
+```bash
+DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
+```
+
+Start the database container in a new terminal (leave it running):
+
+```bash
+npm run start:db
+```
+
+**Option B: Using your own PostgreSQL instance**
+
+Configure `DATABASE_URL` to point to your existing PostgreSQL database.
+
+5. Start the backend development server (in a new terminal)
 
 ```bash
 npm run dev:backend
 ```
 
-5. Start the frontend development server (in a new terminal)
+6. Start the frontend development server (in a new terminal)
 
 ```bash
 npm run dev:frontend
@@ -39,6 +65,10 @@ npm run dev:frontend
 #### General
 
 - `npm run install:all` - Install dependencies for both backend and frontend
+
+#### Database
+
+- `npm run start:db` - Start PostgreSQL database in Docker container
 
 #### Backend
 
