@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./App.css";
-import Exactum2 from "./assets/exactum-2.svg?react";
+import MainView from "./components/MainView";
 import pingServer from "./services/pingService";
 
 function App() {
@@ -19,11 +19,7 @@ function App() {
     ping();
   }, []);
 
-  return (
-    <div className="wrapper">
-      <Exactum2 className="floor-image" />
-    </div>
-  );
+  return <MainView />;
 }
 
 export default App;
