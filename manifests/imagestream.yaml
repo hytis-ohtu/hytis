@@ -1,19 +1,19 @@
-#kind: ImageStream
-#apiVersion: image.openshift.io/v1
-#
-#metadata:
-#  name: sijoittaja
-#  labels:
-#    app: sijoittaja
-#spec:
-#  lookupPolicy:
-#    local: false
-#  tags:
-#    - name: staging
-#      from:
-#        kind: DockerImage
-#        name: l0uko/sijoittaja-frontend:staging
-#      importPolicy:
-#        scheduled: true
-#      referencePolicy:
-#        type: Local
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+
+metadata:
+  name: sijoittaja-frontend
+  labels:
+    app: sijoittaja-frontend
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: staging
+      from:
+        kind: DockerImage
+        name: l0uko/sijoittaja-frontend:staging
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Local

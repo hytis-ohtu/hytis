@@ -1,28 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  #annotations:
-  #  alpha.image.policy.openshift.io/resolve-names: "*"
-  #  image.openshift.io/triggers: >-
-  #    [{"from":{"kind":"ImageStreamTag","name":"sijoittaja:staging","namespace":"ohtuprojekti-staging"},"fieldPath":"spec.template.spec.containers[?(@.name==\"sijoittaja\")].image","pause":"false"}]
-  name: sijoittaja-dep
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: "*"
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"sijoittaja:staging","namespace":"ohtuprojekti-staging"},"fieldPath":"spec.template.spec.containers[?(@.name==\"sijoittaja-frontend\")].image","pause":"false"}]
+  name: sijoittaja-frontend-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sijoittaja
+      app: sijoittaja-frontend
   template:
     metadata:
       labels:
-        app: sijoittaja
+        app: sijoittaja-frontend
     spec:
       containers:
-<<<<<<< HEAD
-        - name: sijoittaja
-=======
         - name: sijoittaja-frontend
->>>>>>> origin/main
-          image: l0uko/sijoittaja-frontend:staging
+          image: sijoittaja-frontend:staging
           ports:
             - containerPort: 4173
           resources:
@@ -32,14 +28,4 @@ spec:
             requests:
               memory: "50Mi"
               cpu: "50m"
-        - name: sijoittaja-backend
-          image: l0uko/sijoittaja-backend:staging
-          ports:
-            - containerPort: 3000
-          resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-            requests:
-              memory: "50Mi"
-              cpu: "50m"
+
