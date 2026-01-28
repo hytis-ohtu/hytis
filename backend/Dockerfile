@@ -12,4 +12,4 @@ EXPOSE 3000
 
 RUN npm run tsc
 
-CMD ["node", "build/index.js"]
+CMD ["node", "build/src/index.js"]
