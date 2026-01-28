@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:db": "docker compose -f database.yaml up",
+    "seed:db": "ts-node-dev src/seed.ts",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint .",

@@ -48,13 +48,19 @@ npm run start:db
 
 Configure `DATABASE_URL` to point to your existing PostgreSQL database.
 
-5. Start the backend development server (in a new terminal)
+5. Seed the database with initial seed data
+
+```bash
+npm run seed:db
+```
+
+6. Start the backend development server (in a new terminal)
 
 ```bash
 npm run dev:backend
 ```
 
-6. Start the frontend development server (in a new terminal)
+7. Start the frontend development server (in a new terminal)
 
 ```bash
 npm run dev:frontend
@@ -69,6 +75,7 @@ npm run dev:frontend
 #### Database
 
 - `npm run start:db` - Start PostgreSQL database in Docker container
+- `npm run seed:db` - Seed database with initial seed data
 
 #### Backend
 
