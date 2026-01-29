@@ -7,6 +7,7 @@
     "start:db": "npm run start:db --prefix backend",
     "seed:db": "npm run seed:db --prefix backend",
     "dev:backend": "npm run dev --prefix backend",
+    "build:backend": "npm run tsc --prefix backend",
     "lint:backend": "npm run lint --prefix backend",
     "start:backend": "npm start --prefix backend",
     "prettier:backend": "npm run prettier --prefix backend",
