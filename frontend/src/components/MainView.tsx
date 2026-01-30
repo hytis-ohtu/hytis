@@ -7,21 +7,6 @@ function MainView() {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function findRoom() {
-      try {
-        const result = await findRoomById("1");
-        console.log("✅ Room details:", result);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error("❌ Failed to fetch room details:", error.message);
-        }
-      }
-    }
-
-    findRoom();
-  }, []);
-
-  useEffect(() => {
     const rooms = document.querySelectorAll("path[id]");
     rooms.forEach((room) => {
       room.classList.add("room");
@@ -29,11 +14,25 @@ function MainView() {
     });
   }, [activeRoomId]);
 
+  async function findRoom(id: string) {
+    try {
+      const result = await findRoomById(id);
+      console.log("✅ Room details:", result);
+    } catch (error: unknown) {
+      let errorMessage = "❌ Failed to fetch room details: ";
+      if (error instanceof Error) {
+        errorMessage += error.message;
+      }
+      console.log(errorMessage);
+    }
+  }
+
   async function handleClick(event: React.MouseEvent<SVGSVGElement>) {
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[id]");
       if (target?.id) {
         console.log("Clicked room with id:", target.id);
+        await findRoom(target.id);
         setActiveRoomId(target.id);
       }
     }
