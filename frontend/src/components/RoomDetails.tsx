@@ -26,6 +26,9 @@ function RoomDetails({
         <h1 className="room-title">Huone</h1>
         <X className="close-room-details" onClick={handleClose} />
       </header>
+      <div className="room-avatar">
+        <h2 className="room-name">{room.name}</h2>
+      </div>
     </motion.div>
   );
 }
