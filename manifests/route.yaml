@@ -4,12 +4,12 @@ metadata:
   name: sijoittaja-route
   namespace: ohtuprojekti-staging
   labels:
-    app: sijoittaja-frontend
+    app: sijoittaja-backend
     type: external
 spec:
-  host: ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi 
+  host: ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi
   port:
-    targetPort: 4173
+    targetPort: 3000
   to:
     kind: Service
     name: sijoittaja-svc

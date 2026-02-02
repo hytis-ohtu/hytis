@@ -15,9 +15,9 @@ metadata:
   name: sijoittaja-svc
 spec:
   selector:
-    app: sijoittaja-frontend
+    app: sijoittaja-backend
   ports:
     - protocol: TCP
-      port: 4173
-      targetPort: 4173
+      port: 3000
+      targetPort: 3000
   type: ClusterIP
