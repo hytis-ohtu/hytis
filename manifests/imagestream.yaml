@@ -12,7 +12,7 @@ spec:
     - name: staging
       from:
         kind: DockerImage
-        name: l0uko/sijoittaja-backend:staging
+        name: ghcr.io/ohtu-tilasijoittelujarjestelma/hytis:staging
       importPolicy:
         scheduled: true
       referencePolicy:

@@ -12,9 +12,9 @@ on:
     branches:
       - 'main'
       - 'dev'
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
+    #paths:
+    #  - 'frontend/**'
+    #  - 'backend/**'
 
 jobs:
   frontend:
