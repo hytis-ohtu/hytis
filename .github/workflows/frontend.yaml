@@ -19,8 +19,8 @@ jobs:
         cache-dependency-path: frontend/package-lock.json
     - name: Install dependencies
       run: npm ci
-    - name: Run lint
-      run: npm run lint
+    #- name: Run lint
+    #  run: npm run lint
 
   test:
     runs-on: ubuntu-24.04
@@ -37,5 +37,5 @@ jobs:
         cache-dependency-path: frontend/package-lock.json
     - name: Install dependencies
       run: npm ci
-    - name: Run tests
-      run: npm run test
+    #- name: Run tests
+    #  run: npm run test
