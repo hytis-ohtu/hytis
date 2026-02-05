@@ -16,9 +16,9 @@
         - 'frontend/**'
         - 'backend/**'
 
-  jobs:
-    frontend:
-      uses: ./.github/workflows/frontend.yaml
+  #jobs:
+  #  frontend:
+  #    uses: ./.github/workflows/frontend.yaml
 
     #backend:
     #  uses: ./.github/workflows/backend.yaml
