@@ -29,7 +29,7 @@ jobs:
     if: |
       always()
       && github.ref == 'refs/heads/dev'
-    needs: [frontend, backend]
+    #needs: [frontend, backend]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
