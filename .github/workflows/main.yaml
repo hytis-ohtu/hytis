@@ -18,10 +18,10 @@ on:
 
 jobs:
   frontend:
-    uses: ./.github/workflows/frontend.yaml
+    uses: ./.github/workflows/frontend.yml
 
   backend:
-    uses: ./.github/workflows/backend.yaml
+    uses: ./.github/workflows/backend.yml
     secrets:
       SECRET: ${{ secrets.SECRET }}
 
