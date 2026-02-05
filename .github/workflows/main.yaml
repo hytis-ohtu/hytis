@@ -43,18 +43,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      #- name: Setup buildx
-      #  uses: docker/setup-buildx-action@v3
-      #- name: Build and push
-      #  uses: docker/build-push-action@v6
-      #  with:
-      #    push: true
-      #    tags: |
-      #      ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:staging
-      #      ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:${{ github.sha }}
-      #    #cache-from: type=registry,ref=ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:buildcache
-      #    #cache-to: type=registry,ref=ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:buildcache,mode=max
-      #    build-args: EXPO_PUBLIC_SOCKET_URL_WEB_ARG=https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: |
+            ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:staging
+            ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:${{ github.sha }}
+          cache-from: type=registry,ref=ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:buildcache
+          cache-to: type=registry,ref=ghcr.io/OhTu-Tilasijoittelujarjestelma/hytis:buildcache,mode=max
+          build-args: EXPO_PUBLIC_SOCKET_URL_WEB_ARG=https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi
 #
   #build-and-push-prod:
   #  if: |
