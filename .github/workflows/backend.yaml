@@ -1,10 +1,11 @@
 name: "backend pipeline"
- 
+
 on:
-  push:
-    branches:
-      - main
-      - dev
+  workflow_call:
+    secrets:
+      SECRET:
+        required: true
+
 jobs:
   lint:
     runs-on: ubuntu-24.04
