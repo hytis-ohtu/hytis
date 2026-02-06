@@ -2,9 +2,9 @@ kind: ImageStream
 apiVersion: image.openshift.io/v1
 
 metadata:
-  name: sijoittaja-frontend
+  name: sijoittaja-backend
   labels:
-    app: sijoittaja-frontend
+    app: sijoittaja-backend
 spec:
   lookupPolicy:
     local: false
@@ -12,7 +12,7 @@ spec:
     - name: staging
       from:
         kind: DockerImage
-        name: l0uko/sijoittaja-frontend:staging
+        name: l0uko/sijoittaja-backend:staging
       importPolicy:
         scheduled: true
       referencePolicy:

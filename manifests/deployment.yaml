@@ -4,23 +4,26 @@ metadata:
   annotations:
     alpha.image.policy.openshift.io/resolve-names: "*"
     image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"sijoittaja:staging","namespace":"ohtuprojekti-staging"},"fieldPath":"spec.template.spec.containers[?(@.name==\"sijoittaja-frontend\")].image","pause":"false"}]
-  name: sijoittaja-frontend-dep
+      [{"from":{"kind":"ImageStreamTag","name":"sijoittaja-backend:staging","namespace":"ohtuprojekti-staging"},"fieldPath":"spec.template.spec.containers[?(@.name==\"sijoittaja-backend\")].image","pause":"false"}]
+  name: sijoittaja-backend-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sijoittaja-frontend
+      app: sijoittaja-backend
   template:
     metadata:
       labels:
-        app: sijoittaja-frontend
+        app: sijoittaja-backend
     spec:
       containers:
-        - name: sijoittaja-frontend
-          image: sijoittaja-frontend:staging
+        - name: sijoittaja-backend
+          image: l0uko/sijoittaja-backend:staging
           ports:
-            - containerPort: 4173
+            - containerPort: 3000
+          env:
+           - name: DB_URL
+             value: 'postgresql://neondb_owner:npg_XpTUAvmjn1C4@ep-shiny-field-agupt0rb-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
           resources:
             limits:
               memory: "512Mi"

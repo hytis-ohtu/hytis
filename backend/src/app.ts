@@ -4,6 +4,7 @@ import { config, isProduction } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRoutes from "./routes/authRoutes";
+import roomsRouter from "./routes/roomsRouter";
 
 const app = express();
 
@@ -27,6 +28,8 @@ const setUpApp = async () => {
 
   app.use("/api", authRoutes);
 
+  app.use("/api/rooms", roomsRouter);
+
   app.get("/ping", (_req, res) => {
     console.log("someone pinged here");
     res.send("pong");
@@ -41,6 +44,10 @@ const setUpApp = async () => {
       redis: isProduction ? "enabled" : "disabled",
     });
   });
+
+  if (isProduction) {
+    app.use(express.static("build/dist"));
+  }
 };
 
 setUpApp().catch((err) => {

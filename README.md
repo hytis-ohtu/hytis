@@ -107,3 +107,4 @@ npm run dev:frontend
 - `npm run build:frontend` - Build frontend for production
 - `npm run preview:frontend` - Preview production build locally
 - `npm run lint:frontend` - Run linter for frontend code
+

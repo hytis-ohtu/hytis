@@ -37,3 +37,21 @@
 .logout-button:hover {
   background-color: #5568d3;
 }
+
+.room {
+  pointer-events: all;
+  cursor: pointer;
+  fill: oklch(70.4% 0.04 256.788);
+}
+
+.room:hover {
+  fill: oklch(83.7% 0.128 66.29);
+}
+
+.room.active {
+  fill: oklch(75% 0.183 55.934);
+}
+
+g[stroke]:not(.room) {
+  pointer-events: none;
+}
