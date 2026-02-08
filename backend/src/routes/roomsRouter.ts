@@ -4,6 +4,15 @@ import { Contract, Department, Person, Room, Title } from "../models";
 const router = Router();
 
 router.get(
+  "/",
+  async (_req: Request, res: Response<Room[]>): Promise<Response<Room[]>> => {
+    const rooms = await Room.findAll({ attributes: ["id", "name"] });
+
+    return res.status(200).json(rooms);
+  },
+);
+
+router.get(
   "/:id",
   async (
     req: Request<{ id: string }>,
