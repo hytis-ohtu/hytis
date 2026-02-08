@@ -10,6 +10,7 @@
     "module": "commonjs",
     "target": "ES6",
     "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     //"types": [],
     // For nodejs:
     // "lib": ["esnext"],

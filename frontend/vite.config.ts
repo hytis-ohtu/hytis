@@ -6,6 +6,6 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [react(), svgr()],
   preview: {
-    allowedHosts: ["ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi"],
+    allowedHosts: ["hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi"],
   },
 });
