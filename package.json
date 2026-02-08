@@ -15,7 +15,8 @@
     "build:frontend": "npm run build --prefix frontend",
     "lint:frontend": "npm run lint --prefix frontend",
     "preview:frontend": "npm run preview --prefix frontend",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e-report": "playwright show-report"
   },
   "repository": {
     "type": "git",
