@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja/issues"
   },
-  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme"
+  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
 }
