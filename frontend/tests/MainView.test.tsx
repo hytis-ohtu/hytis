@@ -10,7 +10,7 @@ vi.mock("../src/contexts/AuthContext", () => ({
   }),
 }));
 
-vi.mock("../assets/exactum-2.svg?react", () => ({
+vi.mock("../src/assets/exactum-2.svg?react", () => ({
   default: () => <svg data-testid="mock-svg" />,
 }));
 
@@ -20,5 +20,6 @@ describe("MainView", () => {
   it("renders without crashing", () => {
     render(<MainView />);
     expect(screen.getByText("Test User")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
   });
 });
