@@ -40,10 +40,10 @@ router.get(
     });
 
     if (!room) {
-      return res.json({ error: "Room not found." });
+      return res.status(404).json({ error: "Room not found." });
     }
 
-    return res.json(room);
+    return res.status(200).json(room);
   },
 );
 
