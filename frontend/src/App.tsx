@@ -2,8 +2,19 @@ import { useEffect } from "react";
 import "./App.css";
 import MainView from "./components/MainView";
 import pingServer from "./services/pingService";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
+
+function AppContent() {
+  const { user, isLoading, needsLogin, login } = useAuth();
+
   useEffect(() => {
     async function ping() {
       try {
@@ -18,6 +29,23 @@ function App() {
 
     ping();
   }, []);
+
+  useEffect(() => {
+    if (needsLogin) {
+      const timer = setTimeout(() => {
+        login();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [needsLogin, login]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (needsLogin) {
+    return <div className="wrapper">Redirecting to login page...</div>;
+  }
 
   return <MainView />;
 }

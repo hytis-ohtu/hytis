@@ -14,7 +14,9 @@
     "dev:frontend": "npm run dev --prefix frontend",
     "build:frontend": "npm run build --prefix frontend",
     "lint:frontend": "npm run lint --prefix frontend",
-    "preview:frontend": "npm run preview --prefix frontend"
+    "preview:frontend": "npm run preview --prefix frontend",
+    "test:frontend": "npm run test --prefix frontend",
+    "coverage:frontend": "npm run coverage --prefix frontend"
   },
   "repository": {
     "type": "git",

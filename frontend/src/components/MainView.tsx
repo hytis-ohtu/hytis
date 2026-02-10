@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.svg?react";
+import { useAuth } from "../contexts/AuthContext";
 import { findRoomById } from "../services/roomsService";
 import "./MainView.css";
 
 function MainView() {
+  const { user, logout } = useAuth();
+
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,9 +42,19 @@ function MainView() {
   }
 
   return (
-    <div className="wrapper">
-      <Exactum2 className="floor-image" onClick={handleClick} />
-    </div>
+    <>
+      <header className="main-header">
+        <div className="user-info">
+          <span className="user-name">{user?.name}</span>
+          <button className="logout-button" onClick={() => void logout()}>
+            Logout
+          </button>
+        </div>
+      </header>
+      <div className="wrapper">
+        <Exactum2 className="floor-image" onClick={handleClick} />
+      </div>
+    </>
   );
 }
 
