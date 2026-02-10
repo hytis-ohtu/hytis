@@ -13,8 +13,8 @@ export const configureSession = async (app: Application): Promise<void> => {
   const sessionOptions = await createSessionOptions();
   app.use(session(sessionOptions));
 
-  app.use(passport.initialize() as any);
-  app.use(passport.session() as any);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   configurePassportSerialization();
 };
@@ -67,12 +67,18 @@ const createSessionOptions = async (): Promise<session.SessionOptions> => {
 
 const configurePassportSerialization = (): void => {
   passport.serializeUser(
-    (user: Express.User, done: (err: any, id?: Express.User) => void) => {
+    (
+      user: Express.User,
+      done: (err: Error | null, id?: Express.User) => void,
+    ) => {
       done(null, user);
     },
   );
   passport.deserializeUser(
-    (user: Express.User, done: (err: any, user?: Express.User) => void) => {
+    (
+      user: Express.User,
+      done: (err: Error | null, user?: Express.User) => void,
+    ) => {
       done(null, user);
     },
   );

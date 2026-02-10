@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import * as authService from "../services/authService";
 import type { AuthContextType, UserData } from "../types/auth";
 
@@ -37,12 +43,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, needsLogin, logout, login }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, needsLogin, logout, login }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
-
+/* eslint-disable react-refresh/only-export-components */
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (context === undefined) {
