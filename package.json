@@ -16,7 +16,9 @@
     "lint:frontend": "npm run lint --prefix frontend",
     "preview:frontend": "npm run preview --prefix frontend",
     "test:e2e": "playwright test",
-    "test:e2e-report": "playwright show-report"
+    "test:e2e-report": "playwright show-report",
+    "test:frontend": "npm run test --prefix frontend",
+    "coverage:frontend": "npm run coverage --prefix frontend"
   },
   "repository": {
     "type": "git",
