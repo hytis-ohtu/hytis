@@ -1,18 +1,12 @@
 import assert from "node:assert";
 import { test } from "node:test";
-// import supertest from "supertest";
+import supertest from "supertest";
 
-import { reverse } from "../src/utils/for_testing";
+import app from "../src/app";
 
-// const api = supertest(app);
+const api = supertest(app);
 
-test("reverse test", () => {
-  const result = reverse("react");
-
-  assert.strictEqual(result, "tcaer");
-});
-
-test("example", () => {
-  const a = 1 + 2;
-  assert.strictEqual(a, 3);
+test("ping test", async () => {
+  const response = await api.get("/ping");
+  assert.strictEqual(response.text.includes("pong"), true);
 });
