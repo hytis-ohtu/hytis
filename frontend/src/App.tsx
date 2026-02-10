@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
 import MainView from "./components/MainView";
-import pingServer from "./services/pingService";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import pingServer from "./services/pingService";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
 }
 
 function AppContent() {
-  const { user, isLoading, needsLogin, login } = useAuth();
+  const { isLoading, needsLogin, login } = useAuth();
 
   useEffect(() => {
     async function ping() {
