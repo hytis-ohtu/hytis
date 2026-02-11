@@ -1,5 +1,5 @@
 {
-  "name": "sijoittaja",
+  "name": "hytis",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -21,12 +21,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja.git"
+    "url": "git+https://github.com/hytis-ohtu/hytis.git"
   },
   "keywords": [],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja/issues"
+    "url": "https://github.com/hytis-ohtu/hytis/issues"
   },
-  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme"
+  "homepage": "https://github.com/hytis-ohtu/hytis#readme"
 }
