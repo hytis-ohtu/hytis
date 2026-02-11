@@ -3,6 +3,11 @@ import { Contract, Department, Person, Room, Title } from "../models";
 
 const router = Router();
 
+/**
+ * GET /api/rooms
+ * Returns a list of all rooms with id and name
+ * Returns empty array if no rooms exist
+ */
 router.get(
   "/",
   async (_req: Request, res: Response<Room[]>): Promise<Response<Room[]>> => {
