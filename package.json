@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja/issues"
   },
-  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme"
+  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme",
+  "devDependencies": {
+    "@types/supertest": "^6.0.3"
+  }
 }
