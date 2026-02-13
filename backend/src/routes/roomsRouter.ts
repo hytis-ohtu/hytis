@@ -3,12 +3,17 @@ import { Contract, Department, Person, Room, Title } from "../models";
 
 const router = Router();
 
+/**
+ * GET /api/rooms/:id
+ * Returns room details with associated contracts and personnel information
+ * Returns 404 if room not found
+ */
 router.get(
   "/:id",
   async (
     req: Request<{ id: string }>,
-    res: Response,
-  ): Promise<Response<Room>> => {
+    res: Response<Room | { error: string }>,
+  ): Promise<Response<Room | { error: string }>> => {
     const room = await Room.findByPk(req.params.id, {
       attributes: ["id", "name", "area"],
       include: [
@@ -40,10 +45,10 @@ router.get(
     });
 
     if (!room) {
-      return res.json({ error: "Room not found." });
+      return res.status(404).json({ error: "Room not found." });
     }
 
-    return res.json(room);
+    return res.status(200).json(room);
   },
 );
 

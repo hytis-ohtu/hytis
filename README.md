@@ -6,12 +6,12 @@
 
     HTTPS:
     ```bash
-    git clone https://github.com/OhTu-Tilasijoittelujarjestelma/hytis.git
+    git clone https://github.com/hytis-ohtu/hytis.git
     ```
 
     SSH:
     ```bash
-    git clone git@github.com:OhTu-Tilasijoittelujarjestelma/hytis.git
+    git clone git@github.com:hytis-ohtu/hytis.git
     ```
 
 2. Navigate to the project root directory
