@@ -4,89 +4,99 @@
 
 1. Clone the repository
 
-    HTTPS:
-    ```bash
-    git clone https://github.com/hytis-ohtu/hytis.git
-    ```
+   HTTPS:
 
-    SSH:
-    ```bash
-    git clone git@github.com:hytis-ohtu/hytis.git
-    ```
+   ```bash
+   git clone https://github.com/hytis-ohtu/hytis.git
+   ```
+
+   SSH:
+
+   ```bash
+   git clone git@github.com:hytis-ohtu/hytis.git
+   ```
 
 2. Navigate to the project root directory
 
-    ```bash
-    cd HYTiS
-    ```
+   ```bash
+   cd HYTiS
+   ```
 
 3. Install all dependencies
 
-    ```bash
-    npm run install:all
-    ```
+   ```bash
+   npm run install:all
+   ```
 
 4. Set up environment variables
 
-    **Backend**
+   **Backend**
 
-    Create a `.env` file in the `backend` directory with the following contents:
+   Create a `.env` file in the `backend` directory with the following contents:
 
-    ```bash
-    DATABASE_URL=YOUR_DATABASE_URL_HERE
-    ```
+   ```bash
+   DATABASE_URL=YOUR_DATABASE_URL_HERE
+   PORT=3000
+   NODE_ENV=development
+   SESSION_SECRET=change-this-to-a-long-random-string-in-production
+   SESSION_MAX_AGE=86400000
+   FRONTEND_URL=http://localhost:5173
+   ```
 
-    **Option A: Using Docker PostgreSQL (recommended for development)**
+   These are the variables for development mode.
+   See the .env.example file from backend folder to see the production variables.
 
-    If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
+   **Option A: Using Docker PostgreSQL (recommended for development)**
 
-    ```bash
-    DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
-    ```
+   If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
 
-    Start the database container in a new terminal (leave it running):
+   ```bash
+   DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
+   ```
 
-    ```bash
-    npm run start:db
-    ```
+   Start the database container in a new terminal (leave it running):
 
-    **Option B: Using your own PostgreSQL database**
+   ```bash
+   npm run start:db
+   ```
 
-    Configure `DATABASE_URL` to point to your existing PostgreSQL database.
+   **Option B: Using your own PostgreSQL database**
 
-    **Frontend**
+   Configure `DATABASE_URL` to point to your existing PostgreSQL database.
 
-    Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
+   **Frontend**
 
-    `.env.development`:
+   Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
 
-    ```bash
-    VITE_API_URL=http://localhost:3000
-    ```
+   `.env.development`:
 
-    `.env.production`:
+   ```bash
+   VITE_API_URL=http://localhost:3000
+   ```
 
-    ```bash
-    VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
-    ```
+   `.env.production`:
+
+   ```bash
+   VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
+   ```
 
 5. Add seed data to the database
 
-    ```bash
-    npm run seed:db
-    ```
+   ```bash
+   npm run seed:db
+   ```
 
 6. Start the backend development server (in a new terminal)
 
-    ```bash
-    npm run dev:backend
-    ```
+   ```bash
+   npm run dev:backend
+   ```
 
 7. Start the frontend development server (in a new terminal)
 
-    ```bash
-    npm run dev:frontend
-    ```
+   ```bash
+   npm run dev:frontend
+   ```
 
 ## npm commands
 

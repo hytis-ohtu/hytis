@@ -2,18 +2,19 @@
   "name": "backend",
   "version": "1.0.0",
   "type": "module",
-  "description": "tilasijoittelu backend",
+  "description": "hytis backend",
   "main": "index.js",
   "scripts": {
     "start:db": "docker compose -f database.yaml up",
     "seed:db": "ts-node-dev src/seed.ts",
     "tsc": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "start": "node build/src/index.js",
-    "test": "tsx --test"
+    "test": "tsx --test",
+    "coverage": "tsx --experimental-test-coverage --test"
   },
-  "author": "tilasijoittelija-tiimi",
+  "author": "hytis-tiimi",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -24,6 +25,7 @@
     "@types/express-session": "^1.18.2",
     "@types/node": "^25.0.10",
     "@types/passport": "^1.0.17",
+    "@types/supertest": "^6.0.3",
     "eslint": "^9.39.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "supertest": "^7.2.2",

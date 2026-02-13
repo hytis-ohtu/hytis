@@ -1,5 +1,5 @@
 {
-  "name": "sijoittaja",
+  "name": "hytis",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -16,17 +16,18 @@
     "lint:frontend": "npm run lint --prefix frontend",
     "preview:frontend": "npm run preview --prefix frontend",
     "test:backend": "npm run test --prefix backend",
+    "coverage:backend": "npm run coverage --prefix backend",
     "test:frontend": "npm run test --prefix frontend",
     "coverage:frontend": "npm run coverage --prefix frontend"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja.git"
+    "url": "git+https://github.com/hytis-ohtu/hytis.git"
   },
   "keywords": [],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja/issues"
+    "url": "https://github.com/hytis-ohtu/hytis/issues"
   },
-  "homepage": "https://github.com/OhTu-Tilasijoittelujarjestelma/Sijoittaja#readme"
+  "homepage": "https://github.com/hytis-ohtu/hytis#readme"
 }
