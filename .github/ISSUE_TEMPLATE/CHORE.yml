@@ -1,4 +1,5 @@
 name: "Chore"
+description: "Luo uusi Chore"
 type: "Chore"
 body:
   - type: textarea

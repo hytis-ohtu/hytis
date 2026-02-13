@@ -1,4 +1,5 @@
 name: "Task"
+description: "Luo uusi Task"
 type: "Task"
 body:
   - type: textarea
