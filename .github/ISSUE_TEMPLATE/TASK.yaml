@@ -1,0 +1,18 @@
+name: "Task"
+type: "Task"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Kuvaus
+      placeholder: |
+        Esim. Docker-imagelle annetaan tagi :release
+  - type: textarea
+    id: ac
+    attributes:
+      label: Osatehtävät
+      placeholder: |
+        Esim.
+        - [ ] Tokenin tarkistaminen
+        - [ ] Landing page mikä tarkistaa onko kirjautuneena, käyttäjälle ei näy mitään
+        - [ ] Redirect main sivulle
