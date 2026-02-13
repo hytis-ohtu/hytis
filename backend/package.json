@@ -8,7 +8,7 @@
     "start:db": "docker compose -f database.yaml up",
     "seed:db": "ts-node-dev src/seed.ts",
     "tsc": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "start": "node build/src/index.js",
     "test": "tsx --test"
