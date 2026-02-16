@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hytis-config
+data:
+  DB_URL: postgresql://neondb_owner:npg_XpTUAvmjn1C4@ep-shiny-field-agupt0rb-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+  OIDC_CLIENT_ID: id_valuesehe_see_the_spregistry
+  OIDC_CLIENT_SECRET: secret_secretvaluehere_see_the_spregistry
+  OIDC_REDIRECT_URI: https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi/api/login/callback
+  OIDC_ISSUER: https://login-test.it.helsinki.fi/.well-known/openid-configuration
+  REDIS_HOST: redis-svc
+  SESSION_SECRET: randomsecretstringhere
