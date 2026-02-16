@@ -1,110 +1,123 @@
-# Sijoittaja
+# HYTiS
 
-## Instructions
+## Development
 
 1. Clone the repository
 
-```bash
-HTTPS - git clone https://github.com/aarnif/Sijoittaja.git
+   HTTPS:
 
-SSH - git clone git@github.com:aarnif/Sijoittaja.git
-```
+   ```bash
+   git clone https://github.com/hytis-ohtu/hytis.git
+   ```
+
+   SSH:
+
+   ```bash
+   git clone git@github.com:hytis-ohtu/hytis.git
+   ```
 
 2. Navigate to the project root directory
 
-```bash
-cd Sijoittaja
-```
+   ```bash
+   cd HYTiS
+   ```
 
 3. Install all dependencies
 
-```bash
-npm run install:all
-```
+   ```bash
+   npm run install:all
+   ```
 
 4. Set up environment variables
 
-**Backend environment variables**
+   **Backend**
 
-Create a `.env` file in the `backend` directory with the following contents:
+   Create a `.env` file in the `backend` directory with the following contents:
 
-```bash
-DATABASE_URL=YOUR_DATABASE_URL_HERE
-```
+   ```bash
+   DATABASE_URL=YOUR_DATABASE_URL_HERE
+   PORT=3000
+   NODE_ENV=development
+   SESSION_SECRET=change-this-to-a-long-random-string-in-production
+   SESSION_MAX_AGE=86400000
+   FRONTEND_URL=http://localhost:5173
+   ```
 
-**Option A: Using Docker PostgreSQL (recommended for development)**
+   These are the variables for development mode.
+   See the .env.example file from backend folder to see the production variables.
 
-If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
+   **Option A: Using Docker PostgreSQL (recommended for development)**
 
-```bash
-DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
-```
+   If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
 
-Start the database container in a new terminal (leave it running):
+   ```bash
+   DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
+   ```
 
-```bash
-npm run start:db
-```
+   Start the database container in a new terminal (leave it running):
 
-**Option B: Using your own PostgreSQL instance**
+   ```bash
+   npm run start:db
+   ```
 
-Configure `DATABASE_URL` to point to your existing PostgreSQL database.
+   **Option B: Using your own PostgreSQL database**
 
-**Frontend environment variables**
+   Configure `DATABASE_URL` to point to your existing PostgreSQL database.
 
-Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
+   **Frontend**
 
-`.env.development`:
+   Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
 
-```bash
-VITE_API_URL=http://localhost:3000
-```
+   `.env.development`:
 
-`.env.production`:
+   ```bash
+   VITE_API_URL=http://localhost:3000
+   ```
 
-```bash
-VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
-```
+   `.env.production`:
 
-5. Seed the database with initial seed data
+   ```bash
+   VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
+   ```
 
-```bash
-npm run seed:db
-```
+5. Add seed data to the database
+
+   ```bash
+   npm run seed:db
+   ```
 
 6. Start the backend development server (in a new terminal)
 
-```bash
-npm run dev:backend
-```
+   ```bash
+   npm run dev:backend
+   ```
 
 7. Start the frontend development server (in a new terminal)
 
-```bash
-npm run dev:frontend
-```
+   ```bash
+   npm run dev:frontend
+   ```
 
-### Available Commands
+## npm commands
 
-#### General
+### General
 
 - `npm run install:all` - Install dependencies for both backend and frontend
 
-#### Database
+### Database
 
 - `npm run start:db` - Start PostgreSQL database in Docker container
-- `npm run seed:db` - Seed database with initial seed data
+- `npm run seed:db` - Add seed data to the database
 
-#### Backend
+### Backend
 
 - `npm run dev:backend` - Start backend in development mode
 - `npm run start:backend` - Start backend in production mode
 - `npm run lint:backend` - Run linter for backend code
 
-#### Frontend
+### Frontend
 
 - `npm run dev:frontend` - Start frontend development server
 - `npm run build:frontend` - Build frontend for production
 - `npm run preview:frontend` - Preview production build locally
 - `npm run lint:frontend` - Run linter for frontend code
-

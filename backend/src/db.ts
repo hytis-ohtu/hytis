@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import config from "../config";
+import { DATABASE_URL } from "./config/environmentConfig";
 
-const sequelize = new Sequelize(config.DATABASE_URL, {
+const sequelize = new Sequelize(DATABASE_URL, {
   dialect: "postgres",
 });
 
