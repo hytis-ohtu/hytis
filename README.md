@@ -1,5 +1,5 @@
 # HYTiS
-
+Project URL: https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi
 ## Development
 
 1. Clone the repository
