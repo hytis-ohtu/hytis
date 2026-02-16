@@ -3,7 +3,7 @@
  */
 import "dotenv/config";
 
-export const DATABASE_URL = process.env.DATABASE_URL || "";
+export const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/test_db";
 
 export const isProduction = process.env.NODE_ENV === "production";
 export const isDevelopment = process.env.NODE_ENV === "development";
