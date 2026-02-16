@@ -10,7 +10,7 @@ export const isDevelopment = process.env.NODE_ENV === "development";
 
 export const config = {
   port: parseInt(process.env.PORT || "3000"),
-  nodeEnv: process.env.NODE_ENV || "development",
+  nodeEnv: process.env.NODE_ENV || "production",
 
   sessionSecret: process.env.SESSION_SECRET || "dev-secret-change-this",
   sessionMaxAge: parseInt(process.env.SESSION_MAX_AGE || "86400000"), // 24h
