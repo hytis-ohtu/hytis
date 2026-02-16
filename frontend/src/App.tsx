@@ -14,6 +14,7 @@ function App() {
 
 function AppContent() {
   const { isLoading, needsLogin, login } = useAuth();
+  const { isLoading, needsLogin, login } = useAuth();
 
   useEffect(() => {
     async function ping() {
