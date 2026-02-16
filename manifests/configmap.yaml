@@ -10,3 +10,4 @@ data:
   OIDC_ISSUER: https://login-test.it.helsinki.fi/.well-known/openid-configuration
   REDIS_HOST: redis-svc
   SESSION_SECRET: randomsecretstringhere
+  NODE_ENV: "production" 
