@@ -11,4 +11,4 @@ data:
   REDIS_HOST: redis-svc
   SESSION_SECRET: randomsecretstringhere
   NODE_ENV: "production" 
-  FRONTEND_URL: https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi/
+  FRONTEND_URL: https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi
