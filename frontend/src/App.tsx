@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
+import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
 import pingServer from "./services/pingService";
 
 function App() {
@@ -13,7 +14,6 @@ function App() {
 }
 
 function AppContent() {
-  const { isLoading, needsLogin, login } = useAuth();
   const { isLoading, needsLogin, login } = useAuth();
 
   useEffect(() => {
