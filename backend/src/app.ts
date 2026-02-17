@@ -45,9 +45,9 @@ const setUpApp = async () => {
     });
   });
 
-  if (isProduction) {
+  
     app.use(express.static("build/dist"));
-  }
+  
 };
 
 setUpApp().catch((err) => {
