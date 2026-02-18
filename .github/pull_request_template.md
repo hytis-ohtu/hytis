@@ -1,44 +1,39 @@
-<!-- Vaihda jokaisen kohdan kuvaus ... tilalle. -->
+<!-- Fill the description of each field in place of the ... -->
 
-### Kuvaus
+### Description
 
-<!-- Lyhyt kuvaus toiminnallisuudesta -->
-
-...
-
-### Arkkitehtuuri
-
-<!-- Onko sovelluksen arkkitehtuuriin tehty muutoksia? -->
+<!-- Short description of the changes introduced in the PR -->
 
 ...
 
-### Perustelu
+### Architecture
 
-<!-- Miksi tämä muutos on oleellinen? -->
+<!-- Do the changes affect the program architecture -->
 
 ...
 
-### Liittyvät Issuet
+### Motive
 
-<!-- Lisää Taskin GitHub Issue-id -->
+<!-- Why is this change necessary? -->
+
+...
+
+### Related Issues
+
+<!-- Add the GitHub Issue-id of the task -->
 
 closes ...
 
-### Testaus
+### Testing
 
-<!-- Onko toiminnallisuudelle tehty testejä? -->
-<!-- Jos on, mitä testejä? Jos ei, miksi? -->
-
-...
-
-### Dokumentaatio
-
-<!-- Onko toiminnallisuudelle tehty dokumentaatio GitHub Wikiin? -->
-<!-- Jos on, mitä on dokumentoitu? Jos ei, miksi -->
+<!-- Have tests been added for the changes? -->
+<!-- If yes, what types of tests? If no, why not? -->
 
 ...
 
-### Definition of Done
+### Documentation
 
-- [ ] Taskin nimen kuvaama toiminnallisuus on toteutettu
-- [ ] Taskin kaikki osakohdat ovat valmiit
+<!-- Have the changes been documented in the GitHub Wiki? -->
+<!-- If yes, what has been documented? If no, why not? -->
+
+...
