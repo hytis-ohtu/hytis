@@ -32,4 +32,3 @@ spec:
             - configMapRef:
                 name: hytis-config
 
-
