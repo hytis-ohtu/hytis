@@ -18,12 +18,6 @@
 
 ...
 
-### Related Issues
-
-<!-- Add the GitHub Issue-id of the task -->
-
-closes ...
-
 ### Testing
 
 <!-- Have tests been added for the changes? -->
