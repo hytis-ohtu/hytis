@@ -15,11 +15,7 @@ export const config = {
   sessionSecret: process.env.SESSION_SECRET || "dev-secret-change-this",
   sessionMaxAge: parseInt(process.env.SESSION_MAX_AGE || "86400000"), // 24h
 
-  redis: {
-    host: process.env.REDIS_HOST || "localhost",
-    port: parseInt(process.env.REDIS_PORT || "6379"),
-    password: process.env.REDIS_PASSWORD,
-  },
+  redis: process.env.REDIS_URL || "",
 
   oidc: {
     clientId: process.env.OIDC_CLIENT_ID,
