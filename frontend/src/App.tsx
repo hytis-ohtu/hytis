@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import "./App.css";
-import MainView from "./components/MainView";
 import AuthProvider from "./components/AuthProvider";
+import MainView from "./components/MainView";
 import { useAuth } from "./contexts/AuthContext";
 import pingServer from "./services/pingService";
 

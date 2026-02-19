@@ -1,0 +1,67 @@
+name: "backend pipeline"
+
+on:
+  workflow_call:
+    secrets:
+      SECRET:
+        required: true
+
+jobs:
+  lint: #also builds
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '25'
+        cache: "npm"
+        cache-dependency-path: backend/package-lock.json
+    - name: Install dependencies
+      run: npm ci
+    - name: Build
+      run: npm run tsc
+    - name: Run lint
+      run: npm run lint
+
+  test:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '25'
+        cache: "npm"
+        cache-dependency-path: backend/package-lock.json
+    - name: Install dependencies
+      run: npm ci
+    #- name: Run database migrations
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+    #  run: npx prisma migrate deploy
+    - name: Run tests
+      #env:
+      #  #DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+      #  SECRET: ${{ secrets.SECRET }}
+      run: npm run test
