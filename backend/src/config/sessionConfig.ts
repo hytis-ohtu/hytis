@@ -23,11 +23,7 @@ const createSessionOptions = async (): Promise<session.SessionOptions> => {
   if (isProduction) {
     console.log("Setting up Redis session store for production");
 
-    const redisClient = new Redis({
-      host: config.redis.host,
-      port: config.redis.port,
-      password: config.redis.password,
-    });
+    const redisClient = new Redis(config.redis);
 
     redisClient.on("error", (err) => console.log("Redis Client Error", err));
     redisClient.on("connect", () => console.log("Connected to Redis"));
