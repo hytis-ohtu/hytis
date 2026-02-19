@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "type": "module",
   "description": "hytis backend",
   "main": "index.js",
   "scripts": {
@@ -11,8 +10,8 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "start": "node build/src/index.js",
-    "test": "tsx --test",
-    "coverage": "tsx --experimental-test-coverage --test"
+    "test": "npx jest",
+    "coverage": "npx jest --coverage"
   },
   "author": "hytis-tiimi",
   "license": "MIT",
@@ -23,12 +22,15 @@
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.18.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.0.10",
     "@types/passport": "^1.0.17",
     "@types/supertest": "^6.0.3",
     "eslint": "^9.39.2",
+    "jest": "^30.2.0",
     "prettier-plugin-organize-imports": "^4.3.0",
     "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

@@ -1,7 +1,7 @@
 # Use postgres/example user/password credentials
 
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
     # set shared memory limit when using docker compose
@@ -16,3 +16,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: example
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
