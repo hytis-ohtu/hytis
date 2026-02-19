@@ -1,6 +1,7 @@
 import "express-session";
 
 declare global {
+  /* eslint-disable @typescript-eslint/no-namespace */
   namespace Express {
     interface User {
       id: string;
@@ -12,8 +13,8 @@ declare global {
     interface Request {
       user?: User;
       isAuthenticated(): boolean;
-      login(user: User, done: (err: any) => void): void;
-      logout(done: (err: any) => void): void;
+      login(user: User, done: (err: Error | null) => void): void;
+      logout(done: (err: Error | null) => void): void;
     }
   }
 }

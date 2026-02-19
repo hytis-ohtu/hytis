@@ -1,0 +1,12 @@
+name: "Chore"
+description: "Luo uusi Chore"
+type: "Chore"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Kuvaus
+      placeholder: |
+        Esim.
+        End-to-end-testit toteutetaan playwright-kirjastolla.
+        Testit tulevat hakemiston juureen e2e-tests-kansioon.

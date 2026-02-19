@@ -2,7 +2,11 @@
  * IN PRODUCTION: Configures Passport to use OpenID Connect for authenticationm, not used in development mode
  */
 
-import { Issuer, Strategy as OpenIDStrategy } from "openid-client";
+import {
+  Issuer,
+  Strategy as OpenIDStrategy,
+  type StrategyVerifyCallbackUserInfo,
+} from "openid-client";
 import passport from "passport";
 import { config, isProduction } from "./environmentConfig";
 
@@ -17,11 +21,10 @@ interface UserInfo {
   hyGroupCn?: string;
 }
 
-const verifyLogin: any = async (
-  req: any,
-  tokenSet: any,
-  userinfo: UserInfo,
-  done: (err: any, user?: Express.User | false) => void,
+const verifyLogin: StrategyVerifyCallbackUserInfo<Express.User, UserInfo> = (
+  tokenSet,
+  userinfo,
+  done,
 ) => {
   console.log("User logged in via OIDC:", userinfo.uid);
   console.log("User info:", userinfo);
@@ -87,14 +90,14 @@ export const configurePassport = async () => {
 
     passport.use(
       "oidc",
-      new OpenIDStrategy(
+      new OpenIDStrategy<Express.User>(
         {
           client,
           params,
           passReqToCallback: false,
           usePKCE: false,
         },
-        verifyLogin,
+        verifyLogin as unknown as StrategyVerifyCallbackUserInfo<Express.User>,
       ),
     );
 

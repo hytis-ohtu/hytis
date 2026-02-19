@@ -13,8 +13,8 @@ export const configureSession = async (app: Application): Promise<void> => {
   const sessionOptions = await createSessionOptions();
   app.use(session(sessionOptions));
 
-  app.use(passport.initialize() as any);
-  app.use(passport.session() as any);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   configurePassportSerialization();
 };
@@ -23,11 +23,7 @@ const createSessionOptions = async (): Promise<session.SessionOptions> => {
   if (isProduction) {
     console.log("Setting up Redis session store for production");
 
-    const redisClient = new Redis({
-      host: config.redis.host,
-      port: config.redis.port,
-      password: config.redis.password,
-    });
+    const redisClient = new Redis(config.redis);
 
     redisClient.on("error", (err) => console.log("Redis Client Error", err));
     redisClient.on("connect", () => console.log("Connected to Redis"));
@@ -67,12 +63,18 @@ const createSessionOptions = async (): Promise<session.SessionOptions> => {
 
 const configurePassportSerialization = (): void => {
   passport.serializeUser(
-    (user: Express.User, done: (err: any, id?: Express.User) => void) => {
+    (
+      user: Express.User,
+      done: (err: Error | null, id?: Express.User) => void,
+    ) => {
       done(null, user);
     },
   );
   passport.deserializeUser(
-    (user: Express.User, done: (err: any, user?: Express.User) => void) => {
+    (
+      user: Express.User,
+      done: (err: Error | null, user?: Express.User) => void,
+    ) => {
       done(null, user);
     },
   );
