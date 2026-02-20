@@ -1,1 +1,9 @@
 .DS_Store
+
+# Playwright
+node_modules/
+e2e-tests/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
