@@ -5,8 +5,8 @@
 import { RedisStore } from "connect-redis";
 import { Application } from "express";
 import session from "express-session";
-import Redis from "ioredis";
 import passport from "passport";
+import { createClient } from "redis";
 import { config, isProduction } from "./environmentConfig";
 
 export const configureSession = async (app: Application): Promise<void> => {
@@ -23,10 +23,12 @@ const createSessionOptions = async (): Promise<session.SessionOptions> => {
   if (isProduction) {
     console.log("Setting up Redis session store for production");
 
-    const redisClient = new Redis(config.redis);
+    const redisClient = createClient({ url: config.redis });
 
     redisClient.on("error", (err) => console.log("Redis Client Error", err));
     redisClient.on("connect", () => console.log("Connected to Redis"));
+
+    await redisClient.connect();
 
     const redisStore = new RedisStore({
       client: redisClient,
