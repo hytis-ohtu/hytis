@@ -2,7 +2,7 @@ import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.svg?react";
 import { useAuth } from "../contexts/AuthContext";
-import { findRoomById } from "../services/roomsService";
+import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
@@ -13,6 +13,32 @@ function MainView() {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
+
+  useEffect(() => {
+    async function mapIdsToRoomElements() {
+      try {
+        const result = await findAllRooms();
+
+        const roomsMap = new Map(result.map((room) => [room.name, room.id]));
+
+        const roomElements = document.querySelectorAll("path[data-room]");
+
+        roomElements.forEach((element) => {
+          const roomName = element.getAttribute("data-room");
+          if (roomName && roomsMap.has(roomName)) {
+            element.id = String(roomsMap.get(roomName));
+          }
+        });
+      } catch (error: unknown) {
+        let errorMessage = "❌ Failed to map rooms: ";
+        if (error instanceof Error) {
+          errorMessage += error.message;
+        }
+        console.log(errorMessage);
+      }
+    }
+    mapIdsToRoomElements();
+  }, []);
 
   useEffect(() => {
     const rooms = document.querySelectorAll("path[data-room]");

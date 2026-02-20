@@ -4,6 +4,20 @@ import { Contract, Department, Person, Room, Title } from "../models";
 const router = Router();
 
 /**
+ * GET /api/rooms
+ * Returns a list of all rooms with id and name
+ * Returns empty array if no rooms exist
+ */
+router.get(
+  "/",
+  async (_req: Request, res: Response<Room[]>): Promise<Response<Room[]>> => {
+    const rooms = await Room.findAll({ attributes: ["id", "name"] });
+
+    return res.status(200).json(rooms);
+  },
+);
+
+/**
  * GET /api/rooms/:id
  * Returns room details with associated contracts and personnel information
  * Returns 404 if room not found
