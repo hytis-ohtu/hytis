@@ -28,7 +28,9 @@ if (isProduction) {
   router.get("/login", passport.authenticate("oidc"));
 } else {
   router.get("/login", mockAuthMiddleware, (req: Request, res: Response) => {
-    res.redirect("http://localhost:5173");
+    res.redirect(
+      "https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi",
+    );
   });
 }
 
