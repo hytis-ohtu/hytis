@@ -44,10 +44,7 @@ const setUpApp = async () => {
       redis: isProduction ? "enabled" : "disabled",
     });
   });
-
-  if (isProduction) {
     app.use(express.static("build/dist"));
-  }
 };
 
 setUpApp().catch((err) => {
