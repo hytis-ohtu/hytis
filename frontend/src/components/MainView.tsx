@@ -19,15 +19,19 @@ function MainView() {
       try {
         const result = await findAllRooms();
 
-        const roomsMap = new Map(result.map((room) => [room.name, room.id]));
+        const roomsMap = new Map(result.map((room) => [room.name, room]));
 
         const roomElements = document.querySelectorAll("path[data-room]");
 
         roomElements.forEach((element) => {
           const roomName = element.getAttribute("data-room");
           if (roomName && roomsMap.has(roomName)) {
-            element.id = String(roomsMap.get(roomName));
-            element.classList.add("room");
+            const room = roomsMap.get(roomName);
+
+            if (room) {
+              element.id = String(room.id);
+              element.classList.add("room");
+            }
           }
         });
       } catch (error: unknown) {
