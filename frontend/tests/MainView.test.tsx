@@ -11,7 +11,7 @@ vi.mock("../src/contexts/AuthContext", () => ({
   }),
 }));
 
-vi.mock("../src/assets/exactum-2.svg?react", () => ({
+vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
   default: () => <svg data-testid="mock-svg" />,
 }));
 

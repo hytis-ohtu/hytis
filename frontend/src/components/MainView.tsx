@@ -1,6 +1,6 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
-import Exactum2 from "../assets/exactum-2.svg?react";
+import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useAuth } from "../contexts/AuthContext";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
