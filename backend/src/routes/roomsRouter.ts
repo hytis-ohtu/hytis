@@ -5,13 +5,22 @@ const router = Router();
 
 /**
  * GET /api/rooms
- * Returns a list of all rooms with id and name
+ * Returns a list of all rooms with id, name, area, capacity and contract ids
  * Returns empty array if no rooms exist
  */
 router.get(
   "/",
   async (_req: Request, res: Response<Room[]>): Promise<Response<Room[]>> => {
-    const rooms = await Room.findAll({ attributes: ["id", "name"] });
+    const rooms = await Room.findAll({
+      attributes: ["id", "name", "area", "capacity"],
+      include: [
+        {
+          model: Contract,
+          as: "contracts",
+          attributes: ["id"],
+        },
+      ],
+    });
 
     return res.status(200).json(rooms);
   },
