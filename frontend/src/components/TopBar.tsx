@@ -12,7 +12,7 @@ interface TopBarProps {
   actions?: TopBarAction[];
 }
 
-const TopBar: React.FC<TopBarProps> = ({ title = "HYTis", actions = [] }) => {
+function TopBar({ title = "HYTis", actions = [] }: TopBarProps) {
   return (
     <header className="topbar">
       <span className="topbar__title">{title}</span>
@@ -30,6 +30,6 @@ const TopBar: React.FC<TopBarProps> = ({ title = "HYTis", actions = [] }) => {
       </div>
     </header>
   );
-};
+}
 
 export default TopBar;
