@@ -27,6 +27,7 @@ function MainView() {
           const roomName = element.getAttribute("data-room");
           if (roomName && roomsMap.has(roomName)) {
             element.id = String(roomsMap.get(roomName));
+            element.classList.add("room");
           }
         });
       } catch (error: unknown) {
@@ -43,7 +44,6 @@ function MainView() {
   useEffect(() => {
     const rooms = document.querySelectorAll("path[data-room]");
     rooms.forEach((room) => {
-      room.classList.add("room");
       room.classList.toggle("active", room.id === activeRoomId);
     });
   }, [activeRoomId]);
