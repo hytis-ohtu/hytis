@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
+import TopBar from "./components/TopBar";
 import { useAuth } from "./contexts/AuthContext";
 import pingServer from "./services/pingService";
 
@@ -14,7 +15,7 @@ function App() {
 }
 
 function AppContent() {
-  const { isLoading, needsLogin, login } = useAuth();
+  const { isLoading, needsLogin, login, logout } = useAuth();
 
   useEffect(() => {
     async function ping() {
@@ -48,7 +49,23 @@ function AppContent() {
     return <div className="wrapper">Redirecting to login page...</div>;
   }
 
-  return <MainView />;
+  return (
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <TopBar
+        title="HYTiS"
+        actions={[
+          {
+            id: "logout",
+            icon: "Logout",
+            onClick: () => void logout(),
+          },
+        ]}
+      />
+      <MainView />
+    </div>
+  );
 }
 
 export default App;

@@ -50,14 +50,6 @@ function MainView() {
 
   return (
     <>
-      <header className="main-header">
-        <div className="user-info">
-          <span className="user-name">{user?.name}</span>
-          <button className="logout-button" onClick={() => void logout()}>
-            Logout
-          </button>
-        </div>
-      </header>
       <div className="wrapper">
         <Exactum2 className="floor-image" onClick={handleClick} />
         <AnimatePresence>
