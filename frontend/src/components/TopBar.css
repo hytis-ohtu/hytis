@@ -1,0 +1,53 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 64px;
+  background: #111;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.topbar__title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.topbar__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.topbar__button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.08s;
+}
+
+.topbar__button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.topbar__button:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
