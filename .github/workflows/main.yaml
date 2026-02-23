@@ -28,7 +28,7 @@ jobs:
   build-and-push-dev:
     if: |
       always()
-      && github.ref == 'refs/heads/main'
+      && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     needs: [frontend, backend]
     runs-on: ubuntu-24.04
     permissions:
@@ -39,7 +39,6 @@ jobs:
       - name: log in to ghcr
         uses: docker/login-action@v3
         with:
-          context: .
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
