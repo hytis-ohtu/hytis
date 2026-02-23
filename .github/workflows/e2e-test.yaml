@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  lint: #also builds
+  test: #also builds
     runs-on: ubuntu-24.04
     defaults:
       run:
@@ -19,21 +19,11 @@ jobs:
         cache-dependency-path: frontend/package-lock.json
     - name: Install dependencies
       run: npm run install:all && npm install
+    - name: Install playwright
+      run: npx playwright install
     - name: Build
       run: npm run build:backend && npm run build:frontend
     - name: Run e2e-tests
       run: npm run test:e2e
 
-  test:
-    runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: .
-    steps:
-    - uses: actions/checkout@v4
-    - name: setup node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '25'
-        cache: "npm"
-        cache-dependency-path: frontend/package-lock.json
+
