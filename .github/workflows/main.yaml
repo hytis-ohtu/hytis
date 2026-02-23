@@ -18,6 +18,8 @@ jobs:
     uses: ./.github/workflows/backend.yaml
     secrets:
       SECRET: ${{ secrets.SECRET }}
+  e2e-tests:
+    uses: ./.github/workflows/e2e-test.yaml
 
   build-and-push-dev:
     if: |
