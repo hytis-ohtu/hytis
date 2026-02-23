@@ -35,8 +35,8 @@ function MainView() {
     const map = mapRef.current;
     const container = containerRef.current;
 
-    const sensitivity = 0.02;
-    const maxZoom = 2;
+    const sensitivity = 0.05;
+    const maxZoom = 3;
     const minZoom = 0.5;
 
     const onMouseDown = (e: MouseEvent) => {
@@ -64,8 +64,8 @@ function MainView() {
       const nextX = offsetX + transformValues.current.lastX;
       const nextY = offsetY + transformValues.current.lastY;
 
-      map.style.top = `${nextY}px`;
       map.style.left = `${nextX}px`;
+      map.style.top = `${nextY}px`;
     };
 
     const onScroll = (e: WheelEvent) => {
@@ -77,8 +77,20 @@ function MainView() {
       if (scale > maxZoom) scale = maxZoom;
       else if (scale < minZoom) scale = minZoom;
 
+      let xPos = Number(map.style.left.replace("px", ""));
+      let yPos = Number(map.style.top.replace("px", ""));
+      const x = (e.clientX - xPos) / transformValues.current.scale;
+      const y = (e.clientY - yPos) / transformValues.current.scale;
+      xPos = e.clientX - x * scale;
+      yPos = e.clientY - y * scale;
+
+      transformValues.current.lastX = xPos;
+      transformValues.current.lastY = yPos;
       transformValues.current.scale = scale;
-      map.style.scale = `${transformValues.current.scale}`;
+
+      map.style.left = `${xPos}px`;
+      map.style.top = `${yPos}px`;
+      map.style.scale = `${scale}`;
     };
 
     container.addEventListener("mousedown", onMouseDown);
