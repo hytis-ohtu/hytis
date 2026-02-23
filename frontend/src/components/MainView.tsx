@@ -65,7 +65,7 @@ function MainView() {
   }
 
   useEffect(() => {
-    async function mapIdsToRoomElements() {
+    async function mapDataToRoomElements() {
       try {
         const result = await findAllRooms();
 
@@ -115,7 +115,7 @@ function MainView() {
         console.log(errorMessage);
       }
     }
-    mapIdsToRoomElements();
+    mapDataToRoomElements();
   }, []);
 
   useEffect(() => {
