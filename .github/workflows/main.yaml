@@ -22,7 +22,7 @@ jobs:
   build-and-push-dev:
     if: |
       always()
-      && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+      && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/build/e2e-on-actions'
     needs: [frontend, backend]
     runs-on: ubuntu-24.04
     permissions:
