@@ -23,6 +23,8 @@ jobs:
       run: npx playwright install
     - name: Build
       run: npm run build:backend && npm run build:frontend
+    - name: start database
+      run: npm run start:db
     - name: start backend
       run: npm run start:backend
     - name: start frontend
