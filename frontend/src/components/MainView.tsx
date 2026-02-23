@@ -7,12 +7,49 @@ import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
+const ROOM_LABEL_FONT_SIZE = 24;
+
 function MainView() {
   const { user, logout } = useAuth();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
+
+  function createRoomInfoLabel(
+    centerX: number,
+    centerY: number,
+    lines: string[],
+  ): SVGTextElement {
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", String(centerX));
+    text.setAttribute("y", String(centerY));
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
+    text.classList.add("room-label");
+
+    const fontSize = ROOM_LABEL_FONT_SIZE;
+    text.style.fontSize = `${fontSize}px`;
+    const lineHeight = fontSize * 1.2;
+    // Offset the starting position so the label is centered in the middle of the room
+    const offsetStart = -((lines.length - 1) / 2) * lineHeight;
+
+    lines.forEach((line, i) => {
+      const tspan = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "tspan",
+      );
+      tspan.setAttribute("x", String(centerX));
+      tspan.setAttribute(
+        "dy",
+        i === 0 ? String(offsetStart) : String(lineHeight),
+      );
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+
+    return text;
+  }
 
   useEffect(() => {
     async function mapIdsToRoomElements() {
@@ -31,6 +68,23 @@ function MainView() {
             if (room) {
               element.id = String(room.id);
               element.classList.add("room");
+
+              if (element instanceof SVGGraphicsElement) {
+                const bbox = element.getBBox();
+                const centerX = bbox.x + bbox.width / 2;
+                const centerY = bbox.y + bbox.height / 2;
+
+                const lines = [
+                  roomName,
+                  `${room?.area}m²`,
+                  `${room.contracts?.length}/${room?.capacity}`,
+                ];
+
+                element.parentNode?.insertBefore(
+                  createRoomInfoLabel(centerX, centerY, lines),
+                  element.nextSibling,
+                );
+              }
             }
           }
         });

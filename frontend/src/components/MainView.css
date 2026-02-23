@@ -52,6 +52,12 @@
   fill: oklch(75% 0.183 55.934);
 }
 
+.room-label {
+  fill: #333;
+  font-weight: 500;
+  pointer-events: none;
+}
+
 g[stroke]:not(.room) {
   pointer-events: none;
 }
