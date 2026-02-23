@@ -16,6 +16,19 @@ function MainView() {
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
 
+  function getRoomAvailability(
+    capacity: number,
+    occupants: number,
+  ): "available" | "limited" | "full" {
+    if (occupants === 0 || occupants < capacity - 2) {
+      return "available";
+    }
+    if (occupants < capacity) {
+      return "limited";
+    }
+    return "full";
+  }
+
   function createRoomInfoLabel(
     centerX: number,
     centerY: number,
@@ -68,6 +81,12 @@ function MainView() {
             if (room) {
               element.id = String(room.id);
               element.classList.add("room");
+
+              const availabilityState = getRoomAvailability(
+                room.capacity,
+                room.contracts.length,
+              );
+              element.classList.add(availabilityState);
 
               if (element instanceof SVGGraphicsElement) {
                 const bbox = element.getBBox();
