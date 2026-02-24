@@ -99,10 +99,16 @@ function MainView() {
                   `${room.contracts.length}/${room.capacity}`,
                 ];
 
-                element.parentNode?.insertBefore(
-                  createRoomInfoLabel(centerX, centerY, lines),
-                  element.nextSibling,
+                const group = document.createElementNS(
+                  "http://www.w3.org/2000/svg",
+                  "g",
                 );
+
+                const label = createRoomInfoLabel(centerX, centerY, lines);
+
+                element.parentNode?.insertBefore(group, element);
+                group.appendChild(element);
+                group.appendChild(label);
               }
             }
           }
