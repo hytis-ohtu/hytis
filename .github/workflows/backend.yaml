@@ -65,8 +65,8 @@ jobs:
         #  #DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
         #  SECRET: ${{ secrets.SECRET }}
         run: npm run coverage
-
-      - uses: codecov/codecov-action@v5
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: hytis-ohtu/hytis
