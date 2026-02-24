@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { findAllRooms } from "../src/services/roomsService";
 import MainView from "../src/components/MainView.tsx";
+import { findAllRooms } from "../src/services/roomsService";
 
 vi.mock("../src/contexts/AuthContext", () => ({
   useAuth: () => ({
