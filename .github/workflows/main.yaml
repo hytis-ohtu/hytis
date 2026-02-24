@@ -5,10 +5,11 @@ on:
     branches:
       - main
       - dev
+      - "feat/initialize-codecov"
   pull_request:
     branches:
-      - 'main'
-      - 'dev'
+      - "main"
+      - "dev"
 
 jobs:
   frontend:
