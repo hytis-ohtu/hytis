@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
 
-test("room labels are shown on the floor map", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:5173");
-
   await page.waitForSelector(".room-group");
+});
 
+test("room labels are shown on the floor map", async ({ page }) => {
   const roomLabel = page
     .locator(".room-label")
     .filter({ hasText: "A210" })
@@ -21,10 +22,6 @@ test("room labels are shown on the floor map", async ({ page }) => {
 test("room has correct availability color based on occupancy", async ({
   page,
 }) => {
-  await page.goto("http://localhost:5173");
-
-  await page.waitForSelector(".room-group");
-
   const availableRoom = page.locator('[data-room="A210"]');
   await expect(availableRoom).toHaveClass(/available/);
 
