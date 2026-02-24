@@ -103,6 +103,7 @@ function MainView() {
                   "http://www.w3.org/2000/svg",
                   "g",
                 );
+                group.classList.add("room-group");
 
                 const label = createRoomInfoLabel(centerX, centerY, lines);
 

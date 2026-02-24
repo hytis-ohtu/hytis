@@ -69,6 +69,10 @@
   pointer-events: none;
 }
 
+.room-group:has(.room.active) .room-label {
+  fill: #f8fafc;
+}
+
 g[stroke]:not(.room) {
   pointer-events: none;
 }
