@@ -13,19 +13,19 @@ jobs:
       run:
         working-directory: backend
     steps:
-    - uses: actions/checkout@v4
-    - name: setup node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '25'
-        cache: "npm"
-        cache-dependency-path: backend/package-lock.json
-    - name: Install dependencies
-      run: npm ci
-    - name: Build
-      run: npm run tsc
-    - name: Run lint
-      run: npm run lint
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "25"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run tsc
+      - name: Run lint
+        run: npm run lint
 
   test:
     runs-on: ubuntu-24.04
@@ -47,21 +47,28 @@ jobs:
       run:
         working-directory: backend
     steps:
-    - uses: actions/checkout@v4
-    - name: setup node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '25'
-        cache: "npm"
-        cache-dependency-path: backend/package-lock.json
-    - name: Install dependencies
-      run: npm ci
-    #- name: Run database migrations
-      env:
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-    #  run: npx prisma migrate deploy
-    - name: Run tests
-      #env:
-      #  #DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-      #  SECRET: ${{ secrets.SECRET }}
-      run: npm run test
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "25"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+        #- name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+      #  run: npx prisma migrate deploy
+      - name: Run tests and coverage
+        #env:
+        #  #DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        #  SECRET: ${{ secrets.SECRET }}
+        run: npm run coverage
+
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: hytis-ohtu/hytis
+          files: ./backend/coverage/lcov.info
+          flags: backend
