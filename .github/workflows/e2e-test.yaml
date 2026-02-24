@@ -24,9 +24,9 @@ jobs:
     - name: Build
       run: npm run build:backend && npm run build:frontend
     - name: start backend
-      run: npm run start:backend
+      run: npm run dev:backend
     - name: start frontend
-      run: npm run preview:frontend
+      run: npm run dev:frontend
     - name: Run e2e-tests
       run: npm run test:e2e
 
