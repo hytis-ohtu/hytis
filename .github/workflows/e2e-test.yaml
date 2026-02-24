@@ -38,12 +38,12 @@ jobs:
     - name: Build
       run: npm run build:backend && npm run build:frontend
     - name: start backend
-      run: npm run dev:backend
+      run: npm run dev:backend &
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
         PORT: 3000
     - name: start frontend
-      run: npm run dev:frontend
+      run: npm run dev:frontend &
     - name: Run e2e-tests
       run: npm run test:e2e
 
