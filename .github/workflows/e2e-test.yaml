@@ -6,6 +6,20 @@ on:
 jobs:
   test: #also builds
     runs-on: ubuntu-24.04
+    services:
+        postgres:
+            image: postgres:alpine
+            env:
+                POSTGRES_PASSWORD: postgres
+                POSTGRES_USER: postgres
+                POSTGRES_DB: test_db
+            options: >-
+                --health-cmd pg_isready
+                --health-interval 10s
+                --health-timeout 5s
+                --health-retries 5
+            ports:
+            - 5432:5432
     defaults:
       run:
         working-directory: .
@@ -25,6 +39,9 @@ jobs:
       run: npm run build:backend && npm run build:frontend
     - name: start backend
       run: npm run dev:backend
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        PORT: 3000
     - name: start frontend
       run: npm run dev:frontend
     - name: Run e2e-tests
