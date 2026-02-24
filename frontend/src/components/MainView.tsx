@@ -95,8 +95,8 @@ function MainView() {
 
                 const lines = [
                   roomName,
-                  `${room?.area}m²`,
-                  `${room.contracts?.length}/${room?.capacity}`,
+                  `${room.area}m²`,
+                  `${room.contracts.length}/${room.capacity}`,
                 ];
 
                 element.parentNode?.insertBefore(
