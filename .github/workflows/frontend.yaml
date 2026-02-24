@@ -42,7 +42,7 @@ jobs:
       - name: Run tests and coverage
         run: npm run coverage
 
-      - name: Upload coverage to Codecov
+      - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
