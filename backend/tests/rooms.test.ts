@@ -2,8 +2,15 @@ import supertest from "supertest";
 import app from "../src/app";
 import { contracts } from "../src/data/contracts";
 import { rooms } from "../src/data/rooms";
+import { createAllTables, dropAllTables, seedData } from "../src/seed";
 
 const api = supertest(app);
+
+beforeEach(async () => {
+  await dropAllTables();
+  await createAllTables();
+  await seedData();
+});
 
 test("rooms data is returned as json", async () => {
   await api
