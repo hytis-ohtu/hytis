@@ -19,6 +19,11 @@ vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
         d="M1325.291-1106.835h-9.448v127.748h278.74v-330.33h-274.016v8.315h4.724v9.449h-4.724v175.37h4.724zm166.678-9.448h9.448v9.448h-9.448zm0-184.82h9.448v9.45h-9.448z"
         data-room="A210"
       />
+      <path d="M1598.93-1309.417v144h145.322v-144z" data-room="A211" />
+      <path
+        d="M1750.866-1291.653h-2.835v126.236h96v-144h-98.834v8.315h5.67z"
+        data-room="A212"
+      />
     </svg>
   ),
 }));
@@ -38,10 +43,20 @@ describe("MainView", () => {
     render(<MainView />);
 
     await waitFor(() => {
-      const roomElement = document.querySelector('[data-room="A210"]');
-      expect(roomElement).toHaveAttribute("id", "1");
-      expect(roomElement).toHaveClass("room");
-      expect(roomElement).toHaveClass("available");
+      const availableRoom = document.querySelector('[data-room="A210"]');
+      expect(availableRoom).toHaveAttribute("id", "1");
+      expect(availableRoom).toHaveClass("room");
+      expect(availableRoom).toHaveClass("available");
+
+      const limitedRoom = document.querySelector('[data-room="A211"]');
+      expect(limitedRoom).toHaveAttribute("id", "2");
+      expect(limitedRoom).toHaveClass("room");
+      expect(limitedRoom).toHaveClass("limited");
+
+      const fullRoom = document.querySelector('[data-room="A212"]');
+      expect(fullRoom).toHaveAttribute("id", "3");
+      expect(fullRoom).toHaveClass("room");
+      expect(fullRoom).toHaveClass("full");
     });
   });
 });
