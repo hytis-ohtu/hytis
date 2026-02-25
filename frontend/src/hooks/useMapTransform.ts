@@ -37,7 +37,7 @@ export function useMapTransform() {
       coords.current.startY = e.clientY;
     };
 
-    const onMouseUp = (e: MouseEvent) => {
+    const onMouseUp = () => {
       isClicked.current = false;
       coords.current.lastX = map.offsetLeft;
       coords.current.lastY = map.offsetTop;
