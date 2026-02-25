@@ -5,6 +5,7 @@ import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRoutes from "./routes/authRoutes";
 import roomsRouter from "./routes/roomsRouter";
+import testingRouter from "./routes/testingRouter";
 
 const app = express();
 
@@ -44,6 +45,10 @@ const setUpApp = async () => {
       redis: isProduction ? "enabled" : "disabled",
     });
   });
+
+  if (!isProduction) {
+    app.use("/api/testing", testingRouter);
+  }
 
   if (isProduction) {
     app.use(express.static("build/dist"));
