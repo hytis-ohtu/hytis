@@ -12,6 +12,22 @@ import { defineConfig, devices } from "@playwright/test";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  webServer: [
+    {
+      command: "npm run dev:backend",
+      url: "http://localhost:3000/ping",
+      reuseExistingServer: !process.env.CI,
+      stdout: "ignore",
+      stderr: "pipe",
+    },
+    {
+      command: "npm run dev:frontend",
+      url: "http://localhost:5173",
+      reuseExistingServer: !process.env.CI,
+      stdout: "ignore",
+      stderr: "pipe",
+    },
+  ],
   testDir: "./e2e-tests/",
   outputDir: "e2e-tests/test-results",
   /* Run tests in files in parallel */
