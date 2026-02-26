@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import "./TopBarMenu.css";
 
 interface TopBarMenuProps {
@@ -7,6 +8,7 @@ interface TopBarMenuProps {
 
 function TopBarMenu({ onClose }: TopBarMenuProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -24,12 +26,7 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
-      <button
-        className="topbar-menu__button"
-        onClick={() => {
-          /*log out method*/ onClose();
-        }}
-      >
+      <button className="topbar-menu__button" onClick={() => void logout()}>
         Log Out
       </button>
     </div>
