@@ -10,26 +10,15 @@ export interface TopBarAction {
 
 interface TopBarProps {
   title?: string;
-  actions?: TopBarAction[];
 }
 
-function TopBar({ title = "HYTis", actions = [] }: TopBarProps) {
+function TopBar({ title = "HYTis" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <header className="topbar">
       <span className="topbar__title">{title}</span>
       <div className="topbar__actions">
-        {actions.map((action) => (
-          <button
-            key={action.id}
-            className="topbar__button"
-            onClick={action.onClick}
-            title={action.id}
-          >
-            {action.icon}
-          </button>
-        ))}
         <button
           className="topbar__button topbar__profile"
           onClick={(e) => {
@@ -37,7 +26,7 @@ function TopBar({ title = "HYTis", actions = [] }: TopBarProps) {
             setMenuOpen((v) => !v);
           }}
         >
-          JD
+          👤
         </button>
         {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
       </div>
