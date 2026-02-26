@@ -1,0 +1,31 @@
+.topbar-menu {
+  position: absolute;
+  top: 48px;
+  right: 16px;
+  background: #1a1a1a;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--radius);
+  padding: var(--gap);
+  min-width: 140px;
+  z-index: var(--z-index-topbar);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.topbar-menu__button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.topbar-menu__button:hover {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
