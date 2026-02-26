@@ -19,6 +19,9 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       stdout: "ignore",
       stderr: "pipe",
+      env: {
+        PORT: "3000",
+      },
     },
     {
       command: "npm run dev:frontend",
@@ -26,6 +29,9 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       stdout: "ignore",
       stderr: "pipe",
+      env: {
+        VITE_API_URL: "http://localhost:3000",
+      },
     },
   ],
   testDir: "./e2e-tests/",

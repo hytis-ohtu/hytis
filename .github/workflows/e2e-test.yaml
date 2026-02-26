@@ -42,7 +42,5 @@ jobs:
       env:
         CI: true
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-        PORT: 3000
-        VITE_API_URL: http://localhost:3000
 
 
