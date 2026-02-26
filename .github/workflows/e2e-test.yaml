@@ -37,16 +37,12 @@ jobs:
       run: npm run build:backend && npm run build:frontend
     - name: Install playwright
       run: npx playwright install --with-deps
-    - name: start backend
-      run: npm run dev:backend &
-      env:
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-        PORT: 3000
-    - name: start frontend
-      run: npm run dev:frontend &
-      env:
-        VITE_API_URL: http://localhost:3000
     - name: Run e2e-tests
       run: npm run test:e2e
+      env:
+        CI: true
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        PORT: 3000
+        VITE_API_URL: http://localhost:3000
 
 
