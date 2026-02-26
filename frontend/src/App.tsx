@@ -15,7 +15,7 @@ function App() {
 }
 
 function AppContent() {
-  const { isLoading, needsLogin, login, logout } = useAuth();
+  const { isLoading, needsLogin, login } = useAuth();
 
   useEffect(() => {
     async function ping() {
@@ -53,16 +53,7 @@ function AppContent() {
     <div
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
-      <TopBar
-        title="HYTiS"
-        actions={[
-          {
-            id: "logout",
-            icon: "Logout",
-            onClick: () => void logout(),
-          },
-        ]}
-      />
+      <TopBar title="HYTiS" />
       <MainView />
     </div>
   );
