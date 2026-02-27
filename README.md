@@ -1,5 +1,7 @@
 # HYTiS
 
+[![codecov](https://codecov.io/gh/hytis-ohtu/hytis/graph/badge.svg?token=WLP90N7ZRE)](https://codecov.io/gh/hytis-ohtu/hytis)
+
 ## Development
 
 1. Clone the repository

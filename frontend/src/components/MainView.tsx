@@ -2,6 +2,7 @@ import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useAuth } from "../contexts/AuthContext";
+import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import "./MainView.css";
@@ -10,6 +11,7 @@ import RoomDetails from "./RoomDetails";
 const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
+  const { mapContainer, inputContainer, hasMoved } = useMapTransform();
   const { user, logout } = useAuth();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
@@ -147,6 +149,8 @@ function MainView() {
   }
 
   async function handleClick(event: React.MouseEvent<SVGSVGElement>) {
+    if (hasMoved.current) return;
+
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
@@ -169,7 +173,13 @@ function MainView() {
         </div>
       </header>
       <div className="wrapper">
-        <Exactum2 className="floor-image" onClick={handleClick} />
+        <div className="main-container">
+          <div ref={inputContainer} className="click-container">
+            <div ref={mapContainer} className="map-container">
+              <Exactum2 className="map" onClick={handleClick} />
+            </div>
+          </div>
+        </div>
         <AnimatePresence>
           {isRoomDetailsOpen && (
             <RoomDetails
