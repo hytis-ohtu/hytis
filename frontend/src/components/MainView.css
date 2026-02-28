@@ -36,15 +36,36 @@
 .room {
   pointer-events: all;
   cursor: pointer;
-  fill: oklch(70.4% 0.04 256.788);
+}
+
+.room.available {
+  fill: #4ade80;
+}
+
+.room.limited {
+  fill: #facc15;
+}
+
+.room.full {
+  fill: #f87171;
 }
 
 .room:hover {
-  fill: oklch(83.7% 0.128 66.29);
+  filter: brightness(0.8);
 }
 
 .room.active {
-  fill: oklch(75% 0.183 55.934);
+  filter: brightness(0.7);
+}
+
+.room-label {
+  fill: #333;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.room-group:has(.room.active) .room-label {
+  fill: #f8fafc;
 }
 
 g[stroke]:not(.room) {

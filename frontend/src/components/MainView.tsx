@@ -8,6 +8,9 @@ import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
+const ROOM_LABEL_FONT_SIZE = 24;
+const LIMITED_CAPACITY_THRESHOLD = 2;
+
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
   const { user, logout } = useAuth();
@@ -16,20 +19,102 @@ function MainView() {
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
 
+  function getRoomAvailability(
+    capacity: number,
+    occupants: number,
+  ): "available" | "limited" | "full" {
+    if (occupants === 0 || occupants < capacity - LIMITED_CAPACITY_THRESHOLD) {
+      return "available";
+    }
+    if (occupants < capacity) {
+      return "limited";
+    }
+    return "full";
+  }
+
+  function createRoomInfoLabel(
+    centerX: number,
+    centerY: number,
+    lines: string[],
+  ): SVGTextElement {
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", String(centerX));
+    text.setAttribute("y", String(centerY));
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
+    text.classList.add("room-label");
+
+    const fontSize = ROOM_LABEL_FONT_SIZE;
+    text.style.fontSize = `${fontSize}px`;
+    const lineHeight = fontSize * 1.2;
+    // Offset the starting position so the label is centered in the middle of the room
+    const offsetStart = -((lines.length - 1) / 2) * lineHeight;
+
+    lines.forEach((line, i) => {
+      const tspan = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "tspan",
+      );
+      tspan.setAttribute("x", String(centerX));
+      tspan.setAttribute(
+        "dy",
+        i === 0 ? String(offsetStart) : String(lineHeight),
+      );
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+
+    return text;
+  }
+
   useEffect(() => {
-    async function mapIdsToRoomElements() {
+    async function mapDataToRoomElements() {
       try {
         const result = await findAllRooms();
 
-        const roomsMap = new Map(result.map((room) => [room.name, room.id]));
+        const roomsMap = new Map(result.map((room) => [room.name, room]));
 
         const roomElements = document.querySelectorAll("path[data-room]");
 
         roomElements.forEach((element) => {
           const roomName = element.getAttribute("data-room");
           if (roomName && roomsMap.has(roomName)) {
-            element.id = String(roomsMap.get(roomName));
-            element.classList.add("room");
+            const room = roomsMap.get(roomName);
+
+            if (room) {
+              element.id = String(room.id);
+              element.classList.add("room");
+
+              const availabilityState = getRoomAvailability(
+                room.capacity,
+                room.contracts.length,
+              );
+              element.classList.add(availabilityState);
+
+              if (element instanceof SVGGraphicsElement) {
+                const bbox = element.getBBox();
+                const centerX = bbox.x + bbox.width / 2;
+                const centerY = bbox.y + bbox.height / 2;
+
+                const lines = [
+                  roomName,
+                  `${room.area}m²`,
+                  `${room.contracts.length}/${room.capacity}`,
+                ];
+
+                const group = document.createElementNS(
+                  "http://www.w3.org/2000/svg",
+                  "g",
+                );
+                group.classList.add("room-group");
+
+                const label = createRoomInfoLabel(centerX, centerY, lines);
+
+                element.parentNode?.insertBefore(group, element);
+                group.appendChild(element);
+                group.appendChild(label);
+              }
+            }
           }
         });
       } catch (error: unknown) {
@@ -40,7 +125,7 @@ function MainView() {
         console.log(errorMessage);
       }
     }
-    mapIdsToRoomElements();
+    mapDataToRoomElements();
   }, []);
 
   useEffect(() => {
