@@ -9,6 +9,7 @@ import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
 const ROOM_LABEL_FONT_SIZE = 24;
+const LIMITED_CAPACITY_THRESHOLD = 2;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
@@ -22,7 +23,7 @@ function MainView() {
     capacity: number,
     occupants: number,
   ): "available" | "limited" | "full" {
-    if (occupants === 0 || occupants < capacity - 2) {
+    if (occupants === 0 || occupants < capacity - LIMITED_CAPACITY_THRESHOLD) {
       return "available";
     }
     if (occupants < capacity) {
