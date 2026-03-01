@@ -4,13 +4,14 @@
   --text-color: #ffffff;
   --background-color: #fff;
   --muted-color: #ccc;
+
   --radius: 8px;
   --gap: 12px;
+  --transition-fast: 0.15s;
+  --font-weight-bold: 600;
 
   --topbar-height: 64px;
   --button-size: 44px;
-  --font-weight-bold: 600;
-  --transition-fast: 0.15s;
   --z-index-topbar: 1000;
 }
 

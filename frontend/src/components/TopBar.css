@@ -55,7 +55,7 @@
 }
 
 .topbar__profile {
-  background: var(--muted-color);
+  background: var(--primary-color);
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;

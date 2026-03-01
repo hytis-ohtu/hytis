@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import React from "react";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
@@ -26,7 +27,7 @@ function TopBar({ title = "HYTis" }: TopBarProps) {
             setMenuOpen((v) => !v);
           }}
         >
-          👤
+          <User className="size-6" />
         </button>
         {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
       </div>

@@ -2,7 +2,7 @@
   position: absolute;
   top: 48px;
   right: 16px;
-  background: #1a1a1a;
+  background: var(--secondary-color);
   border: 1px solid var(--secondary-color);
   border-radius: var(--radius);
   padding: var(--gap);
