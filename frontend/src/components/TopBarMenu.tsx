@@ -26,6 +26,7 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
+      {user && <div className="topbar-menu__user">{user.name}</div>}
       <button className="topbar-menu__button" onClick={() => void logout()}>
         Log Out
       </button>
