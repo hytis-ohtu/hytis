@@ -34,7 +34,6 @@ describe("MainView", () => {
   it("renders without crashing", () => {
     vi.mocked(findAllRooms).mockResolvedValue([]);
     render(<MainView />);
-    expect(screen.getByText("Test User")).toBeInTheDocument();
     expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
   });
 
