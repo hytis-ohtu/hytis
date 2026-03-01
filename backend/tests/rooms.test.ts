@@ -95,3 +95,8 @@ test("single room is returned", async () => {
     validateContract(contract, expectedContracts[index]),
   );
 });
+
+test("returns 404 for non-existing room", async () => {
+  const response = await api.get("/api/rooms/9999").expect(404);
+  expect(response.body.error).toBe("Room not found.");
+});
