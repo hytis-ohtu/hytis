@@ -7,6 +7,7 @@ class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
   declare id: number;
   declare name: string;
   declare area: number | null;
+  declare capacity: number | null;
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare contracts?: Contract[];
@@ -25,6 +26,10 @@ Room.init(
     },
     area: {
       type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    capacity: {
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
   },
