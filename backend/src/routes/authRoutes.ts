@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import passport from "passport";
-import { config, isProduction } from "../config/environmentConfig";
+import { config, useHyLogin } from "../config/environmentConfig";
 import { mockAuthMiddleware } from "../middleware/mockAuth";
 
 const router = Router();
@@ -24,11 +24,11 @@ router.get("/user", (req: Request, res: Response) => {
  * DEVELOMPENT VERSION: Uses mock authentication middleware to log in a test user
  * PRODUCTION VERSION: Redirects to university login page
  */
-if (isProduction) {
+if (useHyLogin) {
   router.get("/login", passport.authenticate("oidc"));
 } else {
   router.get("/login", mockAuthMiddleware, (req: Request, res: Response) => {
-    res.redirect("http://localhost:5173");
+    res.redirect(config.frontendUrl || "http://localhost:5173");
   });
 }
 
@@ -39,7 +39,7 @@ if (isProduction) {
  * In the development version, this does nothing
  * because the mock authentication logs directly in on the /api/login route
  */
-if (isProduction) {
+if (useHyLogin) {
   router.get(
     "/login/callback",
     passport.authenticate("oidc", {

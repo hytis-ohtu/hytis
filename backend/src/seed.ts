@@ -47,6 +47,8 @@ const resetDatabase = async () => {
   console.log("Connection closed!");
 };
 
-resetDatabase().catch((error) => {
-  console.error("Error during database reset:", error);
-});
+if (process.env.SEED_DB === "true") {
+  resetDatabase().catch((error) => {
+    console.error("Error during database reset:", error);
+  });
+}

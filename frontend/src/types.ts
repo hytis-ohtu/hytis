@@ -23,5 +23,6 @@ export interface Room {
   id: number;
   name: string;
   area: string;
+  capacity: number;
   contracts: Contract[];
 }

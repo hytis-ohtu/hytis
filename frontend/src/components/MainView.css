@@ -1,8 +1,3 @@
-.floor-image {
-  width: 100%;
-  height: 100%;
-}
-
 .main-header {
   position: fixed;
   top: 0;
@@ -41,17 +36,67 @@
 .room {
   pointer-events: all;
   cursor: pointer;
-  fill: oklch(70.4% 0.04 256.788);
+}
+
+.room.available {
+  fill: #4ade80;
+}
+
+.room.limited {
+  fill: #facc15;
+}
+
+.room.full {
+  fill: #f87171;
 }
 
 .room:hover {
-  fill: oklch(83.7% 0.128 66.29);
+  filter: brightness(0.8);
 }
 
 .room.active {
-  fill: oklch(75% 0.183 55.934);
+  filter: brightness(0.7);
+}
+
+.room-label {
+  fill: #333;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.room-group:has(.room.active) .room-label {
+  fill: #f8fafc;
 }
 
 g[stroke]:not(.room) {
   pointer-events: none;
+}
+
+.main-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.click-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.map-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  scale: 1;
+  transform-origin: 0 0;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
 }
