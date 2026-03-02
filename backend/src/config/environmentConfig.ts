@@ -9,6 +9,7 @@ export const DATABASE_URL =
 
 export const isProduction = process.env.NODE_ENV === "production";
 export const isDevelopment = process.env.NODE_ENV === "development";
+export const useHyLogin = process.env.USE_HY_LOGIN === "true";
 
 export const config = {
   port: parseInt(process.env.PORT || "3000"),
