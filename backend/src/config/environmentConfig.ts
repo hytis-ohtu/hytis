@@ -18,7 +18,7 @@ export const config = {
   sessionMaxAge: parseInt(process.env.SESSION_MAX_AGE || "86400000"), // 24h
 
   redis: {
-    host: process.env.REDIS_HOST || "localhost",
+    host: process.env.REDIS_HOST || "hytis-redis-svc",
     port: parseInt(process.env.REDIS_PORT || "6379"),
     password: process.env.REDIS_PASSWORD,
   },
