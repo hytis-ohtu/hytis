@@ -8,7 +8,7 @@ import {
   type StrategyVerifyCallbackUserInfo,
 } from "openid-client";
 import passport from "passport";
-import { config, isProduction } from "./environmentConfig";
+import { config, useHyLogin } from "./environmentConfig";
 
 interface UserInfo {
   sub: string;
@@ -43,7 +43,7 @@ const verifyLogin: StrategyVerifyCallbackUserInfo<Express.User, UserInfo> = (
 };
 
 export const configurePassport = async () => {
-  if (!isProduction) {
+  if (!useHyLogin) {
     console.log("Passport OIDC configuration skipped (development mode)");
     return;
   }
