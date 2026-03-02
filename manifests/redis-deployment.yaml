@@ -1,36 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
+  name: hytis-redis
   labels:
-    app: redis
+    app: hytis-redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis
+      app: hytis-redis
   template:
     metadata:
       labels:
-        app: redis
+        app: hytis-redis
     spec:
       containers:
-      - name: redis
+      - name: hytis-redis
         image: registry.redhat.io/rhel9/redis-7
         ports:
         - containerPort: 6379
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-svc
-  labels:
-    app: redis
-spec:
-  ports:
-  - port: 6379
-    targetPort: 6379
-  selector:
-    app: redis
