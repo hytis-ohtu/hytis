@@ -13,7 +13,7 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       const target = e.target as HTMLElement;
-      if (target.closest(".topbar__profile")) {
+      if (target.closest(".topbar-profile")) {
         return;
       }
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -26,8 +26,8 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
-      {user && <div className="topbar-menu__user">{user.name}</div>}
-      <button className="topbar-menu__button" onClick={() => void logout()}>
+      {user && <div className="topbar-menu-user">{user.name}</div>}
+      <button className="topbar-menu-button" onClick={() => void logout()}>
         Log Out
       </button>
     </div>

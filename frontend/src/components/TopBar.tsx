@@ -1,5 +1,5 @@
 import { User } from "lucide-react";
-import React from "react";
+import { useState } from "react";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
 
@@ -14,14 +14,14 @@ interface TopBarProps {
 }
 
 function TopBar({ title = "HYTis" }: TopBarProps) {
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="topbar">
-      <span className="topbar__title">{title}</span>
-      <div className="topbar__actions">
+      <span className="topbar-title">{title}</span>
+      <div className="topbar-actions">
         <button
-          className="topbar__button topbar__profile"
+          className="topbar-button topbar-profile"
           onClick={(e) => {
             e.stopPropagation();
             setMenuOpen((v) => !v);
