@@ -10,3 +10,4 @@ spec:
     targetPort: 6379
   selector:
     app: hytis-redis
+  type: ClusterIP
