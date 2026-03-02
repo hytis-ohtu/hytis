@@ -1,7 +1,6 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
-import { useAuth } from "../contexts/AuthContext";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
@@ -13,7 +12,6 @@ const LIMITED_CAPACITY_THRESHOLD = 2;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
-  const { user, logout } = useAuth();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
@@ -165,14 +163,6 @@ function MainView() {
 
   return (
     <>
-      <header className="main-header">
-        <div className="user-info">
-          <span className="user-name">{user?.name}</span>
-          <button className="logout-button" onClick={() => void logout()}>
-            Logout
-          </button>
-        </div>
-      </header>
       <div className="wrapper">
         <div className="main-container">
           <div ref={inputContainer} className="click-container">

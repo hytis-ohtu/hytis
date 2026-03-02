@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
+import TopBar from "./components/TopBar";
 import { useAuth } from "./contexts/AuthContext";
 import pingServer from "./services/pingService";
 
@@ -48,7 +49,14 @@ function AppContent() {
     return <div className="wrapper">Redirecting to login page...</div>;
   }
 
-  return <MainView />;
+  return (
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <TopBar title="HYTiS" />
+      <MainView />
+    </div>
+  );
 }
 
 export default App;

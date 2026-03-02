@@ -60,6 +60,9 @@ export function useMapTransform() {
     };
 
     const onScroll = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
       const dir = Math.sign(e.deltaY);
       const speedEqualizer = Math.max(scale.current, 1);
 
@@ -89,7 +92,7 @@ export function useMapTransform() {
     container.addEventListener("mouseup", onMouseUp);
     container.addEventListener("mousemove", onMouseMove);
     container.addEventListener("mouseleave", onMouseUp);
-    container.addEventListener("wheel", onScroll);
+    container.addEventListener("wheel", onScroll, { passive: false });
 
     const cleanup = () => {
       container.removeEventListener("mousedown", onMouseDown);

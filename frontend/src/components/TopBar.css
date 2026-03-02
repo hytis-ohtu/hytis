@@ -1,0 +1,68 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--topbar-height);
+  background: var(--primary-color);
+  border-bottom: 1px solid var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap);
+  z-index: var(--z-index-topbar);
+}
+
+.topbar-title {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.topbar-button {
+  width: var(--button-size);
+  height: var(--button-size);
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    transform 0.08s;
+}
+
+.topbar-button:hover {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.topbar-button:active {
+  transform: scale(0.98);
+  background: var(--muted-color);
+  color: var(--text-color);
+}
+
+.topbar-profile {
+  background: var(--primary-color);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-color);
+  letter-spacing: 0.02em;
+}
+
+.topbar-profile:hover {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
