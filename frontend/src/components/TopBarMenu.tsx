@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import "./TopBarMenu.css";
@@ -26,6 +27,9 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
+      <button className="topbar-menu-close-button" onClick={onClose}>
+        <X size={16} />
+      </button>
       {user && <div className="topbar-menu-user">{user.name}</div>}
       <button className="topbar-menu-button" onClick={() => void logout()}>
         Log Out
