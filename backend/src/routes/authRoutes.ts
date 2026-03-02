@@ -28,7 +28,7 @@ if (isProduction) {
   router.get("/login", passport.authenticate("oidc"));
 } else {
   router.get("/login", mockAuthMiddleware, (req: Request, res: Response) => {
-    res.redirect("http://localhost:5173");
+    res.redirect(config.frontendUrl || "http://localhost:5173");
   });
 }
 
