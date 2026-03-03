@@ -1,7 +1,6 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
-import { useAuth } from "../contexts/AuthContext";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
@@ -15,7 +14,6 @@ const ROOM_LABEL_FONT_SIZE_MAX = 32;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
-  const { user, logout } = useAuth();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
@@ -166,28 +164,6 @@ function MainView() {
 
   return (
     <>
-      <header className="main-header">
-        <div className="user-info">
-          <span className="user-name">{user?.name}</span>
-          <input
-            type="range"
-            min={ROOM_LABEL_FONT_SIZE_MIN}
-            max={ROOM_LABEL_FONT_SIZE_MAX}
-            value={fontSize}
-            onChange={(e) => {
-              const newSize = Number(e.target.value);
-              setFontSize(newSize);
-              document.documentElement.style.setProperty(
-                "--map-font-size",
-                `${newSize}px`,
-              );
-            }}
-          />
-          <button className="logout-button" onClick={() => void logout()}>
-            Logout
-          </button>
-        </div>
-      </header>
       <div className="wrapper">
         <div className="main-container">
           <div ref={inputContainer} className="click-container">

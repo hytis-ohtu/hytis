@@ -2,6 +2,8 @@ import type { InferAttributes, InferCreationAttributes } from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Contract } from "./contract";
+import { Department } from "./department";
+import { Title } from "./title";
 
 class Person extends Model<
   InferAttributes<Person>,
@@ -15,6 +17,8 @@ class Person extends Model<
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare contracts?: Contract[];
+  declare department?: Department;
+  declare title?: Title;
 }
 
 Person.init(

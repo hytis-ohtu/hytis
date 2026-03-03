@@ -7,7 +7,7 @@ import { Application } from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import passport from "passport";
-import { config, isProduction } from "./environmentConfig";
+import { config, useHyLogin } from "./environmentConfig";
 
 export const configureSession = async (app: Application): Promise<void> => {
   const sessionOptions = await createSessionOptions();
@@ -20,7 +20,7 @@ export const configureSession = async (app: Application): Promise<void> => {
 };
 
 const createSessionOptions = async (): Promise<session.SessionOptions> => {
-  if (isProduction) {
+  if (useHyLogin) {
     console.log("Setting up Redis session store for production");
 
     const redisClient = new Redis(config.redis);
