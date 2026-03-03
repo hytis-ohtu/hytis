@@ -7,8 +7,8 @@ import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
-const ROOM_LABEL_FONT_SIZE = 24;
 const LIMITED_CAPACITY_THRESHOLD = 2;
+const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
@@ -43,7 +43,6 @@ function MainView() {
     text.classList.add("room-label");
 
     const fontSize = ROOM_LABEL_FONT_SIZE;
-    text.style.fontSize = `${fontSize}px`;
     const lineHeight = fontSize * 1.2;
     // Offset the starting position so the label is centered in the middle of the room
     const offsetStart = -((lines.length - 1) / 2) * lineHeight;
