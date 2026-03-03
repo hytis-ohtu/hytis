@@ -12,6 +12,9 @@
 }
 
 .topbar-menu-button {
+  align-items: center;
+  display: flex;
+  gap: 8px;
   width: 100%;
   padding: 8px 12px;
   border: none;

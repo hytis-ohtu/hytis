@@ -1,10 +1,7 @@
-import { X } from "lucide-react";
-import { useEffect, useRef } from "react";
-import {
-  ROOM_LABEL_FONT_SIZE_MAX,
-  ROOM_LABEL_FONT_SIZE_MIN,
-} from "../constants";
+import { Settings, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import SettingsModal from "./SettingsModal";
 import "./TopBarMenu.css";
 
 interface TopBarMenuProps {
@@ -16,6 +13,7 @@ interface TopBarMenuProps {
 function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -37,21 +35,20 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
         <X size={16} />
       </button>
       {user && <div className="topbar-menu-user">{user.name}</div>}
-      <input
-        type="range"
-        min={ROOM_LABEL_FONT_SIZE_MIN}
-        max={ROOM_LABEL_FONT_SIZE_MAX}
-        value={fontSize}
-        onChange={(e) => {
-          const size = Number(e.target.value);
-          setFontSize(size);
-          localStorage.setItem("map-font-size", String(size));
-          document.documentElement.style.setProperty(
-            "--map-font-size",
-            `${size}px`,
-          );
-        }}
-      />
+      <button
+        className="topbar-menu-button"
+        onClick={() => setSettingsOpen(true)}
+      >
+        <Settings size={16} />
+        Asetukset
+      </button>
+      {settingsOpen && (
+        <SettingsModal
+          onClose={() => setSettingsOpen(false)}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+        />
+      )}
       <button className="topbar-menu-button" onClick={() => void logout()}>
         Log Out
       </button>
