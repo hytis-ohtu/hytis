@@ -1,9 +1,8 @@
 import { X } from "lucide-react";
-import {
-  ROOM_LABEL_FONT_SIZE_MAX,
-  ROOM_LABEL_FONT_SIZE_MIN,
-} from "../constants";
 import "./SettingsModal.css";
+
+const ROOM_LABEL_FONT_SIZE_MIN = 10;
+const ROOM_LABEL_FONT_SIZE_MAX = 32;
 
 interface SettingsModalProps {
   onClose: () => void;

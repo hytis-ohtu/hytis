@@ -1,8 +1,9 @@
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ROOM_LABEL_FONT_SIZE } from "../constants";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
+
+const ROOM_LABEL_FONT_SIZE = 24;
 
 export interface TopBarAction {
   id: string;
@@ -16,11 +17,9 @@ interface TopBarProps {
 
 function TopBar({ title = "HYTis" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [fontSize, setFontSize] = useState(() => {
-    return (
-      Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE
-    );
-  });
+  const [fontSize, setFontSize] = useState(
+    Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
+  );
 
   useEffect(() => {
     document.documentElement.style.setProperty(

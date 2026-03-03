@@ -1,9 +1,18 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsModal from "../src/components/SettingsModal.tsx";
 
 describe("SettingsModal", () => {
+  const onCloseMock = vi.fn();
+  const setFontSizeMock = vi.fn();
+
+  beforeEach(() => {
+    onCloseMock.mockClear();
+    setFontSizeMock.mockClear();
+  });
+
   it("renders without crashing", () => {
     render(
       <SettingsModal onClose={() => {}} fontSize={16} setFontSize={() => {}} />,
@@ -12,7 +21,6 @@ describe("SettingsModal", () => {
   });
 
   it("calls onClose when close button is clicked", async () => {
-    const onCloseMock = vi.fn();
     render(
       <SettingsModal
         onClose={onCloseMock}
@@ -20,7 +28,7 @@ describe("SettingsModal", () => {
         setFontSize={() => {}}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /close/i }));
+    await userEvent.click(screen.getByRole("button", { name: /close/i }));
 
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
@@ -34,8 +42,7 @@ describe("SettingsModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls setFontSize when the range input value changes", () => {
-    const setFontSizeMock = vi.fn();
+  it("calls setFontSize when the range input value changes", async () => {
     render(
       <SettingsModal
         onClose={() => {}}
@@ -48,8 +55,7 @@ describe("SettingsModal", () => {
     expect(setFontSizeMock).toHaveBeenCalledWith(20);
   });
 
-  it("updates localStorage and CSS variable when font size changes", () => {
-    const setFontSizeMock = vi.fn();
+  it("updates localStorage and CSS variable when font size changes", async () => {
     render(
       <SettingsModal
         onClose={() => {}}

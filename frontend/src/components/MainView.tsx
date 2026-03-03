@@ -1,7 +1,6 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
-import { ROOM_LABEL_FONT_SIZE } from "../constants";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
@@ -9,6 +8,7 @@ import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
 const LIMITED_CAPACITY_THRESHOLD = 2;
+const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
