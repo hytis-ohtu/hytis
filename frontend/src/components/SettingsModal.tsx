@@ -15,7 +15,11 @@ function SettingsModal({ onClose, fontSize, setFontSize }: SettingsModalProps) {
   return (
     <div className="settings-overlay" onClick={onClose}>
       <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="settings-modal-close-button" onClick={onClose}>
+        <button
+          className="settings-modal-close-button"
+          onClick={onClose}
+          aria-label="close"
+        >
           <X size={16} />
         </button>
         <h2 className="settings-modal-title">Asetukset</h2>
