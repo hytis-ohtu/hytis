@@ -60,7 +60,7 @@ describe("SettingsModal", () => {
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "22" } });
 
-    expect(localStorage.getItem("map-font-size")).toBe("22");
+    expect(localStorage.setItem).toHaveBeenCalledWith("map-font-size", "22");
     expect(
       document.documentElement.style.getPropertyValue("--map-font-size"),
     ).toBe("22px");
