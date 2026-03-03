@@ -1,6 +1,7 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
+import { ROOM_LABEL_FONT_SIZE } from "../constants";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
@@ -8,9 +9,6 @@ import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
 const LIMITED_CAPACITY_THRESHOLD = 2;
-const ROOM_LABEL_FONT_SIZE = 24;
-const ROOM_LABEL_FONT_SIZE_MIN = 10;
-const ROOM_LABEL_FONT_SIZE_MAX = 32;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
@@ -18,7 +16,6 @@ function MainView() {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
-  const [fontSize, setFontSize] = useState<number>(ROOM_LABEL_FONT_SIZE);
 
   function getRoomAvailability(
     capacity: number,
@@ -45,6 +42,7 @@ function MainView() {
     text.setAttribute("dominant-baseline", "middle");
     text.classList.add("room-label");
 
+    const fontSize = ROOM_LABEL_FONT_SIZE;
     const lineHeight = fontSize * 1.2;
     // Offset the starting position so the label is centered in the middle of the room
     const offsetStart = -((lines.length - 1) / 2) * lineHeight;
