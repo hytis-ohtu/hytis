@@ -27,7 +27,7 @@ function TopBar({ title = "HYTis" }: TopBarProps) {
       "--map-font-size",
       `${fontSize}px`,
     );
-  }, []);
+  }, [fontSize]);
 
   return (
     <header className="topbar">
