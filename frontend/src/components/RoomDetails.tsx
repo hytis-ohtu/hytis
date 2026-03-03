@@ -24,7 +24,11 @@ function RoomDetails({
     >
       <header className="room-details-header">
         <h1 className="room-details-title">Huone</h1>
-        <X className="room-details-close-button" onClick={handleClose} />
+        <X
+          data-testid="close-room-details-panel"
+          className="room-details-close-button"
+          onClick={handleClose}
+        />
       </header>
       <div className="room-details-avatar">
         <h2 className="room-details-avatar-name">{room.name}</h2>
