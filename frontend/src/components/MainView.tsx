@@ -8,8 +8,10 @@ import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
-const ROOM_LABEL_FONT_SIZE = 24;
 const LIMITED_CAPACITY_THRESHOLD = 2;
+const ROOM_LABEL_FONT_SIZE = 24;
+const ROOM_LABEL_FONT_SIZE_MIN = 10;
+const ROOM_LABEL_FONT_SIZE_MAX = 32;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
@@ -18,6 +20,7 @@ function MainView() {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
+  const [fontSize, setFontSize] = useState<number>(ROOM_LABEL_FONT_SIZE);
 
   function getRoomAvailability(
     capacity: number,
@@ -44,8 +47,6 @@ function MainView() {
     text.setAttribute("dominant-baseline", "middle");
     text.classList.add("room-label");
 
-    const fontSize = ROOM_LABEL_FONT_SIZE;
-    text.style.fontSize = `${fontSize}px`;
     const lineHeight = fontSize * 1.2;
     // Offset the starting position so the label is centered in the middle of the room
     const offsetStart = -((lines.length - 1) / 2) * lineHeight;
@@ -168,6 +169,20 @@ function MainView() {
       <header className="main-header">
         <div className="user-info">
           <span className="user-name">{user?.name}</span>
+          <input
+            type="range"
+            min={ROOM_LABEL_FONT_SIZE_MIN}
+            max={ROOM_LABEL_FONT_SIZE_MAX}
+            value={fontSize}
+            onChange={(e) => {
+              const newSize = Number(e.target.value);
+              setFontSize(newSize);
+              document.documentElement.style.setProperty(
+                "--map-font-size",
+                `${newSize}px`,
+              );
+            }}
+          />
           <button className="logout-button" onClick={() => void logout()}>
             Logout
           </button>
