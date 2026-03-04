@@ -1,7 +1,9 @@
 import { User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
+
+const ROOM_LABEL_FONT_SIZE = 24;
 
 export interface TopBarAction {
   id: string;
@@ -15,6 +17,16 @@ interface TopBarProps {
 
 function TopBar({ title = "HYTis" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [fontSize, setFontSize] = useState(
+    Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
+  );
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--map-font-size",
+      `${fontSize}px`,
+    );
+  }, [fontSize]);
 
   return (
     <header className="topbar">
@@ -29,7 +41,13 @@ function TopBar({ title = "HYTis" }: TopBarProps) {
         >
           <User className="size-6" />
         </button>
-        {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
+        {menuOpen && (
+          <TopBarMenu
+            onClose={() => setMenuOpen(false)}
+            fontSize={fontSize}
+            setFontSize={setFontSize}
+          />
+        )}
       </div>
     </header>
   );
