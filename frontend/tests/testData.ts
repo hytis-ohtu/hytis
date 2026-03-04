@@ -4,6 +4,10 @@ export const rooms = [
     name: "A210",
     area: "63.60",
     capacity: 15,
+    department: {
+      id: 2,
+      name: "H523 CS",
+    },
     contracts: [
       {
         startDate: "2023-01-01",
@@ -12,7 +16,8 @@ export const rooms = [
           firstName: "Matti",
           lastName: "Virtanen",
           department: {
-            name: "Matematiikka ja tilastotiede",
+            id: 1,
+            name: "H516 MATHSTAT",
           },
           title: {
             name: "asiantuntija",
@@ -26,7 +31,8 @@ export const rooms = [
           firstName: "Laura",
           lastName: "Korhonen",
           department: {
-            name: "Tietojenkäsittelytiede",
+            id: 2,
+            name: "H523 CS",
           },
           title: {
             name: "harjoittelija",
@@ -40,7 +46,8 @@ export const rooms = [
           firstName: "Jari",
           lastName: "Nieminen",
           department: {
-            name: "Matematiikka ja tilastotiede",
+            id: 1,
+            name: "H516 MATHSTAT",
           },
           title: {
             name: "lehtori",
@@ -54,6 +61,10 @@ export const rooms = [
     name: "A211",
     area: "14.60",
     capacity: 3,
+    department: {
+      id: 1,
+      name: "H516 MATHSTAT",
+    },
     contracts: [
       {
         startDate: "2022-09-01",
@@ -62,7 +73,8 @@ export const rooms = [
           firstName: "Sanna",
           lastName: "Mäkinen",
           department: {
-            name: "Tietojenkäsittelytiede",
+            id: 2,
+            name: "H523 CS",
           },
           title: {
             name: "professori",
@@ -76,7 +88,8 @@ export const rooms = [
           firstName: "Mikko",
           lastName: "Laine",
           department: {
-            name: "Matematiikka ja tilastotiede",
+            id: 1,
+            name: "H516 MATHSTAT",
           },
           title: {
             name: "yliopistotutkija",
@@ -90,6 +103,10 @@ export const rooms = [
     name: "A212",
     area: "9.70",
     capacity: 2,
+    department: {
+      id: 1,
+      name: "H516 MATHSTAT",
+    },
     contracts: [
       {
         startDate: "2024-01-15",
@@ -98,7 +115,8 @@ export const rooms = [
           firstName: "Päivi",
           lastName: "Koskinen",
           department: {
-            name: "Tietojenkäsittelytiede",
+            id: 2,
+            name: "H523 CS",
           },
           title: {
             name: "asiantuntija",
@@ -112,7 +130,8 @@ export const rooms = [
           firstName: "Robert",
           lastName: "Miller",
           department: {
-            name: "Matematiikka ja tilastotiede",
+            id: 1,
+            name: "H516 MATHSTAT",
           },
           title: {
             name: "harjoittelija",
