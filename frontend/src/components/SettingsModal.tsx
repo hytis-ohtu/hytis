@@ -21,7 +21,9 @@ function SettingsModal({ onClose, fontSize, setFontSize }: SettingsModalProps) {
         >
           <X size={16} />
         </button>
-        <h2 className="settings-modal-title">Asetukset</h2>
+        <h2 data-testid="settings-modal-title" className="settings-modal-title">
+          Asetukset
+        </h2>
         <div className="settings-modal-row">
           <label>Kartan tekstin fonttikoko: {fontSize}px</label>
           <input
