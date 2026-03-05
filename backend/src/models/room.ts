@@ -2,14 +2,17 @@ import type { InferAttributes, InferCreationAttributes } from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Contract } from "./contract";
+import { Department } from "./department";
 
 class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
   declare id: number;
   declare name: string;
   declare area: number | null;
   declare capacity: number | null;
+  declare departmentId: number | null;
   declare createdAt?: Date;
   declare updatedAt?: Date;
+  declare department?: Department;
   declare contracts?: Contract[];
 }
 
@@ -31,6 +34,14 @@ Room.init(
     capacity: {
       type: DataTypes.INTEGER,
       allowNull: true,
+    },
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "departments",
+        key: "id",
+      },
     },
   },
   {
