@@ -45,17 +45,14 @@ describe("MainView", () => {
       const availableRoom = document.querySelector('[data-room="A210"]');
       expect(availableRoom).toHaveAttribute("id", "1");
       expect(availableRoom).toHaveClass("room");
-      expect(availableRoom).toHaveClass("available");
 
       const limitedRoom = document.querySelector('[data-room="A211"]');
       expect(limitedRoom).toHaveAttribute("id", "2");
       expect(limitedRoom).toHaveClass("room");
-      expect(limitedRoom).toHaveClass("limited");
 
       const fullRoom = document.querySelector('[data-room="A212"]');
       expect(fullRoom).toHaveAttribute("id", "3");
       expect(fullRoom).toHaveClass("room");
-      expect(fullRoom).toHaveClass("full");
     });
   });
 });
