@@ -15,6 +15,11 @@ router.get(
       attributes: ["id", "name", "area", "capacity"],
       include: [
         {
+          model: Department,
+          as: "department",
+          attributes: ["id", "name"],
+        },
+        {
           model: Contract,
           as: "contracts",
           attributes: ["id"],
@@ -63,6 +68,11 @@ router.get(
               ],
             },
           ],
+        },
+        {
+          model: Department,
+          as: "department",
+          attributes: ["id", "name"],
         },
       ],
     });

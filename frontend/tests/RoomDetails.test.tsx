@@ -13,6 +13,10 @@ const mockRoom: Room = {
   area: "63.6",
   capacity: 15,
   contracts: [],
+  department: {
+    id: 2,
+    name: "H523 CS",
+  },
 };
 
 describe("RoomDetails", () => {
