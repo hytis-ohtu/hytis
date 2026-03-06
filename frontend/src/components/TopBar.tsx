@@ -33,6 +33,7 @@ function TopBar({ title = "HYTis" }: TopBarProps) {
       <span className="topbar-title">{title}</span>
       <div className="topbar-actions">
         <button
+          data-testid="topbar-profile-button"
           className="topbar-button topbar-profile"
           onClick={(e) => {
             e.stopPropagation();
