@@ -7,10 +7,16 @@ export const AvailabilityColors = {
   full: "#f87171",
 };
 
-export const DepartmentColors = {
-  "H516 MATHSTAT": "#4ade80",
-  "H523 CS": "#667eea",
-};
+export function getDepartmentColor(departmentName: string): string {
+  const color = DepartmentColors.get(departmentName) || null;
+  if (color === null) return "#aaaaaa";
+  return color;
+}
+
+const DepartmentColors = new Map([
+  ["H516 MATHSTAT", "#4ade80"],
+  ["H523 CS", "#667eea"],
+]);
 
 const LIMITED_CAPACITY_THRESHOLD = 2;
 
@@ -55,7 +61,7 @@ export function useRoomColors() {
             );
             element.style.fill = AvailabilityColors[availabilityState];
           } else {
-            element.style.fill = DepartmentColors[room.department.name];
+            element.style.fill = getDepartmentColor(room.department.name);
           }
         }
       } catch (error: unknown) {

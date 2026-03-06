@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
 import {
   AvailabilityColors,
-  DepartmentColors,
+  getDepartmentColor,
 } from "../src/hooks/useRoomColors.ts";
 import { findAllRooms } from "../src/services/roomsService";
 import { rooms } from "./testData.ts";
@@ -84,7 +84,7 @@ describe("MainView", () => {
       const room = document.querySelector('[data-room="A210"]');
       expect(
         room instanceof SVGGraphicsElement &&
-          room.style.fill === DepartmentColors[rooms[0].department.name],
+          room.style.fill === getDepartmentColor(rooms[0].department.name),
       );
     });
   });
