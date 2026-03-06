@@ -60,6 +60,7 @@ export function useRoomColors() {
               room.contracts.length,
             );
             element.style.fill = AvailabilityColors[availabilityState];
+            element.classList.add(availabilityState);
           } else {
             element.style.fill = getDepartmentColor(room.department.name);
           }

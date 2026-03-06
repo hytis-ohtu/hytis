@@ -24,22 +24,13 @@ test("room has correct availability color based on occupancy", async ({
   page,
 }) => {
   const availableRoom = page.locator('[data-room="A210"]');
-  await expect(
-    availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === "#4ade80",
-  );
+  await expect(availableRoom).toHaveClass(/available/);
 
   const limitedRoom = page.locator('[data-room="A211"]');
-  await expect(
-    availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === "#facc15",
-  );
+  await expect(limitedRoom).toHaveClass(/limited/);
 
   const fullRoom = page.locator('[data-room="A212"]');
-  await expect(
-    availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === "#f87171",
-  );
+  await expect(fullRoom).toHaveClass(/full/);
 });
 
 test("room details panel is shown with room name when clicking room from the map", async ({
