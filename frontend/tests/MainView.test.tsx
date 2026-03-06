@@ -88,4 +88,8 @@ describe("MainView", () => {
       );
     });
   });
+
+  it("incorrect department name returns error color", () => {
+    expect(getDepartmentColor("incorrect name") === "#aaaaaa");
+  });
 });
