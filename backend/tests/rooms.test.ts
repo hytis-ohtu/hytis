@@ -42,6 +42,7 @@ test("returns correct room data", async () => {
   expect(returnedRoom.contracts).toEqual(
     expectedContracts.map((contract) => ({ id: contract.id })),
   );
+  expect(returnedRoom.department.id).toBe(expectedRoom.departmentId);
 });
 
 test("single room is returned", async () => {
@@ -60,6 +61,8 @@ test("single room is returned", async () => {
   returnedRoom.contracts.forEach((contract: Contract, index: number) =>
     validateContract(contract, expectedContracts[index]),
   );
+
+  expect(returnedRoom.department.id).toBe(expectedRoom.departmentId);
 });
 
 test("returns 404 for non-existing room", async () => {

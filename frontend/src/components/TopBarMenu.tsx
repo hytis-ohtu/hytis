@@ -36,6 +36,7 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
       </button>
       {user && <div className="topbar-menu-user">{user.name}</div>}
       <button
+        data-testid="topbar-settings-button"
         className="topbar-menu-button"
         onClick={() => setSettingsOpen(true)}
       >
