@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { AvailabilityColors } from "../frontend/src/hooks/useRoomColors";
 
 test.beforeEach(async ({ page, request }) => {
   await request.post("http://localhost:3000/api/testing/reset");
@@ -27,19 +26,19 @@ test("room has correct availability color based on occupancy", async ({
   const availableRoom = page.locator('[data-room="A210"]');
   await expect(
     availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === AvailabilityColors["full"],
+      availableRoom.style.fill === "#4ade80",
   );
 
   const limitedRoom = page.locator('[data-room="A211"]');
   await expect(
     availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === AvailabilityColors["limited"],
+      availableRoom.style.fill === "#facc15",
   );
 
   const fullRoom = page.locator('[data-room="A212"]');
   await expect(
     availableRoom instanceof SVGGraphicsElement &&
-      availableRoom.style.fill === AvailabilityColors["full"],
+      availableRoom.style.fill === "#f87171",
   );
 });
 
