@@ -153,6 +153,7 @@ function MainView() {
           </div>
         </div>
         <button
+          data-testid="switch-color-mode"
           onClick={() => setUseAvailability(!useAvailability)}
           className="color-button"
         >

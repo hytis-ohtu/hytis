@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { findAllRooms } from "../services/roomsService";
 
-const AvailabilityColors = {
+export const AvailabilityColors = {
   available: "#4ade80",
   limited: "#facc15",
   full: "#f87171",
 };
 
-const DepartmentColors = {
+export const DepartmentColors = {
   "H516 MATHSTAT": "#4ade80",
   "H523 CS": "#667eea",
 };
