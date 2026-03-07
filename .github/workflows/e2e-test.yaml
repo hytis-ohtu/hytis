@@ -32,7 +32,7 @@ jobs:
         cache: "npm"
         cache-dependency-path: "**/package-lock.json"
     - name: Install dependencies
-      run: npm run install:all && npm install
+      run: npm run install:all
     - name: Build
       run: npm run build:backend && npm run build:frontend
     - name: Install playwright
