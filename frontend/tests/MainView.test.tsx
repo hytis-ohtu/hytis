@@ -59,16 +59,16 @@ describe("MainView", () => {
       expect(limitedRoom).toHaveAttribute("id", "2");
       expect(limitedRoom).toHaveClass("room");
       expect(
-        availableRoom instanceof SVGGraphicsElement &&
-          availableRoom.style.fill === AvailabilityColors["limited"],
+        limitedRoom instanceof SVGGraphicsElement &&
+          limitedRoom.style.fill === AvailabilityColors["limited"],
       );
 
       const fullRoom = document.querySelector('[data-room="A212"]');
       expect(fullRoom).toHaveAttribute("id", "3");
       expect(fullRoom).toHaveClass("room");
       expect(
-        availableRoom instanceof SVGGraphicsElement &&
-          availableRoom.style.fill === AvailabilityColors["full"],
+        fullRoom instanceof SVGGraphicsElement &&
+          fullRoom.style.fill === AvailabilityColors["full"],
       );
     });
   });
