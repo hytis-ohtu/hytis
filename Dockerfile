@@ -1,4 +1,4 @@
-FROM node:25
+FROM node:25-alpine
 WORKDIR /usr/src/app
 
 # Install the application dependencies
