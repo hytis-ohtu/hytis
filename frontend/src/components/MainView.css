@@ -97,4 +97,51 @@ g[stroke]:not(.room) {
   left: 2vw;
   bottom: 2vh;
   font-size: 16px;
+  cursor: pointer;
+}
+.zoom-in-button {
+  position: absolute;
+  left: 3vw;
+  bottom: 6vh;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    transform 0.08s;
+}
+.zoom-out-button {
+  position: absolute;
+  left: 9vw;
+  bottom: 6vh;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    transform 0.08s;
+}
+.reset-button {
+  font-size: 20px;
+  position: absolute;
+  left: 5vw;
+  bottom: 6vh;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    transform 0.08s;
 }

@@ -1,3 +1,4 @@
+import { Minus, Plus } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
@@ -11,7 +12,13 @@ import RoomDetails from "./RoomDetails";
 const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
-  const { mapContainer, inputContainer, hasMoved } = useMapTransform();
+  const {
+    mapContainer,
+    inputContainer,
+    hasMoved,
+    handleZoomFunc,
+    handleResetFunc,
+  } = useMapTransform();
   const { useAvailability, setUseAvailability } = useRoomColors();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
@@ -152,6 +159,21 @@ function MainView() {
             </div>
           </div>
         </div>
+        <button
+          onClick={(e) => handleZoomFunc(e, -1)}
+          className="zoom-in-button"
+        >
+          <Plus className="size-6" />
+        </button>
+        <button onClick={handleResetFunc} className="reset-button">
+          RESET
+        </button>
+        <button
+          onClick={(e) => handleZoomFunc(e, 1)}
+          className="zoom-out-button"
+        >
+          <Minus className="size-6" />
+        </button>
         <button
           data-testid="switch-color-mode"
           onClick={() => setUseAvailability(!useAvailability)}
