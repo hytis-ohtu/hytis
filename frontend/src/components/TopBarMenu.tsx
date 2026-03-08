@@ -1,4 +1,4 @@
-import { Settings, X } from "lucide-react";
+import { LogOut, Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import SettingsModal from "./SettingsModal";
@@ -55,6 +55,7 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
         />
       )}
       <button className="topbar-menu-button" onClick={() => void logout()}>
+        <LogOut size={16} />
         Log Out
       </button>
     </div>
