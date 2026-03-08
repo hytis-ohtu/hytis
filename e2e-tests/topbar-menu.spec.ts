@@ -15,7 +15,7 @@ test("topbar menu can be opened and closed by the profile button", async ({
   await openProfileMenu(page);
   await expect(page.getByTestId("topbar-settings-button")).toBeVisible();
 
-  await page.getByTestId("topbar-menu-button").click();
+  await openProfileMenu(page);
   await expect(page.getByTestId("topbar-settings-button")).not.toBeVisible();
 });
 
