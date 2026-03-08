@@ -5,6 +5,7 @@ import { useMapTransform } from "../hooks/useMapTransform";
 import { useRoomColors } from "../hooks/useRoomColors";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
+import Legend from "./Legend";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
@@ -159,6 +160,7 @@ function MainView() {
         >
           {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
         </button>
+        <Legend mode={useAvailability ? "availability" : "department"} />
         <AnimatePresence>
           {isRoomDetailsOpen && (
             <RoomDetails
