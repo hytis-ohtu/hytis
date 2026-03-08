@@ -34,3 +34,10 @@ test("topbar menu can be closed by the close button", async ({ page }) => {
   await page.getByTestId("profile-menu-close-button").click();
   await expect(page.getByTestId("topbar-settings-button")).not.toBeVisible();
 });
+
+test("logout shows redirect message", async ({ page }) => {
+  await openProfileMenu(page);
+  await page.getByText("Log Out").click();
+
+  await expect(page.getByText("Redirecting to login page...")).toBeVisible();
+});
