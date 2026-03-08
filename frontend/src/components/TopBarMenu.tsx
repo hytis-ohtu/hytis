@@ -31,7 +31,11 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
-      <button className="topbar-menu-close-button" onClick={onClose}>
+      <button
+        data-testid="profile-menu-close-button"
+        className="topbar-menu-close-button"
+        onClick={onClose}
+      >
         <X size={16} />
       </button>
       {user && <div className="topbar-menu-user">{user.name}</div>}
