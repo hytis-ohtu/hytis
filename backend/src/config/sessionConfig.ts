@@ -2,7 +2,7 @@
  * Configures session middleware and Passport session handling
  */
 
-import { RedisStore } from "connect-redis";
+import RedisStore from "connect-redis";
 import { Application } from "express";
 import session from "express-session";
 import Redis from "ioredis";
