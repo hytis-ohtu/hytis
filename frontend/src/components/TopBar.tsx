@@ -15,7 +15,7 @@ interface TopBarProps {
   title?: string;
 }
 
-function TopBar({ title = "HYTis" }: TopBarProps) {
+function TopBar({ title = "HYTiS" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [fontSize, setFontSize] = useState(
     Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
