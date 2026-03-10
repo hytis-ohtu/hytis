@@ -163,16 +163,20 @@ function MainView() {
           onClick={(e) => handleZoomFunc(e, -1)}
           className="zoom-in-button"
         >
-          <Plus className="size-6" />
+          <Plus />
         </button>
-        <button onClick={handleResetFunc} className="reset-button">
+        <button
+          data-testid="reset-transform-button"
+          onClick={handleResetFunc}
+          className="reset-button"
+        >
           RESET
         </button>
         <button
           onClick={(e) => handleZoomFunc(e, 1)}
           className="zoom-out-button"
         >
-          <Minus className="size-6" />
+          <Minus />
         </button>
         <button
           data-testid="switch-color-mode"

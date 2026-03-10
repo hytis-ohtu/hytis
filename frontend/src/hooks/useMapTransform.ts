@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 
-const WHEEL_SENSITIVITY = 0.05;
-const BUTTON_SENSITIVITY = 0.25;
-const MAX_ZOOM = 3;
-const MIN_ZOOM = 0.75;
+export const WHEEL_SENSITIVITY = 0.05;
+export const BUTTON_SENSITIVITY = 0.25;
+export const MAX_ZOOM = 3;
+export const MIN_ZOOM = 0.75;
+export const DEFAULT_SCALE = 0.9;
 
 export function useMapTransform() {
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +24,7 @@ export function useMapTransform() {
     lastX: 0,
     lastY: 0,
   });
-  const scale = useRef<number>(1);
+  const scale = useRef<number>(0.9);
 
   function getLeftBound(): number {
     return window.innerWidth / 4;
@@ -38,7 +39,7 @@ export function useMapTransform() {
     return window.innerHeight / 2;
   }
 
-  function handleButtonZoom(e, dir: number) {
+  function handleButtonZoom(e: React.MouseEvent, dir: number) {
     if (!mapRef.current) return;
     const map = mapRef.current;
 
@@ -88,7 +89,7 @@ export function useMapTransform() {
     map.style.scale = `${newScale}`;
   }
 
-  function handleButtonReset(e) {
+  function handleButtonReset(e: React.MouseEvent) {
     if (!mapRef.current) return;
     const map = mapRef.current;
 
@@ -111,8 +112,22 @@ export function useMapTransform() {
 
     const map = mapRef.current;
     const container = inputContainerRef.current;
+    map.style.scale = `${scale.current}`;
+
+    function setHover(state: boolean) {
+      const roomElements = document.querySelectorAll("path[data-room]");
+
+      for (const element of roomElements) {
+        if (!(element instanceof SVGGraphicsElement)) continue;
+
+        if (state) element.style.pointerEvents = `all`;
+        else element.style.pointerEvents = `none`;
+      }
+    }
 
     const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+
       isClicked.current = true;
       isMapMoved.current = false;
       coords.current.startX = e.clientX;
@@ -120,19 +135,27 @@ export function useMapTransform() {
     };
 
     const onMouseUp = () => {
+      if (!isClicked) return;
+
       isClicked.current = false;
       coords.current.lastX = map.offsetLeft;
       coords.current.lastY = map.offsetTop;
+
+      setHover(true);
     };
 
     const onMouseMove = (e: MouseEvent) => {
       if (!isClicked.current) return;
 
+      if (!isMapMoved.current) setHover(false);
+
+      isMapMoved.current = true;
+
+      e.preventDefault();
+      e.stopPropagation();
+
       const offsetX = e.clientX - coords.current.startX;
       const offsetY = e.clientY - coords.current.startY;
-
-      if (Math.abs(offsetX) > 0 || Math.abs(offsetY) > 0)
-        isMapMoved.current = true;
 
       let nextX = offsetX + coords.current.lastX;
       let nextY = offsetY + coords.current.lastY;
@@ -141,14 +164,18 @@ export function useMapTransform() {
       const height = map.clientHeight * scale.current;
 
       if (nextX > getLeftBound()) {
+        coords.current.startX += nextX - getLeftBound();
         nextX = getLeftBound();
       } else if (nextX + width < getRightBound()) {
+        coords.current.startX += nextX + width - getRightBound();
         nextX = getRightBound() - width;
       }
 
       if (nextY > getTopBound()) {
+        coords.current.startY += nextY - getTopBound();
         nextY = getTopBound();
       } else if (nextY + height < getBottomBound()) {
+        coords.current.startY += nextY + height - getBottomBound();
         nextY = getBottomBound() - height;
       }
 
