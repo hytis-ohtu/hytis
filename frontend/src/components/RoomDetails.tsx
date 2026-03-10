@@ -30,9 +30,19 @@ function RoomDetails({
           onClick={handleClose}
         />
       </header>
+
       <div className="room-details-avatar">
         <h2 className="room-details-avatar-name">{room.name}</h2>
       </div>
+
+      <section className="room-details-">
+        <h1 className="room-details-title">Tiedot</h1>
+        <ul>
+          <li>Pinta-ala: {room.area} m²</li>
+          <li>Kapasiteetti: {room.capacity}</li>
+          <li>Osasto: {room.department.name}</li>
+        </ul>
+      </section>
     </motion.div>
   );
 }
