@@ -160,6 +160,7 @@ function MainView() {
           </div>
         </div>
         <button
+          data-testid="zoom-increase-button"
           onClick={(e) => handleZoomFunc(e, -1)}
           className="zoom-in-button"
         >
@@ -173,6 +174,7 @@ function MainView() {
           RESET
         </button>
         <button
+          data-testid="zoom-decrease-button"
           onClick={(e) => handleZoomFunc(e, 1)}
           className="zoom-out-button"
         >
