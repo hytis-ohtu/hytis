@@ -2,33 +2,21 @@ import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
+import { useRoomColors } from "../hooks/useRoomColors";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
-const LIMITED_CAPACITY_THRESHOLD = 2;
 const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
+  const { useAvailability, setUseAvailability } = useRoomColors();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
-
-  function getRoomAvailability(
-    capacity: number,
-    occupants: number,
-  ): "available" | "limited" | "full" {
-    if (occupants === 0 || occupants < capacity - LIMITED_CAPACITY_THRESHOLD) {
-      return "available";
-    }
-    if (occupants < capacity) {
-      return "limited";
-    }
-    return "full";
-  }
 
   function createRoomInfoLabel(
     centerX: number,
@@ -81,12 +69,6 @@ function MainView() {
             if (room) {
               element.id = String(room.id);
               element.classList.add("room");
-
-              const availabilityState = getRoomAvailability(
-                room.capacity,
-                room.contracts.length,
-              );
-              element.classList.add(availabilityState);
 
               if (element instanceof SVGGraphicsElement) {
                 const bbox = element.getBBox();
@@ -170,6 +152,13 @@ function MainView() {
             </div>
           </div>
         </div>
+        <button
+          data-testid="switch-color-mode"
+          onClick={() => setUseAvailability(!useAvailability)}
+          className="color-button"
+        >
+          {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
+        </button>
         <AnimatePresence>
           {isRoomDetailsOpen && (
             <RoomDetails
