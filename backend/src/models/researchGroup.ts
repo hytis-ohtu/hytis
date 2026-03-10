@@ -1,6 +1,7 @@
 import type { InferAttributes, InferCreationAttributes } from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
+import { Person } from "./person";
 
 class ResearchGroup extends Model<
   InferAttributes<ResearchGroup>,
@@ -10,6 +11,7 @@ class ResearchGroup extends Model<
   declare name: string;
   declare createdAt?: Date;
   declare updatedAt?: Date;
+  declare people?: Person[];
 }
 
 ResearchGroup.init(
