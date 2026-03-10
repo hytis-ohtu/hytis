@@ -1,6 +1,8 @@
 import { X } from "lucide-react";
 import { motion } from "motion/react";
+import { useState } from "react";
 import type { Room } from "../types";
+import AddPersonModal from "./AddPersonModal";
 import "./RoomDetails.css";
 
 function RoomDetails({
@@ -10,6 +12,8 @@ function RoomDetails({
   room: Room | null;
   handleClose: () => void;
 }) {
+  const [addPersonOpen, setAddPersonOpen] = useState(false);
+
   if (!room) {
     return null;
   }
@@ -32,6 +36,17 @@ function RoomDetails({
       </header>
       <div className="room-details-avatar">
         <h2 className="room-details-avatar-name">{room.name}</h2>
+      </div>
+      <div className="room-details-info">
+        <button
+          className="room-details-button"
+          onClick={() => setAddPersonOpen(true)}
+        >
+          Lisää henkilö
+        </button>
+        {addPersonOpen && (
+          <AddPersonModal onClose={() => setAddPersonOpen(false)} />
+        )}
       </div>
     </motion.div>
   );
