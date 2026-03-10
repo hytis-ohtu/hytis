@@ -19,8 +19,6 @@ RUN npm ci
 
 COPY /frontend .
 
-ENV VITE_API_URL="https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi"
-
 RUN npm run build
 
 
