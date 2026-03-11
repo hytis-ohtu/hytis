@@ -47,3 +47,12 @@
   font-weight: 600;
   color: white;
 }
+
+.room-details-info {
+  width: 100%;
+  padding: var(--gap);
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--radius);
+  background: var(--background-color);
+  color: var(--primary-color);
+}

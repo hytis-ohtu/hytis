@@ -27,5 +27,5 @@ export interface Room {
   capacity: number;
   department: Department;
   contracts: Contract[];
-  extra: string;
+  freeText: string;
 }
