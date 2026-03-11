@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const WHEEL_SENSITIVITY = 0.05;
 export const BUTTON_SENSITIVITY = 0.25;
-export const MAX_ZOOM = 3;
+export const MAX_ZOOM = 2.5;
 export const MIN_ZOOM = 0.75;
 export const DEFAULT_SCALE = 0.9;
 
@@ -24,10 +24,10 @@ export function useMapTransform() {
     lastX: 0,
     lastY: 0,
   });
-  const scale = useRef<number>(0.9);
+  const scale = useRef<number>(DEFAULT_SCALE);
 
   function getLeftBound(): number {
-    return window.innerWidth / 4;
+    return window.innerWidth / 8;
   }
   function getRightBound(): number {
     return (window.innerWidth / 4) * 3;
@@ -104,7 +104,18 @@ export function useMapTransform() {
 
     map.style.left = `${0}px`;
     map.style.top = `${0}px`;
-    map.style.scale = `${0.9}`;
+    map.style.scale = `${DEFAULT_SCALE}`;
+  }
+
+  function setHover(state: boolean) {
+    const roomElements = document.querySelectorAll("path[data-room]");
+
+    for (const element of roomElements) {
+      if (!(element instanceof SVGGraphicsElement)) continue;
+
+      if (state) element.style.pointerEvents = `all`;
+      else element.style.pointerEvents = `none`;
+    }
   }
 
   useEffect(() => {
@@ -112,18 +123,7 @@ export function useMapTransform() {
 
     const map = mapRef.current;
     const container = inputContainerRef.current;
-    map.style.scale = `${scale.current}`;
-
-    function setHover(state: boolean) {
-      const roomElements = document.querySelectorAll("path[data-room]");
-
-      for (const element of roomElements) {
-        if (!(element instanceof SVGGraphicsElement)) continue;
-
-        if (state) element.style.pointerEvents = `all`;
-        else element.style.pointerEvents = `none`;
-      }
-    }
+    map.style.scale = `${DEFAULT_SCALE}`;
 
     const onMouseDown = (e: MouseEvent) => {
       if (e.button !== 0) return;

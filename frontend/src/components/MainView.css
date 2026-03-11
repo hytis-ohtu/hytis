@@ -61,15 +61,10 @@ g[stroke]:not(.room) {
   pointer-events: none;
 }
 
-.main-container {
+.click-container {
   display: grid;
   place-items: center;
-  height: 100vh;
-  width: 100vw;
-}
-
-.click-container {
-  position: relative;
+  position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;

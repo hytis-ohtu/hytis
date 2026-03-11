@@ -152,11 +152,9 @@ function MainView() {
   return (
     <>
       <div className="wrapper">
-        <div className="main-container">
-          <div ref={inputContainer} className="click-container">
-            <div ref={mapContainer} className="map-container">
-              <Exactum2 className="map" onClick={handleClick} />
-            </div>
+        <div ref={inputContainer} className="click-container">
+          <div ref={mapContainer} className="map-container">
+            <Exactum2 className="map" onClick={handleClick} />
           </div>
         </div>
         <button
