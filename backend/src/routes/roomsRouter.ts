@@ -43,7 +43,7 @@ router.get(
     res: Response<Room | { error: string }>,
   ): Promise<Response<Room | { error: string }>> => {
     const room = await Room.findByPk(req.params.id, {
-      attributes: ["id", "name", "area", "freeText", "capacity"],
+      attributes: ["id", "name", "area", "freeText", "capacity", "roomType"],
       include: [
         {
           model: Contract,

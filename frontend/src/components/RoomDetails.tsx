@@ -40,6 +40,7 @@ function RoomDetails({
         <ul>
           <li>Pinta-ala: {room.area} m²</li>
           <li>Kapasiteetti: {room.capacity}</li>
+          <li>Huonetyyppi: {room.roomType}</li>
           <li>Osasto: {room.department.name}</li>
           <li>Lisätiedot: {room.freeText}</li>
         </ul>
