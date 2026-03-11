@@ -6,6 +6,7 @@
 .wrapper {
   height: 100vh;
   padding: 16px;
+  padding-top: 72px;
   display: flex;
   justify-content: center;
   align-items: center;

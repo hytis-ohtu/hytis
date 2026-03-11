@@ -1,4 +1,5 @@
 export interface Department {
+  id: number;
   name: string;
 }
 
@@ -24,5 +25,6 @@ export interface Room {
   name: string;
   area: string;
   capacity: number;
+  department: Department;
   contracts: Contract[];
 }

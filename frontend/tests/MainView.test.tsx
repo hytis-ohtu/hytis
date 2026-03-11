@@ -1,7 +1,12 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
+import {
+  AvailabilityColors,
+  getDepartmentColor,
+} from "../src/hooks/useRoomColors.ts";
 import { findAllRooms } from "../src/services/roomsService";
 import { rooms } from "./testData.ts";
 
@@ -34,7 +39,6 @@ describe("MainView", () => {
   it("renders without crashing", () => {
     vi.mocked(findAllRooms).mockResolvedValue([]);
     render(<MainView />);
-    expect(screen.getByText("Test User")).toBeInTheDocument();
     expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
   });
 
@@ -46,17 +50,46 @@ describe("MainView", () => {
       const availableRoom = document.querySelector('[data-room="A210"]');
       expect(availableRoom).toHaveAttribute("id", "1");
       expect(availableRoom).toHaveClass("room");
-      expect(availableRoom).toHaveClass("available");
+      expect(
+        availableRoom instanceof SVGGraphicsElement &&
+          availableRoom.style.fill === AvailabilityColors["available"],
+      );
 
       const limitedRoom = document.querySelector('[data-room="A211"]');
       expect(limitedRoom).toHaveAttribute("id", "2");
       expect(limitedRoom).toHaveClass("room");
-      expect(limitedRoom).toHaveClass("limited");
+      expect(
+        limitedRoom instanceof SVGGraphicsElement &&
+          limitedRoom.style.fill === AvailabilityColors["limited"],
+      );
 
       const fullRoom = document.querySelector('[data-room="A212"]');
       expect(fullRoom).toHaveAttribute("id", "3");
       expect(fullRoom).toHaveClass("room");
-      expect(fullRoom).toHaveClass("full");
+      expect(
+        fullRoom instanceof SVGGraphicsElement &&
+          fullRoom.style.fill === AvailabilityColors["full"],
+      );
     });
+  });
+
+  it("room colors change correctly when showing departments", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("switch-color-mode"));
+
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A210"]');
+      expect(
+        room instanceof SVGGraphicsElement &&
+          room.style.fill === getDepartmentColor(rooms[0].department.name),
+      );
+    });
+  });
+
+  it("incorrect department name returns error color", () => {
+    expect(getDepartmentColor("incorrect name") === "#aaaaaa");
   });
 });

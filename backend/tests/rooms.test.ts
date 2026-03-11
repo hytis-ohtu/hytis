@@ -2,7 +2,9 @@ import supertest from "supertest";
 import app from "../src/app";
 import { contracts } from "../src/data/contracts";
 import { rooms } from "../src/data/rooms";
+import type { Contract } from "../src/models";
 import { createAllTables, dropAllTables, seedData } from "../src/seed";
+import { validateContract } from "./testHelpers";
 
 const api = supertest(app);
 
@@ -40,4 +42,30 @@ test("returns correct room data", async () => {
   expect(returnedRoom.contracts).toEqual(
     expectedContracts.map((contract) => ({ id: contract.id })),
   );
+  expect(returnedRoom.department.id).toBe(expectedRoom.departmentId);
+});
+
+test("single room is returned", async () => {
+  const response = await api.get("/api/rooms/1").expect(200);
+  const returnedRoom = response.body;
+  const expectedRoom = rooms[0];
+  const expectedContracts = contracts.filter(
+    (contract) => contract.roomId === expectedRoom.id,
+  );
+
+  expect(returnedRoom.id).toBe(expectedRoom.id);
+  expect(returnedRoom.name).toBe(expectedRoom.name);
+  expect(parseFloat(returnedRoom.area)).toBe(expectedRoom.area);
+  expect(returnedRoom.contracts).toHaveLength(expectedContracts.length);
+
+  returnedRoom.contracts.forEach((contract: Contract, index: number) =>
+    validateContract(contract, expectedContracts[index]),
+  );
+
+  expect(returnedRoom.department.id).toBe(expectedRoom.departmentId);
+});
+
+test("returns 404 for non-existing room", async () => {
+  const response = await api.get("/api/rooms/9999").expect(404);
+  expect(response.body.error).toBe("Room not found.");
 });

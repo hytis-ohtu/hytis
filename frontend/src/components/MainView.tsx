@@ -1,36 +1,22 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
-import { useAuth } from "../contexts/AuthContext";
 import { useMapTransform } from "../hooks/useMapTransform";
+import { useRoomColors } from "../hooks/useRoomColors";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
 const ROOM_LABEL_FONT_SIZE = 24;
-const LIMITED_CAPACITY_THRESHOLD = 2;
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved } = useMapTransform();
-  const { user, logout } = useAuth();
+  const { useAvailability, setUseAvailability } = useRoomColors();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
-
-  function getRoomAvailability(
-    capacity: number,
-    occupants: number,
-  ): "available" | "limited" | "full" {
-    if (occupants === 0 || occupants < capacity - LIMITED_CAPACITY_THRESHOLD) {
-      return "available";
-    }
-    if (occupants < capacity) {
-      return "limited";
-    }
-    return "full";
-  }
 
   function createRoomInfoLabel(
     centerX: number,
@@ -45,7 +31,6 @@ function MainView() {
     text.classList.add("room-label");
 
     const fontSize = ROOM_LABEL_FONT_SIZE;
-    text.style.fontSize = `${fontSize}px`;
     const lineHeight = fontSize * 1.2;
     // Offset the starting position so the label is centered in the middle of the room
     const offsetStart = -((lines.length - 1) / 2) * lineHeight;
@@ -84,12 +69,6 @@ function MainView() {
             if (room) {
               element.id = String(room.id);
               element.classList.add("room");
-
-              const availabilityState = getRoomAvailability(
-                room.capacity,
-                room.contracts.length,
-              );
-              element.classList.add(availabilityState);
 
               if (element instanceof SVGGraphicsElement) {
                 const bbox = element.getBBox();
@@ -165,14 +144,6 @@ function MainView() {
 
   return (
     <>
-      <header className="main-header">
-        <div className="user-info">
-          <span className="user-name">{user?.name}</span>
-          <button className="logout-button" onClick={() => void logout()}>
-            Logout
-          </button>
-        </div>
-      </header>
       <div className="wrapper">
         <div className="main-container">
           <div ref={inputContainer} className="click-container">
@@ -181,6 +152,13 @@ function MainView() {
             </div>
           </div>
         </div>
+        <button
+          data-testid="switch-color-mode"
+          onClick={() => setUseAvailability(!useAvailability)}
+          className="color-button"
+        >
+          {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
+        </button>
         <AnimatePresence>
           {isRoomDetailsOpen && (
             <RoomDetails

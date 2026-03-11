@@ -38,18 +38,6 @@
   cursor: pointer;
 }
 
-.room.available {
-  fill: #4ade80;
-}
-
-.room.limited {
-  fill: #facc15;
-}
-
-.room.full {
-  fill: #f87171;
-}
-
 .room:hover {
   filter: brightness(0.8);
 }
@@ -61,6 +49,7 @@
 .room-label {
   fill: #333;
   font-weight: 500;
+  font-size: var(--map-font-size, 24px);
   pointer-events: none;
 }
 
@@ -99,4 +88,13 @@ g[stroke]:not(.room) {
 .map {
   height: 100%;
   width: 100%;
+}
+
+.color-button {
+  position: absolute;
+  width: 10vw;
+  height: 3vh;
+  left: 2vw;
+  bottom: 2vh;
+  font-size: 16px;
 }
