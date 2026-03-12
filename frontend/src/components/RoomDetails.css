@@ -51,7 +51,7 @@
 .room-details-info {
   width: 100%;
   padding: var(--gap);
-  border: 1px solid var(--secondary-color);
+  border: 3px solid var(--secondary-color);
   border-radius: var(--radius);
   background: var(--background-color);
   color: var(--primary-color);
