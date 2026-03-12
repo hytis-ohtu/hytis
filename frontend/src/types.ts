@@ -28,4 +28,5 @@ export interface Room {
   department: Department;
   contracts: Contract[];
   freeText: string;
+  roomType: string;
 }
