@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import type { Room } from "../types";
-import AddPersonModal from "./AddPersonModal";
+import AddPersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
 function RoomDetails({
