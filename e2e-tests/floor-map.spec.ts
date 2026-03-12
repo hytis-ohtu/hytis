@@ -56,34 +56,44 @@ test("room details panel is hidden when clicking the close button", async ({
 });
 
 test("zooming in with button works", async ({ page }) => {
-  const mapBefore = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleBefore = mapBefore.style.scale;
+  const mapBefore = await page.locator(".map-container");
+  const scaleBefore = await mapBefore.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
   const zoomInButton = page.getByTestId("zoom-increase-button");
   await zoomInButton.click();
 
-  const mapCurrent = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleCurrent = mapCurrent.style.scale;
+  const mapAfter = await page.locator(".map-container");
+  const scaleAfter = await mapAfter.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
-  await expect(scaleCurrent > scaleBefore);
+  expect(scaleAfter > scaleBefore);
 });
 
 test("zooming out with button works", async ({ page }) => {
-  const mapBefore = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleBefore = mapBefore.style.scale;
+  const mapBefore = await page.locator(".map-container");
+  const scaleBefore = await mapBefore.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
-  const zoomOutButton = page.getByTestId("zoom-decrease-button").click();
-  await zoomOutButton.click();
+  const zoomInButton = page.getByTestId("zoom-decrease-button");
+  await zoomInButton.click();
 
-  const mapCurrent = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleCurrent = mapCurrent.style.scale;
+  const mapAfter = await page.locator(".map-container");
+  const scaleAfter = await mapAfter.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
-  await expect(scaleCurrent < scaleBefore);
+  expect(scaleAfter < scaleBefore);
 });
 
 test("reset button works", async ({ page }) => {
-  const mapBefore = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleBefore = mapBefore.style.scale;
+  const mapBefore = await page.locator(".map-container");
+  const scaleBefore = await mapBefore.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
   const zoomButton = page.getByTestId("zoom-increase-button");
   await zoomButton.click();
@@ -91,8 +101,10 @@ test("reset button works", async ({ page }) => {
   const resetButton = page.getByTestId("reset-transform-button");
   await resetButton.click();
 
-  const mapCurrent = page.locator(".map-container").first() as HTMLDivElement;
-  const scaleCurrent = mapCurrent.style.scale;
+  const mapAfter = await page.locator(".map-container");
+  const scaleAfter = await mapAfter.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
 
-  await expect(scaleCurrent === scaleBefore);
+  expect(scaleAfter === scaleBefore);
 });
