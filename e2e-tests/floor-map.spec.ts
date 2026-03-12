@@ -56,50 +56,43 @@ test("room details panel is hidden when clicking the close button", async ({
 });
 
 test("zooming in with button works", async ({ page }) => {
-  const mapBefore = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const mapBefore = page.locator(".map-container").first();
   const scaleBefore = mapBefore.style.scale;
 
-  page.getByTestId("zoom-increase-button").click();
+  const zoomInButton = page.getByTestId("zoom-increase-button");
+  await zoomInButton.click();
 
-  const mapCurrent = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const mapCurrent = page.locator(".map-container").first();
   const scaleCurrent = mapCurrent.style.scale;
 
-  expect(scaleCurrent > scaleBefore);
+  await expect(scaleCurrent > scaleBefore);
 });
 
 test("zooming out with button works", async ({ page }) => {
-  const mapBefore = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const mapBefore = page.locator(".map-container").first();
   const scaleBefore = mapBefore.style.scale;
 
-  page.getByTestId("zoom-decrease-button").click();
+  const zoomOutButton = page.getByTestId("zoom-decrease-button").click();
+  await zoomOutButton.click();
 
-  const mapCurrent = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const mapCurrent = page.locator(".map-container").first();
   const scaleCurrent = mapCurrent.style.scale;
 
-  expect(scaleCurrent < scaleBefore);
+  await expect(scaleCurrent < scaleBefore);
 });
 
 test("reset button works", async ({ page }) => {
-  const mapBefore = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const mapBefore = page.locator(".map-container").first();
   const scaleBefore = mapBefore.style.scale;
 
-  page.getByTestId("zoom-increase-button").click();
-  page.getByTestId("reset-transform-button").click();
+  const zoomButton = page.getByTestId("zoom-increase-button");
+  await zoomButton.click();
 
-  const mapCurrent = document.getElementsByClassName(
-    "map-container",
-  )[0] as HTMLDivElement;
+  const resetButton = page.getByTestId("reset-transform-button");
+  await resetButton.click();
+
+  const mapCurrent = page.locator(".map-container").first();
   const scaleCurrent = mapCurrent.style.scale;
 
-  expect(scaleCurrent === scaleBefore);
+  await expect(scaleCurrent === scaleBefore);
 });
