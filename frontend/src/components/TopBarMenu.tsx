@@ -1,4 +1,4 @@
-import { Settings, X } from "lucide-react";
+import { LogOut, Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import SettingsModal from "./SettingsModal";
@@ -31,7 +31,11 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
 
   return (
     <div className="topbar-menu" ref={ref}>
-      <button className="topbar-menu-close-button" onClick={onClose}>
+      <button
+        data-testid="profile-menu-close-button"
+        className="topbar-menu-close-button"
+        onClick={onClose}
+      >
         <X size={16} />
       </button>
       {user && <div className="topbar-menu-user">{user.name}</div>}
@@ -51,6 +55,7 @@ function TopBarMenu({ onClose, fontSize, setFontSize }: TopBarMenuProps) {
         />
       )}
       <button className="topbar-menu-button" onClick={() => void logout()}>
+        <LogOut size={16} />
         Log Out
       </button>
     </div>

@@ -5,6 +5,8 @@ export const people = [
     lastName: "Virtanen",
     titleId: 1,
     departmentId: 1,
+    researchGroupId: 1,
+    freeText: null,
   },
   {
     id: 2,
@@ -12,6 +14,8 @@ export const people = [
     lastName: "Korhonen",
     titleId: 2,
     departmentId: 2,
+    researchGroupId: 2,
+    freeText: "Liikkuu pyörätuolilla",
   },
   {
     id: 3,
@@ -19,6 +23,8 @@ export const people = [
     lastName: "Nieminen",
     titleId: 3,
     departmentId: 1,
+    researchGroupId: 1,
+    freeText: null,
   },
   {
     id: 4,
@@ -26,6 +32,8 @@ export const people = [
     lastName: "Mäkinen",
     titleId: 4,
     departmentId: 2,
+    researchGroupId: 3,
+    freeText: "Vieraileva tutkija 2024-2025",
   },
   {
     id: 5,
@@ -33,6 +41,8 @@ export const people = [
     lastName: "Laine",
     titleId: 5,
     departmentId: 1,
+    researchGroupId: 2,
+    freeText: null,
   },
   {
     id: 6,
@@ -40,6 +50,8 @@ export const people = [
     lastName: "Koskinen",
     titleId: 1,
     departmentId: 2,
+    researchGroupId: 4,
+    freeText: null,
   },
   {
     id: 7,
@@ -47,6 +59,8 @@ export const people = [
     lastName: "Miller",
     titleId: 2,
     departmentId: 1,
+    researchGroupId: 3,
+    freeText: null,
   },
   {
     id: 8,
@@ -54,6 +68,8 @@ export const people = [
     lastName: "Tanaka",
     titleId: 3,
     departmentId: 2,
+    researchGroupId: 1,
+    freeText: null,
   },
   {
     id: 9,
@@ -61,6 +77,8 @@ export const people = [
     lastName: "Andersson",
     titleId: 4,
     departmentId: 1,
+    researchGroupId: 4,
+    freeText: null,
   },
   {
     id: 10,
@@ -68,6 +86,8 @@ export const people = [
     lastName: "Hassan",
     titleId: 5,
     departmentId: 2,
+    researchGroupId: 2,
+    freeText: "1 pv/viikko toimistolla",
   },
   {
     id: 11,
@@ -75,6 +95,8 @@ export const people = [
     lastName: "Chen",
     titleId: 1,
     departmentId: 1,
+    researchGroupId: 3,
+    freeText: null,
   },
   {
     id: 12,
@@ -82,6 +104,8 @@ export const people = [
     lastName: "Sharma",
     titleId: 2,
     departmentId: 2,
+    researchGroupId: 1,
+    freeText: null,
   },
   {
     id: 13,
@@ -89,6 +113,8 @@ export const people = [
     lastName: "Martínez",
     titleId: 3,
     departmentId: 1,
+    researchGroupId: 2,
+    freeText: "Hajusteeton työpiste",
   },
   {
     id: 14,
@@ -96,6 +122,8 @@ export const people = [
     lastName: "Ali",
     titleId: 4,
     departmentId: 2,
+    researchGroupId: 4,
+    freeText: null,
   },
   {
     id: 15,
@@ -103,6 +131,8 @@ export const people = [
     lastName: "Popova",
     titleId: 5,
     departmentId: 1,
+    researchGroupId: 3,
+    freeText: null,
   },
   {
     id: 16,
@@ -110,6 +140,8 @@ export const people = [
     lastName: "Rossi",
     titleId: 1,
     departmentId: 2,
+    researchGroupId: 2,
+    freeText: null,
   },
   {
     id: 17,
@@ -117,6 +149,8 @@ export const people = [
     lastName: "Haddad",
     titleId: 2,
     departmentId: 1,
+    researchGroupId: 1,
+    freeText: "Säädettävä työpiste",
   },
   {
     id: 18,
@@ -124,6 +158,8 @@ export const people = [
     lastName: "Ivanova",
     titleId: 3,
     departmentId: 2,
+    researchGroupId: 4,
+    freeText: null,
   },
   {
     id: 19,
@@ -131,6 +167,8 @@ export const people = [
     lastName: "Wang",
     titleId: 4,
     departmentId: 1,
+    researchGroupId: 3,
+    freeText: null,
   },
   {
     id: 20,
@@ -138,5 +176,7 @@ export const people = [
     lastName: "Silva",
     titleId: 5,
     departmentId: 2,
+    researchGroupId: 2,
+    freeText: null,
   },
 ];
