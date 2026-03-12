@@ -54,3 +54,52 @@ test("room details panel is hidden when clicking the close button", async ({
   await expect(page.getByRole("heading", { name: "Huone" })).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "A210" })).not.toBeVisible();
 });
+
+test("zooming in with button works", async ({ page }) => {
+  const mapBefore = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleBefore = mapBefore.style.scale;
+
+  page.getByTestId("zoom-increase-button").click();
+
+  const mapCurrent = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleCurrent = mapCurrent.style.scale;
+
+  expect(scaleCurrent > scaleBefore);
+});
+
+test("zooming out with button works", async ({ page }) => {
+  const mapBefore = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleBefore = mapBefore.style.scale;
+
+  page.getByTestId("zoom-decrease-button").click();
+
+  const mapCurrent = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleCurrent = mapCurrent.style.scale;
+
+  expect(scaleCurrent < scaleBefore);
+});
+
+test("reset button works", async ({ page }) => {
+  const mapBefore = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleBefore = mapBefore.style.scale;
+
+  page.getByTestId("zoom-increase-button").click();
+  page.getByTestId("reset-transform-button").click();
+
+  const mapCurrent = document.getElementsByClassName(
+    "map-container",
+  )[0] as HTMLDivElement;
+  const scaleCurrent = mapCurrent.style.scale;
+
+  expect(scaleCurrent === scaleBefore);
+});
