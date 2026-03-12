@@ -5,7 +5,7 @@ export const rooms = [
     area: 63.6,
     capacity: 15,
     departmentId: 2,
-    freeText: "Lorem ipsum",
+    freeText: "Hätäpoistumistie",
     roomType: "Konferenssihuone",
   },
   {
