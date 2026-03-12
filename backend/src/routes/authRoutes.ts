@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import passport from "passport";
 import { config, useHyLogin } from "../config/environmentConfig";
+import { endSessionUrl } from "../config/oidcConfig";
 import { mockAuthMiddleware } from "../middleware/mockAuth";
 
 const router = Router();
@@ -77,6 +78,11 @@ router.post("/logout", (req: Request, res: Response) => {
       }
 
       res.clearCookie("connect.sid");
+
+      if (useHyLogin && endSessionUrl) {
+        return res.json({ logoutUrl: endSessionUrl });
+      }
+
       res.json({ message: "Logged out successfully" });
     });
   });
