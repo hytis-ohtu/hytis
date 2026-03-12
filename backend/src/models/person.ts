@@ -3,6 +3,7 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Contract } from "./contract";
 import { Department } from "./department";
+import { ResearchGroup } from "./researchGroup";
 import { Title } from "./title";
 
 class Person extends Model<
@@ -12,13 +13,18 @@ class Person extends Model<
   declare id: number;
   declare firstName: string;
   declare lastName: string;
+  declare freeText: string | null;
   declare titleId: number | null;
   declare departmentId: number | null;
+  declare researchGroupId: number | null;
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare contracts?: Contract[];
   declare department?: Department;
   declare title?: Title;
+  declare researchGroup?: ResearchGroup;
+  declare supervisors?: Person[];
+  declare subordinates?: Person[];
 }
 
 Person.init(
@@ -36,6 +42,10 @@ Person.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    freeText: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     titleId: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -49,6 +59,14 @@ Person.init(
       allowNull: true,
       references: {
         model: "departments",
+        key: "id",
+      },
+    },
+    researchGroupId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "research_groups",
         key: "id",
       },
     },
