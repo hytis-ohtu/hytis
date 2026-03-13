@@ -4,6 +4,7 @@ import { config, isProduction } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRoutes from "./routes/authRoutes";
+import personRouter from "./routes/personRouter";
 import roomsRouter from "./routes/roomsRouter";
 import testingRouter from "./routes/testingRouter";
 
@@ -30,6 +31,8 @@ const setUpApp = async () => {
   app.use("/api", authRoutes);
 
   app.use("/api/rooms", roomsRouter);
+
+  app.use("/api/persons", personRouter);
 
   app.get("/ping", (_req, res) => {
     console.log("someone pinged here");
