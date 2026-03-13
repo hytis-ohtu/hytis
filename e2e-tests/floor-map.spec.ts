@@ -108,3 +108,77 @@ test("reset button works", async ({ page }) => {
 
   expect(scaleAfter === scaleBefore);
 });
+
+test("zooming in with wheel works", async ({ page }) => {
+  const mapBefore = await page.locator(".map-container");
+  const scaleBefore = await mapBefore.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
+
+  await page.mouse.wheel(0, -1);
+
+  const mapAfter = await page.locator(".map-container");
+  const scaleAfter = await mapAfter.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
+
+  expect(scaleAfter > scaleBefore);
+});
+
+test("zooming out with wheel works", async ({ page }) => {
+  const mapBefore = await page.locator(".map-container");
+  const scaleBefore = await mapBefore.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
+
+  await page.mouse.wheel(0, 1);
+
+  const mapAfter = await page.locator(".map-container");
+  const scaleAfter = await mapAfter.evaluate((el) => {
+    return Number(window.getComputedStyle(el).getPropertyValue("scale"));
+  });
+
+  expect(scaleAfter < scaleBefore);
+});
+
+test("moving map horizontally works", async ({ page }) => {
+  const mapBefore = await page.locator(".map-container");
+  const xPosBefore = await mapBefore.evaluate((el) => {
+    return Number(
+      window.getComputedStyle(el).getPropertyValue("left").replace("px", ""),
+    );
+  });
+
+  await page.mouse.click(0, 0);
+  await page.mouse.move(100, 0);
+
+  const mapAfter = await page.locator(".map-container");
+  const xPosAfter = await mapAfter.evaluate((el) => {
+    return Number(
+      window.getComputedStyle(el).getPropertyValue("left").replace("px", ""),
+    );
+  });
+
+  expect(xPosAfter > xPosBefore);
+});
+
+test("moving map vertically works", async ({ page }) => {
+  const mapBefore = await page.locator(".map-container");
+  const yPosBefore = await mapBefore.evaluate((el) => {
+    return Number(
+      window.getComputedStyle(el).getPropertyValue("top").replace("px", ""),
+    );
+  });
+
+  await page.mouse.click(0, 0);
+  await page.mouse.move(0, 100);
+
+  const mapAfter = await page.locator(".map-container");
+  const yPosAfter = await mapAfter.evaluate((el) => {
+    return Number(
+      window.getComputedStyle(el).getPropertyValue("top").replace("px", ""),
+    );
+  });
+
+  expect(yPosAfter > yPosBefore);
+});

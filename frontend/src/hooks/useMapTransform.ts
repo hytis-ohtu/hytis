@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const WHEEL_SENSITIVITY = 0.05;
 export const BUTTON_SENSITIVITY = 0.25;
-export const MAX_ZOOM = 2.5;
+export const MAX_ZOOM = 4;
 export const MIN_ZOOM = 0.75;
 export const DEFAULT_SCALE = 0.9;
 
