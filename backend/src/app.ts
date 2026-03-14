@@ -32,7 +32,7 @@ const setUpApp = async () => {
 
   app.use("/api/rooms", roomsRouter);
 
-  app.use("/api/persons", peopleRouter);
+  app.use("/api/people", peopleRouter);
 
   app.get("/ping", (_req, res) => {
     console.log("someone pinged here");
