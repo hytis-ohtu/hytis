@@ -59,3 +59,17 @@ test("a person with missing required fields cannot be created", async () => {
 
   await api.post("/api/persons").send(newPerson).expect(400);
 });
+
+test("a person with invalid supervisor IDs cannot be created", async () => {
+  const newPerson = {
+    firstName: "Terppa",
+    lastName: "Testaaja",
+    freeText: "Tämä on testihenkilö",
+    titleId: 1,
+    departmentId: 1,
+    researchGroupId: 1,
+    supervisorIds: [9999], // Invalid supervisor ID
+  };
+
+  await api.post("/api/persons").send(newPerson).expect(500);
+});
