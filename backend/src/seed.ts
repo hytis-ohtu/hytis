@@ -60,6 +60,10 @@ export const fixSequences = async () => {
   await sequelize.query(
     "SELECT setval('people_id_seq', (SELECT MAX(id) FROM people))",
   );
+  await sequelize.query(
+    "SELECT setval('research_groups_id_seq', (SELECT MAX(id) FROM research_groups))",
+  );
+  console.log("Sequences fixed!");
 };
 
 const resetDatabase = async () => {
