@@ -4,6 +4,10 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
 import {
+  BUTTON_SENSITIVITY,
+  DEFAULT_SCALE,
+} from "../src/hooks/useMapTransform.ts";
+import {
   AvailabilityColors,
   getDepartmentColor,
 } from "../src/hooks/useRoomColors.ts";
@@ -91,5 +95,47 @@ describe("MainView", () => {
 
   it("incorrect department name returns error color", () => {
     expect(getDepartmentColor("incorrect name") === "#aaaaaa");
+  });
+
+  it("zooming in with button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-increase-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement &&
+        el.style.scale === `${DEFAULT_SCALE + BUTTON_SENSITIVITY}`,
+    );
+  });
+
+  it("zooming out with button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-decrease-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement &&
+        el.style.scale === `${DEFAULT_SCALE - BUTTON_SENSITIVITY}`,
+    );
+  });
+
+  it("reset button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-increase-button"));
+    user.click(screen.getByTestId("reset-transform-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement && el.style.scale === `${DEFAULT_SCALE}`,
+    );
   });
 });
