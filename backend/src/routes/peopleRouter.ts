@@ -4,7 +4,7 @@ import { Person, PersonSupervisor } from "../models";
 const router = Router();
 
 /**
- * POST /api/persons
+ * POST /api/people
  * Creates a new person with the provided first name and last name
  * Optionally, titleId, departmentId, researchGroupId, freeText and supervisorIds can be provided
  */
