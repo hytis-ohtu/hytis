@@ -29,7 +29,7 @@ test("a person can be created", async () => {
   };
 
   const response = await api
-    .post("/api/persons")
+    .post("/api/people")
     .send(newPerson)
     .expect(201)
     .expect("Content-Type", /application\/json/);
@@ -57,7 +57,7 @@ test("a person with missing required fields cannot be created", async () => {
     supervisorIds: [1, 2],
   };
 
-  await api.post("/api/persons").send(newPerson).expect(400);
+  await api.post("/api/people").send(newPerson).expect(400);
 });
 
 test("a person with invalid supervisor IDs cannot be created", async () => {
@@ -71,5 +71,5 @@ test("a person with invalid supervisor IDs cannot be created", async () => {
     supervisorIds: [9999], // Invalid supervisor ID
   };
 
-  await api.post("/api/persons").send(newPerson).expect(500);
+  await api.post("/api/people").send(newPerson).expect(500);
 });
