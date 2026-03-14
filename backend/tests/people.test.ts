@@ -1,8 +1,12 @@
 import supertest from "supertest";
 import app from "../src/app";
-import { sequelize } from "../src/db";
 import type { Person } from "../src/models";
-import { createAllTables, dropAllTables, seedData } from "../src/seed";
+import {
+  createAllTables,
+  dropAllTables,
+  fixSequences,
+  seedData,
+} from "../src/seed";
 
 const api = supertest(app);
 
@@ -10,9 +14,7 @@ beforeEach(async () => {
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await sequelize.query(
-    "SELECT setval('people_id_seq', (SELECT MAX(id) FROM people))",
-  );
+  await fixSequences();
 });
 
 test("a person can be created", async () => {
