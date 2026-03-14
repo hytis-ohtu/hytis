@@ -11,7 +11,7 @@ interface PersonModalProps {
 }
 
 function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
-  const formDataRef = useRef<Record<string, string>>({});
+  const formDataRef = useRef<Record<string, string>>({ ...initial });
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<"save" | "close" | null>(
     null,
@@ -19,7 +19,7 @@ function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
 
   const isEdit = Object.keys(initial).length > 0;
 
-  const handleFormSubmit = (values: Record<string, string>) => {
+  const handleFormChange = (values: Record<string, string>) => {
     formDataRef.current = values;
   };
 
@@ -62,7 +62,8 @@ function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
           {isEdit ? "Muokkaa henkilöä" : "Lisää henkilö"}
         </h2>
 
-        <PersonForm onSubmit={handleFormSubmit} initial={initial} />
+        <PersonForm onChange={handleFormChange} initial={initial} />
+
         <div className="personmodal-actions">
           <button className="confirmation-button" onClick={requestSave}>
             {isEdit ? "Tallenna" : "Lisää"}
@@ -74,7 +75,7 @@ function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
           title={
             confirmAction === "save"
               ? "Tallenna muutokset?"
-              : "Suljetaanko ilman tallennusta?"
+              : "Sulje ilman tallennusta?"
           }
           confirmText={confirmAction === "save" ? "Tallenna" : "Kyllä"}
           cancelText="Peruuta"
