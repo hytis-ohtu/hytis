@@ -5,7 +5,8 @@ const router = Router();
 
 /**
  * POST /api/persons
- * Creates a new person with the provided first name, last name, title and department id, and free text
+ * Creates a new person with the provided first name and last name
+ * Optionally, titleId, departmentId, researchGroupId, freeText and supervisorIds can be provided
  */
 
 router.post("/", async (req: Request, res: Response) => {
