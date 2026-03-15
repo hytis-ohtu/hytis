@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import ConfirmationButton from "./ConfirmationButton";
 import PersonForm from "./PersonForm";
 import "./PersonModal.css";
@@ -22,13 +22,13 @@ function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
 
   const isEdit = Object.keys(initial).length > 0;
 
-  const handleFormChange = (
-    values: Record<string, string>,
-    isValid: boolean,
-  ) => {
-    formDataRef.current = values;
-    setIsFormValid(isValid);
-  };
+  const handleFormChange = useCallback(
+    (values: Record<string, string>, isValid: boolean) => {
+      formDataRef.current = values;
+      setIsFormValid(isValid);
+    },
+    [],
+  );
 
   const handleSave = () => {
     onSubmit?.(formDataRef.current);

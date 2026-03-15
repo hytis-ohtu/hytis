@@ -24,28 +24,28 @@ const FIELDS: FieldDef[] = [
 ];
 
 interface PersonFormProps {
-  initial?: Partial<Record<string, string>>;
+  initial?: Record<string, string>;
   onChange: (values: Record<string, string>, isValid: boolean) => void;
 }
 
-const isValid = (vals: Record<string, string>) => {
-  FIELDS.filter((f) => f.required).every((f) => vals[f.id]?.trim() !== "");
+const isFormValid = (vals: Record<string, string>): boolean => {
+  return FIELDS.filter((f) => f.required).every(
+    (f) => vals[f.id]?.trim() !== "",
+  );
 };
 
 function PersonForm({ initial = {}, onChange }: PersonFormProps) {
   const [values, setValues] = useState<Record<string, string>>({ ...initial });
 
   useEffect(() => {
-    const vals = { ...initial };
-    setValues(vals);
-    onChange(vals, isValid(vals));
-  }, [initial]);
+    onChange(values, isFormValid(values));
+  }, [values, onChange]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues((prev) => {
       const next = { ...prev, [name]: value };
-      onChange(next, isValid(next));
+      onChange(next, isFormValid(next));
       return next;
     });
   };
