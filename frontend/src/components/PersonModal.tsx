@@ -10,7 +10,7 @@ interface PersonModalProps {
   initial?: Record<string, string>;
 }
 
-function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
+function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
   const [isFormValid, setIsFormValid] = useState(
     Object.keys(initial).length > 0,
@@ -98,4 +98,4 @@ function AddPersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   );
 }
 
-export default AddPersonModal;
+export default PersonModal;
