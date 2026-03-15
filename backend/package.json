@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:db": "docker compose -f database.yaml up",
-    "seed:db": "SEED_DB=true ts-node-dev src/seed.ts",
+    "seed:db": "cross-env SEED_DB=true ts-node-dev src/seed.ts",
     "tsc": "tsc",
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
@@ -26,6 +26,7 @@
     "@types/node": "^25.5.0",
     "@types/passport": "^1.0.17",
     "@types/supertest": "^6.0.3",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.4",
     "jest": "^30.3.0",
     "prettier-plugin-organize-imports": "^4.3.0",
