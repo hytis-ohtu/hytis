@@ -51,6 +51,7 @@
   font-weight: 500;
   font-size: var(--map-font-size, 24px);
   pointer-events: none;
+  user-select: none;
 }
 
 .room-group:has(.room.active) .room-label {
