@@ -5,36 +5,47 @@ interface FieldDef {
   id: string;
   label: string;
   type: string;
+  required: boolean;
 }
 
 const FIELDS: FieldDef[] = [
-  { id: "name", label: "Nimi", type: "text" },
-  { id: "department", label: "Osasto", type: "text" },
-  { id: "jobtitle", label: "Työnimike", type: "text" },
-  { id: "supervisors", label: "Esihenkilö(t)", type: "text" },
-  { id: "researchgroup", label: "Tutkimusryhmä", type: "text" },
-  { id: "contract", label: "Sopimuskesto", type: "text" },
-  { id: "misc", label: "Muut tiedot", type: "text" },
+  { id: "name", label: "Nimi:", type: "text", required: true },
+  { id: "department", label: "Osasto:", type: "text", required: true },
+  { id: "jobtitle", label: "Työnimike:", type: "text", required: true },
+  { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: true },
+  { id: "contract", label: "Sopimuskesto:", type: "text", required: true },
+  {
+    id: "researchgroup",
+    label: "Tutkimusryhmä:",
+    type: "text",
+    required: false,
+  },
+  { id: "misc", label: "Muut tiedot:", type: "text", required: false },
 ];
 
 interface PersonFormProps {
   initial?: Partial<Record<string, string>>;
-  onChange: (values: Record<string, string>) => void;
+  onChange: (values: Record<string, string>, isValid: boolean) => void;
 }
+
+const isValid = (vals: Record<string, string>) => {
+  FIELDS.filter((f) => f.required).every((f) => vals[f.id]?.trim() !== "");
+};
 
 function PersonForm({ initial = {}, onChange }: PersonFormProps) {
   const [values, setValues] = useState<Record<string, string>>({ ...initial });
 
-  // Sync if the parent reopens the modal with different initial data
   useEffect(() => {
-    setValues({ ...initial });
+    const vals = { ...initial };
+    setValues(vals);
+    onChange(vals, isValid(vals));
   }, [initial]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues((prev) => {
       const next = { ...prev, [name]: value };
-      onChange(next); // keep parent in sync on every keystroke
+      onChange(next, isValid(next));
       return next;
     });
   };
@@ -42,7 +53,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
   return (
     <div className="personform-container">
       <form className="personform-form">
-        {FIELDS.map(({ id, label, type }) => (
+        {FIELDS.map(({ id, label, type, required }) => (
           <div key={id} className="personform-field">
             <label className="personform-label" htmlFor={id}>
               {label}
@@ -53,6 +64,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
               type={type}
               value={values[id] ?? ""}
               onChange={handleChange}
+              required={required}
               className="personform-input"
             />
           </div>
