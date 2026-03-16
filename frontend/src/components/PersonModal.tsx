@@ -19,7 +19,8 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
       "department",
       "jobtitle",
       "supervisors",
-      "contract",
+      "startDate",
+      "endDate",
     ];
     return REQUIRED_FIELDS.every((f) => Boolean(initial[f]?.trim()));
   });
@@ -67,9 +68,9 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
     <div className="personmodal-overlay" onClick={requestClose}>
       <div className="personmodal-content" onClick={(e) => e.stopPropagation()}>
         <button
+          aria-label="close"
           className="personmodal-close-button"
           onClick={requestClose}
-          data-testid="close-button"
         >
           <X size={16} />
         </button>
