@@ -5,8 +5,8 @@
   right: 0;
   width: 100%;
   height: var(--topbar-height);
-  background: var(--primary-color);
-  border-bottom: 1px solid var(--secondary-color);
+  background: var(--topbar-color);
+  border-bottom: var(--border-style);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,7 +54,7 @@
 }
 
 .topbar-profile {
-  background: var(--primary-color);
+  background: var(--topbar-color);
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;
