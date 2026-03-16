@@ -13,9 +13,9 @@ describe("Legend", () => {
     it("renders all three availability entries", () => {
       render(<Legend mode="availability" />);
 
-      expect(screen.getByText("Available")).toBeInTheDocument();
-      expect(screen.getByText("Limited")).toBeInTheDocument();
-      expect(screen.getByText("Full")).toBeInTheDocument();
+      expect(screen.getByText("Tyhjä")).toBeInTheDocument();
+      expect(screen.getByText("Tilaa")).toBeInTheDocument();
+      expect(screen.getByText("Täynnä")).toBeInTheDocument();
     });
 
     it("does not render department entries", () => {
@@ -28,7 +28,7 @@ describe("Legend", () => {
     it("renders correct color for available status", () => {
       render(<Legend mode="availability" />);
 
-      const availableLabel = screen.getByText("Available");
+      const availableLabel = screen.getByText("Tyhjä");
       const colorBox = availableLabel.previousElementSibling;
 
       expect(colorBox).toHaveStyle({ backgroundColor: "#4ade80" });
@@ -37,7 +37,7 @@ describe("Legend", () => {
     it("renders correct color for limited status", () => {
       render(<Legend mode="availability" />);
 
-      const limitedLabel = screen.getByText("Limited");
+      const limitedLabel = screen.getByText("Tilaa");
       const colorBox = limitedLabel.previousElementSibling;
 
       expect(colorBox).toHaveStyle({ backgroundColor: "#facc15" });
@@ -46,7 +46,7 @@ describe("Legend", () => {
     it("renders correct color for full status", () => {
       render(<Legend mode="availability" />);
 
-      const fullLabel = screen.getByText("Full");
+      const fullLabel = screen.getByText("Täynnä");
       const colorBox = fullLabel.previousElementSibling;
 
       expect(colorBox).toHaveStyle({ backgroundColor: "#f87171" });
@@ -64,9 +64,9 @@ describe("Legend", () => {
     it("does not render availability entries", () => {
       render(<Legend mode="department" />);
 
-      expect(screen.queryByText("Available")).not.toBeInTheDocument();
-      expect(screen.queryByText("Limited")).not.toBeInTheDocument();
-      expect(screen.queryByText("Full")).not.toBeInTheDocument();
+      expect(screen.queryByText("Tyhjä")).not.toBeInTheDocument();
+      expect(screen.queryByText("Tilaa")).not.toBeInTheDocument();
+      expect(screen.queryByText("Täynnä")).not.toBeInTheDocument();
     });
 
     it("renders correct color for H516 MATHSTAT department", () => {

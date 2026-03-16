@@ -15,9 +15,9 @@ test("legend shows availability mode entries by default", async ({ page }) => {
   const legend = page.getByTestId("legend");
 
   // Check that availability mode entries are visible
-  await expect(legend.getByText("Available")).toBeVisible();
-  await expect(legend.getByText("Limited")).toBeVisible();
-  await expect(legend.getByText("Full")).toBeVisible();
+  await expect(legend.getByText("Tyhjä")).toBeVisible();
+  await expect(legend.getByText("Tilaa")).toBeVisible();
+  await expect(legend.getByText("Täynnä")).toBeVisible();
 });
 
 test("legend shows correct colors for availability mode", async ({ page }) => {
@@ -28,9 +28,9 @@ test("legend shows correct colors for availability mode", async ({ page }) => {
   await expect(colorBoxes).toHaveCount(3);
 
   // Check that labels match availability entries
-  await expect(legend.locator(".legend-item").nth(0)).toContainText("Available");
-  await expect(legend.locator(".legend-item").nth(1)).toContainText("Limited");
-  await expect(legend.locator(".legend-item").nth(2)).toContainText("Full");
+  await expect(legend.locator(".legend-item").nth(0)).toContainText("Tyhjä");
+  await expect(legend.locator(".legend-item").nth(1)).toContainText("Tilaa");
+  await expect(legend.locator(".legend-item").nth(2)).toContainText("Täynnä");
 });
 
 test("legend switches to department mode when button is clicked", async ({
@@ -46,9 +46,9 @@ test("legend switches to department mode when button is clicked", async ({
   await expect(legend.getByText("H523 CS")).toBeVisible();
 
   // Availability entries should not be visible
-  await expect(legend.getByText("Available")).not.toBeVisible();
-  await expect(legend.getByText("Limited")).not.toBeVisible();
-  await expect(legend.getByText("Full")).not.toBeVisible();
+  await expect(legend.getByText("Tyhjä")).not.toBeVisible();
+  await expect(legend.getByText("Tilaa")).not.toBeVisible();
+  await expect(legend.getByText("Täynnä")).not.toBeVisible();
 });
 
 test("legend shows correct number of entries in department mode", async ({
@@ -81,9 +81,9 @@ test("legend switches back to availability mode when button is clicked again", a
   const legend = page.getByTestId("legend");
 
   // Check that availability mode entries are visible again
-  await expect(legend.getByText("Available")).toBeVisible();
-  await expect(legend.getByText("Limited")).toBeVisible();
-  await expect(legend.getByText("Full")).toBeVisible();
+  await expect(legend.getByText("Tyhjä")).toBeVisible();
+  await expect(legend.getByText("Tilaa")).toBeVisible();
+  await expect(legend.getByText("Täynnä")).toBeVisible();
 
   // Department entries should not be visible
   await expect(legend.getByText("H516 MATHSTAT")).not.toBeVisible();

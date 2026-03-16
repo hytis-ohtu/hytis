@@ -92,9 +92,9 @@ g[stroke]:not(.room) {
 
 .color-button {
   position: absolute;
-  width: 10vw;
-  height: 3vh;
+  width: 8vw;
+  height: 2.5vh;
   left: 2vw;
   bottom: 2vh;
-  font-size: 16px;
+  font-size: 13px;
 }

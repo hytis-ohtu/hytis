@@ -9,9 +9,9 @@ interface LegendProps {
 
 export default function Legend({ mode }: LegendProps) {
   const availabilityEntries = [
-    { name: "Available", color: AvailabilityColors.available },
-    { name: "Limited", color: AvailabilityColors.limited },
-    { name: "Full", color: AvailabilityColors.full },
+    { name: "Tyhjä", color: AvailabilityColors.available },
+    { name: "Tilaa", color: AvailabilityColors.limited },
+    { name: "Täynnä", color: AvailabilityColors.full },
   ];
 
   const departmentEntries = Array.from(DepartmentColors.entries()).map(
