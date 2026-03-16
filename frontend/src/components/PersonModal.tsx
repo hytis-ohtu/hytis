@@ -81,7 +81,7 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
 
         <div className="personmodal-actions">
           <button
-            className="confirmation-button"
+            className="personmodal-save-button"
             onClick={requestSave}
             disabled={!isFormValid}
           >

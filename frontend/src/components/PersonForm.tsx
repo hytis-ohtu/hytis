@@ -44,16 +44,12 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setValues((prev) => {
-      const next = { ...prev, [name]: value };
-      onChange(next, isFormValid(next));
-      return next;
-    });
+    setValues((prev) => ({ ...prev, [name]: value })); // just update state
   };
 
   return (
     <div className="personform-container">
-      <form className="personform-form">
+      <div className="personform-form">
         {FIELDS.map(({ id, label, type, required }) => (
           <div key={id} className="personform-field">
             <label className="personform-label" htmlFor={id}>
@@ -70,7 +66,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
             />
           </div>
         ))}
-      </form>
+      </div>
     </div>
   );
 }
