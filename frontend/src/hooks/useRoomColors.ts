@@ -13,7 +13,7 @@ export function getDepartmentColor(departmentName: string): string {
   return color;
 }
 
-const DepartmentColors = new Map([
+export const DepartmentColors = new Map([
   ["H516 MATHSTAT", "#4ade80"],
   ["H523 CS", "#667eea"],
 ]);
