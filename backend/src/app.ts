@@ -3,7 +3,7 @@ import express from "express";
 import { config, isProduction } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
-import authRoutes from "./routes/authRoutes";
+import authRouter from "./routes/authRouter";
 import roomsRouter from "./routes/roomsRouter";
 import testingRouter from "./routes/testingRouter";
 
@@ -27,7 +27,7 @@ const setUpApp = async () => {
   await configureSession(app);
   await configurePassport();
 
-  app.use("/api", authRoutes);
+  app.use("/api", authRouter);
 
   app.use("/api/rooms", roomsRouter);
 
