@@ -1,7 +1,7 @@
 .legend {
   position: absolute;
   left: 2vw;
-  bottom: 6vh;
+  top: calc(var(--topbar-height) + 64px);
   display: flex;
   flex-direction: column;
   gap: var(--padding-sm);
