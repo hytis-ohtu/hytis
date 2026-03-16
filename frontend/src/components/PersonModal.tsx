@@ -12,9 +12,17 @@ interface PersonModalProps {
 
 function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
-  const [isFormValid, setIsFormValid] = useState(
-    Object.keys(initial).length > 0,
-  );
+  const [isFormValid, setIsFormValid] = useState(() => {
+    // On edit, validate the pre-filled initial values properly
+    const REQUIRED_FIELDS = [
+      "name",
+      "department",
+      "jobtitle",
+      "supervisors",
+      "contract",
+    ];
+    return REQUIRED_FIELDS.every((f) => Boolean(initial[f]?.trim()));
+  });
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<"save" | "close" | null>(
     null,
@@ -36,6 +44,7 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   };
 
   const requestSave = () => {
+    if (!isFormValid) return;
     setConfirmAction("save");
     setConfirmOpen(true);
   };
@@ -61,7 +70,7 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
         <button
           className="personmodal-close-button"
           onClick={requestClose}
-          aria-label="close"
+          data-testid="close-button"
         >
           <X size={16} />
         </button>

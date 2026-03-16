@@ -52,3 +52,9 @@
   background: var(--muted-color);
   color: var(--text-color);
 }
+
+.confirmation-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}

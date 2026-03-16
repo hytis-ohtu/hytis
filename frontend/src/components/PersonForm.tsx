@@ -13,7 +13,8 @@ const FIELDS: FieldDef[] = [
   { id: "department", label: "Osasto:", type: "text", required: true },
   { id: "jobtitle", label: "Työnimike:", type: "text", required: true },
   { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: true },
-  { id: "contract", label: "Sopimuskesto:", type: "text", required: true },
+  { id: "contractstart", label: "Sopimusalku:", type: "text", required: true },
+  { id: "contractend", label: "Sopimusloppu:", type: "text", required: true },
   {
     id: "researchgroup",
     label: "Tutkimusryhmä:",
@@ -29,8 +30,8 @@ interface PersonFormProps {
 }
 
 const isFormValid = (vals: Record<string, string>): boolean => {
-  return FIELDS.filter((f) => f.required).every(
-    (f) => vals[f.id]?.trim() !== "",
+  return FIELDS.filter((f) => f.required).every((f) =>
+    Boolean(vals[f.id]?.trim()),
   );
 };
 
