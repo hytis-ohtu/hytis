@@ -13,8 +13,8 @@ const FIELDS: FieldDef[] = [
   { id: "department", label: "Osasto:", type: "text", required: true },
   { id: "jobtitle", label: "Työnimike:", type: "text", required: true },
   { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: true },
-  { id: "contractstart", label: "Sopimusalku:", type: "text", required: true },
-  { id: "contractend", label: "Sopimusloppu:", type: "text", required: true },
+  { id: "startDate", label: "Sopimusalku:", type: "text", required: true },
+  { id: "endDate", label: "Sopimusloppu:", type: "text", required: true },
   {
     id: "researchgroup",
     label: "Tutkimusryhmä:",

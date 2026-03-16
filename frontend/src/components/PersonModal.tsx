@@ -44,7 +44,6 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   };
 
   const requestSave = () => {
-    if (!isFormValid) return;
     setConfirmAction("save");
     setConfirmOpen(true);
   };
