@@ -37,7 +37,7 @@ describe("PersonModal", () => {
 
   it("confirmation button if closing", () => {
     render(<PersonModal {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("close-button"));
+    fireEvent.click(screen.getByLabelText("close"));
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
@@ -79,14 +79,14 @@ describe("PersonModal", () => {
 
   it("calls onClose when confirming close", () => {
     render(<PersonModal {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("close-button"));
+    fireEvent.click(screen.getByLabelText("close"));
     fireEvent.click(screen.getByText("Kyllä"));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it("closes confirmation without action on cancel", () => {
     render(<PersonModal {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("close-button"));
+    fireEvent.click(screen.getByLabelText("close"));
     fireEvent.click(screen.getByText("Peruuta"));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     expect(
