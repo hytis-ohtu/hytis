@@ -13,7 +13,6 @@ interface PersonModalProps {
 function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
   const [isFormValid, setIsFormValid] = useState(() => {
-    // On edit, validate the pre-filled initial values properly
     const REQUIRED_FIELDS = [
       "name",
       "department",
