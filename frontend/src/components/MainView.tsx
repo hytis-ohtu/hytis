@@ -1,3 +1,4 @@
+import { Minus, Plus } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
@@ -5,13 +6,20 @@ import { useMapTransform } from "../hooks/useMapTransform";
 import { useRoomColors } from "../hooks/useRoomColors";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
+import Legend from "./Legend";
 import "./MainView.css";
 import RoomDetails from "./RoomDetails";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
 function MainView() {
-  const { mapContainer, inputContainer, hasMoved } = useMapTransform();
+  const {
+    mapContainer,
+    inputContainer,
+    hasMoved,
+    handleZoomFunc,
+    handleResetFunc,
+  } = useMapTransform();
   const { useAvailability, setUseAvailability } = useRoomColors();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
@@ -145,13 +153,32 @@ function MainView() {
   return (
     <>
       <div className="wrapper">
-        <div className="main-container">
-          <div ref={inputContainer} className="click-container">
-            <div ref={mapContainer} className="map-container">
-              <Exactum2 className="map" onClick={handleClick} />
-            </div>
+        <div ref={inputContainer} className="click-container">
+          <div ref={mapContainer} className="map-container">
+            <Exactum2 className="map" onClick={handleClick} />
           </div>
         </div>
+        <button
+          data-testid="zoom-increase-button"
+          onClick={(e) => handleZoomFunc(e, -1)}
+          className="zoom-in-button"
+        >
+          <Plus />
+        </button>
+        <button
+          data-testid="reset-transform-button"
+          onClick={handleResetFunc}
+          className="reset-button"
+        >
+          RESET
+        </button>
+        <button
+          data-testid="zoom-decrease-button"
+          onClick={(e) => handleZoomFunc(e, 1)}
+          className="zoom-out-button"
+        >
+          <Minus />
+        </button>
         <button
           data-testid="switch-color-mode"
           onClick={() => setUseAvailability(!useAvailability)}
@@ -159,6 +186,7 @@ function MainView() {
         >
           {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
         </button>
+        <Legend mode={useAvailability ? "availability" : "department"} />
         <AnimatePresence>
           {isRoomDetailsOpen && (
             <RoomDetails
