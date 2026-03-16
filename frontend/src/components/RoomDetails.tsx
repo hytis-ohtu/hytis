@@ -34,6 +34,7 @@ function RoomDetails({
           onClick={handleClose}
         />
       </header>
+
       <div className="room-details-avatar">
         <h2 className="room-details-avatar-name">{room.name}</h2>
       </div>
@@ -48,6 +49,17 @@ function RoomDetails({
           <AddPersonModal onClose={() => setAddPersonOpen(false)} />
         )}
       </div>
+
+      <section className="room-details-info">
+        <h1>Tiedot</h1>
+        <ul>
+          <li>Pinta-ala: {room.area} m²</li>
+          <li>Kapasiteetti: {room.capacity}</li>
+          <li>Huonetyyppi: {room.roomType}</li>
+          <li>Osasto: {room.department.name}</li>
+          <li>Lisätiedot: {room.freeText}</li>
+        </ul>
+      </section>
     </motion.div>
   );
 }
