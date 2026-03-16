@@ -4,6 +4,8 @@ export const rooms = [
     name: "A210",
     area: "63.60",
     capacity: 15,
+    freeText: "Hätäpoistumistie",
+    roomType: "Konferenssihuone",
     department: {
       id: 2,
       name: "H523 CS",
@@ -61,6 +63,8 @@ export const rooms = [
     name: "A211",
     area: "14.60",
     capacity: 3,
+    freeText: "",
+    roomType: "",
     department: {
       id: 1,
       name: "H516 MATHSTAT",
@@ -103,6 +107,8 @@ export const rooms = [
     name: "A212",
     area: "9.70",
     capacity: 2,
+    freeText: "",
+    roomType: "",
     department: {
       id: 1,
       name: "H516 MATHSTAT",

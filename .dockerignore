@@ -1,0 +1,8 @@
+node_modules
+backend/build
+frontend/dist
+backend/.env
+frontend/.env.development
+frontend/.env.production
+.git
+manifests
