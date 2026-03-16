@@ -124,45 +124,46 @@ describe("MainView", () => {
 
     // Legend should still be rendered
     expect(screen.getByTestId("legend")).toBeInTheDocument();
-  it("zooming in with button works", () => {
-    render(<MainView />);
+    it("zooming in with button works", () => {
+      render(<MainView />);
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-increase-button"));
+      const user = userEvent.setup();
+      user.click(screen.getByTestId("zoom-increase-button"));
 
-    const el = document.getElementsByClassName("map-container")[0];
+      const el = document.getElementsByClassName("map-container")[0];
 
-    expect(
-      el instanceof HTMLDivElement &&
-        el.style.scale === `${DEFAULT_SCALE + BUTTON_SENSITIVITY}`,
-    );
-  });
+      expect(
+        el instanceof HTMLDivElement &&
+          el.style.scale === `${DEFAULT_SCALE + BUTTON_SENSITIVITY}`,
+      );
+    });
 
-  it("zooming out with button works", () => {
-    render(<MainView />);
+    it("zooming out with button works", () => {
+      render(<MainView />);
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-decrease-button"));
+      const user = userEvent.setup();
+      user.click(screen.getByTestId("zoom-decrease-button"));
 
-    const el = document.getElementsByClassName("map-container")[0];
+      const el = document.getElementsByClassName("map-container")[0];
 
-    expect(
-      el instanceof HTMLDivElement &&
-        el.style.scale === `${DEFAULT_SCALE - BUTTON_SENSITIVITY}`,
-    );
-  });
+      expect(
+        el instanceof HTMLDivElement &&
+          el.style.scale === `${DEFAULT_SCALE - BUTTON_SENSITIVITY}`,
+      );
+    });
 
-  it("reset button works", () => {
-    render(<MainView />);
+    it("reset button works", () => {
+      render(<MainView />);
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-increase-button"));
-    user.click(screen.getByTestId("reset-transform-button"));
+      const user = userEvent.setup();
+      user.click(screen.getByTestId("zoom-increase-button"));
+      user.click(screen.getByTestId("reset-transform-button"));
 
-    const el = document.getElementsByClassName("map-container")[0];
+      const el = document.getElementsByClassName("map-container")[0];
 
-    expect(
-      el instanceof HTMLDivElement && el.style.scale === `${DEFAULT_SCALE}`,
-    );
+      expect(
+        el instanceof HTMLDivElement && el.style.scale === `${DEFAULT_SCALE}`,
+      );
+    });
   });
 });
