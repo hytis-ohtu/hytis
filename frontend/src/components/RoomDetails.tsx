@@ -36,7 +36,7 @@ function RoomDetails({
       </div>
 
       <section className="room-details-info">
-        <h1>Tiedot</h1>
+        <h1>Huoneen Tiedot</h1>
         <ul>
           <li>Pinta-ala: {room.area} m²</li>
           <li>Kapasiteetti: {room.capacity}</li>
