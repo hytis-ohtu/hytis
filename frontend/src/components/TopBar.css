@@ -15,7 +15,7 @@
 }
 
 .topbar-title {
-  color: var(--text-color);
+  color: var(--text-color-white);
   font-size: 20px;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
@@ -32,7 +32,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--text-color);
+  color: var(--text-color-black);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -44,13 +44,13 @@
 
 .topbar-button:hover {
   background: var(--secondary-color);
-  color: var(--text-color);
+  color: var(--text-color-black);
 }
 
 .topbar-button:active {
   transform: scale(0.98);
   background: var(--muted-color);
-  color: var(--text-color);
+  color: var(--text-color-black);
 }
 
 .topbar-profile {
@@ -58,11 +58,11 @@
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--text-color-black);
   letter-spacing: 0.02em;
 }
 
 .topbar-profile:hover {
   background: var(--secondary-color);
-  color: var(--text-color);
+  color: var(--text-color-black);
 }
