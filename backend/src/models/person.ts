@@ -1,4 +1,8 @@
-import type { InferAttributes, InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Contract } from "./contract";
@@ -10,7 +14,7 @@ class Person extends Model<
   InferAttributes<Person>,
   InferCreationAttributes<Person>
 > {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare firstName: string;
   declare lastName: string;
   declare freeText: string | null;
