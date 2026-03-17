@@ -12,10 +12,14 @@ export async function getCurrentUser(): Promise<UserData> {
 }
 
 export async function logout(): Promise<void> {
-  await fetch(`${BASE_URL}/api/logout`, {
+  const response = await fetch(`${BASE_URL}/api/logout`, {
     method: "POST",
     credentials: "include",
   });
+  const data = await response.json();
+  if (data.logoutUrl) {
+    window.location.href = data.logoutUrl;
+  }
 }
 
 export function login(): void {
