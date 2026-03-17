@@ -61,11 +61,11 @@
   color: var(--primary-color);
 }
 .room-details-info h2 {
-  padding: var(--radius);
-  margin: 0%;
+  padding: 8px;
+  margin: 0;
 }
 .room-details-info ul {
-  margin: 0%;
+  margin: 0;
 }
 
 .person-details-info {
@@ -86,7 +86,7 @@
   font-weight: 600;
 }
 .person-details-info h2 {
-  margin: 0%;
+  margin: 0;
 }
 .person-details-info ul {
   margin: var(--gap);
