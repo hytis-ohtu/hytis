@@ -37,9 +37,6 @@ function RoomDetails({
       return;
     }
 
-    setAddPersonOpen(false);
-  };
-
   if (!room) {
     return null;
   }
