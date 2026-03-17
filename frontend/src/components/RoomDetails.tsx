@@ -1,4 +1,4 @@
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import type { Room } from "../types";
@@ -84,7 +84,7 @@ function RoomDetails({
             className="room-details-button"
             onClick={() => setAddPersonOpen(true)}
           >
-            <Plus />
+            Lisää henkilö
           </button>
           {addPersonOpen && (
             <AddPersonModal
