@@ -19,7 +19,7 @@
   padding: 8px 12px;
   border: none;
   background: transparent;
-  color: var(--text-color);
+  color: var(--text-color-black);
   text-align: left;
   cursor: pointer;
   border-radius: var(--radius);
@@ -30,11 +30,11 @@
 
 .topbar-menu-button:hover {
   background: var(--muted-color);
-  color: var(--text-color);
+  color: var(--text-color-black);
 }
 
 .topbar-menu-user {
-  color: var(--text-color);
+  color: var(--text-color-black);
   font-size: 14px;
   margin-right: 20px;
 }
@@ -46,7 +46,7 @@
   right: 4px;
   background: transparent;
   border: none;
-  color: var(--text-color);
+  color: var(--text-color-black);
   cursor: pointer;
   padding: 4px;
 }
