@@ -36,6 +36,7 @@ function RoomDetails({
       console.error("Failed to create person");
       return;
     }
+  };
 
   if (!room) {
     return null;
