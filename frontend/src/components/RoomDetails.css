@@ -2,6 +2,9 @@
   position: fixed;
   inset: var(--topbar-height) 0 0 auto;
   width: 100%;
+  height: calc(100vh - var(--topbar-height));
+  overflow-y: scroll;
+  overflow-x: hidden;
   max-width: fit-content;
   padding: var(--padding);
   background-color: var(--background-color);
@@ -56,4 +59,37 @@
   background: var(--background-color);
   color: var(--text-color-black);
   line-height: 1.5rem;
+}
+.room-details-info h2 {
+  padding: 8px;
+  margin: 0;
+}
+.room-details-info ul {
+  margin: 0;
+}
+
+.person-details-info {
+  width: 100%;
+  padding: var(--gap);
+  border: 3px solid var(--secondary-color);
+  border-radius: var(--radius);
+  background: var(--background-color);
+  color: var(--primary-color);
+}
+
+.person-details-info details {
+  margin-top: var(--gap);
+}
+
+.person-details-info summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.person-details-info h2 {
+  margin: 0;
+}
+.person-details-info ul {
+  margin: var(--gap);
+  line-height: 1.5rem;
+  padding-left: var(--gap);
 }

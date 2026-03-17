@@ -78,7 +78,6 @@ function RoomDetails({
       </div>
 
       <section className="room-details-info">
-        <h1>Tiedot</h1>
         <ul>
           <li>Pinta-ala: {room.area} m²</li>
           <li>Kapasiteetti: {room.capacity}</li>
@@ -86,6 +85,28 @@ function RoomDetails({
           <li>Osasto: {room.department.name}</li>
           <li>Lisätiedot: {room.freeText}</li>
         </ul>
+      </section>
+
+      <section className="person-details-info">
+        <h2>Henkilöt</h2>
+
+        {room.contracts.length === 0 ? (
+          <p>Ei sopimuksia.</p>
+        ) : (
+          room.contracts.map((contract) => (
+            <details>
+              <summary>
+                {contract.person.firstName} {contract.person.lastName}
+              </summary>
+              <ul>
+                <li>Osasto: {contract.person.department.name}</li>
+                <li>Titteli: {contract.person.title.name}</li>
+                <li>Alkupvm: {contract.startDate}</li>
+                <li>Loppupvm: {contract.endDate}</li>
+              </ul>
+            </details>
+          ))
+        )}
       </section>
     </motion.div>
   );
