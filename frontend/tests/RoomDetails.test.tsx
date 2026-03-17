@@ -12,7 +12,23 @@ const mockRoom: Room = {
   name: "A210",
   area: "63.6",
   capacity: 15,
-  contracts: [],
+  contracts: [
+    {
+      startDate: "2023-01-01",
+      endDate: "2025-12-31",
+      person: {
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: {
+          id: 516,
+          name: "H516 MATHSTAT",
+        },
+        title: {
+          name: "asiantuntija",
+        },
+      },
+    },
+  ],
   department: {
     id: 2,
     name: "H523 CS",
@@ -42,6 +58,25 @@ describe("RoomDetails", () => {
     expect(
       screen.getByText("Lisätiedot: Hätäpoistumistie"),
     ).toBeInTheDocument();
+    expect(screen.queryByText("this is wrong")).not.toBeInTheDocument();
+  });
+
+  it("renders valid mock person details on sidepanel", async () => {
+    const user = userEvent.setup();
+    render(<RoomDetails room={mockRoom} handleClose={mockHandleClose} />);
+
+    const contract = mockRoom.contracts[0];
+    const fullName = `${contract.person.firstName} ${contract.person.lastName}`;
+
+    const summary = screen.getByText(fullName);
+    expect(summary).toBeInTheDocument();
+
+    await user.click(summary);
+
+    expect(screen.getByText(`Osasto: H516 MATHSTAT`)).toBeInTheDocument();
+    expect(screen.getByText(`Titteli: asiantuntija`)).toBeInTheDocument();
+    expect(screen.getByText(`Alkupvm: 2023-01-01`)).toBeInTheDocument();
+    expect(screen.getByText(`Loppupvm: 2025-12-31`)).toBeInTheDocument();
     expect(screen.queryByText("this is wrong")).not.toBeInTheDocument();
   });
 
