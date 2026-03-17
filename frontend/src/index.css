@@ -1,13 +1,16 @@
 :root {
-  --primary-color: #010204;
-  --secondary-color: #302929;
-  --text-color: #ffffff;
+  --primary-color: #6146c5;
+  --topbar-color: rgb(72, 72, 72);
+  --secondary-color: #cec9e0;
+  --text-color-black: #0d0b15;
+  --text-color-white: #fff;
   --background-color: #fff;
   --muted-color: #ccc;
 
   --radius: 8px;
   --radius-sm: 4px;
   --gap: 12px;
+  --padding: 16px;
   --transition-fast: 0.15s;
   --font-weight-bold: 600;
 
@@ -26,6 +29,9 @@
   --topbar-height: 64px;
   --button-size: 44px;
   --z-index-topbar: 1000;
+
+  --border-style: 3px solid var(--secondary-color);
+  --border-radius-circle: calc(infinity * 1px);
 }
 
 * {
