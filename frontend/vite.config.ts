@@ -5,11 +5,6 @@ import { defineConfig } from "vitest/config";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
-  server: {
-    proxy: {
-      "/api": "http://localhost:3000",
-    },
-  },
   preview: {
     allowedHosts: [
       "hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi",

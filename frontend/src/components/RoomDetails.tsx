@@ -8,11 +8,9 @@ import "./RoomDetails.css";
 function RoomDetails({
   room,
   handleClose,
-  onPersonAdded,
 }: {
   room: Room | null;
   handleClose: () => void;
-  onPersonAdded: () => void;
 }) {
   const [addPersonOpen, setAddPersonOpen] = useState(false);
 
@@ -38,8 +36,6 @@ function RoomDetails({
       console.error("Failed to create person");
       return;
     }
-
-    onPersonAdded();
   };
 
   if (!room) {
