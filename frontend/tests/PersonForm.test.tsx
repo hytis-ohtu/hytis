@@ -4,9 +4,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../src/components/PersonForm.tsx";
 
 const REQUIRED_INITIAL = {
-  name: "Terppa Testaaja",
+  firstName: "Terppa",
+  lastName: "Testaaja",
   department: "CS",
-  jobtitle: "Testaaja",
+  jobtitle: "Devaaja",
   supervisors: "Liisa Esihenkilö",
   startDate: "2025-01-01",
   endDate: "2026-01-01",
@@ -23,24 +24,26 @@ describe("PersonForm", () => {
 
   it("renders without crashing", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Nimi:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Etunimi:")).toBeInTheDocument();
   });
 
   it("renders all fields", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Nimi:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Etunimi:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sukunimi:")).toBeInTheDocument();
     expect(screen.getByLabelText("Osasto:")).toBeInTheDocument();
     expect(screen.getByLabelText("Työnimike:")).toBeInTheDocument();
     expect(screen.getByLabelText("Esihenkilö(t):")).toBeInTheDocument();
-    expect(screen.getByLabelText("Sopimusalku:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Sopimusloppu:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sopimuksen alku:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sopimuksen loppu:")).toBeInTheDocument();
     expect(screen.getByLabelText("Tutkimusryhmä:")).toBeInTheDocument();
     expect(screen.getByLabelText("Muut tiedot:")).toBeInTheDocument();
   });
 
   it("renders with empty fields by default", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Nimi:")).toHaveValue("");
+    expect(screen.getByLabelText("Etunimi:")).toHaveValue("");
+    expect(screen.getByLabelText("Sukunimi:")).toHaveValue("");
     expect(screen.getByLabelText("Osasto:")).toHaveValue("");
   });
 
@@ -63,33 +66,36 @@ describe("PersonForm", () => {
 
   it("calls onChange with updated values when a field changes", () => {
     render(<PersonForm {...defaultProps} />);
-    fireEvent.change(screen.getByLabelText("Nimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi:"), {
       target: { value: "Matti" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
-      expect.objectContaining({ name: "Matti" }),
+      expect.objectContaining({ firstName: "Matti" }),
       false,
     );
   });
 
   it("reports valid when all required fields are filled", () => {
     render(<PersonForm {...defaultProps} />);
-    fireEvent.change(screen.getByLabelText("Nimi:"), {
-      target: { value: "Terppa Testaaja" },
+    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+      target: { value: "Terppa" },
+    });
+    fireEvent.change(screen.getByLabelText("Sukunimi:"), {
+      target: { value: "Testaaja" },
     });
     fireEvent.change(screen.getByLabelText("Osasto:"), {
       target: { value: "CS" },
     });
     fireEvent.change(screen.getByLabelText("Työnimike:"), {
-      target: { value: "Testaaja" },
+      target: { value: "Devaaja" },
     });
     fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
       target: { value: "Liisa Esihenkilö" },
     });
-    fireEvent.change(screen.getByLabelText("Sopimusalku:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
       target: { value: "2025-01-01" },
     });
-    fireEvent.change(screen.getByLabelText("Sopimusloppu:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
       target: { value: "2026-01-01" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -100,22 +106,22 @@ describe("PersonForm", () => {
 
   it("reports invalid when a required field is cleared", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Nimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi:"), {
       target: { value: "" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ name: "" }),
+      expect.objectContaining({ firstName: "" }),
       false,
     );
   });
 
   it("reports invalid when a required field is only whitespace", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Nimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi:"), {
       target: { value: "   " },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ name: "   " }),
+      expect.objectContaining({ firstName: "   " }),
       false,
     );
   });

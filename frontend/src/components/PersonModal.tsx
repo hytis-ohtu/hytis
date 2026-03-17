@@ -14,7 +14,8 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
   const [isFormValid, setIsFormValid] = useState(() => {
     const REQUIRED_FIELDS = [
-      "name",
+      "firstName",
+      "lastName",
       "department",
       "jobtitle",
       "supervisors",

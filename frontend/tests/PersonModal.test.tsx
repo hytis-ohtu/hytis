@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonModal from "../src/components/PersonModal.tsx";
 
 const REQUIRED_INITIAL = {
-  name: "Matti",
+  firstName: "Matti",
+  lastName: "Meikäläinen",
   department: "IT",
   jobtitle: "Developer",
   supervisors: "Liisa",
@@ -118,8 +119,11 @@ describe("PersonModal", () => {
     render(<PersonModal {...defaultProps} />);
     expect(screen.getByText("Lisää")).toBeDisabled();
 
-    fireEvent.change(screen.getByLabelText("Nimi:"), {
-      target: { value: "Terppa Testaaja" },
+    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+      target: { value: "Terppa" },
+    });
+    fireEvent.change(screen.getByLabelText("Sukunimi:"), {
+      target: { value: "Testaaja" },
     });
     fireEvent.change(screen.getByLabelText("Osasto:"), {
       target: { value: "CS" },
@@ -130,10 +134,10 @@ describe("PersonModal", () => {
     fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
       target: { value: "Liisa Esihenkilö" },
     });
-    fireEvent.change(screen.getByLabelText("Sopimusalku:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
       target: { value: "2025-01-01" },
     });
-    fireEvent.change(screen.getByLabelText("Sopimusloppu:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
       target: { value: "2026-01-01" },
     });
 

@@ -9,12 +9,13 @@ interface FieldDef {
 }
 
 const FIELDS: FieldDef[] = [
-  { id: "name", label: "Nimi:", type: "text", required: true },
+  { id: "firstName", label: "Etunimi:", type: "text", required: true },
+  { id: "lastName", label: "Sukunimi:", type: "text", required: true },
   { id: "department", label: "Osasto:", type: "text", required: true },
   { id: "jobtitle", label: "Työnimike:", type: "text", required: true },
   { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: true },
-  { id: "startDate", label: "Sopimusalku:", type: "text", required: true },
-  { id: "endDate", label: "Sopimusloppu:", type: "text", required: true },
+  { id: "startDate", label: "Sopimuksen alku:", type: "text", required: true },
+  { id: "endDate", label: "Sopimuksen loppu:", type: "text", required: true },
   {
     id: "researchgroup",
     label: "Tutkimusryhmä:",
@@ -44,7 +45,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value })); // just update state
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   return (

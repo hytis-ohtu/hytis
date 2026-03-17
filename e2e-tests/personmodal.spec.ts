@@ -1,5 +1,7 @@
 import { test, expect, Page } from "@playwright/test";
 
+test.use({ viewport: { width: 1920, height: 1080 } });
+
 async function openAddPersonModal(page: Page) {
   await page.locator('[data-room="A210"]').click();
   await page.waitForSelector(".room-details-button", { state: "visible" });
@@ -7,12 +9,13 @@ async function openAddPersonModal(page: Page) {
 }
 
 async function fillRequiredFields(page: Page) {
-  await page.getByLabel("Nimi:").fill("Matti Testaaja");
+  await page.getByLabel("Etunimi:").fill("Matti");
+  await page.getByLabel("Sukunimi:").fill("Meikäläinen");
   await page.getByLabel("Osasto:").fill("IT");
   await page.getByLabel("Työnimike:").fill("Developer");
   await page.getByLabel("Esihenkilö(t):").fill("Liisa");
-  await page.getByLabel("Sopimusalku:").fill("2025-01-01");
-  await page.getByLabel("Sopimusloppu:").fill("2026-01-01");
+  await page.getByLabel("Sopimuksen alku:").fill("2025-01-01");
+  await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
 }
 
 test.beforeEach(async ({ page, request }) => {
