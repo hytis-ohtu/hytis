@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { config, isProduction } from "./config/environmentConfig";
+import { config, isProduction, useHyLogin } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRoutes from "./routes/authRoutes";
@@ -9,6 +9,10 @@ import roomsRouter from "./routes/roomsRouter";
 import testingRouter from "./routes/testingRouter";
 
 const app = express();
+
+if (useHyLogin) {
+  app.set("trust proxy", 1);
+}
 
 if (isProduction && !config.frontendUrl) {
   throw new Error("FRONTEND_URL required in production");

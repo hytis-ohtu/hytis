@@ -37,7 +37,7 @@
     "typescript-eslint": "^8.53.0"
   },
   "dependencies": {
-    "connect-redis": "^9.0.0",
+    "connect-redis": "^7.1.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
