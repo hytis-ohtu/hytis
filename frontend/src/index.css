@@ -8,10 +8,23 @@
   --muted-color: #ccc;
 
   --radius: 8px;
+  --radius-sm: 4px;
   --gap: 12px;
   --padding: 16px;
   --transition-fast: 0.15s;
   --font-weight-bold: 600;
+
+  /* Font sizes */
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+
+  /* Spacing */
+  --padding-sm: 0.5rem;
+  --padding-md: 1rem;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
 
   --topbar-height: 64px;
   --button-size: 44px;
