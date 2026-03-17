@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import type { Room } from "../types";
@@ -8,9 +8,11 @@ import "./RoomDetails.css";
 function RoomDetails({
   room,
   handleClose,
+  onPersonAdded,
 }: {
   room: Room | null;
   handleClose: () => void;
+  onPersonAdded: () => void;
 }) {
   const [addPersonOpen, setAddPersonOpen] = useState(false);
 
@@ -36,6 +38,8 @@ function RoomDetails({
       console.error("Failed to create person");
       return;
     }
+
+    onPersonAdded();
   };
 
   if (!room) {
@@ -62,20 +66,6 @@ function RoomDetails({
       <div className="room-details-avatar">
         <h2 className="room-details-avatar-name">{room.name}</h2>
       </div>
-      <div className="room-details-info">
-        <button
-          className="room-details-button"
-          onClick={() => setAddPersonOpen(true)}
-        >
-          Lisää henkilö
-        </button>
-        {addPersonOpen && (
-          <AddPersonModal
-            onClose={() => setAddPersonOpen(false)}
-            onSubmit={handleAddPerson}
-          />
-        )}
-      </div>
 
       <section className="room-details-info">
         <ul>
@@ -88,8 +78,21 @@ function RoomDetails({
       </section>
 
       <section className="person-details-info">
-        <h2>Henkilöt</h2>
-
+        <div className="person-details-header">
+          <h2>Henkilöt</h2>
+          <button
+            className="room-details-button"
+            onClick={() => setAddPersonOpen(true)}
+          >
+            <Plus />
+          </button>
+          {addPersonOpen && (
+            <AddPersonModal
+              onClose={() => setAddPersonOpen(false)}
+              onSubmit={handleAddPerson}
+            />
+          )}
+        </div>
         {room.contracts.length === 0 ? (
           <p>Ei sopimuksia.</p>
         ) : (

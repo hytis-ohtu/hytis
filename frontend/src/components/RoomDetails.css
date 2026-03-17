@@ -93,3 +93,20 @@
   line-height: 1.5rem;
   padding-left: var(--gap);
 }
+
+.person-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.room-details-button {
+  margin-top: 0; /* remove existing top margin */
+  padding: 4px 8px; /* smaller than current var(--gap) */
+  font-size: 0.8rem;
+  border: none;
+  border-radius: var(--radius);
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  cursor: pointer;
+}
