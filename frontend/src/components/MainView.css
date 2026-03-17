@@ -91,7 +91,7 @@ g[stroke]:not(.room) {
   width: 200px;
   height: 40px;
   left: 20px;
-  bottom: 20px;
+  top: calc(var(--topbar-height) + 12px);
   font-size: 16px;
   cursor: pointer;
 }
