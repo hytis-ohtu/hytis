@@ -4,4 +4,5 @@ export default {
   coverageProvider: "v8",
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "./coverage/",
+  detectOpenHandles: true,
 };

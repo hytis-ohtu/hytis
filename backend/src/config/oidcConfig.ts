@@ -21,6 +21,8 @@ interface UserInfo {
   hyGroupCn?: string;
 }
 
+export let endSessionUrl: string | undefined;
+
 const verifyLogin: StrategyVerifyCallbackUserInfo<Express.User, UserInfo> = (
   tokenSet,
   userinfo,
@@ -62,6 +64,7 @@ export const configurePassport = async () => {
   try {
     const oidcIssuer = await Issuer.discover(issuer);
     console.log("Discovered issuer:", oidcIssuer.metadata.issuer);
+    endSessionUrl = oidcIssuer.metadata.end_session_endpoint || "";
 
     const client = new oidcIssuer.Client({
       client_id: clientId,

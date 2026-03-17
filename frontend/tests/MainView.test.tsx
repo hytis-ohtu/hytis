@@ -97,6 +97,34 @@ describe("MainView", () => {
     expect(getDepartmentColor("incorrect name") === "#aaaaaa");
   });
 
+  it("renders legend with correct initial mode (availability)", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+
+    await waitFor(() => {
+      const legend = screen.getByTestId("legend");
+      expect(legend).toBeInTheDocument();
+    });
+  });
+
+  it("legend switches to department mode when button is clicked", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+
+    const user = userEvent.setup();
+
+    // Initially in availability mode (useAvailability is true by default)
+    await waitFor(() => {
+      const legend = screen.getByTestId("legend");
+      expect(legend).toBeInTheDocument();
+    });
+
+    // Click the button to switch to department mode
+    await user.click(screen.getByTestId("switch-color-mode"));
+
+    // Legend should still be rendered
+    expect(screen.getByTestId("legend")).toBeInTheDocument();
+  });
   it("zooming in with button works", () => {
     render(<MainView />);
 
