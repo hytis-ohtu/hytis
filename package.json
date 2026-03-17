@@ -21,7 +21,7 @@
     "coverage:backend": "npm run coverage --prefix backend",
     "test:frontend": "npm run test --prefix frontend",
     "coverage:frontend": "npm run coverage --prefix frontend",
-    "test:all": "npm run test:frontend && npm run test:backend && npm run test:e2e && npm run lint:backend && npm run lint:frontend"
+    "test:all": "npm run test:frontend && npm run test:backend && npm run lint:backend && npm run lint:frontend && npm run test:e2e"
   },
   "repository": {
     "type": "git",
