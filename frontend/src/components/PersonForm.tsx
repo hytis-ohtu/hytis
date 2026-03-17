@@ -11,11 +11,11 @@ interface FieldDef {
 const FIELDS: FieldDef[] = [
   { id: "firstName", label: "Etunimi:", type: "text", required: true },
   { id: "lastName", label: "Sukunimi:", type: "text", required: true },
-  { id: "department", label: "Osasto:", type: "text", required: true },
-  { id: "jobtitle", label: "Työnimike:", type: "text", required: true },
-  { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: true },
-  { id: "startDate", label: "Sopimuksen alku:", type: "text", required: true },
-  { id: "endDate", label: "Sopimuksen loppu:", type: "text", required: true },
+  { id: "department", label: "Osasto:", type: "text", required: false },
+  { id: "jobtitle", label: "Työnimike:", type: "text", required: false },
+  { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: false },
+  { id: "startDate", label: "Sopimuksen alku:", type: "text", required: false },
+  { id: "endDate", label: "Sopimuksen loppu:", type: "text", required: false },
   {
     id: "researchgroup",
     label: "Tutkimusryhmä:",

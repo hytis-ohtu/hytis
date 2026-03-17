@@ -14,6 +14,32 @@ function RoomDetails({
 }) {
   const [addPersonOpen, setAddPersonOpen] = useState(false);
 
+  const handleAddPerson = async (values: Record<string, string>) => {
+    const response = await fetch("/api/people", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        // TODO: needs routes
+        //departmentId: values.department,
+        //titleId: values.jobtitle,
+        //supervisorIds: values.supervisors,
+        //researchGroupId: values.researchgroup,
+        freeText: values.misc,
+        startDate: values.startDate,
+        endDate: values.endDate,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to create person");
+      return;
+    }
+
+    setAddPersonOpen(false);
+  };
+
   if (!room) {
     return null;
   }
@@ -46,7 +72,10 @@ function RoomDetails({
           Lisää henkilö
         </button>
         {addPersonOpen && (
-          <AddPersonModal onClose={() => setAddPersonOpen(false)} />
+          <AddPersonModal
+            onClose={() => setAddPersonOpen(false)}
+            onSubmit={handleAddPerson}
+          />
         )}
       </div>
 
