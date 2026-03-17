@@ -36,7 +36,7 @@ function RoomDetails({
       </div>
 
       <section className="room-details-info">
-        <h1>Huoneen Tiedot</h1>
+        <h2>Huoneen Tiedot</h2>
         <ul>
           <li>Pinta-ala: {room.area} m²</li>
           <li>Kapasiteetti: {room.capacity}</li>
@@ -47,7 +47,7 @@ function RoomDetails({
       </section>
 
       <section className="person-details-info">
-        <h1>Henkilöt</h1>
+        <h2>Henkilöt</h2>
 
         {room.contracts.length === 0 ? (
           <p>Ei sopimuksia.</p>

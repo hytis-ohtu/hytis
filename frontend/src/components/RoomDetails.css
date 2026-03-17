@@ -60,6 +60,13 @@
   background: var(--background-color);
   color: var(--primary-color);
 }
+.room-details-info h2 {
+  padding: var(--radius);
+  margin: 0%;
+}
+.room-details-info ul {
+  margin: 0%;
+}
 
 .person-details-info {
   width: 100%;
@@ -78,7 +85,9 @@
   cursor: pointer;
   font-weight: 600;
 }
-
+.person-details-info h2 {
+  margin: 0%;
+}
 .person-details-info ul {
   margin: var(--gap);
   line-height: 1.5rem;
