@@ -39,7 +39,7 @@
   padding: 8px 12px;
   border: none;
   background: var(--primary-color);
-  color: var(--text-color);
+  color: var(--text-color-white);
   text-align: center;
   cursor: pointer;
   border-radius: var(--radius);
@@ -50,7 +50,7 @@
 
 .confirmation-button:hover {
   background: var(--muted-color);
-  color: var(--text-color);
+  color: var(--primary-color);
 }
 
 .confirmation-button:disabled {
