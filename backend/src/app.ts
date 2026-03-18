@@ -38,11 +38,6 @@ const setUpApp = async () => {
 
   app.use("/api/people", peopleRouter);
 
-  app.get("/ping", (_req, res) => {
-    console.log("someone pinged here");
-    res.send("pong");
-  });
-
   // Test route to check server health
   app.get("/health", (req, res) => {
     res.json({

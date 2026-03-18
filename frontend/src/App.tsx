@@ -4,7 +4,6 @@ import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./contexts/AuthContext";
-import pingServer from "./services/pingService";
 
 function App() {
   return (
@@ -16,21 +15,6 @@ function App() {
 
 function AppContent() {
   const { isLoading, needsLogin, login } = useAuth();
-
-  useEffect(() => {
-    async function ping() {
-      try {
-        const result = await pingServer();
-        console.log("✅ Server responded successfully:", result);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error("❌ Failed to ping server:", error.message);
-        }
-      }
-    }
-
-    ping();
-  }, []);
 
   useEffect(() => {
     if (needsLogin) {
