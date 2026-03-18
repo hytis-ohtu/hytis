@@ -1,13 +1,9 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
+import { test } from "./testHelper";
 
 async function openProfileMenu(page: Page) {
   await page.getByTestId("topbar-profile-button").click();
 }
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-});
 
 test("topbar menu can be opened and closed by the profile button", async ({
   page,

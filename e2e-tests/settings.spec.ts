@@ -1,14 +1,10 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
+import { test } from "./testHelper";
 
 async function openSettings(page: Page) {
   await page.getByTestId("topbar-profile-button").click();
   await page.getByTestId("topbar-settings-button").click();
 }
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-});
 
 test("settings modal can be opened and closed", async ({ page }) => {
   await openSettings(page);
@@ -26,7 +22,7 @@ test("font size changes when slider is adjusted", async ({ page }) => {
   const fontSizeValue = await page.evaluate(() =>
     getComputedStyle(document.documentElement)
       .getPropertyValue("--map-font-size")
-      .trim()
+      .trim(),
   );
 
   expect(fontSizeValue).toBe("30px");

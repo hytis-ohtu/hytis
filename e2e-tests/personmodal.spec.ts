@@ -1,4 +1,5 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
+import { test } from "./testHelper";
 
 test.use({ viewport: { width: 1920, height: 1080 } });
 
@@ -17,12 +18,6 @@ async function fillRequiredFields(page: Page) {
   await page.getByLabel("Sopimuksen alku:").fill("2025-01-01");
   await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
 }
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-  await page.waitForSelector(".room-group");
-});
 
 test("person modal can be opened", async ({ page }) => {
   await openAddPersonModal(page);
