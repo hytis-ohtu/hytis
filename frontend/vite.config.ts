@@ -16,6 +16,7 @@ export default defineConfig({
     setupFiles: "./tests/testSetup.ts",
     coverage: {
       provider: "v8",
+      include: ["./src/**/*.{ts,tsx}"],
       reporter: ["text", "lcov"],
       reportsDirectory: "./coverage",
     },
