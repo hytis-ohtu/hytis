@@ -20,7 +20,8 @@
     "test:backend": "npm run test --prefix backend",
     "coverage:backend": "npm run coverage --prefix backend",
     "test:frontend": "npm run test --prefix frontend",
-    "coverage:frontend": "npm run coverage --prefix frontend"
+    "coverage:frontend": "npm run coverage --prefix frontend",
+    "test:all": "npm run test:frontend && npm run test:backend && npm run lint:backend && npm run lint:frontend && npm run test:e2e"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,6 @@
   "homepage": "https://github.com/hytis-ohtu/hytis#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.2.2"
+    "@types/node": "^25.5.0"
   }
 }

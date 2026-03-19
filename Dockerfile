@@ -1,22 +1,37 @@
-FROM node:25
+FROM node:25-alpine AS backend-build
+
 WORKDIR /usr/src/app
 
-# Install the application dependencies
-COPY . .
-RUN npm run install:all
-# Copy in the source code
+COPY /backend/package*.json ./
+RUN npm ci
 
-RUN chmod -R 777 *
-ENV NODE_ENV=production
-ENV DATABASE_URL='postgresql://neondb_owner:npg_XpTUAvmjn1C4@ep-shiny-field-agupt0rb-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-ENV VITE_API_URL="https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi"
-ENV FRONTEND_URL="https://hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi"
-#RUN npm run tsc
-RUN npm run build:frontend
-RUN npm run build:backend
-RUN mkdir build && cp -r frontend/dist build/
-# Expose port WIP
+COPY /backend .
+
+RUN npm run tsc
+
+
+FROM node:25-alpine AS frontend-build
+
+WORKDIR /usr/src/app
+
+COPY /frontend/package*.json ./
+RUN npm ci
+
+COPY /frontend .
+
+RUN npm run build
+
+
+FROM node:25-alpine
+WORKDIR /usr/src/app
+
+COPY --from=backend-build /usr/src/app/package*.json ./
+COPY --from=backend-build /usr/src/app/build ./build
+COPY --from=frontend-build /usr/src/app/dist ./build/dist
+
+RUN npm ci --omit=dev && \
+    npm cache clean --force
+
 EXPOSE 3000
-CMD ["node", "backend/build/src/index.js"]
-#CMD [ "/bin/bash"]
+CMD ["node", "build/src/index.js"]
 

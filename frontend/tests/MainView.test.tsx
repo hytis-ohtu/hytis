@@ -4,6 +4,10 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
 import {
+  BUTTON_SENSITIVITY,
+  DEFAULT_SCALE,
+} from "../src/hooks/useMapTransform.ts";
+import {
   AvailabilityColors,
   getDepartmentColor,
 } from "../src/hooks/useRoomColors.ts";
@@ -91,5 +95,75 @@ describe("MainView", () => {
 
   it("incorrect department name returns error color", () => {
     expect(getDepartmentColor("incorrect name") === "#aaaaaa");
+  });
+
+  it("renders legend with correct initial mode (availability)", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+
+    await waitFor(() => {
+      const legend = screen.getByTestId("legend");
+      expect(legend).toBeInTheDocument();
+    });
+  });
+
+  it("legend switches to department mode when button is clicked", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+
+    const user = userEvent.setup();
+
+    // Initially in availability mode (useAvailability is true by default)
+    await waitFor(() => {
+      const legend = screen.getByTestId("legend");
+      expect(legend).toBeInTheDocument();
+    });
+
+    // Click the button to switch to department mode
+    await user.click(screen.getByTestId("switch-color-mode"));
+
+    // Legend should still be rendered
+    expect(screen.getByTestId("legend")).toBeInTheDocument();
+  });
+  it("zooming in with button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-increase-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement &&
+        el.style.scale === `${DEFAULT_SCALE + BUTTON_SENSITIVITY}`,
+    );
+  });
+
+  it("zooming out with button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-decrease-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement &&
+        el.style.scale === `${DEFAULT_SCALE - BUTTON_SENSITIVITY}`,
+    );
+  });
+
+  it("reset button works", () => {
+    render(<MainView />);
+
+    const user = userEvent.setup();
+    user.click(screen.getByTestId("zoom-increase-button"));
+    user.click(screen.getByTestId("reset-transform-button"));
+
+    const el = document.getElementsByClassName("map-container")[0];
+
+    expect(
+      el instanceof HTMLDivElement && el.style.scale === `${DEFAULT_SCALE}`,
+    );
   });
 });

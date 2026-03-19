@@ -1,13 +1,18 @@
 import cors from "cors";
 import express from "express";
-import { config, isProduction } from "./config/environmentConfig";
+import { config, isProduction, useHyLogin } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
-import authRoutes from "./routes/authRoutes";
+import authRouter from "./routes/authRouter";
+import peopleRouter from "./routes/peopleRouter";
 import roomsRouter from "./routes/roomsRouter";
 import testingRouter from "./routes/testingRouter";
 
 const app = express();
+
+if (useHyLogin) {
+  app.set("trust proxy", 1);
+}
 
 if (isProduction && !config.frontendUrl) {
   throw new Error("FRONTEND_URL required in production");
@@ -27,9 +32,11 @@ const setUpApp = async () => {
   await configureSession(app);
   await configurePassport();
 
-  app.use("/api", authRoutes);
+  app.use("/api", authRouter);
 
   app.use("/api/rooms", roomsRouter);
+
+  app.use("/api/people", peopleRouter);
 
   app.get("/ping", (_req, res) => {
     console.log("someone pinged here");

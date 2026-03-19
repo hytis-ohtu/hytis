@@ -1,6 +1,8 @@
 import { Contract } from "./contract";
 import { Department } from "./department";
 import { Person } from "./person";
+import { PersonSupervisor } from "./personSupervisor";
+import { ResearchGroup } from "./researchGroup";
 import { Room } from "./room";
 import { Title } from "./title";
 
@@ -19,4 +21,31 @@ Contract.belongsTo(Person, { foreignKey: "personId", as: "person" });
 Room.hasMany(Contract, { foreignKey: "roomId", as: "contracts" });
 Contract.belongsTo(Room, { foreignKey: "roomId", as: "room" });
 
-export { Contract, Department, Person, Room, Title };
+ResearchGroup.hasMany(Person, { foreignKey: "researchGroupId", as: "people" });
+Person.belongsTo(ResearchGroup, {
+  foreignKey: "researchGroupId",
+  as: "researchGroup",
+});
+
+Person.belongsToMany(Person, {
+  through: PersonSupervisor,
+  as: "supervisors",
+  foreignKey: "subordinateId",
+  otherKey: "supervisorId",
+});
+Person.belongsToMany(Person, {
+  through: PersonSupervisor,
+  as: "subordinates",
+  foreignKey: "supervisorId",
+  otherKey: "subordinateId",
+});
+
+export {
+  Contract,
+  Department,
+  Person,
+  PersonSupervisor,
+  ResearchGroup,
+  Room,
+  Title,
+};
