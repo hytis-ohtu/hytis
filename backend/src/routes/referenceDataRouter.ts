@@ -16,7 +16,7 @@ router.get(
         attributes: ["id", "name"],
       });
       return res.status(200).json(departments);
-    } catch (error) {
+    } catch {
       return res.status(500).json({ error: "Failed to fetch departments" });
     }
   },
@@ -35,7 +35,7 @@ router.get(
         attributes: ["id", "name"],
       });
       return res.status(200).json(titles);
-    } catch (error) {
+    } catch {
       return res.status(500).json({ error: "Failed to fetch titles" });
     }
   },
@@ -54,7 +54,7 @@ router.get(
         attributes: ["id", "name"],
       });
       return res.status(200).json(researchGroups);
-    } catch (error) {
+    } catch {
       return res.status(500).json({ error: "Failed to fetch research groups" });
     }
   },
