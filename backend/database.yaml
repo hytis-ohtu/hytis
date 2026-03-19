@@ -1,5 +1,6 @@
 # Use postgres/example user/password credentials
 
+name: hytis
 services:
   postgres:
     image: postgres
