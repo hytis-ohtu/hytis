@@ -1,4 +1,4 @@
-<!-- Fill the description of each field in place of the ... -->
+<!-- Add a description under each heading if applicable, otherwise leave the default. -->
 
 ### Description
 
@@ -8,26 +8,24 @@
 
 ### Architecture
 
-<!-- Do the changes affect the program architecture -->
+<!-- What changes are there to the application architecture? -->
 
-...
+No changes.
 
 ### Motive
 
-<!-- Why is this change necessary? -->
+<!-- What is the motive behind this PR? -->
 
 ...
 
 ### Testing
 
-<!-- Have tests been added for the changes? -->
-<!-- If yes, what types of tests? If no, why not? -->
+<!-- Which types of tests have been added? What do they cover? -->
 
-...
+No changes.
 
 ### Documentation
 
-<!-- Have the changes been documented in the GitHub Wiki? -->
-<!-- If yes, what has been documented? If no, why not? -->
+<!-- What documentation has been added to the GitHub Wiki? -->
 
-...
+No changes
