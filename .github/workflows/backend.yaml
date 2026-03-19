@@ -71,6 +71,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: hytis-ohtu/hytis
           files: ./backend/coverage/lcov.info
+          disable_search: true
           flags: backend
