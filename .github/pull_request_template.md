@@ -28,4 +28,4 @@ No changes.
 
 <!-- What documentation has been added to the GitHub Wiki? -->
 
-No changes
+No changes.
