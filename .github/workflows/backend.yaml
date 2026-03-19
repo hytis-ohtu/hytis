@@ -2,11 +2,6 @@ name: "backend pipeline"
 
 on:
   workflow_call:
-    secrets:
-      SECRET:
-        required: true
-      CODECOV_TOKEN:
-        required: true
 
 jobs:
   lint: #also builds
@@ -58,19 +53,14 @@ jobs:
           cache-dependency-path: backend/package-lock.json
       - name: Install dependencies
         run: npm ci
-        #- name: Run database migrations
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
       #  run: npx prisma migrate deploy
       - name: Run tests and coverage
-        #env:
-        #  #DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-        #  SECRET: ${{ secrets.SECRET }}
         run: npm run coverage
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./backend/coverage/lcov.info
           disable_search: true
+          files: ./backend/coverage/lcov.info
           flags: backend

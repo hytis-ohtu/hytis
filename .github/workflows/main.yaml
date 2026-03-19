@@ -14,14 +14,10 @@ on:
 jobs:
   frontend:
     uses: ./.github/workflows/frontend.yaml
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   backend:
     uses: ./.github/workflows/backend.yaml
-    secrets:
-      SECRET: ${{ secrets.SECRET }}
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
   e2e-tests:
     uses: ./.github/workflows/e2e-test.yaml
 
