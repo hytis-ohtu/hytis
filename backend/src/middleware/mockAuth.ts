@@ -19,7 +19,7 @@ interface MockUser {
 
 export const mockAuthMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   if (req.isAuthenticated()) {
