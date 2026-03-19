@@ -4,5 +4,6 @@ export default {
   coverageProvider: "v8",
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "./coverage/",
+  collectCoverageFrom: ["src/**/*.{ts,tsx}"],
   detectOpenHandles: true,
 };
