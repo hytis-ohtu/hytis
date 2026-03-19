@@ -7,17 +7,21 @@ coverage:
   status:
     project:
       backend:
+        target: 80%
         flags:
           - backend
       frontend:
+        target: 80%
         flags:
           - frontend
 
     patch:
       backend:
+        target: 80%
         flags:
           - backend
       frontend:
+        target: 80%
         flags:
           - frontend
 
