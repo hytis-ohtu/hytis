@@ -123,3 +123,22 @@
 - `npm run build:frontend` - Build frontend for production
 - `npm run preview:frontend` - Preview production build locally
 - `npm run lint:frontend` - Run linter for frontend code
+
+### Testing
+
+- `npm run test:all` - Run all tests and linting
+
+#### End-to-end
+
+- `npm run test:e2e` - Run all end-to-end tests
+- `npm run test:e2e-report` - Get report of all end-to-end tests
+
+#### Backend
+
+- `npm run test:backend` - Run all backend tests
+- `npm run coverage:backend` - Get backend coverage
+
+#### Frontend
+
+- `npm run test:frontend` - Run all frontend tests
+- `npm run coverage:frontend` - Get frontend coverage

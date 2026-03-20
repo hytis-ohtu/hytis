@@ -7,7 +7,7 @@ RUN npm ci
 
 COPY /backend .
 
-RUN npm run tsc
+RUN npm run build
 
 
 FROM node:25-alpine AS frontend-build

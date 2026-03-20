@@ -24,7 +24,7 @@ interface UserInfo {
 export let endSessionUrl: string | undefined;
 
 const verifyLogin: StrategyVerifyCallbackUserInfo<Express.User, UserInfo> = (
-  tokenSet,
+  _tokenSet,
   userinfo,
   done,
 ) => {
