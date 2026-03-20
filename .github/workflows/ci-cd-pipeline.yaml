@@ -26,7 +26,7 @@ jobs:
 
   cd-build-and-push-staging:
     name: CD / Build and Push (Staging)
-    if: github.ref == "refs/heads/main"
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: [ci-frontend, ci-backend, ci-app]
     uses: ./.github/workflows/cd-build-and-push.yaml
     secrets: inherit
@@ -35,7 +35,7 @@ jobs:
 
   cd-build-and-push-prod:
     name: CD / Build and Push (Production)
-    if: github.event_name == "release" && github.event.action == "published"
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     needs: [ci-frontend, ci-backend, ci-app]
     uses: ./.github/workflows/cd-build-and-push.yaml
     secrets: inherit
