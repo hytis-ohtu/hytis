@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hytis-redis
+  labels:
+    app: hytis-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hytis-redis
+  template:
+    metadata:
+      labels:
+        app: hytis-redis
+    spec:
+      containers:
+        - name: hytis-redis
+          image: registry.redhat.io/rhel9/redis-7
+          ports:
+            - containerPort: 6379
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
