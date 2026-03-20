@@ -5,6 +5,7 @@ export const BUTTON_SENSITIVITY = 0.25;
 export const MAX_ZOOM = 4;
 export const MIN_ZOOM = 0.75;
 export const DEFAULT_SCALE = 0.9;
+export const MOVE_THRESHOLD = 20;
 
 export function useMapTransform() {
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -147,15 +148,19 @@ export function useMapTransform() {
     const onMouseMove = (e: MouseEvent) => {
       if (!isClicked.current) return;
 
-      if (!isMapMoved.current) setHover(false);
-
-      isMapMoved.current = true;
-
       e.preventDefault();
       e.stopPropagation();
 
       const offsetX = e.clientX - coords.current.startX;
       const offsetY = e.clientY - coords.current.startY;
+
+      if (!isMapMoved.current) {
+        const dist = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+        if (dist > MOVE_THRESHOLD) {
+          setHover(false);
+          isMapMoved.current = true;
+        }
+      }
 
       let nextX = offsetX + coords.current.lastX;
       let nextY = offsetY + coords.current.lastY;
@@ -164,18 +169,18 @@ export function useMapTransform() {
       const height = map.clientHeight * scale.current;
 
       if (nextX > getLeftBound()) {
-        coords.current.startX += nextX - getLeftBound();
+        coords.current.lastX -= nextX - getLeftBound();
         nextX = getLeftBound();
       } else if (nextX + width < getRightBound()) {
-        coords.current.startX += nextX + width - getRightBound();
+        coords.current.lastX -= nextX + width - getRightBound();
         nextX = getRightBound() - width;
       }
 
       if (nextY > getTopBound()) {
-        coords.current.startY += nextY - getTopBound();
+        coords.current.lastY -= nextY - getTopBound();
         nextY = getTopBound();
       } else if (nextY + height < getBottomBound()) {
-        coords.current.startY += nextY + height - getBottomBound();
+        coords.current.lastY -= nextY + height - getBottomBound();
         nextY = getBottomBound() - height;
       }
 
