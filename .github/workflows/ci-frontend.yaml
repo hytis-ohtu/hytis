@@ -1,4 +1,4 @@
-name: CI / Frontend
+name: Frontend
 
 on:
   workflow_call:

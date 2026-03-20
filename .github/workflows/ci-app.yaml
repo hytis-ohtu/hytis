@@ -1,4 +1,4 @@
-name: CI / App
+name: App
 
 on:
   workflow_call:
