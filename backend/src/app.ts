@@ -5,6 +5,7 @@ import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRouter from "./routes/authRouter";
 import peopleRouter from "./routes/peopleRouter";
+import referenceDataRouter from "./routes/referenceDataRouter";
 import roomsRouter from "./routes/roomsRouter";
 import testingRouter from "./routes/testingRouter";
 
@@ -37,6 +38,8 @@ const setUpApp = async () => {
   app.use("/api/rooms", roomsRouter);
 
   app.use("/api/people", peopleRouter);
+
+  app.use("/api/reference-data", referenceDataRouter);
 
   // Test route to check server health
   app.get("/health", (req, res) => {
