@@ -26,7 +26,6 @@
     "type": "git",
     "url": "git+https://github.com/hytis-ohtu/hytis.git"
   },
-  "keywords": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hytis-ohtu/hytis/issues"
@@ -35,5 +34,10 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm"
+    }
   }
 }
