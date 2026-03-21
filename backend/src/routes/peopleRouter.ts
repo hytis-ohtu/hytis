@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { Person, PersonSupervisor } from "../models";
+import { Contract, Person, PersonSupervisor, Room } from "../models";
 
 const router = Router();
 
@@ -18,6 +18,9 @@ router.post("/", async (req: Request, res: Response) => {
     researchGroupId,
     freeText,
     supervisorIds,
+    roomId,
+    startDate,
+    endDate,
   } = req.body;
 
   if (!firstName || !lastName) {
@@ -36,6 +39,15 @@ router.post("/", async (req: Request, res: Response) => {
       freeText,
     });
 
+    if (roomId && startDate && endDate) {
+      await Contract.create({
+        personId: newPerson.id,
+        roomId,
+        startDate,
+        endDate,
+      });
+    }
+
     if (supervisorIds && supervisorIds.length > 0) {
       await PersonSupervisor.bulkCreate(
         supervisorIds.map((supervisorId: number) => ({
@@ -48,6 +60,11 @@ router.post("/", async (req: Request, res: Response) => {
     const createdPerson = await Person.findByPk(newPerson.id, {
       include: [
         { model: Person, as: "supervisors", through: { attributes: [] } },
+        {
+          model: Contract,
+          as: "contracts",
+          include: [{ model: Room, as: "room" }],
+        },
       ],
     });
     res.status(201).json(createdPerson);

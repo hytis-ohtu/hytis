@@ -46,10 +46,6 @@ Person.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    freeText: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
     titleId: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -73,6 +69,10 @@ Person.init(
         model: "research_groups",
         key: "id",
       },
+    },
+    freeText: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   },
   {
