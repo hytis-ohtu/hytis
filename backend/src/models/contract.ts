@@ -1,4 +1,8 @@
-import type { InferAttributes, InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Person } from "./person";
@@ -7,7 +11,7 @@ class Contract extends Model<
   InferAttributes<Contract>,
   InferCreationAttributes<Contract>
 > {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare personId: number;
   declare roomId: number;
   declare startDate: Date;
