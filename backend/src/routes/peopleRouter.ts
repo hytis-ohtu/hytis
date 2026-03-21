@@ -86,7 +86,7 @@ router.get("/", async (req: Request, res: Response) => {
         ["firstName", "ASC"],
       ],
     });
-    res.json(people);
+    res.status(200).json(people);
   } catch (error) {
     console.error("Error fetching people:", error);
     res.status(500).json({ error: "Failed to fetch people" });
