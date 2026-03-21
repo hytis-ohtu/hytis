@@ -123,11 +123,11 @@ test("people are returned in alphabetical order by last name", async () => {
     .expect("Content-Type", /application\/json/);
 
   const people: Person[] = response.body;
-  for (let i = 1; i < people.length; i++) {
-    expect(
-      people[i - 1].lastName.localeCompare(people[i].lastName, "en"),
-    ).toBeLessThanOrEqual(0);
-  }
+  const sorted = [...people].sort((a, b) =>
+    a.lastName.localeCompare(b.lastName, "en"),
+  );
+
+  expect(people.map((p) => p.lastName)).toEqual(sorted.map((p) => p.lastName));
 });
 
 test("returns 500 if there is an error fetching people", async () => {
