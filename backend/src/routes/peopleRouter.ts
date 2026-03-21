@@ -39,7 +39,7 @@ router.post("/", async (req: Request, res: Response) => {
       freeText,
     });
 
-    if (roomId && startDate && endDate) {
+    if (roomId) {
       await Contract.create({
         personId: newPerson.id,
         roomId,
@@ -71,6 +71,25 @@ router.post("/", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error creating person:", error);
     res.status(500).json({ error: "Failed to create person" });
+  }
+});
+
+/**
+ * GET /api/people
+ * Fetches all people, ordered by last name and first name
+ */
+router.get("/", async (req: Request, res: Response) => {
+  try {
+    const people = await Person.findAll({
+      order: [
+        ["lastName", "ASC"],
+        ["firstName", "ASC"],
+      ],
+    });
+    res.json(people);
+  } catch (error) {
+    console.error("Error fetching people:", error);
+    res.status(500).json({ error: "Failed to fetch people" });
   }
 });
 
