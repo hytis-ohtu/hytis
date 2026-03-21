@@ -17,15 +17,18 @@ beforeEach(async () => {
   await fixSequences();
 });
 
-test("a person can be created", async () => {
+test("a person can be created with a contract", async () => {
   const newPerson = {
     firstName: "Terppa",
     lastName: "Testaaja",
-    freeText: "Tämä on testihenkilö",
     titleId: 1,
     departmentId: 1,
     researchGroupId: 1,
+    freeText: "Tämä on testihenkilö",
     supervisorIds: [1, 2],
+    roomId: 1,
+    startDate: "2026-01-01",
+    endDate: "2026-12-31",
   };
 
   const response = await api
@@ -44,6 +47,12 @@ test("a person can be created", async () => {
   expect(createdPerson.supervisors).toHaveLength(
     newPerson.supervisorIds.length,
   );
+
+  expect(createdPerson.contracts).toHaveLength(1);
+  expect(createdPerson.contracts![0].roomId).toBe(newPerson.roomId);
+  expect(createdPerson.contracts![0].startDate).toBe(newPerson.startDate);
+  expect(createdPerson.contracts![0].endDate).toBe(newPerson.endDate);
+
   console.log("Created person:", createdPerson);
 });
 
