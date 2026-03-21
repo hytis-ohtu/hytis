@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { Op } from "sequelize";
 import { Person, PersonSupervisor } from "../models";
 
 const router = Router();
@@ -54,6 +55,41 @@ router.post("/", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error creating person:", error);
     res.status(500).json({ error: "Failed to create person" });
+  }
+});
+
+/**
+ * GET /api/people
+ * Searches for people by first name or last name
+ * Query parameter 'q' is used for partial matching
+ */
+router.get("/", async (req: Request, res: Response) => {
+  const { q } = req.query;
+
+  if (!q || typeof q !== "string") {
+    return res.status(400).json({ error: "Query parameter 'q' is required" });
+  }
+
+  try {
+    const people = await Person.findAll({
+      where: {
+        [Op.or]: [
+          { firstName: { [Op.iLike]: `%${q}%` } },
+          { lastName: { [Op.iLike]: `%${q}%` } },
+        ],
+      },
+      include: [
+        { model: Person, as: "supervisors", through: { attributes: [] } },
+        "department",
+        "title",
+        "researchGroup",
+      ],
+    });
+
+    res.json(people);
+  } catch (error) {
+    console.error("Error searching people:", error);
+    res.status(500).json({ error: "Failed to search people" });
   }
 });
 
