@@ -2,9 +2,6 @@ name: "frontend pipeline"
 
 on:
   workflow_call:
-    secrets:
-      CODECOV_TOKEN:
-        required: true
 
 jobs:
   lint: #also builds
@@ -47,7 +44,6 @@ jobs:
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: hytis-ohtu/hytis
+          disable_search: true
           files: ./frontend/coverage/lcov.info
           flags: frontend

@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - dev
-      - build/e2e-on-actions
   pull_request:
     branches:
       - "main"
@@ -15,21 +14,17 @@ on:
 jobs:
   frontend:
     uses: ./.github/workflows/frontend.yaml
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   backend:
     uses: ./.github/workflows/backend.yaml
-    secrets:
-      SECRET: ${{ secrets.SECRET }}
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
   e2e-tests:
     uses: ./.github/workflows/e2e-test.yaml
 
   build-and-push-dev:
     if: |
       always()
-      && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+      && github.ref == 'refs/heads/main'
     needs: [frontend, backend]
     runs-on: ubuntu-24.04
     permissions:

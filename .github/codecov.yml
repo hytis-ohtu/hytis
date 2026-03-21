@@ -1,0 +1,27 @@
+codecov:
+  require_ci_to_pass: false
+  notify:
+    wait_for_ci: false
+
+coverage:
+  status:
+    patch:
+      backend:
+        target: 80%
+        flags:
+          - backend
+      frontend:
+        target: 80%
+        flags:
+          - frontend
+
+comment:
+  after_n_builds: 2
+
+flags:
+  frontend:
+    paths:
+      - frontend/
+  backend:
+    paths:
+      - backend/

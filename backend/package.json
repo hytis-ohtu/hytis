@@ -6,7 +6,7 @@
   "scripts": {
     "start:db": "docker compose -f database.yaml up",
     "seed:db": "cross-env SEED_DB=true ts-node-dev src/seed.ts",
-    "tsc": "tsc",
+    "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "start": "node build/src/index.js",
