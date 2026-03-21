@@ -17,6 +17,7 @@ const mockRoom_A210: Room = {
       startDate: "2023-01-01",
       endDate: "2025-12-31",
       person: {
+        id: 1,
         firstName: "Matti",
         lastName: "Virtanen",
         department: {
