@@ -192,6 +192,7 @@ function MainView() {
             <RoomDetails
               room={room}
               handleClose={() => setIsRoomDetailsOpen(false)}
+              onPersonAdded={() => findRoom(activeRoomId!)}
             />
           )}
         </AnimatePresence>
