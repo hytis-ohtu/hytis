@@ -161,3 +161,13 @@ test("a person's supervisors can be cleared", async () => {
   const updated: Person = response.body;
   expect(updated.supervisors).toHaveLength(0);
 });
+
+test("a person with invalid supervisor IDs cannot be updated", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    supervisorIds: [9999],
+  };
+
+  await api.put("/api/people/1").send(updatedPerson).expect(500);
+});
