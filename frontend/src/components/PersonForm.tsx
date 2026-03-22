@@ -10,7 +10,7 @@ import "./PersonForm.css";
 interface FieldDef {
   id: string;
   label: string;
-  type: "text" | "select";
+  type: "text" | "select" | "date";
   required: boolean;
 }
 
@@ -20,8 +20,8 @@ const FIELDS: FieldDef[] = [
   { id: "department", label: "Osasto:", type: "select", required: false },
   { id: "jobtitle", label: "Työnimike:", type: "select", required: false },
   { id: "supervisors", label: "Esihenkilö(t):", type: "text", required: false },
-  { id: "startDate", label: "Sopimuksen alku:", type: "text", required: false },
-  { id: "endDate", label: "Sopimuksen loppu:", type: "text", required: false },
+  { id: "startDate", label: "Sopimuksen alku:", type: "date", required: false },
+  { id: "endDate", label: "Sopimuksen loppu:", type: "date", required: false },
   {
     id: "researchgroup",
     label: "Tutkimusryhmä:",
