@@ -57,15 +57,13 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
       findAllDepartments(),
       findAllTitles(),
       findAllResearchGroups(),
-    ])
-      .then(([departments, titles, researchGroups]) => {
-        setOptions({
-          department: departments,
-          jobtitle: titles,
-          researchgroup: researchGroups,
-        });
-      })
-      .catch((err) => console.error("Failed to load options:", err));
+    ]).then(([departments, titles, researchGroups]) => {
+      setOptions({
+        department: departments,
+        jobtitle: titles,
+        researchgroup: researchGroups,
+      });
+    });
   }, []);
 
   useEffect(() => {

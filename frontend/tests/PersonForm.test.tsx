@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../src/components/PersonForm.tsx";
 
@@ -18,7 +18,6 @@ vi.mock("../src/services/referenceDataService", () => ({
   ]),
 }));
 
-// Only firstName and lastName are required now
 const REQUIRED_INITIAL = {
   firstName: "Terppa",
   lastName: "Testaaja",
@@ -86,6 +85,14 @@ describe("PersonForm", () => {
     );
   });
 
+  it("updates state when a select changes (line 68)", () => {
+    render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
+    const select = screen.getByLabelText("Osasto:") as HTMLSelectElement;
+    select.value = "1";
+    fireEvent.change(select);
+    expect(defaultProps.onChange).toHaveBeenCalled();
+  });
+
   it("reports valid when all required fields are filled", () => {
     render(<PersonForm {...defaultProps} />);
     fireEvent.change(screen.getByLabelText("Etunimi:"), {
@@ -148,5 +155,18 @@ describe("PersonForm", () => {
       }),
       true,
     );
+  });
+
+  it("renders fetched options in dropdowns", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() => {
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: "Developer" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: "Group A" }),
+      ).toBeInTheDocument();
+    });
   });
 });
