@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  ci-frontend:
+    name: Frontend
+    uses: ./.github/workflows/ci-frontend.yaml
+
+  ci-backend:
+    name: Backend
+    uses: ./.github/workflows/ci-backend.yaml
+
+  ci-app:
+    name: App
+    uses: ./.github/workflows/ci-app.yaml
