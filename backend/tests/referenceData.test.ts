@@ -1,11 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
-import {
-  createAllTables,
-  dropAllTables,
-  fixSequences,
-  seedData,
-} from "../src/seed";
+import { createAllTables, dropAllTables, seedData } from "../src/seed";
 
 const api = supertest(app);
 
@@ -13,7 +8,6 @@ beforeEach(async () => {
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await fixSequences();
 });
 
 test("departments data is returned as json", async () => {

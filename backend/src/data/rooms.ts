@@ -1,6 +1,5 @@
 export const rooms = [
   {
-    id: 1,
     name: "A210",
     area: 63.6,
     capacity: 15,
@@ -9,7 +8,6 @@ export const rooms = [
     roomType: "Konferenssihuone",
   },
   {
-    id: 2,
     name: "A211",
     area: 14.6,
     capacity: 3,
@@ -18,7 +16,6 @@ export const rooms = [
     roomType: "Työhuone",
   },
   {
-    id: 3,
     name: "A212",
     area: 9.7,
     capacity: 2,
@@ -27,7 +24,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 4,
     name: "A213",
     area: 14.6,
     capacity: 3,
@@ -36,7 +32,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 5,
     name: "A214",
     area: 24.7,
     capacity: 6,
@@ -45,7 +40,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 6,
     name: "A215",
     area: 14.7,
     capacity: 3,
@@ -54,7 +48,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 7,
     name: "A216",
     area: 14.0,
     capacity: 3,
@@ -63,7 +56,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 8,
     name: "A217",
     area: 16.6,
     capacity: 4,
@@ -72,7 +64,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 9,
     name: "A218a",
     area: 11.8,
     capacity: 2,
@@ -81,7 +72,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 10,
     name: "A218b",
     area: 8.9,
     capacity: 2,
@@ -90,7 +80,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 11,
     name: "A219",
     area: 21.4,
     capacity: 5,
@@ -99,7 +88,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 12,
     name: "A220",
     area: 14.1,
     capacity: 3,
@@ -108,7 +96,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 13,
     name: "A221",
     area: 14.9,
     capacity: 3,
@@ -117,7 +104,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 14,
     name: "A222",
     area: 9.7,
     capacity: 2,
@@ -126,7 +112,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 15,
     name: "A223",
     area: 14.9,
     capacity: 3,
@@ -135,7 +120,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 16,
     name: "A224",
     area: 15.0,
     capacity: 3,
@@ -144,7 +128,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 17,
     name: "A229",
     area: 11.4,
     capacity: 2,
@@ -153,7 +136,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 18,
     name: "A230",
     area: 13.1,
     capacity: 3,
@@ -162,7 +144,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 19,
     name: "A231",
     area: 10.6,
     capacity: 2,
@@ -171,7 +152,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 20,
     name: "A232",
     area: 20.2,
     capacity: 5,
@@ -180,7 +160,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 22,
     name: "A236",
     area: 14.8,
     capacity: 3,
@@ -189,7 +168,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 23,
     name: "A237",
     area: 9.8,
     capacity: 2,
@@ -198,7 +176,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 24,
     name: "A238",
     area: 9.7,
     capacity: 2,
@@ -207,7 +184,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 25,
     name: "A239a",
     area: 14.7,
     capacity: 3,
@@ -216,7 +192,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 26,
     name: "A239b",
     area: 18.4,
     capacity: 4,
@@ -225,7 +200,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 27,
     name: "A240",
     area: 9.8,
     capacity: 2,
@@ -234,7 +208,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 28,
     name: "A241",
     area: 19.7,
     capacity: 4,
@@ -243,7 +216,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 29,
     name: "A242",
     area: 66.2,
     capacity: 16,
@@ -252,7 +224,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 30,
     name: "B211",
     area: 15.0,
     capacity: 3,
@@ -261,7 +232,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 31,
     name: "B212",
     area: 9.8,
     capacity: 2,
@@ -270,7 +240,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 32,
     name: "B213",
     area: 14.8,
     capacity: 3,
@@ -279,7 +248,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 33,
     name: "B214",
     area: 9.6,
     capacity: 2,
@@ -288,7 +256,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 34,
     name: "B215",
     area: 24.8,
     capacity: 6,
@@ -297,7 +264,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 35,
     name: "B216",
     area: 14.8,
     capacity: 3,
@@ -306,7 +272,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 36,
     name: "B217",
     area: 9.8,
     capacity: 2,
@@ -315,7 +280,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 37,
     name: "B218",
     area: 13.2,
     capacity: 3,
@@ -324,7 +288,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 38,
     name: "B226",
     area: 13.8,
     capacity: 3,
@@ -333,7 +296,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 39,
     name: "B227",
     area: 9.8,
     capacity: 2,
@@ -342,7 +304,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 40,
     name: "B228",
     area: 9.7,
     capacity: 2,
@@ -351,7 +312,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 41,
     name: "B229a",
     area: 14.7,
     capacity: 3,
@@ -360,7 +320,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 42,
     name: "B230",
     area: 28.5,
     capacity: 7,
@@ -369,7 +328,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 43,
     name: "B231",
     area: 9.8,
     capacity: 2,
@@ -378,7 +336,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 44,
     name: "B232",
     area: 14.8,
     capacity: 3,
@@ -387,7 +344,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 45,
     name: "B233",
     area: 46.3,
     capacity: 11,
@@ -396,7 +352,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 46,
     name: "C210",
     area: 15.0,
     capacity: 3,
@@ -405,7 +360,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 47,
     name: "C211",
     area: 9.8,
     capacity: 2,
@@ -414,7 +368,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 48,
     name: "C212",
     area: 14.8,
     capacity: 3,
@@ -423,7 +376,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 49,
     name: "C213",
     area: 9.6,
     capacity: 2,
@@ -432,7 +384,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 50,
     name: "C214",
     area: 24.8,
     capacity: 6,
@@ -441,7 +392,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 51,
     name: "C215",
     area: 14.8,
     capacity: 3,
@@ -450,7 +400,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 52,
     name: "C216",
     area: 9.8,
     capacity: 2,
@@ -459,7 +408,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 53,
     name: "C217",
     area: 13.4,
     capacity: 3,
@@ -468,7 +416,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 54,
     name: "C227",
     area: 14.8,
     capacity: 3,
@@ -477,7 +424,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 55,
     name: "C228",
     area: 9.8,
     capacity: 2,
@@ -486,7 +432,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 56,
     name: "C229",
     area: 9.7,
     capacity: 2,
@@ -495,7 +440,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 57,
     name: "C230a",
     area: 14.7,
     capacity: 3,
@@ -504,7 +448,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 58,
     name: "C230b",
     area: 18.4,
     capacity: 4,
@@ -513,7 +456,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 59,
     name: "C231",
     area: 9.7,
     capacity: 2,
@@ -522,7 +464,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 60,
     name: "C232",
     area: 9.8,
     capacity: 2,
@@ -531,7 +472,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 61,
     name: "C233",
     area: 13.8,
     capacity: 3,
@@ -540,7 +480,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 62,
     name: "D211",
     area: 14.8,
     capacity: 3,
@@ -549,7 +488,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 63,
     name: "D212",
     area: 9.8,
     capacity: 2,
@@ -558,7 +496,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 64,
     name: "D213",
     area: 14.9,
     capacity: 3,
@@ -567,7 +504,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 65,
     name: "D214",
     area: 9.8,
     capacity: 2,
@@ -576,7 +512,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 66,
     name: "D215",
     area: 9.8,
     capacity: 2,
@@ -585,7 +520,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 67,
     name: "D219",
     area: 13.5,
     capacity: 3,
@@ -594,7 +528,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 68,
     name: "D220",
     area: 9.8,
     capacity: 2,
@@ -603,7 +536,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 69,
     name: "D221",
     area: 14.8,
     capacity: 3,
@@ -612,7 +544,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 70,
     name: "D222",
     area: 9.6,
     capacity: 2,
@@ -621,7 +552,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 71,
     name: "D223",
     area: 24.8,
     capacity: 6,
@@ -630,7 +560,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 72,
     name: "D224",
     area: 14.8,
     capacity: 3,
@@ -639,7 +568,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 73,
     name: "D225",
     area: 9.8,
     capacity: 2,
@@ -648,7 +576,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 74,
     name: "D226",
     area: 14.8,
     capacity: 3,
@@ -657,7 +584,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 75,
     name: "D227",
     area: 9.8,
     capacity: 2,
@@ -666,7 +592,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 76,
     name: "D228",
     area: 9.7,
     capacity: 2,
@@ -675,7 +600,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 77,
     name: "D229",
     area: 14.9,
     capacity: 3,
@@ -684,7 +608,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 78,
     name: "D230",
     area: 9.7,
     capacity: 2,
@@ -693,7 +616,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 79,
     name: "D231",
     area: 14.9,
     capacity: 3,
@@ -702,7 +624,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 80,
     name: "D232",
     area: 9.7,
     capacity: 2,
@@ -711,7 +632,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 81,
     name: "D233",
     area: 14.8,
     capacity: 3,
@@ -720,7 +640,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 82,
     name: "D235",
     area: 9.7,
     capacity: 2,
@@ -729,7 +648,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 83,
     name: "D236",
     area: 14.9,
     capacity: 3,
@@ -738,7 +656,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 84,
     name: "D237",
     area: 9.7,
     capacity: 2,
@@ -747,7 +664,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 85,
     name: "D238",
     area: 14.9,
     capacity: 3,
@@ -756,7 +672,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 86,
     name: "D239",
     area: 9.7,
     capacity: 2,
@@ -765,7 +680,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 87,
     name: "D240a",
     area: 14.7,
     capacity: 3,
@@ -774,7 +688,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 88,
     name: "D240b",
     area: 18.4,
     capacity: 4,
@@ -783,7 +696,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 89,
     name: "D241",
     area: 9.7,
     capacity: 2,
@@ -792,7 +704,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 90,
     name: "D242",
     area: 9.8,
     capacity: 2,
@@ -801,7 +712,6 @@ export const rooms = [
     roomType: "",
   },
   {
-    id: 91,
     name: "D243",
     area: 14.8,
     capacity: 3,
