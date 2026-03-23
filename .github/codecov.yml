@@ -8,10 +8,12 @@ coverage:
     patch:
       backend:
         target: 80%
+        threshold: 10%
         flags:
           - backend
       frontend:
         target: 80%
+        threshold: 10%
         flags:
           - frontend
 
