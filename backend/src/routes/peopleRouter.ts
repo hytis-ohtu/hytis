@@ -70,6 +70,10 @@ router.get("/", async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Query parameter 'q' is required" });
   }
 
+  if (q.length > 100) {
+    return res.status(400).json({ error: "Query too long" });
+  }
+
   try {
     const people = await Person.findAll({
       where: {

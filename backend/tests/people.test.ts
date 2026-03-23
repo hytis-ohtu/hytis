@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../src/app";
-import type { Person } from "../src/models";
+import { Person } from "../src/models";
+import type { Person as PersonType } from "../src/models";
 import {
   createAllTables,
   dropAllTables,
@@ -34,7 +35,7 @@ test("a person can be created", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const createdPerson: Person = response.body;
+  const createdPerson: PersonType = response.body;
   expect(createdPerson.firstName).toBe(newPerson.firstName);
   expect(createdPerson.lastName).toBe(newPerson.lastName);
   expect(createdPerson.freeText).toBe(newPerson.freeText);
@@ -123,7 +124,7 @@ describe("GET /api/people - search", () => {
     const response = await api.get("/api/people?q=Ma").expect(200);
 
     expect(response.body.length).toBeGreaterThan(0);
-    response.body.forEach((person: Person) => {
+    response.body.forEach((person: PersonType) => {
       const matchesFirstName = person.firstName
         .toLowerCase()
         .includes("ma");
@@ -170,6 +171,16 @@ describe("GET /api/people - search", () => {
     await api.get("/api/people?q=").expect(400);
   });
 
+  test("search returns 400 when query parameter is too long (over 100 characters)", async () => {
+    const longQuery = "a".repeat(101);
+    const response = await api
+      .get(`/api/people?q=${longQuery}`)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.error).toBe("Query too long");
+  });
+
   test("multiple people can be found with partial match", async () => {
     const response = await api.get("/api/people?q=a").expect(200);
 
@@ -191,5 +202,17 @@ describe("GET /api/people - search", () => {
     // Jari Nieminen should have Matti Virtanen as supervisor (based on seed data)
     expect(person.supervisors.length).toBeGreaterThan(0);
     expect(person.supervisors[0].firstName).toBe("Matti");
+  });
+
+  test("search returns 500 when database query fails", async () => {
+    const findAllSpy = jest.spyOn(Person, "findAll").mockRejectedValueOnce(new Error("Database error"));
+
+    const response = await api
+      .get("/api/people?q=Matti")
+      .expect(500)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.error).toBe("Failed to search people");
+    findAllSpy.mockRestore();
   });
 });

@@ -8,6 +8,7 @@ function PersonSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Person[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -30,9 +31,10 @@ function PersonSearch() {
   // Search function
   useEffect(() => {
     const search = async () => {
-      if (query.trim().length < 1) {
+      if (query.trim().length < 3) {
         setResults([]);
         setIsOpen(false);
+        setError(false);
         return;
       }
 
@@ -40,9 +42,12 @@ function PersonSearch() {
         const people = await searchPeople(query);
         setResults(people);
         setIsOpen(true);
+        setError(false);
       } catch (error) {
         console.error("Error searching people:", error);
         setResults([]);
+        setError(true);
+        setIsOpen(true);
       }
     };
 
@@ -59,7 +64,7 @@ function PersonSearch() {
   };
 
   const handleFocus = () => {
-    if (query.trim().length >= 1 && results.length > 0) {
+    if (query.trim().length >= 3 && results.length > 0) {
       setIsOpen(true);
     }
   };
@@ -99,11 +104,15 @@ function PersonSearch() {
           </div>
 
           <div className="person-search-results">
-            {results.length === 0 && (
+            {error ? (
+              <div className="person-search-error">
+                Virhe henkilöiden haussa
+              </div>
+            ) : results.length === 0 ? (
               <div className="person-search-no-results">
                 Ei tuloksia haulle "{query}"
               </div>
-            )}
+            ) : null}
 
             {results.map((person) => (
               <div

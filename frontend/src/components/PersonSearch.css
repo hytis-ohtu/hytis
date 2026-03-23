@@ -102,6 +102,14 @@
   font-size: var(--font-size-base);
 }
 
+.person-search-error {
+  padding: var(--padding-md);
+  text-align: center;
+  color: #dc3545;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+}
+
 .person-search-result {
   padding: var(--padding-md);
   border-bottom: 1px solid var(--muted-color);
