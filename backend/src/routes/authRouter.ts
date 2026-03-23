@@ -28,7 +28,7 @@ router.get("/user", (req: Request, res: Response) => {
 if (useHyLogin) {
   router.get("/login", passport.authenticate("oidc"));
 } else {
-  router.get("/login", mockAuthMiddleware, (req: Request, res: Response) => {
+  router.get("/login", mockAuthMiddleware, (_req: Request, res: Response) => {
     res.redirect(config.frontendUrl || "http://localhost:5173");
   });
 }
@@ -47,12 +47,12 @@ if (useHyLogin) {
       failureRedirect: "/",
       failureMessage: true,
     }) as express.RequestHandler,
-    (req: Request, res: Response) => {
+    (_req: Request, res: Response) => {
       res.redirect(config.frontendUrl || "/");
     },
   );
 } else {
-  router.get("/login/callback", (req: Request, res: Response) => {
+  router.get("/login/callback", (_req: Request, res: Response) => {
     res.status(501).json({
       error: "Not implemented in development mode",
       message: "This route is only used with real OIDC authentication",
