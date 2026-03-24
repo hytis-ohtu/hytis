@@ -5,5 +5,6 @@ export default {
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "./coverage/",
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
+  coveragePathIgnorePatterns: ["src/data/", "src/models/"],
   detectOpenHandles: true,
 };

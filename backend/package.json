@@ -55,5 +55,10 @@
     "plugins": [
       "prettier-plugin-organize-imports"
     ]
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm"
+    }
   }
 }
