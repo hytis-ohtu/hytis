@@ -63,6 +63,9 @@ export const fixSequences = async () => {
   await sequelize.query(
     "SELECT setval('research_groups_id_seq', (SELECT MAX(id) FROM research_groups))",
   );
+  await sequelize.query(
+    "SELECT setval('contracts_id_seq', (SELECT MAX(id) FROM contracts))",
+  );
   console.log("Sequences fixed!");
 };
 
