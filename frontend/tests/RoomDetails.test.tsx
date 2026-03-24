@@ -53,7 +53,7 @@ const mockRoom_A219: Room = {
 };
 
 describe("RoomDetails", () => {
-  it("renders nothing if there is no room data", () => {
+  it("renders loading skeleton when data is being fetched", () => {
     const { container } = render(
       <RoomDetails
         room={null}
@@ -61,7 +61,9 @@ describe("RoomDetails", () => {
         onPersonAdded={mockOnPersonAdded}
       />,
     );
-    expect(container).toBeEmptyDOMElement();
+    expect(
+      container.querySelector(".react-loading-skeleton"),
+    ).toBeInTheDocument();
   });
 
   it("renders room details panel when room data is provided", () => {

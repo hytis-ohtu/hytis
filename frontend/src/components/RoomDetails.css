@@ -5,11 +5,11 @@
   height: calc(100vh - var(--topbar-height));
   overflow-y: scroll;
   overflow-x: hidden;
-  max-width: fit-content;
+  max-width: 300px;
   padding: var(--padding);
   background-color: var(--background-color);
   border-left: var(--border-style);
-  display: flex;
+  display: block;
   flex-direction: column;
   align-items: center;
   gap: var(--gap);
@@ -38,6 +38,7 @@
 .room-details-avatar {
   width: 10em;
   height: 10em;
+  margin: var(--gap) auto;
   border-radius: var(--border-radius-circle);
   background-color: var(--primary-color);
   display: flex;

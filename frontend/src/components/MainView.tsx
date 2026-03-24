@@ -143,9 +143,9 @@ function MainView() {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
         console.log("Clicked room with id:", target.id);
+        setIsRoomDetailsOpen(true);
         await findRoom(target.id);
         setActiveRoomId(target.id);
-        setIsRoomDetailsOpen(true);
       }
     }
   }
