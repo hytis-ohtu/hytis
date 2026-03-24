@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
-import type { Person } from "../src/models";
+import { Person } from "../src/models";
 import {
   createAllTables,
   dropAllTables,
@@ -17,15 +17,18 @@ beforeEach(async () => {
   await fixSequences();
 });
 
-test("a person can be created", async () => {
+test("a person can be created with a contract", async () => {
   const newPerson = {
     firstName: "Terppa",
     lastName: "Testaaja",
-    freeText: "Tämä on testihenkilö",
     titleId: 1,
     departmentId: 1,
     researchGroupId: 1,
+    freeText: "Tämä on testihenkilö",
     supervisorIds: [1, 2],
+    roomId: 1,
+    startDate: "2026-01-01",
+    endDate: "2026-12-31",
   };
 
   const response = await api
@@ -44,7 +47,46 @@ test("a person can be created", async () => {
   expect(createdPerson.supervisors).toHaveLength(
     newPerson.supervisorIds.length,
   );
-  console.log("Created person:", createdPerson);
+
+  expect(createdPerson.contracts).toHaveLength(1);
+  expect(createdPerson.contracts![0].roomId).toBe(newPerson.roomId);
+  expect(createdPerson.contracts![0].startDate).toBe(newPerson.startDate);
+  expect(createdPerson.contracts![0].endDate).toBe(newPerson.endDate);
+});
+
+test("a person can be created with a contract that does not have startDate and endDate", async () => {
+  const newPerson = {
+    firstName: "Terppa",
+    lastName: "Testaaja",
+    titleId: 1,
+    departmentId: 1,
+    researchGroupId: 1,
+    freeText: "Tämä on testihenkilö",
+    supervisorIds: [1, 2],
+    roomId: 1,
+  };
+
+  const response = await api
+    .post("/api/people")
+    .send(newPerson)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const createdPerson: Person = response.body;
+  expect(createdPerson.firstName).toBe(newPerson.firstName);
+  expect(createdPerson.lastName).toBe(newPerson.lastName);
+  expect(createdPerson.freeText).toBe(newPerson.freeText);
+  expect(createdPerson.titleId).toBe(newPerson.titleId);
+  expect(createdPerson.departmentId).toBe(newPerson.departmentId);
+  expect(createdPerson.researchGroupId).toBe(newPerson.researchGroupId);
+  expect(createdPerson.supervisors).toHaveLength(
+    newPerson.supervisorIds.length,
+  );
+
+  expect(createdPerson.contracts).toHaveLength(1);
+  expect(createdPerson.contracts![0].roomId).toBe(newPerson.roomId);
+  expect(createdPerson.contracts![0].startDate).toBeNull();
+  expect(createdPerson.contracts![0].endDate).toBeNull();
 });
 
 test("a person with missing required fields cannot be created", async () => {
@@ -72,4 +114,26 @@ test("a person with invalid supervisor IDs cannot be created", async () => {
   };
 
   await api.post("/api/people").send(newPerson).expect(500);
+});
+
+test("people are returned as a list", async () => {
+  const response = await api
+    .get("/api/people")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  const people: Person[] = response.body;
+  expect(Array.isArray(people)).toBe(true);
+  expect(people.length).toBeGreaterThan(0);
+});
+
+test("returns 500 if there is an error fetching people", async () => {
+  // Temporarily override the findAll method to simulate an error
+  const originalFindAll = Person.findAll;
+  Person.findAll = jest.fn().mockRejectedValue(new Error("Database error"));
+
+  await api.get("/api/people").expect(500);
+
+  // Restore the original method
+  Person.findAll = originalFindAll;
 });
