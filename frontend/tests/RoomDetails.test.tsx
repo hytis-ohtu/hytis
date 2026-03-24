@@ -112,6 +112,37 @@ describe("RoomDetails", () => {
     ).toBeInTheDocument();
   });
 
+  it("handles addPerson error state and logs the failure", async () => {
+    const user = userEvent.setup();
+    const onPersonAdded = vi.fn();
+    const addPersonError = new Error("network failed");
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+
+    vi.mocked(addPerson).mockRejectedValueOnce(addPersonError);
+
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonAdded={onPersonAdded}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(addPerson).toHaveBeenCalled();
+    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Failed to add person:",
+      addPersonError,
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
   it("renders room details panel when room data is provided", () => {
     render(
       <RoomDetails
