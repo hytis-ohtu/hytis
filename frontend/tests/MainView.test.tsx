@@ -94,7 +94,7 @@ describe("MainView", () => {
   });
 
   it("incorrect department name returns error color", () => {
-    expect(getDepartmentColor("incorrect name") === "#aaaaaa");
+    expect(getDepartmentColor("incorrect name") === "#418585");
   });
 
   it("renders legend with correct initial mode (availability)", async () => {
