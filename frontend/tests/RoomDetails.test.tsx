@@ -3,7 +3,34 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import RoomDetails from "../src/components/RoomDetails.tsx";
+import { addPerson } from "../src/services/peopleService";
 import type { Room } from "../src/types.ts";
+
+vi.mock("../src/services/peopleService", () => ({
+  addPerson: vi.fn(),
+}));
+
+vi.mock("../src/components/PersonModal", () => ({
+  default: ({
+    onSubmit,
+  }: {
+    onSubmit?: (values: Record<string, string>) => void;
+  }) => (
+    <button
+      data-testid="mock-personmodal-submit"
+      onClick={() =>
+        onSubmit?.({
+          firstName: "Test",
+          lastName: "User",
+          startDate: "2026-01-01",
+          endDate: "2026-12-31",
+        })
+      }
+    >
+      Mock Submit
+    </button>
+  ),
+}));
 
 const mockHandleClose = vi.fn();
 const mockOnPersonAdded = vi.fn();
@@ -54,7 +81,26 @@ const mockRoom_A219: Room = {
 };
 
 describe("RoomDetails", () => {
-  it("renders nothing if there is no room data", () => {
+  it("returns early from handleAddPerson when room id is undefined", async () => {
+    const user = userEvent.setup();
+    const onPersonAdded = vi.fn();
+
+    render(
+      <RoomDetails
+        room={null}
+        handleClose={mockHandleClose}
+        onPersonAdded={onPersonAdded}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(addPerson).not.toHaveBeenCalled();
+    expect(onPersonAdded).not.toHaveBeenCalled();
+  });
+
+  it("renders loading skeleton when data is being fetched", () => {
     const { container } = render(
       <RoomDetails
         room={null}
@@ -62,7 +108,40 @@ describe("RoomDetails", () => {
         onPersonAdded={mockOnPersonAdded}
       />,
     );
-    expect(container).toBeEmptyDOMElement();
+    expect(
+      container.querySelector(".react-loading-skeleton"),
+    ).toBeInTheDocument();
+  });
+
+  it("handles addPerson error state and logs the failure", async () => {
+    const user = userEvent.setup();
+    const onPersonAdded = vi.fn();
+    const addPersonError = new Error("network failed");
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+
+    vi.mocked(addPerson).mockRejectedValueOnce(addPersonError);
+
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonAdded={onPersonAdded}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(addPerson).toHaveBeenCalled();
+    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Failed to add person:",
+      addPersonError,
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 
   it("renders room details panel when room data is provided", () => {
