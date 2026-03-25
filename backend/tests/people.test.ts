@@ -3,6 +3,7 @@ import app from "../src/app";
 import { Person } from "../src/models";
 import type { Person as PersonType } from "../src/models";
 import {
+  connectToDatabase,
   createAllTables,
   dropAllTables,
   fixSequences,
@@ -12,6 +13,7 @@ import {
 const api = supertest(app);
 
 beforeEach(async () => {
+  await connectToDatabase();
   await dropAllTables();
   await createAllTables();
   await seedData();

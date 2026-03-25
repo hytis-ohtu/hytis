@@ -302,9 +302,10 @@ describe("PersonSearch", () => {
       expect(mockSearchPeople).toHaveBeenCalledWith("Matti");
     });
 
-    // Should show empty results on error
-    const dropdown = screen.queryByTestId("person-search-dropdown");
-    // Dropdown might not open on error, or show "no results"
-    expect(dropdown).not.toBeInTheDocument();
+    // Should show error message in dropdown
+    const dropdown = screen.getByTestId("person-search-dropdown");
+    const errorMessage = screen.getByText("Virhe henkilöiden haussa");
+    expect(dropdown).toBeInTheDocument();
+    expect(errorMessage).toBeInTheDocument();
   });
 });
