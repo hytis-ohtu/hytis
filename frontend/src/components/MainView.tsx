@@ -144,8 +144,8 @@ function MainView() {
       if (target?.id) {
         console.log("Clicked room with id:", target.id);
         setIsRoomDetailsOpen(true);
-        await findRoom(target.id);
         setActiveRoomId(target.id);
+        await findRoom(target.id);
       }
     }
   }
@@ -191,7 +191,10 @@ function MainView() {
           {isRoomDetailsOpen && (
             <RoomDetails
               room={room}
-              handleClose={() => setIsRoomDetailsOpen(false)}
+              handleClose={() => {
+                setIsRoomDetailsOpen(false);
+                setActiveRoomId(null);
+              }}
               onPersonAdded={() => findRoom(activeRoomId!)}
             />
           )}
