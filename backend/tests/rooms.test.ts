@@ -3,12 +3,13 @@ import app from "../src/app";
 import { contracts } from "../src/data/contracts";
 import { rooms } from "../src/data/rooms";
 import type { Contract } from "../src/models";
-import { createAllTables, dropAllTables, seedData } from "../src/seed";
+import { connectToDatabase, createAllTables, dropAllTables, seedData } from "../src/seed";
 import { validateContract } from "./testHelpers";
 
 const api = supertest(app);
 
 beforeEach(async () => {
+  await connectToDatabase();
   await dropAllTables();
   await createAllTables();
   await seedData();
