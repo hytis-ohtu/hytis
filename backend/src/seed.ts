@@ -5,7 +5,7 @@ import { personSupervisors } from "./data/personSupervisors";
 import { researchGroups } from "./data/researchGroups";
 import { rooms } from "./data/rooms";
 import { titles } from "./data/titles";
-import { connectToDatabase, sequelize } from "./db";
+import { connectToDatabase as connectToDatabaseImport, sequelize } from "./db";
 import {
   Contract,
   Department,
@@ -15,6 +15,9 @@ import {
   Room,
   Title,
 } from "./models/index";
+
+// Re-export connectToDatabase for use in tests
+export { connectToDatabaseImport as connectToDatabase };
 
 export const dropAllTables = async () => {
   console.log("Dropping tables...");
@@ -70,7 +73,7 @@ export const fixSequences = async () => {
 };
 
 const resetDatabase = async () => {
-  await connectToDatabase();
+  await connectToDatabaseImport();
   await dropAllTables();
   await createAllTables();
   await seedData();
