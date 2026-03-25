@@ -44,10 +44,10 @@ function RoomDetails({
 
   return (
     <motion.div
-      initial={{ x: "100vw" }}
+      initial={{ x: "100%" }}
       animate={{ x: 0 }}
-      exit={{ x: "100vw" }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      exit={{ x: "100%" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       className="room-details"
     >
       <header className="room-details-header">
