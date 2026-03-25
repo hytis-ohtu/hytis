@@ -231,12 +231,24 @@ describe("GET /api/people - search", () => {
     expect(response.body).toEqual([]);
   });
 
-  test("search returns 400 when query parameter is missing", async () => {
-    await api.get("/api/people").expect(400);
+  test("fetches all people when query parameter is missing", async () => {
+    const response = await api
+      .get("/api/people")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
-  test("search returns 400 when query parameter is empty string", async () => {
-    await api.get("/api/people?q=").expect(400);
+  test("fetches all people when query parameter is empty string", async () => {
+    const response = await api
+      .get("/api/people?q=")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
   test("search returns 400 when query parameter is too long (over 100 characters)", async () => {

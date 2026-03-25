@@ -50,6 +50,18 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     if (supervisorIds && supervisorIds.length > 0) {
+      // Validate that all supervisor IDs exist
+      const supervisors = await Person.findAll({
+        where: { id: supervisorIds },
+        attributes: ["id"],
+      });
+
+      if (supervisors.length !== supervisorIds.length) {
+        // Rollback: delete the created person since validation failed
+        await newPerson.destroy();
+        return res.status(400).json({ error: "One or more supervisor IDs are invalid" });
+      }
+
       await PersonSupervisor.bulkCreate(
         supervisorIds.map((supervisorId: number) => ({
           supervisorId,
@@ -77,59 +89,53 @@ router.post("/", async (req: Request, res: Response) => {
 
 /**
  * GET /api/people
- * Searches for people by first name or last name
- * Query parameter 'q' is used for partial matching
+ * Fetches all people, or searches if query parameter 'q' is provided
+ * Query parameter 'q' is used for partial matching on first/last name
  */
 router.get("/", async (req: Request, res: Response) => {
   const { q } = req.query;
 
-  if (!q || typeof q !== "string") {
-    return res.status(400).json({ error: "Query parameter 'q' is required" });
-  }
+  // If query parameter 'q' is provided, search people
+  if (q && typeof q === "string") {
+    if (q.length > 100) {
+      return res.status(400).json({ error: "Query too long" });
+    }
 
-  if (q.length > 100) {
-    return res.status(400).json({ error: "Query too long" });
-  }
-
-  try {
-    const people = await Person.findAll({
-      where: {
-        [Op.or]: [
-          { firstName: { [Op.iLike]: `%${q}%` } },
-          { lastName: { [Op.iLike]: `%${q}%` } },
+    try {
+      const people = await Person.findAll({
+        where: {
+          [Op.or]: [
+            { firstName: { [Op.iLike]: `%${q}%` } },
+            { lastName: { [Op.iLike]: `%${q}%` } },
+          ],
+        },
+        include: [
+          { model: Person, as: "supervisors", through: { attributes: [] } },
+          "department",
+          "title",
+          "researchGroup",
         ],
-      },
-      include: [
-        { model: Person, as: "supervisors", through: { attributes: [] } },
-        "department",
-        "title",
-        "researchGroup",
-      ],
-    });
+      });
 
-    res.json(people);
-  } catch (error) {
-    console.error("Error searching people:", error);
-    res.status(500).json({ error: "Failed to search people" });
-  }
-});
-
-/**
- * GET /api/people
- * Fetches all people, ordered by last name and first name
- */
-router.get("/", async (req: Request, res: Response) => {
-  try {
-    const people = await Person.findAll({
-      order: [
-        ["lastName", "ASC"],
-        ["firstName", "ASC"],
-      ],
-    });
-    res.status(200).json(people);
-  } catch (error) {
-    console.error("Error fetching people:", error);
-    res.status(500).json({ error: "Failed to fetch people" });
+      res.json(people);
+    } catch (error) {
+      console.error("Error searching people:", error);
+      res.status(500).json({ error: "Failed to search people" });
+    }
+  } else {
+    // No query parameter - fetch all people
+    try {
+      const people = await Person.findAll({
+        order: [
+          ["lastName", "ASC"],
+          ["firstName", "ASC"],
+        ],
+      });
+      res.status(200).json(people);
+    } catch (error) {
+      console.error("Error fetching people:", error);
+      res.status(500).json({ error: "Failed to fetch people" });
+    }
   }
 });
 
