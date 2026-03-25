@@ -6,6 +6,7 @@ import RoomDetails from "../src/components/RoomDetails.tsx";
 import type { Room } from "../src/types.ts";
 
 const mockHandleClose = vi.fn();
+const mockOnPersonAdded = vi.fn();
 
 const mockRoom_A210: Room = {
   id: 1,
@@ -55,13 +56,23 @@ const mockRoom_A219: Room = {
 describe("RoomDetails", () => {
   it("renders nothing if there is no room data", () => {
     const { container } = render(
-      <RoomDetails room={null} handleClose={mockHandleClose} />,
+      <RoomDetails
+        room={null}
+        handleClose={mockHandleClose}
+        onPersonAdded={mockOnPersonAdded}
+      />,
     );
     expect(container).toBeEmptyDOMElement();
   });
 
   it("renders room details panel when room data is provided", () => {
-    render(<RoomDetails room={mockRoom_A210} handleClose={mockHandleClose} />);
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonAdded={mockOnPersonAdded}
+      />,
+    );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
     expect(
       screen.getByRole("heading", { name: mockRoom_A210.name }),
@@ -80,7 +91,13 @@ describe("RoomDetails", () => {
 
   it("renders valid mock person details on sidepanel", async () => {
     const user = userEvent.setup();
-    render(<RoomDetails room={mockRoom_A210} handleClose={mockHandleClose} />);
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonAdded={mockOnPersonAdded}
+      />,
+    );
 
     const contract = mockRoom_A210.contracts[0];
     const fullName = `${contract.person.firstName} ${contract.person.lastName}`;
@@ -98,13 +115,25 @@ describe("RoomDetails", () => {
   });
 
   it("renders room details panel when room data is provided", () => {
-    render(<RoomDetails room={mockRoom_A219} handleClose={mockHandleClose} />);
+    render(
+      <RoomDetails
+        room={mockRoom_A219}
+        handleClose={mockHandleClose}
+        onPersonAdded={mockOnPersonAdded}
+      />,
+    );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
     expect(screen.getByText("Ei sopimuksia.")).toBeInTheDocument();
   });
   it("room details panel can be closed", async () => {
     const user = userEvent.setup();
-    render(<RoomDetails room={mockRoom_A210} handleClose={mockHandleClose} />);
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonAdded={mockOnPersonAdded}
+      />,
+    );
 
     await user.click(screen.getByTestId("close-room-details-panel"));
 

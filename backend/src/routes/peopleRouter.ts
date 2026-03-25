@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { Op } from "sequelize";
-import { Person, PersonSupervisor } from "../models";
+import { Contract, Person, PersonSupervisor, Room } from "../models";
 
 const router = Router();
 
@@ -19,6 +19,9 @@ router.post("/", async (req: Request, res: Response) => {
     researchGroupId,
     freeText,
     supervisorIds,
+    roomId,
+    startDate,
+    endDate,
   } = req.body;
 
   if (!firstName || !lastName) {
@@ -37,6 +40,15 @@ router.post("/", async (req: Request, res: Response) => {
       freeText,
     });
 
+    if (roomId) {
+      await Contract.create({
+        personId: newPerson.id,
+        roomId,
+        startDate,
+        endDate,
+      });
+    }
+
     if (supervisorIds && supervisorIds.length > 0) {
       await PersonSupervisor.bulkCreate(
         supervisorIds.map((supervisorId: number) => ({
@@ -49,6 +61,11 @@ router.post("/", async (req: Request, res: Response) => {
     const createdPerson = await Person.findByPk(newPerson.id, {
       include: [
         { model: Person, as: "supervisors", through: { attributes: [] } },
+        {
+          model: Contract,
+          as: "contracts",
+          include: [{ model: Room, as: "room" }],
+        },
       ],
     });
     res.status(201).json(createdPerson);
@@ -94,6 +111,25 @@ router.get("/", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error searching people:", error);
     res.status(500).json({ error: "Failed to search people" });
+  }
+});
+
+/**
+ * GET /api/people
+ * Fetches all people, ordered by last name and first name
+ */
+router.get("/", async (req: Request, res: Response) => {
+  try {
+    const people = await Person.findAll({
+      order: [
+        ["lastName", "ASC"],
+        ["firstName", "ASC"],
+      ],
+    });
+    res.status(200).json(people);
+  } catch (error) {
+    console.error("Error fetching people:", error);
+    res.status(500).json({ error: "Failed to fetch people" });
   }
 });
 

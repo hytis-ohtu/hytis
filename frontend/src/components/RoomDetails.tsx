@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { addPerson } from "../services/peopleService";
 import type { Room } from "../types";
 import AddPersonModal from "./PersonModal";
 import "./RoomDetails.css";
@@ -8,33 +9,20 @@ import "./RoomDetails.css";
 function RoomDetails({
   room,
   handleClose,
+  onPersonAdded,
 }: {
   room: Room | null;
   handleClose: () => void;
+  onPersonAdded: () => void;
 }) {
   const [addPersonOpen, setAddPersonOpen] = useState(false);
 
   const handleAddPerson = async (values: Record<string, string>) => {
-    const response = await fetch("/api/people", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        // TODO: needs routes
-        //departmentId: values.department,
-        //titleId: values.jobtitle,
-        //supervisorIds: values.supervisors,
-        //researchGroupId: values.researchgroup,
-        freeText: values.misc,
-        startDate: values.startDate,
-        endDate: values.endDate,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error("Failed to create person");
-      return;
+    try {
+      await addPerson(values, room!.id);
+      onPersonAdded();
+    } catch (error) {
+      console.error("Failed to add person:", error);
     }
   };
 
