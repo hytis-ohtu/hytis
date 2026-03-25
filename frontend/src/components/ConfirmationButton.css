@@ -18,7 +18,7 @@
 }
 
 .confirmation-title {
-  color: var(--text-color);
+  color: var(--text-color-black);
   font-size: 24px;
   margin-bottom: var(--gap);
   margin-right: 20px;

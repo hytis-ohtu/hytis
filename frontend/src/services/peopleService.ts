@@ -17,11 +17,10 @@ export async function addPerson(
   const response = await axios.post<Person>(`${BASE_URL}/api/people`, {
     firstName: values.firstName,
     lastName: values.lastName,
-    // TODO: needs routes
-    //departmentId: values.department,
-    //titleId: values.jobtitle,
-    //supervisorIds: values.supervisors,
-    //researchGroupId: values.researchgroup,
+    departmentId: values.department || undefined,
+    titleId: values.jobtitle || undefined,
+    supervisorIds: values.supervisors || undefined,
+    researchGroupId: values.researchgroup || undefined,
     freeText: values.misc,
     startDate: values.startDate,
     endDate: values.endDate,
