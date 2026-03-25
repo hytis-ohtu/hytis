@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { connectToDatabase, createAllTables, dropAllTables, seedData } from "../seed";
+import { connectToDatabase, createAllTables, dropAllTables, fixSequences, seedData } from "../seed";
 
 const router = Router();
 
@@ -17,6 +17,7 @@ router.post(
     await dropAllTables();
     await createAllTables();
     await seedData();
+    await fixSequences();
 
     return res.status(200).json({ message: "Database reset successfully." });
   },

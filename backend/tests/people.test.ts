@@ -116,7 +116,7 @@ test("a person with invalid supervisor IDs cannot be created", async () => {
     supervisorIds: [9999], // Invalid supervisor ID
   };
 
-  await api.post("/api/people").send(newPerson).expect(500);
+  await api.post("/api/people").send(newPerson).expect(400);
 });
 
 describe("GET /api/people", () => {
