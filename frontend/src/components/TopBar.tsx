@@ -2,6 +2,7 @@ import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
+import PersonSearch from "./PersonSearch";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
@@ -31,6 +32,7 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
   return (
     <header className="topbar">
       <span className="topbar-title">{title}</span>
+      <PersonSearch />
       <div className="topbar-actions">
         <button
           data-testid="topbar-profile-button"
