@@ -1,31 +1,55 @@
-name: "backend pipeline"
+name: Backend
 
 on:
   workflow_call:
 
+defaults:
+  run:
+    working-directory: backend
+
 jobs:
-  lint: #also builds
-    runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: backend
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: setup node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: "25"
-          cache: "npm"
           cache-dependency-path: backend/package-lock.json
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build
         run: npm run build
-      - name: Run lint
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "25"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
         run: npm run lint
 
-  test:
-    runs-on: ubuntu-24.04
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:alpine
@@ -40,24 +64,24 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    defaults:
-      run:
-        working-directory: backend
+
     steps:
-      - uses: actions/checkout@v4
-      - name: setup node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: "25"
-          cache: "npm"
           cache-dependency-path: backend/package-lock.json
+
       - name: Install dependencies
         run: npm ci
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-      #  run: npx prisma migrate deploy
+
       - name: Run tests and coverage
         run: npm run coverage
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:

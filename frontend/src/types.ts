@@ -8,6 +8,7 @@ export interface Title {
 }
 
 export interface Person {
+  id: number;
   firstName: string;
   lastName: string;
   department: Department;

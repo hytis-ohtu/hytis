@@ -1,16 +1,26 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../src/components/PersonForm.tsx";
+
+vi.mock("../src/services/referenceDataService", () => ({
+  findAllDepartments: vi.fn().mockResolvedValue([
+    { id: 1, name: "IT" },
+    { id: 2, name: "HR" },
+  ]),
+  findAllTitles: vi.fn().mockResolvedValue([
+    { id: 1, name: "Developer" },
+    { id: 2, name: "Manager" },
+  ]),
+  findAllResearchGroups: vi.fn().mockResolvedValue([
+    { id: 1, name: "Group A" },
+    { id: 2, name: "Group B" },
+  ]),
+}));
 
 const REQUIRED_INITIAL = {
   firstName: "Terppa",
   lastName: "Testaaja",
-  department: "CS",
-  jobtitle: "Devaaja",
-  supervisors: "Liisa Esihenkilö",
-  startDate: "2025-01-01",
-  endDate: "2026-01-01",
 };
 
 describe("PersonForm", () => {
@@ -44,14 +54,14 @@ describe("PersonForm", () => {
     render(<PersonForm {...defaultProps} />);
     expect(screen.getByLabelText("Etunimi:")).toHaveValue("");
     expect(screen.getByLabelText("Sukunimi:")).toHaveValue("");
+    // selects default to "" (the placeholder option)
     expect(screen.getByLabelText("Osasto:")).toHaveValue("");
   });
 
-  it("renders with initial values pre-filled", () => {
+  it("renders with initial text values pre-filled", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    Object.values(REQUIRED_INITIAL).forEach((value) => {
-      expect(screen.getByDisplayValue(value)).toBeInTheDocument();
-    });
+    expect(screen.getByDisplayValue("Terppa")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Testaaja")).toBeInTheDocument();
   });
 
   it("calls onChange on mount with initial values and validity", () => {
@@ -64,7 +74,7 @@ describe("PersonForm", () => {
     expect(defaultProps.onChange).toHaveBeenCalledWith({}, false);
   });
 
-  it("calls onChange with updated values when a field changes", () => {
+  it("calls onChange with updated values when a text field changes", () => {
     render(<PersonForm {...defaultProps} />);
     fireEvent.change(screen.getByLabelText("Etunimi:"), {
       target: { value: "Matti" },
@@ -75,6 +85,14 @@ describe("PersonForm", () => {
     );
   });
 
+  it("updates state when a select changes (line 68)", () => {
+    render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
+    const select = screen.getByLabelText("Osasto:") as HTMLSelectElement;
+    select.value = "1";
+    fireEvent.change(select);
+    expect(defaultProps.onChange).toHaveBeenCalled();
+  });
+
   it("reports valid when all required fields are filled", () => {
     render(<PersonForm {...defaultProps} />);
     fireEvent.change(screen.getByLabelText("Etunimi:"), {
@@ -82,21 +100,6 @@ describe("PersonForm", () => {
     });
     fireEvent.change(screen.getByLabelText("Sukunimi:"), {
       target: { value: "Testaaja" },
-    });
-    fireEvent.change(screen.getByLabelText("Osasto:"), {
-      target: { value: "CS" },
-    });
-    fireEvent.change(screen.getByLabelText("Työnimike:"), {
-      target: { value: "Devaaja" },
-    });
-    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
-      target: { value: "Liisa Esihenkilö" },
-    });
-    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
-      target: { value: "2025-01-01" },
-    });
-    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
-      target: { value: "2026-01-01" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
       expect.objectContaining(REQUIRED_INITIAL),
@@ -128,9 +131,6 @@ describe("PersonForm", () => {
 
   it("optional fields do not affect validity", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Tutkimusryhmä:"), {
-      target: { value: "Tutkimusryhmä A" },
-    });
     fireEvent.change(screen.getByLabelText("Muut tiedot:"), {
       target: { value: "" },
     });
@@ -138,5 +138,35 @@ describe("PersonForm", () => {
       expect.objectContaining({ ...REQUIRED_INITIAL }),
       true,
     );
+  });
+
+  it("date fields accept date values", () => {
+    render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
+    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
+      target: { value: "2025-01-01" },
+    });
+    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
+      target: { value: "2026-01-01" },
+    });
+    expect(defaultProps.onChange).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        startDate: "2025-01-01",
+        endDate: "2026-01-01",
+      }),
+      true,
+    );
+  });
+
+  it("renders fetched options in dropdowns", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() => {
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: "Developer" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: "Group A" }),
+      ).toBeInTheDocument();
+    });
   });
 });

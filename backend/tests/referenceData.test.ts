@@ -1,19 +1,19 @@
 import supertest from "supertest";
 import app from "../src/app";
 import {
+  connectToDatabase,
   createAllTables,
   dropAllTables,
-  fixSequences,
   seedData,
 } from "../src/seed";
 
 const api = supertest(app);
 
 beforeEach(async () => {
+  await connectToDatabase();
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await fixSequences();
 });
 
 test("departments data is returned as json", async () => {
