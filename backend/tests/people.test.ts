@@ -1,12 +1,11 @@
 import supertest from "supertest";
 import app from "../src/app";
-import { Person } from "../src/models";
 import type { Person as PersonType } from "../src/models";
+import { Person } from "../src/models";
 import {
   connectToDatabase,
   createAllTables,
   dropAllTables,
-  fixSequences,
   seedData,
 } from "../src/seed";
 
@@ -17,7 +16,6 @@ beforeEach(async () => {
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await fixSequences();
 });
 
 test("a person can be created with a contract", async () => {
@@ -167,17 +165,11 @@ describe("GET /api/people - search", () => {
   });
 
   test("search is case-insensitive", async () => {
-    const lowercaseResponse = await api
-      .get("/api/people?q=matti")
-      .expect(200);
+    const lowercaseResponse = await api.get("/api/people?q=matti").expect(200);
 
-    const uppercaseResponse = await api
-      .get("/api/people?q=MATTI")
-      .expect(200);
+    const uppercaseResponse = await api.get("/api/people?q=MATTI").expect(200);
 
-    const mixedCaseResponse = await api
-      .get("/api/people?q=MaTtI")
-      .expect(200);
+    const mixedCaseResponse = await api.get("/api/people?q=MaTtI").expect(200);
 
     expect(lowercaseResponse.body).toHaveLength(1);
     expect(uppercaseResponse.body).toHaveLength(1);
@@ -193,13 +185,9 @@ describe("GET /api/people - search", () => {
 
     expect(response.body.length).toBeGreaterThan(0);
     response.body.forEach((person: PersonType) => {
-      const matchesFirstName = person.firstName
-        .toLowerCase()
-        .includes("ma");
+      const matchesFirstName = person.firstName.toLowerCase().includes("ma");
       const matchesLastName = person.lastName.toLowerCase().includes("ma");
-      expect(
-        matchesFirstName || matchesLastName,
-      ).toBe(true);
+      expect(matchesFirstName || matchesLastName).toBe(true);
     });
   });
 
@@ -269,9 +257,7 @@ describe("GET /api/people - search", () => {
   });
 
   test("search includes supervisors in response", async () => {
-    const response = await api
-      .get("/api/people?q=Jari")
-      .expect(200);
+    const response = await api.get("/api/people?q=Jari").expect(200);
 
     expect(response.body).toHaveLength(1);
     const person = response.body[0];
@@ -285,7 +271,9 @@ describe("GET /api/people - search", () => {
   });
 
   test("search returns 500 when database query fails", async () => {
-    const findAllSpy = jest.spyOn(Person, "findAll").mockRejectedValueOnce(new Error("Database error"));
+    const findAllSpy = jest
+      .spyOn(Person, "findAll")
+      .mockRejectedValueOnce(new Error("Database error"));
 
     const response = await api
       .get("/api/people?q=Matti")

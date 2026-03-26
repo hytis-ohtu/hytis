@@ -4,7 +4,6 @@ import {
   connectToDatabase,
   createAllTables,
   dropAllTables,
-  fixSequences,
   seedData,
 } from "../src/seed";
 
@@ -15,7 +14,6 @@ beforeEach(async () => {
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await fixSequences();
 });
 
 test("departments data is returned as json", async () => {
