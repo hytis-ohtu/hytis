@@ -123,6 +123,9 @@ router.put(
       researchGroupId,
       freeText,
       supervisorIds,
+      startDate,
+      endDate,
+      roomId,
     } = req.body;
 
     try {
@@ -154,9 +157,35 @@ router.put(
         }
       }
 
+      if (roomId !== undefined) {
+        const existingContract = await Contract.findOne({
+          where: { personId: Number(personId), roomId: Number(roomId) },
+        });
+
+        if (existingContract) {
+          await existingContract.update({
+            startDate:
+              startDate !== undefined ? startDate : existingContract.startDate,
+            endDate: endDate !== undefined ? endDate : existingContract.endDate,
+          });
+        } else {
+          await Contract.create({
+            personId: Number(personId),
+            roomId: Number(roomId),
+            startDate: startDate ?? null,
+            endDate: endDate ?? null,
+          });
+        }
+      }
+
       await person.reload({
         include: [
           { model: Person, as: "supervisors", through: { attributes: [] } },
+          {
+            model: Contract,
+            as: "contracts",
+            include: [{ model: Room, as: "room" }],
+          },
         ],
       });
 
