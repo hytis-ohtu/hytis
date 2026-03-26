@@ -101,9 +101,19 @@ function RoomDetails({
               </summary>
               <ul>
                 <li>Osasto: {contract.person.department.name}</li>
+                <li>Tutkimusryhmä: {contract.person.researchGroup.name}</li>
                 <li>Titteli: {contract.person.title.name}</li>
+                <li>
+                  Esihenkilöt:{" "}
+                  {contract.person.supervisors
+                    .map((s) => s.firstName + " " + s.lastName)
+                    .join(", ")}
+                </li>
                 <li>Alkupvm: {contract.startDate}</li>
                 <li>Loppupvm: {contract.endDate}</li>
+                {contract.person.freeText !== null && (
+                  <li>Lisätiedot: {contract.person.freeText}</li>
+                )}
               </ul>
             </details>
           ))
