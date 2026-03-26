@@ -21,6 +21,11 @@ vi.mock("../src/services/referenceDataService", () => ({
 const REQUIRED_INITIAL = {
   firstName: "Terppa",
   lastName: "Testaaja",
+  department: "1",
+  jobtitle: "1",
+  supervisors: "Joku",
+  startDate: "2025-01-01",
+  endDate: "2026-01-01",
 };
 
 describe("PersonForm", () => {
@@ -54,7 +59,6 @@ describe("PersonForm", () => {
     render(<PersonForm {...defaultProps} />);
     expect(screen.getByLabelText("Etunimi:")).toHaveValue("");
     expect(screen.getByLabelText("Sukunimi:")).toHaveValue("");
-    // selects default to "" (the placeholder option)
     expect(screen.getByLabelText("Osasto:")).toHaveValue("");
   });
 
@@ -85,7 +89,7 @@ describe("PersonForm", () => {
     );
   });
 
-  it("updates state when a select changes (line 68)", () => {
+  it("updates state when a select changes", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
     const select = screen.getByLabelText("Osasto:") as HTMLSelectElement;
     select.value = "1";
@@ -102,7 +106,7 @@ describe("PersonForm", () => {
       target: { value: "Testaaja" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining(REQUIRED_INITIAL),
+      expect.objectContaining({ firstName: "Terppa", lastName: "Testaaja" }),
       true,
     );
   });
@@ -135,7 +139,7 @@ describe("PersonForm", () => {
       target: { value: "" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ ...REQUIRED_INITIAL }),
+      expect.objectContaining({ firstName: "Terppa", lastName: "Testaaja" }),
       true,
     );
   });

@@ -18,10 +18,14 @@ vi.mock("../src/services/referenceDataService", () => ({
   ]),
 }));
 
-// Only firstName and lastName are required now
 const REQUIRED_INITIAL = {
   firstName: "Matti",
   lastName: "Meikäläinen",
+  department: "1",
+  jobtitle: "1",
+  supervisors: "1",
+  startDate: "2025-01-01",
+  endDate: "2026-01-01",
 };
 
 describe("PersonModal", () => {
@@ -135,7 +139,6 @@ describe("PersonModal", () => {
     fireEvent.change(screen.getByLabelText("Sukunimi:"), {
       target: { value: "Testaaja" },
     });
-
     expect(screen.getByText("Lisää")).toBeEnabled();
   });
 });

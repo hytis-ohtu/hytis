@@ -45,7 +45,7 @@ describe("peopleService", () => {
         lastName: "Doe",
         departmentId: "2",
         titleId: "3",
-        supervisorIds: "5,6",
+        supervisorIds: [5, 6],
         researchGroupId: "1",
         freeText: "Some notes",
         startDate: "2024-01-01",
