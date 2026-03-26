@@ -8,6 +8,9 @@ const PersonSchema = z.object({
   researchGroupId: z.number().nullable().optional(),
   freeText: z.string().nullable().optional(),
   supervisorIds: z.array(z.number()).optional(),
+  startDate: z.coerce.date().nullable().optional(),
+  endDate: z.coerce.date().nullable().optional(),
+  roomId: z.number().nullable().optional(),
 });
 
 export type PersonInput = z.infer<typeof PersonSchema>;
