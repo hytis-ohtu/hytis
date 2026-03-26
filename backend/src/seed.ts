@@ -16,6 +16,9 @@ import {
   Title,
 } from "./models/index";
 
+// Re-export connectToDatabase for use in tests
+export { connectToDatabase };
+
 export const dropAllTables = async () => {
   console.log("Dropping tables...");
   await Contract.drop({ cascade: true });

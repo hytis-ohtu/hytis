@@ -1,10 +1,16 @@
 import supertest from "supertest";
 import app from "../src/app";
-import { createAllTables, dropAllTables, seedData } from "../src/seed";
+import {
+  connectToDatabase,
+  createAllTables,
+  dropAllTables,
+  seedData,
+} from "../src/seed";
 
 const api = supertest(app);
 
 beforeEach(async () => {
+  await connectToDatabase();
   await dropAllTables();
   await createAllTables();
   await seedData();

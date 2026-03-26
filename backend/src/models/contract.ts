@@ -46,9 +46,11 @@ Contract.init(
     },
     startDate: {
       type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     endDate: {
       type: DataTypes.DATEONLY,
+      allowNull: true,
     },
   },
   {
