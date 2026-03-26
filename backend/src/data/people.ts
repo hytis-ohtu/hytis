@@ -1,6 +1,5 @@
 export const people = [
   {
-    id: 1,
     firstName: "Matti",
     lastName: "Virtanen",
     titleId: 1,
@@ -9,7 +8,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 2,
     firstName: "Laura",
     lastName: "Korhonen",
     titleId: 2,
@@ -18,7 +16,6 @@ export const people = [
     freeText: "Liikkuu pyörätuolilla",
   },
   {
-    id: 3,
     firstName: "Jari",
     lastName: "Nieminen",
     titleId: 3,
@@ -27,7 +24,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 4,
     firstName: "Sanna",
     lastName: "Mäkinen",
     titleId: 4,
@@ -36,7 +32,6 @@ export const people = [
     freeText: "Vieraileva tutkija 2024-2025",
   },
   {
-    id: 5,
     firstName: "Mikko",
     lastName: "Laine",
     titleId: 5,
@@ -45,7 +40,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 6,
     firstName: "Päivi",
     lastName: "Koskinen",
     titleId: 1,
@@ -54,7 +48,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 7,
     firstName: "Robert",
     lastName: "Miller",
     titleId: 2,
@@ -63,7 +56,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 8,
     firstName: "Yuki",
     lastName: "Tanaka",
     titleId: 3,
@@ -72,7 +64,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 9,
     firstName: "Lars",
     lastName: "Andersson",
     titleId: 4,
@@ -81,7 +72,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 10,
     firstName: "Fatima",
     lastName: "Hassan",
     titleId: 5,
@@ -90,7 +80,6 @@ export const people = [
     freeText: "1 pv/viikko toimistolla",
   },
   {
-    id: 11,
     firstName: "Wei",
     lastName: "Chen",
     titleId: 1,
@@ -99,7 +88,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 12,
     firstName: "Priya",
     lastName: "Sharma",
     titleId: 2,
@@ -108,7 +96,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 13,
     firstName: "Sofia",
     lastName: "Martínez",
     titleId: 3,
@@ -117,7 +104,6 @@ export const people = [
     freeText: "Hajusteeton työpiste",
   },
   {
-    id: 14,
     firstName: "Ahmed",
     lastName: "Ali",
     titleId: 4,
@@ -126,7 +112,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 15,
     firstName: "Elena",
     lastName: "Popova",
     titleId: 5,
@@ -135,7 +120,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 16,
     firstName: "Giulia",
     lastName: "Rossi",
     titleId: 1,
@@ -144,7 +128,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 17,
     firstName: "Omar",
     lastName: "Haddad",
     titleId: 2,
@@ -153,7 +136,6 @@ export const people = [
     freeText: "Säädettävä työpiste",
   },
   {
-    id: 18,
     firstName: "Anna",
     lastName: "Ivanova",
     titleId: 3,
@@ -162,7 +144,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 19,
     firstName: "Chen",
     lastName: "Wang",
     titleId: 4,
@@ -171,7 +152,6 @@ export const people = [
     freeText: null,
   },
   {
-    id: 20,
     firstName: "Maria",
     lastName: "Silva",
     titleId: 5,

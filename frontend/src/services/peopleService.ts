@@ -7,6 +7,14 @@ export async function findAllPeople(): Promise<Person[]> {
   return response.data;
 }
 
+export async function searchPeople(query: string): Promise<Person[]> {
+  const response = await axios.get<Person[]>(
+    `${BASE_URL}/api/people?q=${encodeURIComponent(query)}`,
+  );
+
+  return response.data;
+}
+
 export async function addPerson(
   values: Record<string, string>,
   roomId: string | number,

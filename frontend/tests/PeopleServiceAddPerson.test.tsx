@@ -9,6 +9,7 @@ vi.mock("../constants", () => ({ BASE_URL: "" }));
 const mockedAxios = vi.mocked(axios);
 
 const mockPerson: Person = {
+  id: 1,
   firstName: "Terppa",
   lastName: "Testaaja",
   department: { id: 2, name: "CS" },
