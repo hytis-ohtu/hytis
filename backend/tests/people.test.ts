@@ -382,3 +382,75 @@ test("a person with invalid supervisor IDs cannot be updated", async () => {
 
   await api.put("/api/people/1").send(updatedPerson).expect(500);
 });
+
+test("a persons contract with a room can be updated", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    roomId: 1, // Same room as existing contract from seed data
+    startDate: "2026-06-10",
+    endDate: "2027-01-01",
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(1);
+  const contract = updated?.contracts?.[0];
+  expect(contract?.roomId).toBe(1);
+  expect(contract?.startDate).toBe("2026-06-10");
+  expect(contract?.endDate).toBe("2027-01-01");
+});
+
+test("a new contract can be created for an existing person with a contract", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 2,
+      startDate: "2026-03-01",
+      endDate: "2027-02-28",
+    })
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(2);
+  const secondContract = updated?.contracts?.[1];
+  expect(secondContract?.roomId).toBe(2);
+  expect(secondContract?.startDate).toBe("2026-03-01");
+  expect(secondContract?.endDate).toBe("2027-02-28");
+});
+
+test("updating a person with invalid room ID fails", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 9999, // Invalid room ID
+    })
+    .expect(500);
+
+  expect(response.body.error).toBe("Failed to update person");
+});
+
+test("updating a person's contract without dates maintains existing dates", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 1, // Same room as existing contract from seed data
+    })
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(1);
+  const updatedContract = updated?.contracts?.[0];
+  expect(updatedContract?.startDate).toBe("2023-01-01");
+  expect(updatedContract?.endDate).toBe("2025-12-31");
+});
