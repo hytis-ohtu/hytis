@@ -48,7 +48,7 @@ export const validateContract = (
           lastName: supervisor?.lastName,
         };
       }),
-      freeText: expectedPerson.freeText,
+      freeText: expectedPerson?.freeText,
     },
   });
 };
