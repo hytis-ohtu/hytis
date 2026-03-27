@@ -7,7 +7,19 @@ import {
   type ReferenceItem,
 } from "../src/services/referenceDataService";
 
-vi.mock("axios");
+vi.mock("axios", () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(),
+    create: vi.fn(),
+    defaults: { headers: { common: {} } },
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  },
+}));
+
 vi.mock("../constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
