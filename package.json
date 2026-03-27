@@ -7,10 +7,9 @@
     "start:db": "npm run start:db --prefix backend",
     "seed:db": "npm run seed:db --prefix backend",
     "dev:backend": "npm run dev --prefix backend",
-    "build:backend": "npm run tsc --prefix backend",
+    "build:backend": "npm run build --prefix backend",
     "lint:backend": "npm run lint --prefix backend",
     "start:backend": "npm start --prefix backend",
-    "prettier:backend": "npm run prettier --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "build:frontend": "npm run build --prefix frontend",
     "lint:frontend": "npm run lint --prefix frontend",
@@ -27,7 +26,6 @@
     "type": "git",
     "url": "git+https://github.com/hytis-ohtu/hytis.git"
   },
-  "keywords": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hytis-ohtu/hytis/issues"
@@ -36,5 +34,10 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm"
+    }
   }
 }

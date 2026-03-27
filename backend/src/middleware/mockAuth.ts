@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { useHyLogin } from "../config/environmentConfig";
 
 /**
  * Mock authentication middleware - ONLY FOR DEVELOPMENT PURPOSES!
@@ -20,13 +19,9 @@ interface MockUser {
 
 export const mockAuthMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
-  if (useHyLogin) {
-    return next();
-  }
-
   if (req.isAuthenticated()) {
     return next();
   }

@@ -1,4 +1,8 @@
-import type { InferAttributes, InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Person } from "./person";
@@ -7,11 +11,11 @@ class Contract extends Model<
   InferAttributes<Contract>,
   InferCreationAttributes<Contract>
 > {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare personId: number;
   declare roomId: number;
-  declare startDate: Date;
-  declare endDate: Date;
+  declare startDate: Date | null;
+  declare endDate: Date | null;
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare person?: Person;
@@ -42,9 +46,11 @@ Contract.init(
     },
     startDate: {
       type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     endDate: {
       type: DataTypes.DATEONLY,
+      allowNull: true,
     },
   },
   {

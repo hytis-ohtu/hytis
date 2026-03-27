@@ -6,7 +6,7 @@
   "scripts": {
     "start:db": "docker compose -f database.yaml up",
     "seed:db": "cross-env SEED_DB=true ts-node-dev src/seed.ts",
-    "tsc": "tsc",
+    "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "start": "node build/src/index.js",
@@ -49,11 +49,17 @@
     "passport-openidconnect": "^0.1.2",
     "pg": "^8.20.0",
     "sequelize": "^6.37.8",
-    "sequelize-typescript": "^2.1.6"
+    "sequelize-typescript": "^2.1.6",
+    "zod": "^4.3.6"
   },
   "prettier": {
     "plugins": [
       "prettier-plugin-organize-imports"
     ]
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm"
+    }
   }
 }

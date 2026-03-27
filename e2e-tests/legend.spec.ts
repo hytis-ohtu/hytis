@@ -1,10 +1,5 @@
-import { test, expect } from "@playwright/test";
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-  await page.waitForSelector(".room-group");
-});
+import { expect } from "@playwright/test";
+import { test } from "./testHelper";
 
 test("legend is visible on page load", async ({ page }) => {
   const legend = page.getByTestId("legend");
@@ -73,7 +68,9 @@ test("legend switches back to availability mode when button is clicked again", a
   await colorModeButton.click();
 
   // Verify department mode is active
-  await expect(page.getByTestId("legend").getByText("H516 MATHSTAT")).toBeVisible();
+  await expect(
+    page.getByTestId("legend").getByText("H516 MATHSTAT"),
+  ).toBeVisible();
 
   // Switch back to availability mode
   await colorModeButton.click();

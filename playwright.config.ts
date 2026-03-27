@@ -15,7 +15,7 @@ export default defineConfig({
   webServer: [
     {
       command: "npm run dev:backend",
-      url: "http://localhost:3000/ping",
+      url: "http://localhost:3000/health",
       reuseExistingServer: !process.env.CI,
       stdout: "ignore",
       stderr: "pipe",

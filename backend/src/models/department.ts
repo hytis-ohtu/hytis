@@ -1,4 +1,8 @@
-import type { InferAttributes, InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Person } from "./person";
@@ -8,7 +12,7 @@ class Department extends Model<
   InferAttributes<Department>,
   InferCreationAttributes<Department>
 > {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare name: string;
   declare createdAt?: Date;
   declare updatedAt?: Date;

@@ -15,6 +15,7 @@ export const rooms = [
         startDate: "2023-01-01",
         endDate: "2025-12-31",
         person: {
+          id: 1,
           firstName: "Matti",
           lastName: "Virtanen",
           department: {
@@ -30,6 +31,7 @@ export const rooms = [
         startDate: "2023-06-01",
         endDate: "2026-05-31",
         person: {
+          id: 2,
           firstName: "Laura",
           lastName: "Korhonen",
           department: {
@@ -45,6 +47,7 @@ export const rooms = [
         startDate: "2024-01-01",
         endDate: "2026-12-31",
         person: {
+          id: 3,
           firstName: "Jari",
           lastName: "Nieminen",
           department: {
@@ -74,6 +77,7 @@ export const rooms = [
         startDate: "2022-09-01",
         endDate: "2025-08-31",
         person: {
+          id: 4,
           firstName: "Sanna",
           lastName: "Mäkinen",
           department: {
@@ -89,6 +93,7 @@ export const rooms = [
         startDate: "2023-03-01",
         endDate: "2026-02-28",
         person: {
+          id: 5,
           firstName: "Mikko",
           lastName: "Laine",
           department: {
@@ -118,6 +123,7 @@ export const rooms = [
         startDate: "2024-01-15",
         endDate: "2025-12-31",
         person: {
+          id: 6,
           firstName: "Päivi",
           lastName: "Koskinen",
           department: {
@@ -133,6 +139,7 @@ export const rooms = [
         startDate: "2023-09-01",
         endDate: "2025-08-31",
         person: {
+          id: 7,
           firstName: "Robert",
           lastName: "Miller",
           department: {

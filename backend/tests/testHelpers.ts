@@ -1,21 +1,19 @@
 import assert from "assert";
-import { departments } from "../src/data/departments";
-import { people } from "../src/data/people";
-import { titles } from "../src/data/titles";
 import type { Contract } from "../src/models";
 import type { ExpectedContract } from "../src/types/other";
+import { mockDepartments, mockPeople, mockTitles } from "./mockData";
 
 export const validateContract = (
   contract: Contract,
   expectedContract: ExpectedContract,
 ) => {
-  const expectedPerson = people.find(
+  const expectedPerson = mockPeople.find(
     (person) => person.id === expectedContract.personId,
   );
-  const expectedDepartment = departments.find(
+  const expectedDepartment = mockDepartments.find(
     (dept) => dept.id === expectedPerson?.departmentId,
   );
-  const expectedTitle = titles.find(
+  const expectedTitle = mockTitles.find(
     (title) => title.id === expectedPerson?.titleId,
   );
 

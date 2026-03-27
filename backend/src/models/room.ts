@@ -1,11 +1,15 @@
-import type { InferAttributes, InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Contract } from "./contract";
 import { Department } from "./department";
 
 class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare name: string;
   declare area: number | null;
   declare capacity: number | null;

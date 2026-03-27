@@ -3,14 +3,25 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonModal from "../src/components/PersonModal.tsx";
 
+vi.mock("../src/services/referenceDataService", () => ({
+  findAllDepartments: vi.fn().mockResolvedValue([
+    { id: 1, name: "IT" },
+    { id: 2, name: "HR" },
+  ]),
+  findAllTitles: vi.fn().mockResolvedValue([
+    { id: 1, name: "Developer" },
+    { id: 2, name: "Manager" },
+  ]),
+  findAllResearchGroups: vi.fn().mockResolvedValue([
+    { id: 1, name: "Group A" },
+    { id: 2, name: "Group B" },
+  ]),
+}));
+
+// Only firstName and lastName are required now
 const REQUIRED_INITIAL = {
   firstName: "Matti",
   lastName: "Meikäläinen",
-  department: "IT",
-  jobtitle: "Developer",
-  supervisors: "Liisa",
-  startDate: "2025-01-01",
-  endDate: "2026-01-01",
 };
 
 describe("PersonModal", () => {
@@ -31,9 +42,8 @@ describe("PersonModal", () => {
   it("renders with initial values for editing", () => {
     render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
     expect(screen.getByText("Muokkaa henkilöä")).toBeInTheDocument();
-    Object.values(REQUIRED_INITIAL).forEach((value) => {
-      expect(screen.getByDisplayValue(value)).toBeInTheDocument();
-    });
+    expect(screen.getByDisplayValue("Matti")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Meikäläinen")).toBeInTheDocument();
   });
 
   it("confirmation button if closing", () => {
@@ -124,21 +134,6 @@ describe("PersonModal", () => {
     });
     fireEvent.change(screen.getByLabelText("Sukunimi:"), {
       target: { value: "Testaaja" },
-    });
-    fireEvent.change(screen.getByLabelText("Osasto:"), {
-      target: { value: "CS" },
-    });
-    fireEvent.change(screen.getByLabelText("Työnimike:"), {
-      target: { value: "Testaaja" },
-    });
-    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
-      target: { value: "Liisa Esihenkilö" },
-    });
-    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
-      target: { value: "2025-01-01" },
-    });
-    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
-      target: { value: "2026-01-01" },
     });
 
     expect(screen.getByText("Lisää")).toBeEnabled();

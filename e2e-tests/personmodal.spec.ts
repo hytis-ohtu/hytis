@@ -1,4 +1,5 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
+import { test } from "./testHelper";
 
 test.use({ viewport: { width: 1920, height: 1080 } });
 
@@ -11,18 +12,7 @@ async function openAddPersonModal(page: Page) {
 async function fillRequiredFields(page: Page) {
   await page.getByLabel("Etunimi:").fill("Matti");
   await page.getByLabel("Sukunimi:").fill("Meikäläinen");
-  await page.getByLabel("Osasto:").fill("IT");
-  await page.getByLabel("Työnimike:").fill("Developer");
-  await page.getByLabel("Esihenkilö(t):").fill("Liisa");
-  await page.getByLabel("Sopimuksen alku:").fill("2025-01-01");
-  await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
 }
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-  await page.waitForSelector(".room-group");
-});
 
 test("person modal can be opened", async ({ page }) => {
   await openAddPersonModal(page);
@@ -85,6 +75,16 @@ test("save button is enabled when required fields are filled", async ({
   await expect(
     page.getByRole("button", { name: "Lisää", exact: true }),
   ).toBeEnabled();
+});
+
+test("dropdowns can be selected", async ({ page }) => {
+  await openAddPersonModal(page);
+  await page.getByLabel("Osasto:").selectOption({ index: 1 });
+  await page.getByLabel("Työnimike:").selectOption({ index: 1 });
+  await page.getByLabel("Tutkimusryhmä:").selectOption({ index: 1 });
+  await expect(page.getByLabel("Osasto:")).not.toHaveValue("");
+  await expect(page.getByLabel("Työnimike:")).not.toHaveValue("");
+  await expect(page.getByLabel("Tutkimusryhmä:")).not.toHaveValue("");
 });
 
 test("saving opens confirmation dialog", async ({ page }) => {

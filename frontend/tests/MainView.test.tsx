@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
@@ -17,7 +17,7 @@ import {
   AvailabilityColors,
   getDepartmentColor,
 } from "../src/hooks/useRoomColors.ts";
-import { findAllRooms } from "../src/services/roomsService";
+import { findAllRooms, findRoomById } from "../src/services/roomsService";
 import { rooms } from "./testData.ts";
 
 vi.mock("../src/contexts/AuthContext", () => ({
@@ -28,8 +28,8 @@ vi.mock("../src/contexts/AuthContext", () => ({
 }));
 
 vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
-  default: () => (
-    <svg data-testid="mock-svg">
+  default: (props: Record<string, unknown>) => (
+    <svg {...props} data-testid="mock-svg">
       <path
         d="M1325.291-1106.835h-9.448v127.748h278.74v-330.33h-274.016v8.315h4.724v9.449h-4.724v175.37h4.724zm166.678-9.448h9.448v9.448h-9.448zm0-184.82h9.448v9.45h-9.448z"
         data-room="A210"
@@ -133,6 +133,28 @@ describe("MainView", () => {
     expect(screen.getByTestId("legend")).toBeInTheDocument();
   });
 });
+
+  it("fetches room details when a room is clicked", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    vi.mocked(findRoomById).mockResolvedValue(rooms[0]);
+    render(<MainView />);
+
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A210"]');
+      expect(room).toHaveAttribute("id", "1");
+    });
+
+    const room = document.querySelector('[data-room="A210"]');
+    expect(room).toBeTruthy();
+
+    if (room instanceof SVGElement) {
+      fireEvent.click(room);
+    }
+
+    await waitFor(() => {
+      expect(findRoomById).toHaveBeenCalledWith("1");
+    });
+  });
 
 describe("MapTransform", () => {
   describe("transform with buttons", () => {

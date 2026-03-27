@@ -16,6 +16,9 @@ import {
   Title,
 } from "./models/index";
 
+// Re-export connectToDatabase for use in tests
+export { connectToDatabase };
+
 export const dropAllTables = async () => {
   console.log("Dropping tables...");
   await Contract.drop({ cascade: true });
@@ -54,24 +57,11 @@ export const seedData = async () => {
   console.log("Data seeded successfully!");
 };
 
-// After seeding, it is needed to fix the sequences for the auto-incrementing primary keys
-
-export const fixSequences = async () => {
-  await sequelize.query(
-    "SELECT setval('people_id_seq', (SELECT MAX(id) FROM people))",
-  );
-  await sequelize.query(
-    "SELECT setval('research_groups_id_seq', (SELECT MAX(id) FROM research_groups))",
-  );
-  console.log("Sequences fixed!");
-};
-
 const resetDatabase = async () => {
   await connectToDatabase();
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await fixSequences();
   await sequelize.close();
   console.log("Connection closed!");
 };

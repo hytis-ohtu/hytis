@@ -1,0 +1,17 @@
+name: CD / Production
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build-and-push:
+    name: Build and Push
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit
+    uses: ./.github/workflows/cd-build-and-push.yaml
+    with:
+      target: prod

@@ -1,10 +1,5 @@
-import { test, expect } from "@playwright/test";
-
-test.beforeEach(async ({ page, request }) => {
-  await request.post("http://localhost:3000/api/testing/reset");
-  await page.goto("");
-  await page.waitForSelector(".room-group");
-});
+import { expect } from "@playwright/test";
+import { test } from "./testHelper";
 
 test("room labels are shown on the floor map", async ({ page }) => {
   const roomLabel = page
