@@ -4,8 +4,14 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../src/components/MainView.tsx";
 import {
-  BUTTON_SENSITIVITY,
   DEFAULT_SCALE,
+  getBottomBound,
+  getLeftBound,
+  getRightBound,
+  getTopBound,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  MOVE_THRESHOLD,
 } from "../src/hooks/useMapTransform.ts";
 import {
   AvailabilityColors,
@@ -51,29 +57,28 @@ describe("MainView", () => {
     render(<MainView />);
 
     await waitFor(() => {
-      const availableRoom = document.querySelector('[data-room="A210"]');
+      const availableRoom = document.querySelector(
+        '[data-room="A210"]',
+      ) as SVGGraphicsElement;
       expect(availableRoom).toHaveAttribute("id", "1");
       expect(availableRoom).toHaveClass("room");
-      expect(
-        availableRoom instanceof SVGGraphicsElement &&
-          availableRoom.style.fill === AvailabilityColors["available"],
+      expect(availableRoom).toHaveStyle(
+        `fill: ${AvailabilityColors["available"]}`,
       );
 
-      const limitedRoom = document.querySelector('[data-room="A211"]');
+      const limitedRoom = document.querySelector(
+        '[data-room="A211"]',
+      ) as SVGGraphicsElement;
       expect(limitedRoom).toHaveAttribute("id", "2");
       expect(limitedRoom).toHaveClass("room");
-      expect(
-        limitedRoom instanceof SVGGraphicsElement &&
-          limitedRoom.style.fill === AvailabilityColors["limited"],
-      );
+      expect(limitedRoom).toHaveStyle(`fill: ${AvailabilityColors["limited"]}`);
 
-      const fullRoom = document.querySelector('[data-room="A212"]');
+      const fullRoom = document.querySelector(
+        '[data-room="A212"]',
+      ) as SVGGraphicsElement;
       expect(fullRoom).toHaveAttribute("id", "3");
       expect(fullRoom).toHaveClass("room");
-      expect(
-        fullRoom instanceof SVGGraphicsElement &&
-          fullRoom.style.fill === AvailabilityColors["full"],
-      );
+      expect(fullRoom).toHaveStyle(`fill: ${AvailabilityColors["full"]}`);
     });
   });
 
@@ -85,16 +90,18 @@ describe("MainView", () => {
     user.click(screen.getByTestId("switch-color-mode"));
 
     await waitFor(() => {
-      const room = document.querySelector('[data-room="A210"]');
-      expect(
-        room instanceof SVGGraphicsElement &&
-          room.style.fill === getDepartmentColor(rooms[0].department.name),
+      const room = document.querySelector(
+        '[data-room="A210"]',
+      ) as SVGGraphicsElement;
+      expect(room).toHaveStyle(
+        `fill: ${getDepartmentColor(rooms[0].department.name)}`,
       );
     });
   });
 
   it("incorrect department name returns error color", () => {
-    expect(getDepartmentColor("incorrect name") === "#418585");
+    const value = getDepartmentColor("incorrect name");
+    expect(value).toBe("#aaaaaa");
   });
 
   it("renders legend with correct initial mode (availability)", async () => {
@@ -125,45 +132,552 @@ describe("MainView", () => {
     // Legend should still be rendered
     expect(screen.getByTestId("legend")).toBeInTheDocument();
   });
-  it("zooming in with button works", () => {
-    render(<MainView />);
+});
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-increase-button"));
+describe("MapTransform", () => {
+  describe("transform with buttons", () => {
+    it("zoom buttons work", async () => {
+      render(<MainView />);
 
-    const el = document.getElementsByClassName("map-container")[0];
+      const user = userEvent.setup();
+      const map = document.getElementsByClassName(
+        "map-container",
+      )[0] as HTMLDivElement;
 
-    expect(
-      el instanceof HTMLDivElement &&
-        el.style.scale === `${DEFAULT_SCALE + BUTTON_SENSITIVITY}`,
-    );
+      expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+      await user.click(screen.getByTestId("zoom-increase-button"));
+
+      expect(Number(map.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
+
+      await user.click(screen.getByTestId("reset-transform-button"));
+
+      expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+      await user.click(screen.getByTestId("zoom-decrease-button"));
+
+      expect(Number(map.style.scale)).toBeLessThan(DEFAULT_SCALE);
+    });
+
+    it("zooming with button stops at maximum", async () => {
+      render(<MainView />);
+
+      const user = userEvent.setup();
+      const map = document.getElementsByClassName(
+        "map-container",
+      )[0] as HTMLDivElement;
+
+      expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+      while (Number(map.style.scale) !== MAX_ZOOM) {
+        await user.click(screen.getByTestId("zoom-increase-button"));
+      }
+
+      await user.click(screen.getByTestId("zoom-increase-button"));
+
+      expect(Number(map.style.scale)).toBe(MAX_ZOOM);
+    });
+
+    it("zooming with button stops at minimum", async () => {
+      render(<MainView />);
+
+      const user = userEvent.setup();
+      const map = document.getElementsByClassName(
+        "map-container",
+      )[0] as HTMLDivElement;
+
+      expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+      while (Number(map.style.scale) !== MIN_ZOOM) {
+        await user.click(screen.getByTestId("zoom-decrease-button"));
+      }
+
+      await user.click(screen.getByTestId("zoom-decrease-button"));
+
+      expect(Number(map.style.scale)).toBe(MIN_ZOOM);
+    });
+
+    it("while zooming with buttons the map is bounded from the left and top", async () => {
+      render(<MainView />);
+
+      const user = userEvent.setup();
+      const inputDiv = document.getElementsByClassName(
+        "click-container",
+      )[0] as HTMLDivElement;
+      const map = document.getElementsByClassName(
+        "map-container",
+      )[0] as HTMLDivElement;
+
+      const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+        clientX: 10000,
+        clientY: 10000,
+      });
+      const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+        clientX: 0,
+        clientY: 0,
+      });
+      const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+        clientX: 10000,
+        clientY: 10000,
+      });
+
+      inputDiv.dispatchEvent(mouseDownEvent);
+      inputDiv.dispatchEvent(mouseMoveEvent);
+      inputDiv.dispatchEvent(mouseUpEvent);
+      await user.click(screen.getByTestId("zoom-decrease-button"));
+
+      expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
+      expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+    });
+
+    it("while zooming with buttons the map is bounded from the right and bottom", async () => {
+      render(<MainView />);
+
+      const user = userEvent.setup();
+      const inputDiv = document.getElementsByClassName(
+        "click-container",
+      )[0] as HTMLDivElement;
+      const map = document.getElementsByClassName(
+        "map-container",
+      )[0] as HTMLDivElement;
+
+      const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+        clientX: -10000,
+        clientY: -10000,
+      });
+      const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+        clientX: 0,
+        clientY: 0,
+      });
+      const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+        clientX: -10000,
+        clientY: -10000,
+      });
+
+      inputDiv.dispatchEvent(mouseDownEvent);
+      inputDiv.dispatchEvent(mouseMoveEvent);
+      inputDiv.dispatchEvent(mouseUpEvent);
+      await user.click(screen.getByTestId("zoom-decrease-button"));
+
+      const scale = Number(map.style.scale);
+
+      expect(Number(map.style.left.replace("px", ""))).toBe(
+        getRightBound() - window.innerWidth * scale,
+      );
+      expect(Number(map.style.top.replace("px", ""))).toBe(
+        getBottomBound() - window.innerHeight * scale,
+      );
+    });
   });
 
-  it("zooming out with button works", () => {
-    render(<MainView />);
+  describe("transform with mouse", () => {
+    describe("zooming", () => {
+      it("zooming in increases scale", () => {
+        render(<MainView />);
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-decrease-button"));
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
 
-    const el = document.getElementsByClassName("map-container")[0];
+        const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: -10,
+        });
 
-    expect(
-      el instanceof HTMLDivElement &&
-        el.style.scale === `${DEFAULT_SCALE - BUTTON_SENSITIVITY}`,
-    );
-  });
+        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-  it("reset button works", () => {
-    render(<MainView />);
+        inputDiv.dispatchEvent(mouseZoomInEvent);
 
-    const user = userEvent.setup();
-    user.click(screen.getByTestId("zoom-increase-button"));
-    user.click(screen.getByTestId("reset-transform-button"));
+        expect(Number(map.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
+      });
 
-    const el = document.getElementsByClassName("map-container")[0];
+      it("zooming out decreases scale", () => {
+        render(<MainView />);
 
-    expect(
-      el instanceof HTMLDivElement && el.style.scale === `${DEFAULT_SCALE}`,
-    );
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: 10,
+        });
+
+        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+        inputDiv.dispatchEvent(mouseZoomOutEvent);
+
+        expect(Number(map.style.scale)).toBeLessThan(DEFAULT_SCALE);
+      });
+
+      it("zooming stops at maximum", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: -10,
+        });
+
+        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+        while (Number(map.style.scale) !== MAX_ZOOM) {
+          inputDiv.dispatchEvent(mouseZoomInEvent);
+        }
+
+        inputDiv.dispatchEvent(mouseZoomInEvent);
+
+        expect(Number(map.style.scale)).toBe(MAX_ZOOM);
+      });
+
+      it("zooming stops at minimum", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: 10,
+        });
+
+        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+
+        while (Number(map.style.scale) !== MIN_ZOOM) {
+          inputDiv.dispatchEvent(mouseZoomOutEvent);
+        }
+
+        inputDiv.dispatchEvent(mouseZoomOutEvent);
+
+        expect(Number(map.style.scale)).toBe(MIN_ZOOM);
+      });
+
+      it("zooming in moves the map outward", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: -10,
+          clientX: window.innerWidth / 2,
+          clientY: window.innerHeight / 2,
+        });
+
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseZoomInEvent);
+
+        expect(Number(map.style.left.replace("px", ""))).toBeLessThan(0);
+        expect(Number(map.style.top.replace("px", ""))).toBeLessThan(0);
+      });
+
+      it("zooming out moves the map inward", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: 10,
+          clientX: window.innerWidth / 2,
+          clientY: window.innerHeight / 2,
+        });
+
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseZoomOutEvent);
+
+        expect(Number(map.style.left.replace("px", ""))).toBeGreaterThan(0);
+        expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
+      });
+
+      it("while zooming the map is bounded from the left and top", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: 10000,
+          clientY: 10000,
+        });
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: 10000,
+          clientY: 10000,
+        });
+        const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: -10,
+          clientX: 0,
+          clientY: 0,
+        });
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseMoveEvent);
+        inputDiv.dispatchEvent(mouseUpEvent);
+        inputDiv.dispatchEvent(mouseZoomEvent);
+
+        expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
+        expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+      });
+
+      it("while zooming the map is bounded from the right and bottom", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: -10000,
+          clientY: -10000,
+        });
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: -10000,
+          clientY: -10000,
+        });
+        const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
+          deltaY: -10,
+          clientX: window.innerWidth,
+          clientY: window.innerHeight,
+        });
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseMoveEvent);
+        inputDiv.dispatchEvent(mouseUpEvent);
+        inputDiv.dispatchEvent(mouseZoomEvent);
+
+        const scale = Number(map.style.scale);
+
+        expect(Number(map.style.left.replace("px", ""))).toBe(
+          getRightBound() - window.innerWidth * scale,
+        );
+        expect(Number(map.style.top.replace("px", ""))).toBe(
+          getBottomBound() - window.innerHeight * scale,
+        );
+      });
+    });
+
+    describe("moving", () => {
+      it("moving map works", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: 100,
+          clientY: 100,
+        });
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: 100,
+          clientY: 100,
+        });
+
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseMoveEvent);
+
+        // map shouldn't move
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseMoveEvent);
+        inputDiv.dispatchEvent(mouseUpEvent);
+
+        // map should move
+        expect(Number(map.style.left.replace("px", ""))).toBeGreaterThan(0);
+        expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
+      });
+
+      it("moving is bounded from the left and top", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: 10000,
+          clientY: 10000,
+        });
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: 10000,
+          clientY: 10000,
+        });
+
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseMoveEvent);
+        inputDiv.dispatchEvent(mouseUpEvent);
+
+        expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
+        expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+      });
+
+      it("moving is bounded from the right and bottom", () => {
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+        const map = document.getElementsByClassName(
+          "map-container",
+        )[0] as HTMLDivElement;
+
+        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: -10000,
+          clientY: -10000,
+        });
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: -10000,
+          clientY: -10000,
+        });
+
+        expect(map.style.left).toBe("0px");
+        expect(map.style.top).toBe("0px");
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseMoveEvent);
+        inputDiv.dispatchEvent(mouseUpEvent);
+
+        const scale = Number(map.style.scale);
+
+        expect(Number(map.style.left.replace("px", ""))).toBe(
+          getRightBound() - window.innerWidth * scale,
+        );
+        expect(Number(map.style.top.replace("px", ""))).toBe(
+          getBottomBound() - window.innerHeight * scale,
+        );
+      });
+
+      it("moving the map disables room hovering", async () => {
+        vi.mocked(findAllRooms).mockResolvedValue(rooms);
+        render(<MainView />);
+
+        const inputDiv = document.getElementsByClassName(
+          "click-container",
+        )[0] as HTMLDivElement;
+
+        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
+          clientX: 0,
+          clientY: 0,
+        });
+        const mouseLargeMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: MOVE_THRESHOLD + 1,
+          clientY: 0,
+        });
+        const mouseLargeUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: MOVE_THRESHOLD + 1,
+          clientY: 0,
+        });
+        const mouseSmallMoveEvent: MouseEvent = new MouseEvent("mousemove", {
+          clientX: MOVE_THRESHOLD - 1,
+          clientY: 0,
+        });
+        const mouseSmallUpEvent: MouseEvent = new MouseEvent("mouseup", {
+          clientX: MOVE_THRESHOLD - 1,
+          clientY: 0,
+        });
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseLargeMoveEvent);
+
+        await waitFor(() => {
+          const room = document.querySelector(
+            '[data-room="A210"]',
+          ) as SVGGraphicsElement;
+          expect(room).toHaveStyle("pointer-events: none");
+        });
+
+        inputDiv.dispatchEvent(mouseLargeUpEvent);
+
+        await waitFor(() => {
+          const room = document.querySelector(
+            '[data-room="A210"]',
+          ) as SVGGraphicsElement;
+          expect(room).toHaveStyle("pointer-events: all");
+        });
+
+        inputDiv.dispatchEvent(mouseDownEvent);
+        inputDiv.dispatchEvent(mouseSmallMoveEvent);
+
+        await waitFor(() => {
+          const room = document.querySelector(
+            '[data-room="A210"]',
+          ) as SVGGraphicsElement;
+          expect(room).toHaveStyle("pointer-events: all");
+        });
+
+        inputDiv.dispatchEvent(mouseSmallUpEvent);
+
+        await waitFor(() => {
+          const room = document.querySelector(
+            '[data-room="A210"]',
+          ) as SVGGraphicsElement;
+          expect(room).toHaveStyle("pointer-events: all");
+        });
+      });
+    });
   });
 });

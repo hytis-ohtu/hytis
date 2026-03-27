@@ -7,6 +7,19 @@ export const MIN_ZOOM = 0.75;
 export const DEFAULT_SCALE = 0.9;
 export const MOVE_THRESHOLD = 20;
 
+export function getLeftBound(): number {
+  return window.innerWidth / 8;
+}
+export function getRightBound(): number {
+  return (window.innerWidth / 4) * 3;
+}
+export function getTopBound(): number {
+  return window.innerHeight / 2;
+}
+export function getBottomBound(): number {
+  return window.innerHeight / 2;
+}
+
 export function useMapTransform() {
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -26,19 +39,6 @@ export function useMapTransform() {
     lastY: 0,
   });
   const scale = useRef<number>(DEFAULT_SCALE);
-
-  function getLeftBound(): number {
-    return window.innerWidth / 8;
-  }
-  function getRightBound(): number {
-    return (window.innerWidth / 4) * 3;
-  }
-  function getTopBound(): number {
-    return window.innerHeight / 2;
-  }
-  function getBottomBound(): number {
-    return window.innerHeight / 2;
-  }
 
   function handleButtonZoom(e: React.MouseEvent, dir: number) {
     if (!mapRef.current) return;
@@ -67,8 +67,8 @@ export function useMapTransform() {
 
     scale.current = newScale;
 
-    const width = map.clientWidth * scale.current;
-    const height = map.clientHeight * scale.current;
+    const width = window.innerWidth * scale.current;
+    const height = window.innerHeight * scale.current;
 
     if (xPos > getLeftBound()) {
       xPos = getLeftBound();
@@ -112,7 +112,7 @@ export function useMapTransform() {
     const roomElements = document.querySelectorAll("path[data-room]");
 
     for (const element of roomElements) {
-      if (!(element instanceof SVGGraphicsElement)) continue;
+      if (!(element instanceof SVGElement)) continue;
 
       if (state) element.style.pointerEvents = `all`;
       else element.style.pointerEvents = `none`;
@@ -124,6 +124,8 @@ export function useMapTransform() {
 
     const map = mapRef.current;
     const container = inputContainerRef.current;
+    map.style.left = `${0}px`;
+    map.style.top = `${0}px`;
     map.style.scale = `${DEFAULT_SCALE}`;
 
     const onMouseDown = (e: MouseEvent) => {
@@ -165,8 +167,8 @@ export function useMapTransform() {
       let nextX = offsetX + coords.current.lastX;
       let nextY = offsetY + coords.current.lastY;
 
-      const width = map.clientWidth * scale.current;
-      const height = map.clientHeight * scale.current;
+      const width = window.innerWidth * scale.current;
+      const height = window.innerHeight * scale.current;
 
       if (nextX > getLeftBound()) {
         coords.current.lastX -= nextX - getLeftBound();
@@ -210,8 +212,8 @@ export function useMapTransform() {
 
       scale.current = newScale;
 
-      const width = map.clientWidth * scale.current;
-      const height = map.clientHeight * scale.current;
+      const width = window.innerWidth * scale.current;
+      const height = window.innerHeight * scale.current;
 
       if (xPos > getLeftBound()) {
         xPos = getLeftBound();
