@@ -104,15 +104,17 @@ router.put(
     res: Response<Person | { error: string }>,
   ): Promise<Response<Person | { error: string }>> => {
     const personId = req.params.id;
+    let personInput: PersonInput;
 
     try {
-      toPersonInput(req.body);
+      personInput = toPersonInput(req.body);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           error: error.issues.map((issue) => issue.message).join(", "),
         });
       }
+      return res.status(500).json({ error: "Failed to parse person input" });
     }
 
     const {
@@ -126,7 +128,7 @@ router.put(
       startDate,
       endDate,
       roomId,
-    } = req.body;
+    } = personInput;
 
     try {
       const person = await Person.findByPk(Number(personId));
