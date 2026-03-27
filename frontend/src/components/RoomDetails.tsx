@@ -116,7 +116,7 @@ function RoomDetails({
                   value={contract.person.researchGroup?.name}
                 />
                 <Field label="Titteli" value={contract.person.title?.name} />
-                {contract.person.supervisors.length > 0 && (
+                {contract.person.supervisors?.length > 0 && (
                   <li>
                     Esihenkilöt:{" "}
                     {contract.person.supervisors
