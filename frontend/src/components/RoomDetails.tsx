@@ -116,14 +116,15 @@ function RoomDetails({
                   value={contract.person.researchGroup?.name}
                 />
                 <Field label="Titteli" value={contract.person.title?.name} />
-                {contract.person.supervisors?.length > 0 && (
-                  <li>
-                    Esihenkilöt:{" "}
-                    {contract.person.supervisors
-                      .map((s) => s.firstName + " " + s.lastName)
-                      .join(", ")}
-                  </li>
-                )}
+                {contract.person.supervisors &&
+                  contract.person.supervisors.length > 0 && (
+                    <li>
+                      Esihenkilöt:{" "}
+                      {contract.person.supervisors
+                        .map((s) => s.firstName + " " + s.lastName)
+                        .join(", ")}
+                    </li>
+                  )}
                 <Field label="Alkupvm" value={contract.startDate} />
                 <Field label="Loppupvm" value={contract.endDate} />
                 <Field label="Lisätiedot" value={contract.person.freeText} />

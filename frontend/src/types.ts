@@ -21,11 +21,11 @@ export interface Person {
   id: number;
   firstName: string;
   lastName: string;
-  department: Department;
-  researchGroup: ResearchGroup;
-  title: Title;
-  supervisors: Person[];
-  freeText: string | null;
+  department?: Department | null;
+  researchGroup?: ResearchGroup | null;
+  title?: Title | null;
+  supervisors?: Person[];
+  freeText?: string | null;
 }
 
 export interface Contract {
