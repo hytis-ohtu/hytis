@@ -1,6 +1,9 @@
 import { Request, Response, Router } from "express";
 import { Op } from "sequelize";
+import { z } from "zod";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
+import type { PersonInput } from "../utils";
+import toPersonInput from "../utils";
 
 const router = Router();
 
@@ -59,7 +62,9 @@ router.post("/", async (req: Request, res: Response) => {
       if (supervisors.length !== supervisorIds.length) {
         // Rollback: delete the created person since validation failed
         await newPerson.destroy();
-        return res.status(400).json({ error: "One or more supervisor IDs are invalid" });
+        return res
+          .status(400)
+          .json({ error: "One or more supervisor IDs are invalid" });
       }
 
       await PersonSupervisor.bulkCreate(
@@ -86,6 +91,113 @@ router.post("/", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to create person" });
   }
 });
+
+/**
+ * PUT /api/people/:id
+ * Updates a person with the provided first name and last name
+ * Optionally, titleId, departmentId, researchGroupId, freeText and supervisorIds can be updated
+ */
+router.put(
+  "/:id",
+  async (
+    req: Request<{ id: string }, Person | { error: string }, PersonInput>,
+    res: Response<Person | { error: string }>,
+  ): Promise<Response<Person | { error: string }>> => {
+    const personId = req.params.id;
+    let personInput: PersonInput;
+
+    try {
+      personInput = toPersonInput(req.body);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          error: error.issues.map((issue) => issue.message).join(", "),
+        });
+      }
+      return res.status(500).json({ error: "Failed to parse person input" });
+    }
+
+    const {
+      firstName,
+      lastName,
+      titleId,
+      departmentId,
+      researchGroupId,
+      freeText,
+      supervisorIds,
+      startDate,
+      endDate,
+      roomId,
+    } = personInput;
+
+    try {
+      const person = await Person.findByPk(Number(personId));
+
+      if (!person) {
+        return res.status(404).json({ error: "Person not found" });
+      }
+
+      await person.update({
+        firstName,
+        lastName,
+        titleId,
+        departmentId,
+        researchGroupId,
+        freeText,
+      });
+
+      if (supervisorIds !== undefined) {
+        await PersonSupervisor.destroy({ where: { subordinateId: personId } });
+
+        if (supervisorIds.length > 0) {
+          await PersonSupervisor.bulkCreate(
+            supervisorIds.map((supervisorId: number) => ({
+              supervisorId,
+              subordinateId: Number(personId),
+            })),
+          );
+        }
+      }
+
+      if (roomId !== undefined) {
+        const existingContract = await Contract.findOne({
+          where: { personId: Number(personId), roomId: Number(roomId) },
+        });
+
+        if (existingContract) {
+          await existingContract.update({
+            startDate:
+              startDate !== undefined ? startDate : existingContract.startDate,
+            endDate: endDate !== undefined ? endDate : existingContract.endDate,
+          });
+        } else {
+          await Contract.create({
+            personId: Number(personId),
+            roomId: Number(roomId),
+            startDate: startDate ?? null,
+            endDate: endDate ?? null,
+          });
+        }
+      }
+
+      await person.reload({
+        include: [
+          { model: Person, as: "supervisors", through: { attributes: [] } },
+          {
+            model: Contract,
+            as: "contracts",
+            include: [{ model: Room, as: "room" }],
+          },
+        ],
+      });
+
+      return res.status(200).json(person);
+    } catch (error) {
+      console.error("Error updating person:", error);
+      return res.status(500).json({ error: "Failed to update person" });
+    }
+  },
+);
 
 /**
  * GET /api/people
