@@ -16,7 +16,7 @@ export async function searchPeople(query: string): Promise<Person[]> {
 }
 
 export async function addPerson(
-  values: Record<string, string>,
+  values: Record<string, string | undefined>,
   roomId: string | number,
 ): Promise<Person> {
   const supervisorIds = values.supervisors
