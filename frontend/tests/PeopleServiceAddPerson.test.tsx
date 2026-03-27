@@ -3,12 +3,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { addPerson } from "../src/services/peopleService";
 import type { Person } from "../src/types";
 
-vi.mock("axios", () => ({
-  default: {
+vi.mock("axios", () => {
+  const mockAxios = {
     post: vi.fn(),
     get: vi.fn(),
-  },
-}));
+    create: vi.fn(),
+    defaults: { headers: { common: {} } },
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  };
+  return { default: mockAxios };
+});
 
 vi.mock("../constants", () => ({ BASE_URL: "" }));
 
