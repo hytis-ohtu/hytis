@@ -44,3 +44,8 @@ export interface Room {
   freeText: string;
   roomType: string;
 }
+
+export interface FieldProps {
+  label: string;
+  value: string | null | undefined;
+}
