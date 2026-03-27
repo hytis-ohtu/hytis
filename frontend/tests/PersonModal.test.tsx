@@ -18,6 +18,14 @@ vi.mock("../src/services/referenceDataService", () => ({
   ]),
 }));
 
+vi.mock("../src/services/peopleService", () => ({
+  findAllPeople: vi
+    .fn()
+    .mockResolvedValue([{ id: 1, firstName: "Supervisor", lastName: "One" }]),
+  searchPeople: vi.fn().mockResolvedValue([]),
+  addPerson: vi.fn().mockResolvedValue({}),
+}));
+
 const REQUIRED_INITIAL = {
   firstName: "Matti",
   lastName: "Meikäläinen",
