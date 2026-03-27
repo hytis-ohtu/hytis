@@ -62,7 +62,7 @@ describe("peopleService", () => {
         lastName: "Doe",
         misc: "",
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
       };
 
       await addPerson(values, "room-42");
@@ -74,9 +74,9 @@ describe("peopleService", () => {
         titleId: undefined,
         supervisorIds: undefined,
         researchGroupId: undefined,
-        freeText: "",
+        freeText: undefined,
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
         roomId: "room-42",
       });
     });
@@ -88,8 +88,8 @@ describe("peopleService", () => {
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
-        startDate: "",
-        endDate: "",
+        startDate: undefined,
+        endDate: undefined,
       };
 
       await addPerson(values, "room-99");
@@ -177,9 +177,9 @@ describe("peopleService", () => {
         titleId: undefined,
         supervisorIds: undefined,
         researchGroupId: undefined,
-        freeText: "",
+        freeText: undefined,
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
         roomId: 1,
       });
     });
