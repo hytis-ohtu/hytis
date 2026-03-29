@@ -4,6 +4,12 @@ export interface Department {
 }
 
 export interface Title {
+  id: number;
+  name: string;
+}
+
+export interface researchGroup {
+  id: number;
   name: string;
 }
 
@@ -13,6 +19,8 @@ export interface Person {
   lastName: string;
   department: Department;
   title: Title;
+  researchGroup: researchGroup;
+  freeText: string | null;
 }
 
 export interface Contract {
