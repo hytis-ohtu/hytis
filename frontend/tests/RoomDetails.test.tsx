@@ -42,6 +42,7 @@ const mockRoom_A210: Room = {
   capacity: 15,
   contracts: [
     {
+      id: 1,
       startDate: "2023-01-01",
       endDate: "2025-12-31",
       person: {
