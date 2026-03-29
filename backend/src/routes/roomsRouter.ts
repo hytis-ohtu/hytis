@@ -1,5 +1,12 @@
 import { Request, Response, Router } from "express";
-import { Contract, Department, Person, Room, Title } from "../models";
+import {
+  Contract,
+  Department,
+  Person,
+  ResearchGroup,
+  Room,
+  Title,
+} from "../models";
 
 const router = Router();
 
@@ -53,17 +60,22 @@ router.get(
             {
               model: Person,
               as: "person",
-              attributes: ["firstName", "lastName"],
+              attributes: ["id", "firstName", "lastName", "freeText"],
               include: [
                 {
                   model: Department,
                   as: "department",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                 },
                 {
                   model: Title,
                   as: "title",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
+                },
+                {
+                  model: ResearchGroup,
+                  as: "researchGroup",
+                  attributes: ["id", "name"],
                 },
               ],
             },
