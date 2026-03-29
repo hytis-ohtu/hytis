@@ -102,7 +102,7 @@ function RoomDetails({
           <p>Ei sopimuksia.</p>
         ) : (
           contracts.map((contract) => (
-            <details>
+            <details key={contract.id}>
               <summary>
                 {contract.person.firstName} {contract.person.lastName}
               </summary>
