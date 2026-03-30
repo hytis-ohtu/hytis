@@ -12,8 +12,10 @@ const mockPerson: Person = {
   id: 1,
   firstName: "Terppa",
   lastName: "Testaaja",
+  freeText: null,
   department: { id: 2, name: "CS" },
-  title: { name: "Devaaja" },
+  title: { id: 1, name: "Devaaja" },
+  researchGroup: { id: 1, name: "Test Research Group" },
 };
 
 describe("peopleService", () => {
