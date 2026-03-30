@@ -3,13 +3,6 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../src/components/PersonForm.tsx";
 
-vi.mock("../src/services/personService", () => ({
-  findAllPersons: vi.fn().mockResolvedValue([
-    { id: 1, firstName: "Matti", lastName: "Meikäläinen" },
-    { id: 2, firstName: "Maija", lastName: "Meikäläinen" },
-  ]),
-}));
-
 vi.mock("../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
