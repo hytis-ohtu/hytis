@@ -1,5 +1,11 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonModal from "../src/components/PersonModal.tsx";
 import { findAllDepartments } from "../src/services/referenceDataService";
@@ -107,7 +113,8 @@ describe("PersonModal", () => {
   it("calls onSubmit with form data when saving", async () => {
     await renderAndWait({ initial: REQUIRED_INITIAL });
     fireEvent.click(screen.getByText("Tallenna"));
-    fireEvent.click(screen.getAllByText("Tallenna")[1]);
+    const dialog = screen.getByText("Tallenna muutokset?").closest("div")!;
+    fireEvent.click(within(dialog).getByRole("button", { name: "Tallenna" }));
     expect(defaultProps.onSubmit).toHaveBeenCalledWith(REQUIRED_INITIAL);
   });
 

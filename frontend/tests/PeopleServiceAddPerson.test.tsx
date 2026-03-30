@@ -16,7 +16,7 @@ vi.mock("axios", () => ({
   },
 }));
 
-vi.mock("../constants", () => ({ BASE_URL: "" }));
+vi.mock("../src/constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 
