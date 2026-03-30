@@ -111,3 +111,8 @@
   color: var(--background-color);
   cursor: pointer;
 }
+
+.edit-person-button {
+  margin-left: 4px;
+  cursor: pointer;
+}

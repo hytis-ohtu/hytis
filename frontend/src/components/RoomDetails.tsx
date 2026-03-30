@@ -1,10 +1,10 @@
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { addPerson } from "../services/peopleService";
-import type { Room } from "../types";
+import { addPerson, editPerson } from "../services/peopleService";
+import type { Person, Room } from "../types";
 import AddPersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
@@ -17,6 +17,7 @@ function RoomDetails({
   handleClose: () => void;
   onPersonAdded: () => void;
 }) {
+  const [personDetails, setPersonDetails] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const {
     id: roomId,
@@ -39,6 +40,19 @@ function RoomDetails({
       onPersonAdded();
     } catch (error) {
       console.error("Failed to add person:", error);
+    }
+  };
+
+  const handleEditPerson = async (values: Record<string, string>) => {
+    if (roomId === undefined || personDetails?.id === undefined) {
+      return;
+    }
+
+    try {
+      await editPerson(personDetails.id, values, roomId);
+      onPersonAdded();
+    } catch (error) {
+      console.error("Failed to edit person:", error);
     }
   };
 
@@ -84,8 +98,30 @@ function RoomDetails({
           </button>
           {addPersonOpen && (
             <AddPersonModal
-              onClose={() => setAddPersonOpen(false)}
-              onSubmit={handleAddPerson}
+              onClose={() => {
+                setAddPersonOpen(false);
+                setPersonDetails(null);
+              }}
+              onSubmit={personDetails ? handleEditPerson : handleAddPerson}
+              initial={
+                personDetails
+                  ? {
+                      firstName: personDetails.firstName,
+                      lastName: personDetails.lastName,
+                      department: String(personDetails.department.id),
+                      jobtitle: String(personDetails.title.id),
+                      supervisors: "",
+                      startDate:
+                        contracts?.find((c) => c.person.id === personDetails.id)
+                          ?.startDate ?? "",
+                      endDate:
+                        contracts?.find((c) => c.person.id === personDetails.id)
+                          ?.endDate ?? "",
+                      researchgroup: String(personDetails.researchGroup.id),
+                      misc: personDetails.freeText ?? "",
+                    }
+                  : {}
+              }
             />
           )}
         </div>
@@ -98,6 +134,15 @@ function RoomDetails({
             <details>
               <summary>
                 {contract.person.firstName} {contract.person.lastName}
+                <Pencil
+                  size={16}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setPersonDetails(contract.person);
+                    setAddPersonOpen(true);
+                  }}
+                  className="edit-person-button"
+                />
               </summary>
               <ul>
                 <li>Osasto: {contract.person.department.name}</li>
