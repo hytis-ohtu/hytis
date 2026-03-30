@@ -5,17 +5,17 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addPerson, editPerson } from "../services/peopleService";
 import type { Person, Room } from "../types";
-import AddPersonModal from "./PersonModal";
+import PersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
 function RoomDetails({
   room: roomProp,
   handleClose,
-  onPersonAdded,
+  onPersonSaved,
 }: {
   room: Room | null;
   handleClose: () => void;
-  onPersonAdded: () => void;
+  onPersonSaved: () => void;
 }) {
   const [personDetails, setPersonDetails] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
@@ -37,7 +37,7 @@ function RoomDetails({
 
     try {
       await addPerson(values, roomId);
-      onPersonAdded();
+      onPersonSaved();
     } catch (error) {
       console.error("Failed to add person:", error);
     }
@@ -50,7 +50,7 @@ function RoomDetails({
 
     try {
       await editPerson(personDetails.id, values, roomId);
-      onPersonAdded();
+      onPersonSaved();
     } catch (error) {
       console.error("Failed to edit person:", error);
     }
@@ -97,7 +97,7 @@ function RoomDetails({
             Lisää henkilö
           </button>
           {addPersonOpen && (
-            <AddPersonModal
+            <PersonModal
               onClose={() => {
                 setAddPersonOpen(false);
                 setPersonDetails(null);

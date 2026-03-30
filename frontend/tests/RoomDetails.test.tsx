@@ -48,7 +48,7 @@ vi.mock("../src/components/PersonModal", () => ({
 }));
 
 const mockHandleClose = vi.fn();
-const mockOnPersonAdded = vi.fn();
+const mockOnPersonSaved = vi.fn();
 
 const mockRoom_A210: Room = {
   id: 1,
@@ -108,13 +108,13 @@ describe("RoomDetails", () => {
 
   it("returns early from handleAddPerson when room id is undefined", async () => {
     const user = userEvent.setup();
-    const onPersonAdded = vi.fn();
+    const onPersonSaved = vi.fn();
 
     render(
       <RoomDetails
         room={null}
         handleClose={mockHandleClose}
-        onPersonAdded={onPersonAdded}
+        onPersonSaved={onPersonSaved}
       />,
     );
 
@@ -122,7 +122,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(addPerson).not.toHaveBeenCalled();
-    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(onPersonSaved).not.toHaveBeenCalled();
   });
 
   it("renders loading skeleton when data is being fetched", () => {
@@ -130,7 +130,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={null}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(
@@ -140,7 +140,7 @@ describe("RoomDetails", () => {
 
   it("handles addPerson error state and logs the failure", async () => {
     const user = userEvent.setup();
-    const onPersonAdded = vi.fn();
+    const onPersonSaved = vi.fn();
     const addPersonError = new Error("network failed");
     const consoleErrorSpy = vi
       .spyOn(console, "error")
@@ -152,7 +152,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={onPersonAdded}
+        onPersonSaved={onPersonSaved}
       />,
     );
 
@@ -160,7 +160,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(addPerson).toHaveBeenCalled();
-    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(onPersonSaved).not.toHaveBeenCalled();
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to add person:",
       addPersonError,
@@ -179,7 +179,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -204,7 +204,7 @@ describe("RoomDetails", () => {
       }),
       1,
     );
-    expect(mockOnPersonAdded).toHaveBeenCalled();
+    expect(mockOnPersonSaved).toHaveBeenCalled();
   });
 
   it("resets edit state when the modal is closed", async () => {
@@ -214,7 +214,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -244,7 +244,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -252,7 +252,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(editPerson).toHaveBeenCalled();
-    expect(mockOnPersonAdded).not.toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to edit person:",
       editPersonError,
@@ -281,7 +281,7 @@ describe("RoomDetails", () => {
         // @ts-expect-error - Intentionally setting id to undefined to test the guard clause
         room={roomWithPersonMissingId}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -289,7 +289,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(editPerson).not.toHaveBeenCalled();
-    expect(mockOnPersonAdded).not.toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
   });
 
   it("renders room details panel when room data is provided", () => {
@@ -297,7 +297,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -322,7 +322,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -347,7 +347,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A219}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -359,7 +359,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
