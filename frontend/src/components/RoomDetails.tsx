@@ -135,6 +135,7 @@ function RoomDetails({
               <summary>
                 {contract.person.firstName} {contract.person.lastName}
                 <Pencil
+                  data-testid={`edit-person-button-${contract.person.id}`}
                   size={16}
                   onClick={(event) => {
                     event.preventDefault();
