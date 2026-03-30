@@ -30,7 +30,7 @@ const REQUIRED_INITIAL = {
   lastName: "Testaaja",
   department: "1",
   jobtitle: "1",
-  supervisors: "Joku",
+  supervisors: "",
   startDate: "2025-01-01",
   endDate: "2026-01-01",
 };
