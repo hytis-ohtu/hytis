@@ -3,6 +3,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../src/components/PersonForm.tsx";
 
+vi.mock("../src/services/personService", () => ({
+  createPerson: vi.fn().mockResolvedValue({ id: 1 }),
+  updatePerson: vi.fn().mockResolvedValue({ id: 1 }),
+}));
+
 vi.mock("../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
