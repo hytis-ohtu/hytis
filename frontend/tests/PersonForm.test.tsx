@@ -180,4 +180,109 @@ describe("PersonForm", () => {
       ).toBeInTheDocument();
     });
   });
+
+  it("focusing the supervisor input opens the dropdown", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+  });
+
+  it("typing in the supervisor input filters the list", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
+      target: { value: "Joku" },
+    });
+    expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    expect(screen.queryByText("Muu Esihenkilö")).not.toBeInTheDocument();
+  });
+
+  it("shows 'Ei tuloksia' when supervisor search matches nobody", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
+      target: { value: "zzznomatch" },
+    });
+    expect(screen.getByText("Ei tuloksia")).toBeInTheDocument();
+  });
+
+  it("clicking a supervisor in the dropdown adds them as a tag", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    expect(screen.getByLabelText("Poista Joku Esihenkilö")).toBeInTheDocument();
+  });
+
+  it("clicking a selected supervisor in the dropdown removes them", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    // Select
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    // Reopen and click the list item specifically to deselect
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    const listItem = screen
+      .getAllByText("Joku Esihenkilö")
+      .find((el) => el.tagName === "LI")!;
+    fireEvent.click(listItem);
+    expect(
+      screen.queryByLabelText("Poista Joku Esihenkilö"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("clicking the remove tag button deselects a supervisor", async () => {
+    render(<PersonForm {...defaultProps} />);
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    fireEvent.click(screen.getByLabelText("Poista Joku Esihenkilö"));
+    expect(
+      screen.queryByLabelText("Poista Joku Esihenkilö"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("clicking outside the supervisor widget closes the dropdown", async () => {
+    render(
+      <div>
+        <PersonForm {...defaultProps} />
+        <button>outside</button>
+      </div>,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    fireEvent.mouseDown(screen.getByRole("button", { name: "outside" }));
+    expect(screen.queryByText("Joku Esihenkilö")).not.toBeInTheDocument();
+  });
+
+  it("does not render a tag for a supervisor ID with no matching person", async () => {
+    render(
+      <PersonForm
+        {...defaultProps}
+        initial={{ ...REQUIRED_INITIAL, supervisors: "999" }}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
+    );
+    // ID 999 has no matching person — no tag should appear
+    expect(screen.queryByLabelText(/^Poista /)).not.toBeInTheDocument();
+  });
 });

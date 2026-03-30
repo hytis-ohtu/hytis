@@ -1,6 +1,6 @@
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { addPerson } from "../src/services/peopleService";
+import { addPerson, findAllPeople } from "../src/services/peopleService";
 import type { Person } from "../src/types";
 
 vi.mock("axios", () => ({
@@ -31,6 +31,24 @@ const mockPerson: Person = {
 describe("peopleService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  describe("findAllPeople", () => {
+    it("fetches from the correct endpoint and returns the data", async () => {
+      mockedAxios.get = vi.fn().mockResolvedValue({ data: [mockPerson] });
+
+      const result = await findAllPeople();
+
+      expect(result).toEqual([mockPerson]);
+      expect(mockedAxios.get).toHaveBeenCalledWith("/api/people");
+    });
+
+    it("propagates errors from the API", async () => {
+      const error = new Error("Network error");
+      mockedAxios.get = vi.fn().mockRejectedValue(error);
+
+      await expect(findAllPeople()).rejects.toThrow("Network error");
+    });
   });
 
   describe("addPerson", () => {
