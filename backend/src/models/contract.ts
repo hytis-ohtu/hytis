@@ -6,6 +6,7 @@ import type {
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db";
 import { Person } from "./person";
+import { Room } from "./room";
 
 class Contract extends Model<
   InferAttributes<Contract>,
@@ -19,6 +20,7 @@ class Contract extends Model<
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare person?: Person;
+  declare room?: Room;
 }
 
 Contract.init(

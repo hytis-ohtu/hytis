@@ -127,6 +127,11 @@ function PersonSearch() {
                   {person.firstName} {person.lastName}
                 </div>
                 <div className="person-search-result-details">
+                  {person.contracts && person.contracts.length > 0 && person.contracts[0].room && (
+                    <span className="person-search-result-room">
+                      {person.contracts[0].room.name}
+                    </span>
+                  )}
                   {person.title?.name && (
                     <span className="person-search-result-title">
                       {person.title.name}

@@ -26,6 +26,9 @@ test.describe("PersonSearch", () => {
     // Check for person name
     await expect(page.getByText("Matti Virtanen")).toBeVisible();
 
+    // Check for room number
+    await expect(page.getByText("A210")).toBeVisible();
+
     // Check for title
     await expect(page.getByText("asiantuntija")).toBeVisible();
 

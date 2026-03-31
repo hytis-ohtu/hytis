@@ -192,7 +192,7 @@ describe("GET /api/people - search", () => {
     });
   });
 
-  test("search returns people with department, title, and research group", async () => {
+  test("search returns people with department, title, research group, and contracts", async () => {
     const response = await api.get("/api/people?q=Matti").expect(200);
 
     expect(response.body).toHaveLength(1);
@@ -208,6 +208,13 @@ describe("GET /api/people - search", () => {
     expect(person.researchGroup.name).toBe(
       "Algebrallisten rakenteiden tutkimusryhmä",
     );
+
+    // New: Check contracts with room data
+    expect(person.contracts).toBeDefined();
+    expect(Array.isArray(person.contracts)).toBe(true);
+    expect(person.contracts.length).toBeGreaterThan(0);
+    expect(person.contracts[0].room).toBeDefined();
+    expect(person.contracts[0].room.name).toBe("A210");
   });
 
   test("search returns empty array when no matches found", async () => {

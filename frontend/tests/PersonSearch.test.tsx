@@ -98,6 +98,43 @@ describe("PersonSearch", () => {
     });
   });
 
+  it("displays room number in search results when person has contract", async () => {
+    const mockResults = [
+      {
+        id: 1,
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: { id: 1, name: "H516 MATHSTAT" },
+        title: { name: "asiantuntija" },
+        contracts: [
+          {
+            id: 1,
+            personId: 1,
+            roomId: 1,
+            startDate: "2023-01-01",
+            endDate: "2025-12-31",
+            room: { id: 1, name: "A210" },
+          },
+        ],
+      },
+    ];
+
+    mockSearchPeople.mockResolvedValue(mockResults);
+
+    const user = userEvent.setup({ delay: null });
+    render(<PersonSearch />);
+
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+
+    await user.type(searchInput, "Matti");
+
+    await waitFor(() => {
+      expect(screen.getByText("A210")).toBeInTheDocument();
+      expect(screen.getByText("asiantuntija")).toBeInTheDocument();
+      expect(screen.getByText("H516 MATHSTAT")).toBeInTheDocument();
+    });
+  });
+
   it("shows 'Ei tuloksia' message when no results found", async () => {
     mockSearchPeople.mockResolvedValue([]);
 
