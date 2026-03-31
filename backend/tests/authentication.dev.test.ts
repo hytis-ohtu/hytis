@@ -9,7 +9,7 @@ jest.mock("../src/config/environmentConfig", () => ({
   useHyLogin: false,
 }));
 
-// Mock the OIDC config to provide a test logout URL
+// Mock passport's authenticate function to simulate OIDC authentication behavior
 jest.mock("../src/middleware/mockAuth", () => ({
   mockAuthMiddleware: (req: Request, _res: Response, next: NextFunction) => {
     req.user = {
