@@ -79,6 +79,7 @@
 }
 
 .person-details-info details {
+  width: fit-content;
   margin-top: var(--gap);
 }
 
@@ -112,7 +113,17 @@
   cursor: pointer;
 }
 
+.person-name {
+  cursor: pointer;
+}
+
+.cursor-gap {
+  cursor: default;
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+}
+
 .edit-person-button {
-  margin-left: 4px;
   cursor: pointer;
 }

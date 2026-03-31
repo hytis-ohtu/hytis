@@ -133,7 +133,13 @@ function RoomDetails({
           contracts.map((contract) => (
             <details>
               <summary>
-                {contract.person.firstName} {contract.person.lastName}
+                <span className="person-name">
+                  {contract.person.firstName} {contract.person.lastName}
+                </span>
+                <span
+                  onClick={(e) => e.preventDefault()}
+                  className="cursor-gap"
+                ></span>
                 <Pencil
                   data-testid={`edit-person-button-${contract.person.id}`}
                   size={16}
