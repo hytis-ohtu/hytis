@@ -1,6 +1,7 @@
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import session from "express-session";
 import request from "supertest";
+import "../src/types/express";
 
 // Mock the environment config to enable HY login and provide a frontend URL
 jest.mock("../src/config/environmentConfig", () => ({
@@ -15,15 +16,17 @@ jest.mock("../src/config/oidcConfig", () => ({
 
 // Mock passport's authenticate function to simulate OIDC authentication behavior
 jest.mock("passport", () => ({
-  authenticate: jest.fn((_strategy: string, options?: any) => {
-    return (_req: any, res: any, next: any) => {
-      if (options?.failureRedirect) {
-        next();
-      } else {
-        res.redirect("https://login.helsinki.fi/test-login");
-      }
-    };
-  }),
+  authenticate: jest.fn(
+    (_strategy: string, options?: { failureRedirect?: string }) => {
+      return (_req: Request, res: Response, next: NextFunction) => {
+        if (options?.failureRedirect) {
+          next();
+        } else {
+          res.redirect("https://login.helsinki.fi/test-login");
+        }
+      };
+    },
+  ),
 }));
 
 import authRouter from "../src/routes/authRouter";
@@ -41,23 +44,25 @@ function buildApp(
   app.use(
     session({ secret: "test-secret", resave: false, saveUninitialized: false }),
   );
-  app.use((req: any, _res, next) => {
-    req.isAuthenticated = () => isAuthenticated;
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    req.isAuthenticated = (() => isAuthenticated) as typeof req.isAuthenticated;
     if (isAuthenticated)
       req.user = {
-        id: 1,
+        id: "1",
         name: "Testi Käyttäjä",
         email: "testi@testi.fi",
         uid: "testi-käyttäjä",
       };
 
-    req.logout = (cb: (err?: Error) => void) =>
-      logoutBehavior === "logout-error" ? cb(new Error("logout error")) : cb();
+    req.logout = ((cb: (err?: Error) => void) =>
+      logoutBehavior === "logout-error"
+        ? cb(new Error("logout error"))
+        : cb()) as typeof req.logout;
 
-    req.session.destroy = (cb: (err?: Error) => void) =>
+    req.session.destroy = ((cb: (err?: Error) => void) =>
       logoutBehavior === "destroy-error"
         ? cb(new Error("destroy error"))
-        : cb();
+        : cb()) as typeof req.session.destroy;
 
     next();
   });

@@ -1,6 +1,7 @@
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import session from "express-session";
 import request from "supertest";
+import "../src/types/express";
 
 // Mock the environment config to disable HY login and provide a frontend URL
 jest.mock("../src/config/environmentConfig", () => ({
@@ -8,11 +9,11 @@ jest.mock("../src/config/environmentConfig", () => ({
   useHyLogin: false,
 }));
 
-// Mock the authentication middleware to simulate a logged-in user without real OIDC authentication
+// Mock the OIDC config to provide a test logout URL
 jest.mock("../src/middleware/mockAuth", () => ({
-  mockAuthMiddleware: (req: any, _res: any, next: any) => {
+  mockAuthMiddleware: (req: Request, _res: Response, next: NextFunction) => {
     req.user = {
-      id: 1,
+      id: "1",
       name: "Testi Käyttäjä",
       email: "testi@testi.fi",
       uid: "testi-käyttäjä",
@@ -30,17 +31,18 @@ function buildApp(isAuthenticated = false): Express {
   app.use(
     session({ secret: "test-secret", resave: false, saveUninitialized: false }),
   );
-  app.use((req: any, _res, next) => {
-    req.isAuthenticated = () => isAuthenticated;
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    req.isAuthenticated = (() => isAuthenticated) as typeof req.isAuthenticated;
     if (isAuthenticated)
       req.user = {
-        id: 1,
+        id: "1",
         name: "Testi Käyttäjä",
         email: "testi@testi.fi",
         uid: "testi-käyttäjä",
       };
-    req.logout = (cb: (err?: Error) => void) => cb();
-    req.session.destroy = (cb: (err?: Error) => void) => cb();
+    req.logout = ((cb: (err?: Error) => void) => cb()) as typeof req.logout;
+    req.session.destroy = ((cb: (err?: Error) => void) =>
+      cb()) as typeof req.session.destroy;
     next();
   });
   app.use("/api", authRouter);
@@ -57,7 +59,7 @@ describe("GET /api/user", () => {
   it("returns user when logged in", async () => {
     const res = await request(buildApp(true)).get("/api/user");
     expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({ id: 1 });
+    expect(res.body).toMatchObject({ id: "1" });
   });
 });
 
