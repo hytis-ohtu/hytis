@@ -4,7 +4,7 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addPerson } from "../services/peopleService";
-import type { Room } from "../types";
+import type { FieldProps, Room } from "../types";
 import AddPersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
@@ -41,6 +41,13 @@ function RoomDetails({
       console.error("Failed to add person:", error);
     }
   };
+
+  const Field = ({ label, value }: FieldProps) =>
+    value ? (
+      <li>
+        {label}: {value}
+      </li>
+    ) : null;
 
   return (
     <motion.div
@@ -100,10 +107,27 @@ function RoomDetails({
                 {contract.person.firstName} {contract.person.lastName}
               </summary>
               <ul>
-                <li>Osasto: {contract.person.department.name}</li>
-                <li>Titteli: {contract.person.title.name}</li>
-                <li>Alkupvm: {contract.startDate}</li>
-                <li>Loppupvm: {contract.endDate}</li>
+                <Field
+                  label="Osasto"
+                  value={contract.person.department?.name}
+                />
+                <Field
+                  label="Tutkimusryhmä"
+                  value={contract.person.researchGroup?.name}
+                />
+                <Field label="Titteli" value={contract.person.title?.name} />
+                {contract.person.supervisors &&
+                  contract.person.supervisors.length > 0 && (
+                    <li>
+                      Esihenkilöt:{" "}
+                      {contract.person.supervisors
+                        .map((s) => s.firstName + " " + s.lastName)
+                        .join(", ")}
+                    </li>
+                  )}
+                <Field label="Alkupvm" value={contract.startDate} />
+                <Field label="Loppupvm" value={contract.endDate} />
+                <Field label="Lisätiedot" value={contract.person.freeText} />
               </ul>
             </details>
           ))

@@ -7,12 +7,25 @@ export interface Title {
   name: string;
 }
 
+export interface ResearchGroup {
+  id: number;
+  name: string;
+}
+
+export interface PersonSupervisor {
+  supervisorId: number;
+  subordinateId: number;
+}
+
 export interface Person {
   id: number;
   firstName: string;
   lastName: string;
-  department: Department;
-  title: Title;
+  department?: Department | null;
+  researchGroup?: ResearchGroup | null;
+  title?: Title | null;
+  supervisors?: Person[];
+  freeText?: string | null;
 }
 
 export interface Contract {
@@ -30,4 +43,9 @@ export interface Room {
   contracts: Contract[];
   freeText: string;
   roomType: string;
+}
+
+export interface FieldProps {
+  label: string;
+  value: string | null | undefined;
 }
