@@ -284,3 +284,173 @@ describe("GET /api/people - search", () => {
     findAllSpy.mockRestore();
   });
 });
+
+test("a person can be updated", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    freeText: "Päivitetty kuvaus",
+    titleId: 2,
+    departmentId: 2,
+    researchGroupId: 2,
+    supervisorIds: [2, 3],
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.firstName).toBe(updatedPerson.firstName);
+  expect(updated.lastName).toBe(updatedPerson.lastName);
+  expect(updated.freeText).toBe(updatedPerson.freeText);
+  expect(updated.titleId).toBe(updatedPerson.titleId);
+  expect(updated.departmentId).toBe(updatedPerson.departmentId);
+  expect(updated.researchGroupId).toBe(updatedPerson.researchGroupId);
+  expect(updated.supervisors).toHaveLength(updatedPerson.supervisorIds.length);
+});
+
+test("a person cannot be updated with missing required fields", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    // lastName is missing
+    titleId: 2,
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(400);
+
+  expect(response.body.error).toBe(
+    "Invalid input: expected string, received undefined",
+  );
+});
+
+test("a person cannot be updated with empty required fields", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "",
+    titleId: 2,
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(400);
+
+  expect(response.body.error).toBe("Last name is required");
+});
+
+test("updating a non-existent person returns 404", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+  };
+
+  const response = await api
+    .put("/api/people/9999")
+    .send(updatedPerson)
+    .expect(404);
+
+  expect(response.body.error).toBe("Person not found");
+});
+
+test("a person's supervisors can be cleared", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    supervisorIds: [],
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.supervisors).toHaveLength(0);
+});
+
+test("a person with invalid supervisor IDs cannot be updated", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    supervisorIds: [9999],
+  };
+
+  await api.put("/api/people/1").send(updatedPerson).expect(500);
+});
+
+test("a persons contract with a room can be updated", async () => {
+  const updatedPerson = {
+    firstName: "Päivitetty nimi",
+    lastName: "Päivitetty sukunimi",
+    roomId: 1, // Same room as existing contract from seed data
+    startDate: "2026-06-10",
+    endDate: "2027-01-01",
+  };
+
+  const response = await api
+    .put("/api/people/1")
+    .send(updatedPerson)
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(1);
+  const contract = updated?.contracts?.[0];
+  expect(contract?.roomId).toBe(1);
+  expect(contract?.startDate).toBe("2026-06-10");
+  expect(contract?.endDate).toBe("2027-01-01");
+});
+
+test("a new contract can be created for an existing person with a contract", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 2,
+      startDate: "2026-03-01",
+      endDate: "2027-02-28",
+    })
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(2);
+  const secondContract = updated?.contracts?.[1];
+  expect(secondContract?.roomId).toBe(2);
+  expect(secondContract?.startDate).toBe("2026-03-01");
+  expect(secondContract?.endDate).toBe("2027-02-28");
+});
+
+test("updating a person with invalid room ID fails", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 9999, // Invalid room ID
+    })
+    .expect(500);
+
+  expect(response.body.error).toBe("Failed to update person");
+});
+
+test("updating a person's contract without dates maintains existing dates", async () => {
+  const response = await api
+    .put("/api/people/1")
+    .send({
+      firstName: "Matti",
+      lastName: "Virtanen",
+      roomId: 1, // Same room as existing contract from seed data
+    })
+    .expect(200);
+
+  const updated: Person = response.body;
+  expect(updated.contracts).toHaveLength(1);
+  const updatedContract = updated?.contracts?.[0];
+  expect(updatedContract?.startDate).toBe("2023-01-01");
+  expect(updatedContract?.endDate).toBe("2025-12-31");
+});

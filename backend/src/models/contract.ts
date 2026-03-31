@@ -14,8 +14,8 @@ class Contract extends Model<
   declare id: CreationOptional<number>;
   declare personId: number;
   declare roomId: number;
-  declare startDate: Date;
-  declare endDate: Date;
+  declare startDate: Date | null;
+  declare endDate: Date | null;
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare person?: Person;
