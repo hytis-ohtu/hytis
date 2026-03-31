@@ -13,15 +13,7 @@ interface PersonModalProps {
 function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
   const [isFormValid, setIsFormValid] = useState(() => {
-    const REQUIRED_FIELDS = [
-      "firstName",
-      "lastName",
-      "department",
-      "jobtitle",
-      "supervisors",
-      "startDate",
-      "endDate",
-    ];
+    const REQUIRED_FIELDS = ["firstName", "lastName"];
     return REQUIRED_FIELDS.every((f) => Boolean(initial[f]?.trim()));
   });
   const [confirmOpen, setConfirmOpen] = useState(false);

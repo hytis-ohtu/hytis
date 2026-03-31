@@ -1,10 +1,22 @@
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { addPerson } from "../src/services/peopleService";
+import { addPerson, findAllPeople } from "../src/services/peopleService";
 import type { Person } from "../src/types";
 
-vi.mock("axios");
-vi.mock("../constants", () => ({ BASE_URL: "" }));
+vi.mock("axios", () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(),
+    create: vi.fn(),
+    defaults: { headers: { common: {} } },
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  },
+}));
+
+vi.mock("../src/constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 
@@ -19,6 +31,24 @@ const mockPerson: Person = {
 describe("peopleService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  describe("findAllPeople", () => {
+    it("fetches from the correct endpoint and returns the data", async () => {
+      mockedAxios.get = vi.fn().mockResolvedValue({ data: [mockPerson] });
+
+      const result = await findAllPeople();
+
+      expect(result).toEqual([mockPerson]);
+      expect(mockedAxios.get).toHaveBeenCalledWith("/api/people");
+    });
+
+    it("propagates errors from the API", async () => {
+      const error = new Error("Network error");
+      mockedAxios.get = vi.fn().mockRejectedValue(error);
+
+      await expect(findAllPeople()).rejects.toThrow("Network error");
+    });
   });
 
   describe("addPerson", () => {
@@ -45,7 +75,7 @@ describe("peopleService", () => {
         lastName: "Doe",
         departmentId: "2",
         titleId: "3",
-        supervisorIds: "5,6",
+        supervisorIds: [5, 6],
         researchGroupId: "1",
         freeText: "Some notes",
         startDate: "2024-01-01",
@@ -62,7 +92,7 @@ describe("peopleService", () => {
         lastName: "Doe",
         misc: "",
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
       };
 
       await addPerson(values, "room-42");
@@ -74,9 +104,9 @@ describe("peopleService", () => {
         titleId: undefined,
         supervisorIds: undefined,
         researchGroupId: undefined,
-        freeText: "",
+        freeText: undefined,
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
         roomId: "room-42",
       });
     });
@@ -88,8 +118,8 @@ describe("peopleService", () => {
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
-        startDate: "",
-        endDate: "",
+        startDate: undefined,
+        endDate: undefined,
       };
 
       await addPerson(values, "room-99");
@@ -177,9 +207,9 @@ describe("peopleService", () => {
         titleId: undefined,
         supervisorIds: undefined,
         researchGroupId: undefined,
-        freeText: "",
+        freeText: undefined,
         startDate: "2024-01-01",
-        endDate: "",
+        endDate: undefined,
         roomId: 1,
       });
     });
