@@ -1,7 +1,13 @@
 import assert from "assert";
 import type { Contract } from "../src/models";
 import type { ExpectedContract } from "../src/types/other";
-import { mockDepartments, mockPeople, mockTitles } from "./mockData";
+import {
+  mockDepartments,
+  mockPeople,
+  mockPersonSupervisors,
+  mockResearchGroups,
+  mockTitles,
+} from "./mockData";
 
 export const validateContract = (
   contract: Contract,
@@ -16,10 +22,15 @@ export const validateContract = (
   const expectedTitle = mockTitles.find(
     (title) => title.id === expectedPerson?.titleId,
   );
+  const expectedResearchGroup = mockResearchGroups.find(
+    (group) => group.id === expectedPerson?.researchGroupId,
+  );
+
+  const expectedPersonSupervisors = mockPersonSupervisors.filter(
+    (ps) => ps.subordinateId === expectedPerson?.id,
+  );
 
   assert(expectedPerson, "expected person should be defined");
-  assert(expectedDepartment, "expected department should be defined");
-  assert(expectedTitle, "expected title should be defined");
 
   expect(contract).toMatchObject({
     startDate: expectedContract.startDate.toISOString().slice(0, 10),
@@ -27,8 +38,17 @@ export const validateContract = (
     person: {
       firstName: expectedPerson.firstName,
       lastName: expectedPerson.lastName,
-      department: { name: expectedDepartment.name },
-      title: { name: expectedTitle.name },
+      department: { name: expectedDepartment?.name },
+      researchGroup: { name: expectedResearchGroup?.name },
+      title: { name: expectedTitle?.name },
+      supervisors: expectedPersonSupervisors.map((ps) => {
+        const supervisor = mockPeople.find((p) => p.id === ps.supervisorId);
+        return {
+          firstName: supervisor?.firstName,
+          lastName: supervisor?.lastName,
+        };
+      }),
+      freeText: expectedPerson.freeText,
     },
   });
 };

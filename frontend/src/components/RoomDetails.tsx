@@ -4,7 +4,7 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { addPerson, editPerson } from "../services/peopleService";
-import type { Person, Room } from "../types";
+import type { FieldProps, Person, Room } from "../types";
 import PersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
@@ -55,6 +55,13 @@ function RoomDetails({
       console.error("Failed to edit person:", error);
     }
   };
+
+  const Field = ({ label, value }: FieldProps) =>
+    value ? (
+      <li>
+        {label}: {value}
+      </li>
+    ) : null;
 
   return (
     <motion.div
@@ -108,8 +115,8 @@ function RoomDetails({
                   ? {
                       firstName: personDetails.firstName,
                       lastName: personDetails.lastName,
-                      department: String(personDetails.department.id),
-                      jobtitle: String(personDetails.title.id),
+                      department: String(personDetails?.department?.id),
+                      jobtitle: String(personDetails?.title?.id),
                       supervisors: "",
                       startDate:
                         contracts?.find((c) => c.person.id === personDetails.id)
@@ -117,7 +124,7 @@ function RoomDetails({
                       endDate:
                         contracts?.find((c) => c.person.id === personDetails.id)
                           ?.endDate ?? "",
-                      researchgroup: String(personDetails.researchGroup.id),
+                      researchgroup: String(personDetails?.researchGroup?.id),
                       misc: personDetails.freeText ?? "",
                     }
                   : {}
@@ -131,7 +138,7 @@ function RoomDetails({
           <p>Ei sopimuksia.</p>
         ) : (
           contracts.map((contract) => (
-            <details>
+            <details key={contract.id}>
               <summary>
                 <span className="person-name">
                   {contract.person.firstName} {contract.person.lastName}
@@ -152,10 +159,27 @@ function RoomDetails({
                 />
               </summary>
               <ul>
-                <li>Osasto: {contract.person.department.name}</li>
-                <li>Titteli: {contract.person.title.name}</li>
-                <li>Alkupvm: {contract.startDate}</li>
-                <li>Loppupvm: {contract.endDate}</li>
+                <Field
+                  label="Osasto"
+                  value={contract.person.department?.name}
+                />
+                <Field
+                  label="Tutkimusryhmä"
+                  value={contract.person.researchGroup?.name}
+                />
+                <Field label="Titteli" value={contract.person.title?.name} />
+                {contract.person.supervisors &&
+                  contract.person.supervisors.length > 0 && (
+                    <li>
+                      Esihenkilöt:{" "}
+                      {contract.person.supervisors
+                        .map((s) => s.firstName + " " + s.lastName)
+                        .join(", ")}
+                    </li>
+                  )}
+                <Field label="Alkupvm" value={contract.startDate} />
+                <Field label="Loppupvm" value={contract.endDate} />
+                <Field label="Lisätiedot" value={contract.person.freeText} />
               </ul>
             </details>
           ))

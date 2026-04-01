@@ -1,7 +1,14 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonModal from "../src/components/PersonModal.tsx";
+import { findAllDepartments } from "../src/services/referenceDataService";
 
 vi.mock("../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
@@ -18,10 +25,22 @@ vi.mock("../src/services/referenceDataService", () => ({
   ]),
 }));
 
-// Only firstName and lastName are required now
+vi.mock("../src/services/peopleService", () => ({
+  findAllPeople: vi
+    .fn()
+    .mockResolvedValue([{ id: 1, firstName: "Supervisor", lastName: "One" }]),
+  searchPeople: vi.fn().mockResolvedValue([]),
+  addPerson: vi.fn().mockResolvedValue({}),
+}));
+
 const REQUIRED_INITIAL = {
   firstName: "Matti",
   lastName: "Meikäläinen",
+  department: "1",
+  jobtitle: "1",
+  supervisors: "1",
+  startDate: "2025-01-01",
+  endDate: "2026-01-01",
 };
 
 describe("PersonModal", () => {
@@ -30,30 +49,40 @@ describe("PersonModal", () => {
     onSubmit: vi.fn(),
   };
 
+  // Helper that renders and waits for async data fetching to complete
+  const renderAndWait = async (
+    props: Partial<typeof defaultProps> & {
+      initial?: Record<string, string>;
+    } = {},
+  ) => {
+    render(<PersonModal {...defaultProps} {...props} />);
+    await waitFor(() => expect(findAllDepartments).toHaveBeenCalled());
+  };
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders without crashing", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("renders without crashing", async () => {
+    await renderAndWait();
     expect(screen.getByText("Lisää henkilö")).toBeInTheDocument();
   });
 
-  it("renders with initial values for editing", () => {
-    render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
+  it("renders with initial values for editing", async () => {
+    await renderAndWait({ initial: REQUIRED_INITIAL });
     expect(screen.getByText("Muokkaa henkilöä")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Matti")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Meikäläinen")).toBeInTheDocument();
   });
 
-  it("confirmation button if closing", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("confirmation button if closing", async () => {
+    await renderAndWait();
     fireEvent.click(screen.getByLabelText("close"));
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
-  it("confirmation button if clicking outside", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("confirmation button if clicking outside", async () => {
+    await renderAndWait();
     const overlay = screen
       .getByText("Lisää henkilö")
       .closest(".personmodal-content")!.parentElement!;
@@ -63,40 +92,41 @@ describe("PersonModal", () => {
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
-  it("confirmation button if saving", () => {
-    render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
+  it("confirmation button if saving", async () => {
+    await renderAndWait({ initial: REQUIRED_INITIAL });
     fireEvent.click(screen.getByText("Tallenna"));
     expect(screen.getByText("Tallenna muutokset?")).toBeInTheDocument();
   });
 
-  it("disables save button if form is invalid", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("disables save button if form is invalid", async () => {
+    await renderAndWait();
     const saveButton = screen.getByText("Lisää");
     expect(saveButton).toBeDisabled();
   });
 
-  it("enables save button if form is valid", () => {
-    render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
+  it("enables save button if form is valid", async () => {
+    await renderAndWait({ initial: REQUIRED_INITIAL });
     const saveButton = screen.getByText("Tallenna");
     expect(saveButton).toBeEnabled();
   });
 
-  it("calls onSubmit with form data when saving", () => {
-    render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
+  it("calls onSubmit with form data when saving", async () => {
+    await renderAndWait({ initial: REQUIRED_INITIAL });
     fireEvent.click(screen.getByText("Tallenna"));
-    fireEvent.click(screen.getAllByText("Tallenna")[1]);
+    const dialog = screen.getByText("Tallenna muutokset?").closest("div")!;
+    fireEvent.click(within(dialog).getByRole("button", { name: "Tallenna" }));
     expect(defaultProps.onSubmit).toHaveBeenCalledWith(REQUIRED_INITIAL);
   });
 
-  it("calls onClose when confirming close", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("calls onClose when confirming close", async () => {
+    await renderAndWait();
     fireEvent.click(screen.getByLabelText("close"));
     fireEvent.click(screen.getByText("Kyllä"));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
-  it("closes confirmation without action on cancel", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("closes confirmation without action on cancel", async () => {
+    await renderAndWait();
     fireEvent.click(screen.getByLabelText("close"));
     fireEvent.click(screen.getByText("Peruuta"));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
@@ -105,8 +135,8 @@ describe("PersonModal", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("clicking inside the modal does not trigger close confirmation", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("clicking inside the modal does not trigger close confirmation", async () => {
+    await renderAndWait();
     const content = screen
       .getByText("Lisää henkilö")
       .closest(".personmodal-content")!;
@@ -116,8 +146,8 @@ describe("PersonModal", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("cancel save confirmation does not save or close", () => {
-    render(<PersonModal {...defaultProps} initial={REQUIRED_INITIAL} />);
+  it("cancel save confirmation does not save or close", async () => {
+    await renderAndWait({ initial: REQUIRED_INITIAL });
     fireEvent.click(screen.getByText("Tallenna"));
     fireEvent.click(screen.getByText("Peruuta"));
     expect(defaultProps.onSubmit).not.toHaveBeenCalled();
@@ -125,8 +155,8 @@ describe("PersonModal", () => {
     expect(screen.queryByText("Tallenna muutokset?")).not.toBeInTheDocument();
   });
 
-  it("enables save button after filling in required fields", () => {
-    render(<PersonModal {...defaultProps} />);
+  it("enables save button after filling in required fields", async () => {
+    await renderAndWait();
     expect(screen.getByText("Lisää")).toBeDisabled();
 
     fireEvent.change(screen.getByLabelText("Etunimi:"), {
@@ -135,7 +165,6 @@ describe("PersonModal", () => {
     fireEvent.change(screen.getByLabelText("Sukunimi:"), {
       target: { value: "Testaaja" },
     });
-
     expect(screen.getByText("Lisää")).toBeEnabled();
   });
 });

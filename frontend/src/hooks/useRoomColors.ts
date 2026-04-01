@@ -52,7 +52,7 @@ export function useRoomColors() {
           const room = roomsMap.get(roomName);
           if (!room) continue;
 
-          if (!(element instanceof SVGGraphicsElement)) continue;
+          if (!(element instanceof SVGElement)) continue;
 
           if (useAvailability) {
             const availabilityState = getRoomAvailability(

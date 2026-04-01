@@ -12,6 +12,7 @@ export const rooms = [
     },
     contracts: [
       {
+        id: 1,
         startDate: "2023-01-01",
         endDate: "2025-12-31",
         person: {
@@ -34,6 +35,7 @@ export const rooms = [
         },
       },
       {
+        id: 2,
         startDate: "2023-06-01",
         endDate: "2026-05-31",
         person: {
@@ -56,6 +58,7 @@ export const rooms = [
         },
       },
       {
+        id: 3,
         startDate: "2024-01-01",
         endDate: "2026-12-31",
         person: {
@@ -92,6 +95,7 @@ export const rooms = [
     },
     contracts: [
       {
+        id: 4,
         startDate: "2022-09-01",
         endDate: "2025-08-31",
         person: {
@@ -114,6 +118,7 @@ export const rooms = [
         },
       },
       {
+        id: 5,
         startDate: "2023-03-01",
         endDate: "2026-02-28",
         person: {
@@ -150,6 +155,7 @@ export const rooms = [
     },
     contracts: [
       {
+        id: 6,
         startDate: "2024-01-15",
         endDate: "2025-12-31",
         person: {
@@ -172,6 +178,7 @@ export const rooms = [
         },
       },
       {
+        id: 7,
         startDate: "2023-09-01",
         endDate: "2025-08-31",
         person: {

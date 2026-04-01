@@ -17,12 +17,20 @@
   align-items: center;
 }
 
+.personform-field--top {
+  align-items: flex-start;
+}
+
 .personform-label {
   flex: 0 0 140px;
   text-align: center;
   margin-right: 0.5rem;
   font-weight: 600;
   color: var(--text-color-black);
+}
+
+.personform-field--top .personform-label {
+  padding-top: 0.5rem;
 }
 
 .personform-input {
@@ -37,4 +45,70 @@
 
 select.personform-input {
   cursor: pointer;
+}
+
+/* Supervisor widget */
+
+.personform-supervisor {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.personform-supervisor .personform-input {
+  width: 100%;
+  box-sizing: border-box;
+  flex: none;
+}
+
+.personform-supervisor-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.personform-supervisor-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--secondary-color);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.personform-supervisor-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  font-size: 1rem;
+  color: inherit;
+}
+
+.personform-supervisor-list {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--background-color, #fff);
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.personform-supervisor-option {
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.personform-supervisor-option:hover,
+.personform-supervisor-option.selected {
+  background: var(--secondary-color);
 }

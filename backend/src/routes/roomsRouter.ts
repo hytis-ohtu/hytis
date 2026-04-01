@@ -51,11 +51,12 @@ router.get(
   ): Promise<Response<Room | { error: string }>> => {
     const room = await Room.findByPk(req.params.id, {
       attributes: ["id", "name", "area", "freeText", "capacity", "roomType"],
+      order: [[{ model: Contract, as: "contracts" }, "id", "ASC"]],
       include: [
         {
           model: Contract,
           as: "contracts",
-          attributes: ["startDate", "endDate"],
+          attributes: ["id", "startDate", "endDate"],
           include: [
             {
               model: Person,
@@ -76,6 +77,17 @@ router.get(
                   model: ResearchGroup,
                   as: "researchGroup",
                   attributes: ["id", "name"],
+                },
+                {
+                  model: ResearchGroup,
+                  as: "researchGroup",
+                  attributes: ["name"],
+                },
+                {
+                  model: Person,
+                  as: "supervisors",
+                  attributes: ["firstName", "lastName"],
+                  through: { attributes: [] },
                 },
               ],
             },

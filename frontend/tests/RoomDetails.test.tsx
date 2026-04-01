@@ -57,13 +57,13 @@ const mockRoom_A210: Room = {
   capacity: 15,
   contracts: [
     {
+      id: 1,
       startDate: "2023-01-01",
       endDate: "2025-12-31",
       person: {
         id: 1,
         firstName: "Matti",
         lastName: "Virtanen",
-        freeText: null,
         department: {
           id: 516,
           name: "H516 MATHSTAT",
@@ -74,8 +74,29 @@ const mockRoom_A210: Room = {
         },
         researchGroup: {
           id: 1,
-          name: "Algebrallisten rakenteiden tutkimusryhmä",
+          name: "Algoritmit ja optimointi",
         },
+        supervisors: [
+          {
+            id: 2,
+            firstName: "Liisa",
+            lastName: "Lahtinen",
+            department: {
+              id: 517,
+              name: "H517 CS",
+            },
+            title: {
+              name: "professori",
+            },
+            researchGroup: {
+              id: 2,
+              name: "Tietokannat",
+            },
+            supervisors: [],
+            freeText: null,
+          },
+        ],
+        freeText: "Tämä on testihenkilö",
       },
     },
   ],
@@ -337,8 +358,15 @@ describe("RoomDetails", () => {
     expect(screen.getByTestId("edit-person-button-1")).toBeInTheDocument();
     expect(screen.getByText(`Osasto: H516 MATHSTAT`)).toBeInTheDocument();
     expect(screen.getByText(`Titteli: asiantuntija`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Tutkimusryhmä: Algoritmit ja optimointi`),
+    ).toBeInTheDocument();
+    expect(screen.getByText(`Esihenkilöt: Liisa Lahtinen`)).toBeInTheDocument();
     expect(screen.getByText(`Alkupvm: 2023-01-01`)).toBeInTheDocument();
     expect(screen.getByText(`Loppupvm: 2025-12-31`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Lisätiedot: Tämä on testihenkilö`),
+    ).toBeInTheDocument();
     expect(screen.queryByText("this is wrong")).not.toBeInTheDocument();
   });
 
