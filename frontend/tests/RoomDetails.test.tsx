@@ -86,6 +86,7 @@ const mockRoom_A210: Room = {
               name: "H517 CS",
             },
             title: {
+              id: 2,
               name: "professori",
             },
             researchGroup: {
