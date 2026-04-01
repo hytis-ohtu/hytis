@@ -79,11 +79,6 @@ router.get(
                   attributes: ["id", "name"],
                 },
                 {
-                  model: ResearchGroup,
-                  as: "researchGroup",
-                  attributes: ["name"],
-                },
-                {
                   model: Person,
                   as: "supervisors",
                   attributes: ["id", "firstName", "lastName"],
