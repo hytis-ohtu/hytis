@@ -86,7 +86,7 @@ router.get(
                 {
                   model: Person,
                   as: "supervisors",
-                  attributes: ["firstName", "lastName"],
+                  attributes: ["id", "firstName", "lastName"],
                   through: { attributes: [] },
                 },
               ],

@@ -117,7 +117,11 @@ function RoomDetails({
                       lastName: personDetails.lastName,
                       department: String(personDetails?.department?.id),
                       jobtitle: String(personDetails?.title?.id),
-                      supervisors: "",
+                      supervisors: personDetails?.supervisors?.length
+                        ? personDetails.supervisors
+                            .map((s) => String(s.id))
+                            .join(",")
+                        : "",
                       startDate:
                         contracts?.find((c) => c.person.id === personDetails.id)
                           ?.startDate ?? "",

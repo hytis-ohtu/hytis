@@ -44,12 +44,16 @@ export async function editPerson(
   values: Record<string, string>,
   roomId: string | number,
 ): Promise<Person> {
+  const supervisorIds = values.supervisors
+    ? values.supervisors.split(",").map(Number)
+    : [];
+
   const response = await axios.put<Person>(`${BASE_URL}/api/people/${id}`, {
     firstName: values.firstName,
     lastName: values.lastName,
     departmentId: values.department ? Number(values.department) : undefined,
     titleId: values.jobtitle ? Number(values.jobtitle) : undefined,
-    supervisorIds: values.supervisors || undefined,
+    supervisorIds: supervisorIds,
     researchGroupId: values.researchgroup
       ? Number(values.researchgroup)
       : undefined,
