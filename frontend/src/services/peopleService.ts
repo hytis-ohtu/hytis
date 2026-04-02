@@ -38,3 +38,30 @@ export async function addPerson(
 
   return response.data;
 }
+
+export async function editPerson(
+  id: number,
+  values: Record<string, string>,
+  roomId: string | number,
+): Promise<Person> {
+  const supervisorIds = values.supervisors
+    ? values.supervisors.split(",").map(Number)
+    : [];
+
+  const response = await axios.put<Person>(`${BASE_URL}/api/people/${id}`, {
+    firstName: values.firstName,
+    lastName: values.lastName,
+    departmentId: values.department ? Number(values.department) : undefined,
+    titleId: values.jobtitle ? Number(values.jobtitle) : undefined,
+    supervisorIds: supervisorIds,
+    researchGroupId: values.researchgroup
+      ? Number(values.researchgroup)
+      : undefined,
+    freeText: values.misc || undefined,
+    startDate: values.startDate || null,
+    endDate: values.endDate || null,
+    roomId: Number(roomId),
+  });
+
+  return response.data;
+}

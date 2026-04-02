@@ -1,6 +1,10 @@
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { addPerson, findAllPeople } from "../src/services/peopleService";
+import {
+  addPerson,
+  editPerson,
+  findAllPeople,
+} from "../src/services/peopleService";
 import type { Person } from "../src/types";
 
 vi.mock("axios", () => ({
@@ -24,8 +28,10 @@ const mockPerson: Person = {
   id: 1,
   firstName: "Terppa",
   lastName: "Testaaja",
+  freeText: null,
   department: { id: 2, name: "CS" },
-  title: { name: "Devaaja" },
+  title: { id: 1, name: "Devaaja" },
+  researchGroup: { id: 1, name: "Test Research Group" },
 };
 
 describe("peopleService", () => {
@@ -212,6 +218,82 @@ describe("peopleService", () => {
         endDate: undefined,
         roomId: 1,
       });
+    });
+  });
+
+  describe("editPerson", () => {
+    it("puts the correct payload and returns the updated person", async () => {
+      mockedAxios.put = vi.fn().mockResolvedValue({ data: mockPerson });
+
+      const values = {
+        firstName: "Jane",
+        lastName: "Doe",
+        department: "2",
+        jobtitle: "3",
+        supervisors: "5,6",
+        researchgroup: "1",
+        misc: "Updated notes",
+        startDate: "2024-01-01",
+        endDate: "2025-01-01",
+      };
+
+      const result = await editPerson(42, values, "10");
+
+      expect(result).toEqual(mockPerson);
+      expect(mockedAxios.put).toHaveBeenCalledWith("/api/people/42", {
+        firstName: "Jane",
+        lastName: "Doe",
+        departmentId: 2,
+        titleId: 3,
+        supervisorIds: [5, 6],
+        researchGroupId: 1,
+        freeText: "Updated notes",
+        startDate: "2024-01-01",
+        endDate: "2025-01-01",
+        roomId: 10,
+      });
+    });
+
+    it("maps empty edit fields to null or undefined as expected", async () => {
+      mockedAxios.put = vi.fn().mockResolvedValue({ data: mockPerson });
+
+      const values = {
+        firstName: "Jane",
+        lastName: "Doe",
+        misc: "",
+        startDate: "",
+        endDate: "",
+      };
+
+      await editPerson(7, values, 3);
+
+      expect(mockedAxios.put).toHaveBeenCalledWith("/api/people/7", {
+        firstName: "Jane",
+        lastName: "Doe",
+        departmentId: undefined,
+        titleId: undefined,
+        supervisorIds: [],
+        researchGroupId: undefined,
+        freeText: undefined,
+        startDate: null,
+        endDate: null,
+        roomId: 3,
+      });
+    });
+
+    it("propagates errors from the API", async () => {
+      const error = new Error("Bad request");
+      mockedAxios.put = vi.fn().mockRejectedValue(error);
+
+      const values = {
+        firstName: "Jane",
+        lastName: "Doe",
+        misc: "",
+        startDate: "",
+        endDate: "",
+      };
+
+      await expect(editPerson(1, values, 1)).rejects.toThrow("Bad request");
     });
   });
 });

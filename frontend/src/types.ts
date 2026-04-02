@@ -4,6 +4,12 @@ export interface Department {
 }
 
 export interface Title {
+  id: number;
+  name: string;
+}
+
+export interface researchGroup {
+  id: number;
   name: string;
 }
 

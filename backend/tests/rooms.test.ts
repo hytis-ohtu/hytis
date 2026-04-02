@@ -8,7 +8,7 @@ import {
   dropAllTables,
   seedData,
 } from "../src/seed";
-import { mockContracts, mockRoom } from "./mockData";
+import { mockContracts, mockPeople, mockRoom } from "./mockData";
 import { validateContract } from "./testHelpers";
 
 const api = supertest(app);
@@ -54,11 +54,20 @@ test("single room is returned", async () => {
   expect(returnedRoom.id).toBe(mockRoom.id);
   expect(returnedRoom.name).toBe(mockRoom.name);
   expect(parseFloat(returnedRoom.area)).toBe(mockRoom.area);
+  expect(returnedRoom.freeText).toBe(mockRoom.freeText);
+  expect(returnedRoom.roomType).toBe(mockRoom.roomType);
   expect(returnedRoom.contracts).toHaveLength(mockContracts.length);
 
   returnedRoom.contracts.forEach((contract: Contract, index: number) =>
     validateContract(contract, mockContracts[index]),
   );
+
+  const firstPerson = returnedRoom.contracts[0].person;
+  expect(firstPerson.id).toBe(mockPeople[0].id);
+  expect(firstPerson.freeText).toBe(mockPeople[0].freeText);
+  expect(firstPerson.department.id).toBe(mockPeople[0].departmentId);
+  expect(firstPerson.title.id).toBe(mockPeople[0].titleId);
+  expect(firstPerson.researchGroup.id).toBe(mockPeople[0].researchGroupId);
 
   expect(returnedRoom.department.id).toBe(mockRoom.departmentId);
 });

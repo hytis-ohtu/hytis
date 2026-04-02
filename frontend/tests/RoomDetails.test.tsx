@@ -1,39 +1,54 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import RoomDetails from "../src/components/RoomDetails.tsx";
-import { addPerson } from "../src/services/peopleService";
+import { addPerson, editPerson } from "../src/services/peopleService";
 import type { Room } from "../src/types.ts";
 
 vi.mock("../src/services/peopleService", () => ({
   addPerson: vi.fn(),
+  editPerson: vi.fn(),
 }));
 
 vi.mock("../src/components/PersonModal", () => ({
   default: ({
+    onClose,
     onSubmit,
+    initial,
   }: {
+    onClose: () => void;
     onSubmit?: (values: Record<string, string>) => void;
+    initial?: Record<string, string>;
   }) => (
-    <button
-      data-testid="mock-personmodal-submit"
-      onClick={() =>
-        onSubmit?.({
-          firstName: "Test",
-          lastName: "User",
-          startDate: "2026-01-01",
-          endDate: "2026-12-31",
-        })
-      }
-    >
-      Mock Submit
-    </button>
+    <div>
+      <button data-testid="mock-personmodal-close" onClick={onClose}>
+        Mock Close
+      </button>
+      <button
+        data-testid="mock-personmodal-submit"
+        onClick={() =>
+          onSubmit?.({
+            firstName: initial?.firstName ?? "Test",
+            lastName: initial?.lastName ?? "User",
+            startDate: initial?.startDate ?? "2026-01-01",
+            endDate: initial?.endDate ?? "2026-12-31",
+          })
+        }
+      >
+        Mock Submit
+      </button>
+      {initial && Object.keys(initial).length > 0 && (
+        <div data-testid="mock-personmodal-initial">
+          {JSON.stringify(initial)}
+        </div>
+      )}
+    </div>
   ),
 }));
 
 const mockHandleClose = vi.fn();
-const mockOnPersonAdded = vi.fn();
+const mockOnPersonSaved = vi.fn();
 
 const mockRoom_A210: Room = {
   id: 1,
@@ -54,6 +69,7 @@ const mockRoom_A210: Room = {
           name: "H516 MATHSTAT",
         },
         title: {
+          id: 1,
           name: "asiantuntija",
         },
         researchGroup: {
@@ -70,6 +86,7 @@ const mockRoom_A210: Room = {
               name: "H517 CS",
             },
             title: {
+              id: 2,
               name: "professori",
             },
             researchGroup: {
@@ -107,15 +124,19 @@ const mockRoom_A219: Room = {
 };
 
 describe("RoomDetails", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("returns early from handleAddPerson when room id is undefined", async () => {
     const user = userEvent.setup();
-    const onPersonAdded = vi.fn();
+    const onPersonSaved = vi.fn();
 
     render(
       <RoomDetails
         room={null}
         handleClose={mockHandleClose}
-        onPersonAdded={onPersonAdded}
+        onPersonSaved={onPersonSaved}
       />,
     );
 
@@ -123,7 +144,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(addPerson).not.toHaveBeenCalled();
-    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(onPersonSaved).not.toHaveBeenCalled();
   });
 
   it("renders loading skeleton when data is being fetched", () => {
@@ -131,7 +152,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={null}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(
@@ -141,7 +162,7 @@ describe("RoomDetails", () => {
 
   it("handles addPerson error state and logs the failure", async () => {
     const user = userEvent.setup();
-    const onPersonAdded = vi.fn();
+    const onPersonSaved = vi.fn();
     const addPersonError = new Error("network failed");
     const consoleErrorSpy = vi
       .spyOn(console, "error")
@@ -153,7 +174,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={onPersonAdded}
+        onPersonSaved={onPersonSaved}
       />,
     );
 
@@ -161,7 +182,7 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("mock-personmodal-submit"));
 
     expect(addPerson).toHaveBeenCalled();
-    expect(onPersonAdded).not.toHaveBeenCalled();
+    expect(onPersonSaved).not.toHaveBeenCalled();
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to add person:",
       addPersonError,
@@ -170,12 +191,135 @@ describe("RoomDetails", () => {
     consoleErrorSpy.mockRestore();
   });
 
+  it("opens edit mode with person initial values and saves edits", async () => {
+    const user = userEvent.setup();
+    vi.mocked(editPerson).mockResolvedValueOnce(
+      mockRoom_A210.contracts[0].person,
+    );
+
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("edit-person-button-1"));
+
+    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
+      '"firstName":"Matti"',
+    );
+    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
+      '"lastName":"Virtanen"',
+    );
+
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(editPerson).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({
+        firstName: "Matti",
+        lastName: "Virtanen",
+        startDate: "2023-01-01",
+        endDate: "2025-12-31",
+      }),
+      1,
+    );
+    expect(mockOnPersonSaved).toHaveBeenCalled();
+  });
+
+  it("resets edit state when the modal is closed", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("edit-person-button-1"));
+    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
+      '"firstName":"Matti"',
+    );
+
+    await user.click(screen.getByTestId("mock-personmodal-close"));
+    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
+
+    expect(
+      screen.queryByTestId("mock-personmodal-initial"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("handles editPerson error state and logs the failure", async () => {
+    const user = userEvent.setup();
+    const editPersonError = new Error("update failed");
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+
+    vi.mocked(editPerson).mockRejectedValueOnce(editPersonError);
+
+    render(
+      <RoomDetails
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("edit-person-button-1"));
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(editPerson).toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Failed to edit person:",
+      editPersonError,
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("returns early from handleEditPerson when person id is undefined", async () => {
+    const user = userEvent.setup();
+    const roomWithPersonMissingId = {
+      ...mockRoom_A210,
+      contracts: [
+        {
+          ...mockRoom_A210.contracts[0],
+          person: {
+            ...mockRoom_A210.contracts[0].person,
+            id: undefined,
+          },
+        },
+      ],
+    };
+
+    render(
+      <RoomDetails
+        // @ts-expect-error - Intentionally setting id to undefined to test the guard clause
+        room={roomWithPersonMissingId}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("edit-person-button-undefined"));
+    await user.click(screen.getByTestId("mock-personmodal-submit"));
+
+    expect(editPerson).not.toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
+  });
+
   it("renders room details panel when room data is provided", () => {
     render(
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -200,7 +344,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 
@@ -212,6 +356,7 @@ describe("RoomDetails", () => {
 
     await user.click(summary);
 
+    expect(screen.getByTestId("edit-person-button-1")).toBeInTheDocument();
     expect(screen.getByText(`Osasto: H516 MATHSTAT`)).toBeInTheDocument();
     expect(screen.getByText(`Titteli: asiantuntija`)).toBeInTheDocument();
     expect(
@@ -231,7 +376,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A219}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -243,7 +388,7 @@ describe("RoomDetails", () => {
       <RoomDetails
         room={mockRoom_A210}
         handleClose={mockHandleClose}
-        onPersonAdded={mockOnPersonAdded}
+        onPersonSaved={mockOnPersonSaved}
       />,
     );
 

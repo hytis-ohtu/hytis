@@ -19,12 +19,18 @@ export const rooms = [
           id: 1,
           firstName: "Matti",
           lastName: "Virtanen",
+          freeText: null,
           department: {
             id: 1,
             name: "H516 MATHSTAT",
           },
           title: {
+            id: 1,
             name: "asiantuntija",
+          },
+          researchGroup: {
+            id: 1,
+            name: "Algebrallisten rakenteiden tutkimusryhmä",
           },
         },
       },
@@ -36,12 +42,18 @@ export const rooms = [
           id: 2,
           firstName: "Laura",
           lastName: "Korhonen",
+          freeText: null,
           department: {
             id: 2,
             name: "H523 CS",
           },
           title: {
+            id: 2,
             name: "harjoittelija",
+          },
+          researchGroup: {
+            id: 2,
+            name: "Ohjelmistotekniikan tutkimusryhmä",
           },
         },
       },
@@ -53,12 +65,18 @@ export const rooms = [
           id: 3,
           firstName: "Jari",
           lastName: "Nieminen",
+          freeText: null,
           department: {
             id: 1,
             name: "H516 MATHSTAT",
           },
           title: {
+            id: 3,
             name: "lehtori",
+          },
+          researchGroup: {
+            id: 1,
+            name: "Algebrallisten rakenteiden tutkimusryhmä",
           },
         },
       },
@@ -84,12 +102,18 @@ export const rooms = [
           id: 4,
           firstName: "Sanna",
           lastName: "Mäkinen",
+          freeText: null,
           department: {
             id: 2,
             name: "H523 CS",
           },
           title: {
+            id: 4,
             name: "professori",
+          },
+          researchGroup: {
+            id: 2,
+            name: "Ohjelmistotekniikan tutkimusryhmä",
           },
         },
       },
@@ -101,12 +125,18 @@ export const rooms = [
           id: 5,
           firstName: "Mikko",
           lastName: "Laine",
+          freeText: null,
           department: {
             id: 1,
             name: "H516 MATHSTAT",
           },
           title: {
+            id: 5,
             name: "yliopistotutkija",
+          },
+          researchGroup: {
+            id: 1,
+            name: "Algebrallisten rakenteiden tutkimusryhmä",
           },
         },
       },
@@ -132,12 +162,18 @@ export const rooms = [
           id: 6,
           firstName: "Päivi",
           lastName: "Koskinen",
+          freeText: null,
           department: {
             id: 2,
             name: "H523 CS",
           },
           title: {
+            id: 6,
             name: "asiantuntija",
+          },
+          researchGroup: {
+            id: 2,
+            name: "Ohjelmistotekniikan tutkimusryhmä",
           },
         },
       },
@@ -149,12 +185,18 @@ export const rooms = [
           id: 7,
           firstName: "Robert",
           lastName: "Miller",
+          freeText: null,
           department: {
             id: 1,
             name: "H516 MATHSTAT",
           },
           title: {
+            id: 7,
             name: "harjoittelija",
+          },
+          researchGroup: {
+            id: 1,
+            name: "Algebrallisten rakenteiden tutkimusryhmä",
           },
         },
       },

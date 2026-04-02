@@ -61,27 +61,27 @@ router.get(
             {
               model: Person,
               as: "person",
-              attributes: ["firstName", "lastName", "freeText"],
+              attributes: ["id", "firstName", "lastName", "freeText"],
               include: [
                 {
                   model: Department,
                   as: "department",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                 },
                 {
                   model: Title,
                   as: "title",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                 },
                 {
                   model: ResearchGroup,
                   as: "researchGroup",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                 },
                 {
                   model: Person,
                   as: "supervisors",
-                  attributes: ["firstName", "lastName"],
+                  attributes: ["id", "firstName", "lastName"],
                   through: { attributes: [] },
                 },
               ],
