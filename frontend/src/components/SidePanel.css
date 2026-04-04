@@ -75,7 +75,7 @@
   border: 3px solid var(--secondary-color);
   border-radius: var(--radius);
   background: var(--background-color);
-  color: var(--primary-color);
+  color: var(--text-color-black);
 }
 
 .person-details-info details {

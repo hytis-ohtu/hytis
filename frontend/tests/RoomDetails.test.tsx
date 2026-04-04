@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import RoomDetails from "../src/components/RoomDetails.tsx";
+import SidePanel from "../src/components/SidePanel.tsx";
 import { addPerson } from "../src/services/peopleService";
 import type { Room } from "../src/types.ts";
 
@@ -111,7 +111,7 @@ describe("RoomDetails", () => {
     const onPersonAdded = vi.fn();
 
     render(
-      <RoomDetails
+      <SidePanel
         room={null}
         handleClose={mockHandleClose}
         onPersonAdded={onPersonAdded}
@@ -127,7 +127,7 @@ describe("RoomDetails", () => {
 
   it("renders loading skeleton when data is being fetched", () => {
     const { container } = render(
-      <RoomDetails
+      <SidePanel
         room={null}
         handleClose={mockHandleClose}
         onPersonAdded={mockOnPersonAdded}
@@ -149,7 +149,7 @@ describe("RoomDetails", () => {
     vi.mocked(addPerson).mockRejectedValueOnce(addPersonError);
 
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonAdded={onPersonAdded}
@@ -171,7 +171,7 @@ describe("RoomDetails", () => {
 
   it("renders room details panel when room data is provided", () => {
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonAdded={mockOnPersonAdded}
@@ -196,7 +196,7 @@ describe("RoomDetails", () => {
   it("renders valid mock person details on sidepanel", async () => {
     const user = userEvent.setup();
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonAdded={mockOnPersonAdded}
@@ -227,7 +227,7 @@ describe("RoomDetails", () => {
 
   it("renders room details panel when room data is provided", () => {
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A219}
         handleClose={mockHandleClose}
         onPersonAdded={mockOnPersonAdded}
@@ -239,7 +239,7 @@ describe("RoomDetails", () => {
   it("room details panel can be closed", async () => {
     const user = userEvent.setup();
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonAdded={mockOnPersonAdded}
