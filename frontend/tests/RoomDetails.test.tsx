@@ -199,7 +199,7 @@ describe("RoomDetails", () => {
     );
 
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
