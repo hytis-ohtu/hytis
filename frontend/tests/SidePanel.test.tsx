@@ -2,9 +2,8 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import RoomDetails from "../src/components/RoomDetails.tsx";
 import SidePanel from "../src/components/SidePanel.tsx";
-import { addPerson, editPerson } from "../src/services/peopleService";
+import { addPerson, editPerson } from "../src/services/peopleService.ts";
 import type { Room } from "../src/types.ts";
 
 vi.mock("../src/services/peopleService", () => ({
@@ -234,7 +233,7 @@ describe("RoomDetails", () => {
     const user = userEvent.setup();
 
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
@@ -264,7 +263,7 @@ describe("RoomDetails", () => {
     vi.mocked(editPerson).mockRejectedValueOnce(editPersonError);
 
     render(
-      <RoomDetails
+      <SidePanel
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
@@ -300,7 +299,7 @@ describe("RoomDetails", () => {
     };
 
     render(
-      <RoomDetails
+      <SidePanel
         // @ts-expect-error - Intentionally setting id to undefined to test the guard clause
         room={roomWithPersonMissingId}
         handleClose={mockHandleClose}
