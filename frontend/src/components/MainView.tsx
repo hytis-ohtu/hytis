@@ -8,7 +8,7 @@ import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import Legend from "./Legend";
 import "./MainView.css";
-import RoomDetails from "./RoomDetails";
+import SidePanel from "./SidePanel";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
@@ -189,7 +189,7 @@ function MainView() {
         <Legend mode={useAvailability ? "availability" : "department"} />
         <AnimatePresence>
           {isRoomDetailsOpen && (
-            <RoomDetails
+            <SidePanel
               room={room}
               handleClose={() => {
                 setIsRoomDetailsOpen(false);
