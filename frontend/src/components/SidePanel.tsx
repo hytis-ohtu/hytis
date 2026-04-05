@@ -2,8 +2,8 @@ import { X } from "lucide-react";
 import { motion } from "motion/react";
 import "react-loading-skeleton/dist/skeleton.css";
 import type { Room } from "../types";
-import PeopleSidePanel from "./PeopleSidePanel";
-import RoomSidePanel from "./RoomSidePanel";
+import RoomOccupants from "./RoomOccupants";
+import RoomInfo from "./RoomInfo";
 import "./SidePanel.css";
 
 function SidePanel({
@@ -32,9 +32,9 @@ function SidePanel({
         />
       </header>
 
-      <RoomSidePanel room={roomProp} />
+      <RoomInfo room={roomProp} />
 
-      <PeopleSidePanel room={roomProp} onPersonSaved={onPersonSaved} />
+      <RoomOccupants room={roomProp} onPersonSaved={onPersonSaved} />
     </motion.div>
   );
 }

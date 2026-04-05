@@ -6,7 +6,7 @@ import type { FieldProps, Person, Room } from "../types";
 import PersonModal from "./PersonModal";
 import "./SidePanel.css";
 
-function PeopleSidePanel({
+function RoomOccupants({
   room: roomProp,
   onPersonSaved,
 }: {
@@ -146,4 +146,4 @@ function PeopleSidePanel({
   );
 }
 
-export default PeopleSidePanel;
+export default RoomOccupants;

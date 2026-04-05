@@ -2,7 +2,7 @@ import Skeleton from "react-loading-skeleton";
 import type { Room } from "../types";
 import "./SidePanel.css";
 
-function RoomSidePanel({ room: roomProp }: { room: Room | null }) {
+function RoomInfo({ room: roomProp }: { room: Room | null }) {
   const {
     name = <Skeleton />,
     area = <Skeleton />,
@@ -31,4 +31,4 @@ function RoomSidePanel({ room: roomProp }: { room: Room | null }) {
   );
 }
 
-export default RoomSidePanel;
+export default RoomInfo;
