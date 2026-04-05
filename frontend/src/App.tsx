@@ -3,7 +3,7 @@ import "./App.css";
 import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
 import TopBar from "./components/TopBar";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
   return (
