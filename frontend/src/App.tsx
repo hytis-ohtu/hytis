@@ -4,11 +4,15 @@ import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
+import { RoomSelectionProvider } from "./contexts/RoomSelectionContext";
+import { findRoomById } from "./services/roomsService";
 
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <RoomSelectionProvider fetchRoomById={findRoomById}>
+        <AppContent />
+      </RoomSelectionProvider>
     </AuthProvider>
   );
 }
