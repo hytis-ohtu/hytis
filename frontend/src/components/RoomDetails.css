@@ -79,6 +79,7 @@
 }
 
 .person-details-info details {
+  width: fit-content;
   margin-top: var(--gap);
 }
 
@@ -109,5 +110,20 @@
   border-radius: var(--radius);
   background-color: var(--primary-color);
   color: var(--background-color);
+  cursor: pointer;
+}
+
+.person-name {
+  cursor: pointer;
+}
+
+.cursor-gap {
+  cursor: default;
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+}
+
+.edit-person-button {
   cursor: pointer;
 }

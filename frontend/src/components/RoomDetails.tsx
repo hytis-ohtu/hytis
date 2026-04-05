@@ -1,22 +1,23 @@
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { addPerson } from "../services/peopleService";
-import type { Room } from "../types";
-import AddPersonModal from "./PersonModal";
+import { addPerson, editPerson } from "../services/peopleService";
+import type { FieldProps, Person, Room } from "../types";
+import PersonModal from "./PersonModal";
 import "./RoomDetails.css";
 
 function RoomDetails({
   room: roomProp,
   handleClose,
-  onPersonAdded,
+  onPersonSaved,
 }: {
   room: Room | null;
   handleClose: () => void;
-  onPersonAdded: () => void;
+  onPersonSaved: () => void;
 }) {
+  const [personDetails, setPersonDetails] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const {
     id: roomId,
@@ -36,11 +37,31 @@ function RoomDetails({
 
     try {
       await addPerson(values, roomId);
-      onPersonAdded();
+      onPersonSaved();
     } catch (error) {
       console.error("Failed to add person:", error);
     }
   };
+
+  const handleEditPerson = async (values: Record<string, string>) => {
+    if (roomId === undefined || personDetails?.id === undefined) {
+      return;
+    }
+
+    try {
+      await editPerson(personDetails.id, values, roomId);
+      onPersonSaved();
+    } catch (error) {
+      console.error("Failed to edit person:", error);
+    }
+  };
+
+  const Field = ({ label, value }: FieldProps) =>
+    value ? (
+      <li>
+        {label}: {value}
+      </li>
+    ) : null;
 
   return (
     <motion.div
@@ -83,9 +104,35 @@ function RoomDetails({
             Lisää henkilö
           </button>
           {addPersonOpen && (
-            <AddPersonModal
-              onClose={() => setAddPersonOpen(false)}
-              onSubmit={handleAddPerson}
+            <PersonModal
+              onClose={() => {
+                setAddPersonOpen(false);
+                setPersonDetails(null);
+              }}
+              onSubmit={personDetails ? handleEditPerson : handleAddPerson}
+              initial={
+                personDetails
+                  ? {
+                      firstName: personDetails.firstName,
+                      lastName: personDetails.lastName,
+                      department: String(personDetails?.department?.id),
+                      jobtitle: String(personDetails?.title?.id),
+                      supervisors: personDetails?.supervisors?.length
+                        ? personDetails.supervisors
+                            .map((s) => String(s.id))
+                            .join(",")
+                        : "",
+                      startDate:
+                        contracts?.find((c) => c.person.id === personDetails.id)
+                          ?.startDate ?? "",
+                      endDate:
+                        contracts?.find((c) => c.person.id === personDetails.id)
+                          ?.endDate ?? "",
+                      researchgroup: String(personDetails?.researchGroup?.id),
+                      misc: personDetails.freeText ?? "",
+                    }
+                  : {}
+              }
             />
           )}
         </div>
@@ -95,15 +142,48 @@ function RoomDetails({
           <p>Ei sopimuksia.</p>
         ) : (
           contracts.map((contract) => (
-            <details>
+            <details key={contract.id}>
               <summary>
-                {contract.person.firstName} {contract.person.lastName}
+                <span className="person-name">
+                  {contract.person.firstName} {contract.person.lastName}
+                </span>
+                <span
+                  onClick={(e) => e.preventDefault()}
+                  className="cursor-gap"
+                ></span>
+                <Pencil
+                  data-testid={`edit-person-button-${contract.person.id}`}
+                  size={16}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setPersonDetails(contract.person);
+                    setAddPersonOpen(true);
+                  }}
+                  className="edit-person-button"
+                />
               </summary>
               <ul>
-                <li>Osasto: {contract.person.department.name}</li>
-                <li>Titteli: {contract.person.title.name}</li>
-                <li>Alkupvm: {contract.startDate}</li>
-                <li>Loppupvm: {contract.endDate}</li>
+                <Field
+                  label="Osasto"
+                  value={contract.person.department?.name}
+                />
+                <Field
+                  label="Tutkimusryhmä"
+                  value={contract.person.researchGroup?.name}
+                />
+                <Field label="Titteli" value={contract.person.title?.name} />
+                {contract.person.supervisors &&
+                  contract.person.supervisors.length > 0 && (
+                    <li>
+                      Esihenkilöt:{" "}
+                      {contract.person.supervisors
+                        .map((s) => s.firstName + " " + s.lastName)
+                        .join(", ")}
+                    </li>
+                  )}
+                <Field label="Alkupvm" value={contract.startDate} />
+                <Field label="Loppupvm" value={contract.endDate} />
+                <Field label="Lisätiedot" value={contract.person.freeText} />
               </ul>
             </details>
           ))

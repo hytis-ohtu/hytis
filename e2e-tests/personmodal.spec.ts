@@ -12,6 +12,11 @@ async function openAddPersonModal(page: Page) {
 async function fillRequiredFields(page: Page) {
   await page.getByLabel("Etunimi:").fill("Matti");
   await page.getByLabel("Sukunimi:").fill("Meikäläinen");
+  await page.getByLabel("Osasto:").selectOption({ index: 1 });
+  await page.getByLabel("Työnimike:").selectOption({ index: 1 });
+  await page.getByLabel("Esihenkilö(t):").fill("Joku");
+  await page.getByLabel("Sopimuksen alku:").fill("2025-01-01");
+  await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
 }
 
 test("person modal can be opened", async ({ page }) => {

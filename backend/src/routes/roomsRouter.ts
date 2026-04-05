@@ -1,5 +1,12 @@
 import { Request, Response, Router } from "express";
-import { Contract, Department, Person, Room, Title } from "../models";
+import {
+  Contract,
+  Department,
+  Person,
+  ResearchGroup,
+  Room,
+  Title,
+} from "../models";
 
 const router = Router();
 
@@ -44,26 +51,38 @@ router.get(
   ): Promise<Response<Room | { error: string }>> => {
     const room = await Room.findByPk(req.params.id, {
       attributes: ["id", "name", "area", "freeText", "capacity", "roomType"],
+      order: [[{ model: Contract, as: "contracts" }, "id", "ASC"]],
       include: [
         {
           model: Contract,
           as: "contracts",
-          attributes: ["startDate", "endDate"],
+          attributes: ["id", "startDate", "endDate"],
           include: [
             {
               model: Person,
               as: "person",
-              attributes: ["firstName", "lastName"],
+              attributes: ["id", "firstName", "lastName", "freeText"],
               include: [
                 {
                   model: Department,
                   as: "department",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                 },
                 {
                   model: Title,
                   as: "title",
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
+                },
+                {
+                  model: ResearchGroup,
+                  as: "researchGroup",
+                  attributes: ["id", "name"],
+                },
+                {
+                  model: Person,
+                  as: "supervisors",
+                  attributes: ["id", "firstName", "lastName"],
+                  through: { attributes: [] },
                 },
               ],
             },
