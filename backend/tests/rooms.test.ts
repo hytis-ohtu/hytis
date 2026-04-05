@@ -76,3 +76,69 @@ test("returns 404 for non-existing room", async () => {
   const response = await api.get("/api/rooms/9999").expect(404);
   expect(response.body.error).toBe("Room not found.");
 });
+
+test("a room can be updated", async () => {
+  const updatedRoomData = {
+    capacity: 10,
+    freeText: "Päivitetty vapaa teksti",
+    roomType: "Päivitetty huonetyyppi",
+  };
+
+  const response = await api
+    .put("/api/rooms/1")
+    .send(updatedRoomData)
+    .expect(200);
+
+  const updatedRoom = response.body;
+  expect(updatedRoom.capacity).toBe(updatedRoomData.capacity);
+  expect(updatedRoom.freeText).toBe(updatedRoomData.freeText);
+  expect(updatedRoom.roomType).toBe(updatedRoomData.roomType);
+});
+
+test("returns 404 when updating non-existing room", async () => {
+  const updatedRoomData = {
+    capacity: 10,
+    freeText: "Päivitetty vapaa teksti",
+    roomType: "Päivitetty huonetyyppi",
+  };
+
+  const response = await api
+    .put("/api/rooms/9999")
+    .send(updatedRoomData)
+    .expect(404);
+
+  expect(response.body.error).toBe("Room not found");
+});
+
+test("returns 400 when updating room with invalid data", async () => {
+  const invalidRoomData = {
+    capacity: -5, // Invalid capacity
+    freeText: "Päivitetty vapaa teksti",
+    roomType: "Päivitetty huonetyyppi",
+  };
+
+  const response = await api
+    .put("/api/rooms/1")
+    .send(invalidRoomData)
+    .expect(400);
+
+  expect(response.body.error).toBe("Capacity must be non-negative");
+});
+
+test("returns 500 when updating fails due to server error", async () => {
+  const updatedRoomData = {
+    capacity: 10,
+    freeText: "Päivitetty vapaa teksti",
+    roomType: "Päivitetty huonetyyppi",
+  };
+
+  // Simulate server error by disconnecting from the database
+  await dropAllTables();
+
+  const response = await api
+    .put("/api/rooms/1")
+    .send(updatedRoomData)
+    .expect(500);
+
+  expect(response.body.error).toBe("Failed to update room");
+});
