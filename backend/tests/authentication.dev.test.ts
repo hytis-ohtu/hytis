@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import session from "express-session";
 import request from "supertest";
 import "../src/types/express";
+import { FRONTEND_URL, MOCK_USER } from "./testHelpers";
 
 // Mock the environment config to disable HY login and provide a frontend URL
 jest.mock("../src/config/environmentConfig", () => ({
@@ -11,15 +12,8 @@ jest.mock("../src/config/environmentConfig", () => ({
 
 // Mock passport's authenticate function to simulate OIDC authentication behavior
 jest.mock("../src/middleware/mockAuth", () => ({
-  mockAuthMiddleware: (req: Request, _res: Response, next: NextFunction) => {
-    req.user = {
-      id: "1",
-      name: "Testi Käyttäjä",
-      email: "testi@testi.fi",
-      uid: "testi-käyttäjä",
-    };
-    next();
-  },
+  mockAuthMiddleware: (_req: Request, _res: Response, next: NextFunction) =>
+    next(),
 }));
 
 import authRouter from "../src/routes/authRouter";
@@ -33,13 +27,7 @@ function buildApp(isAuthenticated = false): Express {
   );
   app.use((req: Request, _res: Response, next: NextFunction) => {
     req.isAuthenticated = (() => isAuthenticated) as typeof req.isAuthenticated;
-    if (isAuthenticated)
-      req.user = {
-        id: "1",
-        name: "Testi Käyttäjä",
-        email: "testi@testi.fi",
-        uid: "testi-käyttäjä",
-      };
+    if (isAuthenticated) req.user = MOCK_USER;
     req.logout = ((cb: (err?: Error) => void) => cb()) as typeof req.logout;
     req.session.destroy = ((cb: (err?: Error) => void) =>
       cb()) as typeof req.session.destroy;
@@ -59,7 +47,7 @@ describe("GET /api/user", () => {
   it("returns user when logged in", async () => {
     const res = await request(buildApp(true)).get("/api/user");
     expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({ id: "1" });
+    expect(res.body).toMatchObject({ id: MOCK_USER.id });
   });
 });
 
@@ -67,7 +55,7 @@ describe("GET /api/login", () => {
   it("redirects to frontend after login", async () => {
     const res = await request(buildApp()).get("/api/login");
     expect(res.status).toBe(302);
-    expect(res.headers.location).toBe("http://localhost:5173");
+    expect(res.headers.location).toBe(FRONTEND_URL);
   });
 });
 

@@ -32,3 +32,12 @@ export const validateContract = (
     },
   });
 };
+
+export const MOCK_USER = {
+  id: "1",
+  name: "Testi Käyttäjä",
+  email: "testi@testi.fi",
+  uid: "testi-käyttäjä",
+};
+
+export const FRONTEND_URL = "http://localhost:5173";

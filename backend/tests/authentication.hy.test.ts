@@ -2,6 +2,10 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import session from "express-session";
 import request from "supertest";
 import "../src/types/express";
+import { FRONTEND_URL, MOCK_USER } from "./testHelpers";
+
+const HY_LOGIN_URL = "https://login.helsinki.fi/test-login";
+const HY_LOGOUT_URL = "https://login.helsinki.fi/test-logout";
 
 // Mock the environment config to enable HY login and provide a frontend URL
 jest.mock("../src/config/environmentConfig", () => ({
@@ -46,13 +50,7 @@ function buildApp(
   );
   app.use((req: Request, _res: Response, next: NextFunction) => {
     req.isAuthenticated = (() => isAuthenticated) as typeof req.isAuthenticated;
-    if (isAuthenticated)
-      req.user = {
-        id: "1",
-        name: "Testi Käyttäjä",
-        email: "testi@testi.fi",
-        uid: "testi-käyttäjä",
-      };
+    if (isAuthenticated) req.user = MOCK_USER;
 
     req.logout = ((cb: (err?: Error) => void) =>
       logoutBehavior === "logout-error"
@@ -74,7 +72,7 @@ describe("GET /api/login", () => {
   it("redirects to HY login page", async () => {
     const res = await request(buildApp()).get("/api/login");
     expect(res.status).toBe(302);
-    expect(res.headers.location).toBe("https://login.helsinki.fi/test-login");
+    expect(res.headers.location).toBe(HY_LOGIN_URL);
   });
 });
 
@@ -82,7 +80,7 @@ describe("GET /api/login/callback", () => {
   it("redirects to frontend after successful OIDC callback", async () => {
     const res = await request(buildApp()).get("/api/login/callback");
     expect(res.status).toBe(302);
-    expect(res.headers.location).toBe("http://localhost:5173");
+    expect(res.headers.location).toBe(FRONTEND_URL);
   });
 });
 
@@ -91,7 +89,7 @@ describe("POST /api/logout", () => {
     const res = await request(buildApp(true)).post("/api/logout");
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      logoutUrl: "https://login.helsinki.fi/test-logout",
+      logoutUrl: HY_LOGOUT_URL,
     });
   });
 
