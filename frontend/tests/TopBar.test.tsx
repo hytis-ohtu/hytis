@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import TopBar from "../src/components/TopBar.tsx";
 
-vi.mock("../src/contexts/AuthContext", () => ({
+vi.mock("../src/hooks/useAuth", () => ({
   useAuth: () => ({
     user: { name: "Test User" },
     logout: vi.fn(),

@@ -1,6 +1,6 @@
 import { LogOut, Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import SettingsModal from "./SettingsModal";
 import "./TopBarMenu.css";
 
