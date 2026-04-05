@@ -21,15 +21,12 @@ const toPersonInput = (object: unknown): PersonInput =>
 export default toPersonInput;
 
 const RoomSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  area: z.number().positive("Area must be positive").nullable().optional(),
   capacity: z
     .number()
     .int()
     .nonnegative("Capacity must be non-negative")
     .nullable()
     .optional(),
-  departmentId: z.number().int().nullable().optional(),
   freeText: z.string().nullable().optional(),
   roomType: z.string().nullable().optional(),
 });

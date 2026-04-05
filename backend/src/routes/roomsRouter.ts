@@ -133,8 +133,7 @@ router.put(
       return res.status(500).json({ error: "Failed to parse room input" });
     }
 
-    const { name, area, capacity, departmentId, freeText, roomType } =
-      roomInput;
+    const { capacity, freeText, roomType } = roomInput;
 
     try {
       const room = await Room.findByPk(Number(roomId));
@@ -144,10 +143,7 @@ router.put(
       }
 
       await room.update({
-        name,
-        area,
         capacity,
-        departmentId,
         freeText,
         roomType,
       });
