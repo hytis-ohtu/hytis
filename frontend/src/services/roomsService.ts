@@ -15,3 +15,10 @@ export async function findRoomById(id: string): Promise<Room> {
 
   return await response.data;
 }
+
+export async function editRoom(
+  id: number,
+  values: Record<string, string>,
+): Promise<void> {
+  await axios.put(`${BASE_URL}/api/rooms/${id}`, values);
+}
