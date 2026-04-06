@@ -57,7 +57,6 @@ function RoomInfo({
             initial={{
               area: String(roomProp.area),
               capacity: String(roomProp.capacity),
-              roomType: String(roomProp.roomType?.id),
               department: String(roomProp.department?.id ?? ""),
               freeText: roomProp.freeText ?? "",
             }}
