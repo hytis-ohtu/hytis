@@ -1,0 +1,76 @@
+.roommodal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: var(--z-index-topbar);
+  display: grid;
+  place-items: center;
+}
+
+.roommodal-content {
+  position: relative;
+  background: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--radius);
+  padding: var(--gap);
+  min-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.roommodal-title {
+  color: var(--text-color-black);
+  font-size: 24px;
+  margin-bottom: var(--gap);
+  margin-right: 20px;
+  text-align: center;
+}
+
+.roommodal-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.roommodal-close-button {
+  padding: 4px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-color-black);
+  cursor: pointer;
+}
+
+.roommodal-close-button:hover {
+  color: var(--text-color-white);
+}
+
+.roommodal-save-button {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  width: auto;
+  min-width: 120px;
+  justify-content: center;
+  padding: 8px 12px;
+  border: none;
+  background: var(--primary-color);
+  color: var(--text-color-white);
+  text-align: center;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.roommodal-save-button:hover {
+  background: var(--muted-color);
+  color: var(--primary-color);
+}
+
+.roommodal-save-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
