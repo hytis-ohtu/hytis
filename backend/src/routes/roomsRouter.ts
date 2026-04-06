@@ -109,7 +109,7 @@ router.get(
 
 /**
  * PUT /api/rooms/:id
- * Updates a room with the provided name, area, freeText, capacity and roomType
+ * Updates a room with the capacity, freeText and roomType provided in the request body
  * Returns 404 if room not found
  */
 
