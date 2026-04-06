@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../src/app";
 import { rooms } from "../src/data/rooms";
+import { disconnectDatabase } from "../src/db";
 import type { Contract } from "../src/models";
 import {
   connectToDatabase,
@@ -75,4 +76,8 @@ test("single room is returned", async () => {
 test("returns 404 for non-existing room", async () => {
   const response = await api.get("/api/rooms/9999").expect(404);
   expect(response.body.error).toBe("Room not found.");
+});
+
+afterAll(async () => {
+  await disconnectDatabase();
 });

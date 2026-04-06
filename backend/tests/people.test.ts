@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
+import { disconnectDatabase } from "../src/db";
 import type { Person as PersonType } from "../src/models";
 import { Person } from "../src/models";
 import {
@@ -453,4 +454,8 @@ test("updating a person's contract without dates maintains existing dates", asyn
   const updatedContract = updated?.contracts?.[0];
   expect(updatedContract?.startDate).toBe("2023-01-01");
   expect(updatedContract?.endDate).toBe("2025-12-31");
+});
+
+afterAll(async () => {
+  await disconnectDatabase();
 });
