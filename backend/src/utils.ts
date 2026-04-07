@@ -19,3 +19,19 @@ const toPersonInput = (object: unknown): PersonInput =>
   PersonSchema.parse(object);
 
 export default toPersonInput;
+
+const RoomSchema = z.object({
+  capacity: z
+    .number()
+    .int()
+    .nonnegative("Capacity must be non-negative")
+    .nullable()
+    .optional(),
+  freeText: z.string().nullable().optional(),
+  roomType: z.string().nullable().optional(),
+});
+
+export type RoomInput = z.infer<typeof RoomSchema>;
+
+export const toRoomInput = (object: unknown): RoomInput =>
+  RoomSchema.parse(object);
