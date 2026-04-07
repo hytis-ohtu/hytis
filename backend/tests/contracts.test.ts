@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
+import { disconnectDatabase } from "../src/db";
 import { Contract, Person, Room } from "../src/models";
 import {
   connectToDatabase,
@@ -62,4 +63,8 @@ test("delete contract returns 500 on internal server error", async () => {
   expect(response.body.error).toBe("Failed to delete contract");
 
   spy.mockRestore();
+});
+
+afterAll(async () => {
+  await disconnectDatabase();
 });

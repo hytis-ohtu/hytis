@@ -5,7 +5,7 @@ import { personSupervisors } from "./data/personSupervisors";
 import { researchGroups } from "./data/researchGroups";
 import { rooms } from "./data/rooms";
 import { titles } from "./data/titles";
-import { connectToDatabase, sequelize } from "./db";
+import { connectToDatabase, disconnectDatabase } from "./db";
 import {
   Contract,
   Department,
@@ -62,7 +62,7 @@ const resetDatabase = async () => {
   await dropAllTables();
   await createAllTables();
   await seedData();
-  await sequelize.close();
+  await disconnectDatabase();
   console.log("Connection closed!");
 };
 

@@ -14,4 +14,8 @@ const connectToDatabase = async () => {
   }
 };
 
-export { connectToDatabase, sequelize };
+const disconnectDatabase = async () => {
+  await sequelize.close();
+};
+
+export { connectToDatabase, disconnectDatabase, sequelize };
