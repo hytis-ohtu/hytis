@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
+import { disconnectDatabase } from "../src/db";
 import {
   connectToDatabase,
   createAllTables,
@@ -59,4 +60,8 @@ test("error handling works for research groups endpoint", async () => {
     .get("/api/reference-data/research-groups")
     .expect(500)
     .expect("Content-Type", /application\/json/);
+});
+
+afterAll(async () => {
+  await disconnectDatabase();
 });
