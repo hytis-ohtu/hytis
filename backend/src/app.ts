@@ -29,38 +29,34 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const setUpApp = () => {
-  configureSession(app);
+configureSession(app);
 
-  app.use("/api", authRouter);
+app.use("/api", authRouter);
 
-  app.use("/api/rooms", roomsRouter);
+app.use("/api/rooms", roomsRouter);
 
-  app.use("/api/people", peopleRouter);
+app.use("/api/people", peopleRouter);
 
-  app.use("/api/reference-data", referenceDataRouter);
+app.use("/api/reference-data", referenceDataRouter);
 
-  app.use("/api/contracts", contractsRouter);
+app.use("/api/contracts", contractsRouter);
 
-  // Test route to check server health
-  app.get("/health", (req, res) => {
-    res.json({
-      status: "ok",
-      environment: config.nodeEnv,
-      timestamp: new Date().toISOString(),
-      redis: isProduction ? "enabled" : "disabled",
-    });
+// Test route to check server health
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    environment: config.nodeEnv,
+    timestamp: new Date().toISOString(),
+    redis: isProduction ? "enabled" : "disabled",
   });
+});
 
-  if (!isProduction) {
-    app.use("/api/testing", testingRouter);
-  }
+if (!isProduction) {
+  app.use("/api/testing", testingRouter);
+}
 
-  if (isProduction) {
-    app.use(express.static("build/dist"));
-  }
-};
-
-setUpApp();
+if (isProduction) {
+  app.use(express.static("build/dist"));
+}
 
 export default app;
