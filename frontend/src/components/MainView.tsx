@@ -8,7 +8,7 @@ import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
 import Legend from "./Legend";
 import "./MainView.css";
-import RoomDetails from "./RoomDetails";
+import SidePanel from "./SidePanel";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
@@ -23,7 +23,7 @@ function MainView() {
   const { useAvailability, setUseAvailability } = useRoomColors();
 
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-  const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
 
   function createRoomInfoLabel(
@@ -143,7 +143,7 @@ function MainView() {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
         console.log("Clicked room with id:", target.id);
-        setIsRoomDetailsOpen(true);
+        setIsSidePanelOpen(true);
         setActiveRoomId(target.id);
         await findRoom(target.id);
       }
@@ -188,14 +188,14 @@ function MainView() {
         </button>
         <Legend mode={useAvailability ? "availability" : "department"} />
         <AnimatePresence>
-          {isRoomDetailsOpen && (
-            <RoomDetails
+          {isSidePanelOpen && (
+            <SidePanel
               room={room}
               handleClose={() => {
-                setIsRoomDetailsOpen(false);
+                setIsSidePanelOpen(false);
                 setActiveRoomId(null);
               }}
-              onPersonAdded={() => findRoom(activeRoomId!)}
+              onPersonSaved={() => findRoom(activeRoomId!)}
             />
           )}
         </AnimatePresence>

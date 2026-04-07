@@ -4,6 +4,7 @@ import { config, isProduction, useHyLogin } from "./config/environmentConfig";
 import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRouter from "./routes/authRouter";
+import contractsRouter from "./routes/contractsRouter";
 import peopleRouter from "./routes/peopleRouter";
 import referenceDataRouter from "./routes/referenceDataRouter";
 import roomsRouter from "./routes/roomsRouter";
@@ -40,6 +41,8 @@ const setUpApp = async () => {
   app.use("/api/people", peopleRouter);
 
   app.use("/api/reference-data", referenceDataRouter);
+
+  app.use("/api/contracts", contractsRouter);
 
   // Test route to check server health
   app.get("/health", (req, res) => {
