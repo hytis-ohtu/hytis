@@ -3,12 +3,17 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SidePanel from "../src/components/SidePanel.tsx";
-import { addPerson, editPerson } from "../src/services/peopleService.ts";
+import {
+  addPerson,
+  editPerson,
+  removeContract,
+} from "../src/services/peopleService.ts";
 import type { Room } from "../src/types.ts";
 
 vi.mock("../src/services/peopleService", () => ({
   addPerson: vi.fn(),
   editPerson: vi.fn(),
+  removeContract: vi.fn(),
 }));
 
 vi.mock("../src/components/PersonModal", () => ({
@@ -382,6 +387,7 @@ describe("RoomDetails", () => {
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
     expect(screen.getByText("Ei sopimuksia.")).toBeInTheDocument();
   });
+
   it("room details panel can be closed", async () => {
     const user = userEvent.setup();
     render(
@@ -395,5 +401,132 @@ describe("RoomDetails", () => {
     await user.click(screen.getByTestId("close-room-details-panel"));
 
     expect(mockHandleClose).toHaveBeenCalled();
+  });
+
+  it("renders remove button for each contract", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+    expect(screen.getByTestId("remove-person-button-1")).toBeInTheDocument();
+  });
+
+  it("clicking remove button opens confirmation dialog with person name", async () => {
+    const user = userEvent.setup();
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+
+    expect(screen.getByText("Poista Matti Virtanen?")).toBeInTheDocument();
+  });
+
+  it("confirming removal calls removeContract with the contract id", async () => {
+    const user = userEvent.setup();
+    vi.mocked(removeContract).mockResolvedValueOnce(undefined);
+
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Poista" }));
+
+    expect(removeContract).toHaveBeenCalledWith(1);
+  });
+
+  it("confirming removal calls onPersonSaved", async () => {
+    const user = userEvent.setup();
+    vi.mocked(removeContract).mockResolvedValueOnce(undefined);
+
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Poista" }));
+
+    expect(mockOnPersonSaved).toHaveBeenCalled();
+  });
+
+  it("cancelling removal does not call removeContract or onPersonSaved", async () => {
+    const user = userEvent.setup();
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Peruuta" }));
+
+    expect(removeContract).not.toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
+  });
+
+  it("cancelling removal dismisses the confirmation dialog", async () => {
+    const user = userEvent.setup();
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Peruuta" }));
+
+    expect(
+      screen.queryByText("Poista Matti Virtanen?"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("handles removeContract error and logs the failure", async () => {
+    const user = userEvent.setup();
+    const removeError = new Error("delete failed");
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+
+    vi.mocked(removeContract).mockRejectedValueOnce(removeError);
+
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+      />,
+    );
+
+    await user.click(screen.getByTestId("remove-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Poista" }));
+
+    expect(removeContract).toHaveBeenCalled();
+    expect(mockOnPersonSaved).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Failed to remove contract:",
+      removeError,
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 });

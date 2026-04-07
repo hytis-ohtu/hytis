@@ -1,8 +1,13 @@
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { addPerson, editPerson } from "../services/peopleService";
-import type { FieldProps, Person, Room } from "../types";
+import {
+  addPerson,
+  editPerson,
+  removeContract,
+} from "../services/peopleService";
+import type { Contract, FieldProps, Person, Room } from "../types";
+import ConfirmationButton from "./ConfirmationButton";
 import PersonModal from "./PersonModal";
 import "./SidePanel.css";
 
@@ -17,12 +22,12 @@ function RoomOccupants({
 
   const [personDetails, setPersonDetails] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
+  const [contractToRemove, setContractToRemove] = useState<Contract | null>(
+    null,
+  );
 
   const handleAddPerson = async (values: Record<string, string>) => {
-    if (roomId === undefined) {
-      return;
-    }
-
+    if (roomId === undefined) return;
     try {
       await addPerson(values, roomId);
       onPersonSaved();
@@ -30,16 +35,26 @@ function RoomOccupants({
       console.error("Failed to add person:", error);
     }
   };
-  const handleEditPerson = async (values: Record<string, string>) => {
-    if (roomId === undefined || personDetails?.id === undefined) {
-      return;
-    }
 
+  const handleEditPerson = async (values: Record<string, string>) => {
+    if (roomId === undefined || personDetails?.id === undefined) return;
     try {
       await editPerson(personDetails.id, values, roomId);
       onPersonSaved();
     } catch (error) {
       console.error("Failed to edit person:", error);
+    }
+  };
+
+  const handleRemoveContract = async () => {
+    if (contractToRemove === null) return;
+    try {
+      await removeContract(contractToRemove.id);
+      onPersonSaved();
+    } catch (error) {
+      console.error("Failed to remove contract:", error);
+    } finally {
+      setContractToRemove(null);
     }
   };
 
@@ -118,6 +133,19 @@ function RoomOccupants({
                 }}
                 className="edit-person-button"
               />
+              <span
+                onClick={(e) => e.preventDefault()}
+                className="cursor-gap"
+              ></span>
+              <Trash2
+                data-testid={`remove-person-button-${contract.person.id}`}
+                size={16}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setContractToRemove(contract);
+                }}
+                className="remove-person-button"
+              />
             </summary>
             <ul>
               <Field label="Osasto" value={contract.person.department?.name} />
@@ -142,6 +170,15 @@ function RoomOccupants({
           </details>
         ))
       )}
+
+      <ConfirmationButton
+        open={contractToRemove !== null}
+        title={`Poista ${contractToRemove?.person.firstName} ${contractToRemove?.person.lastName}?`}
+        confirmText="Poista"
+        cancelText="Peruuta"
+        onConfirm={handleRemoveContract}
+        onCancel={() => setContractToRemove(null)}
+      />
     </section>
   );
 }
