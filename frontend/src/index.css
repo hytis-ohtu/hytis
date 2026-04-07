@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #6146c5;
+  --primary-color: #e5bb83;
   --topbar-color: rgb(72, 72, 72);
   --secondary-color: #cec9e0;
   --text-color-black: #0d0b15;
@@ -7,16 +7,18 @@
   --background-color: #fff;
   --muted-color: #ccc;
 
-  --radius: 8px;
-  --radius-sm: 4px;
+  --radius: 4px;
+  --radius-sm: 2px;
   --gap: 12px;
   --padding: 16px;
   --transition-fast: 0.15s;
-  --font-weight-bold: 600;
 
-  /* Font sizes */
+  /* Font */
+  --font-plain: "roboto", regular;
+  --font-title: "montserrat", semibold;
   --font-size-sm: 14px;
   --font-size-base: 16px;
+  --font-weight-bold: 600;
 
   /* Spacing */
   --padding-sm: 0.5rem;
@@ -30,7 +32,9 @@
   --button-size: 44px;
   --z-index-topbar: 1000;
 
-  --border-style: 3px solid var(--secondary-color);
+  /* border */
+  --border-sm: 1px solid var(--text-color-black);
+  --border-md: 2px solid var(--text-color-black);
   --border-radius-circle: calc(infinity * 1px);
 }
 

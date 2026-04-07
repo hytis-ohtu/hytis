@@ -9,12 +9,14 @@
   display: flex;
   align-items: center;
   background: var(--background-color);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   transition: box-shadow var(--transition-fast);
 }
 
 .person-search-input-wrapper:focus-within {
-  box-shadow: 0 0 0 3px var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color);
+  border-radius: var(--radius-sm);
+  border: var(--border);
 }
 
 .person-search-icon {
@@ -30,6 +32,7 @@
   padding: var(--padding-sm) var(--padding-sm) var(--padding-sm) 36px;
   border: 1px solid var(--muted-color);
   border-radius: var(--radius);
+  font-family: var(--font-plain);
   font-size: var(--font-size-base);
   outline: none;
   transition:
@@ -65,6 +68,7 @@
 }
 
 .person-search-results-count {
+  font-family: var(--font-plain);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--text-color-black);
