@@ -29,8 +29,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const setUpApp = async () => {
-  await configureSession(app);
+const setUpApp = () => {
+  configureSession(app);
 
   app.use("/api", authRouter);
 
@@ -61,9 +61,6 @@ const setUpApp = async () => {
   }
 };
 
-setUpApp().catch((err) => {
-  console.error("Error setting up the app:", err);
-  process.exit(1);
-});
+setUpApp();
 
 export default app;
