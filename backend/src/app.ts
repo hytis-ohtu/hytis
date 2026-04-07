@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 import { config, isProduction, useHyLogin } from "./config/environmentConfig";
-import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRouter from "./routes/authRouter";
 import contractsRouter from "./routes/contractsRouter";
@@ -32,7 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 
 const setUpApp = async () => {
   await configureSession(app);
-  await configurePassport();
 
   app.use("/api", authRouter);
 
