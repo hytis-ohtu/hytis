@@ -6,6 +6,7 @@ import { connectToDatabase } from "./db";
 const start = async () => {
   await connectToDatabase();
   await configurePassport();
+
   app.listen(config.port, () => {
     console.log(`Server running on port ${config.port}`);
     console.log(`Environment: ${process.env.NODE_ENV || "development"}`);

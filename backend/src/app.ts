@@ -19,12 +19,7 @@ if (isProduction && !config.frontendUrl) {
   throw new Error("FRONTEND_URL required in production");
 }
 
-app.use(
-  cors({
-    origin: config.frontendUrl,
-    credentials: true,
-  }),
-);
+app.use(cors({ origin: config.frontendUrl, credentials: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,13 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 configureSession(app);
 
 app.use("/api", authRouter);
-
 app.use("/api/rooms", roomsRouter);
-
 app.use("/api/people", peopleRouter);
-
 app.use("/api/reference-data", referenceDataRouter);
-
 app.use("/api/contracts", contractsRouter);
 
 // Test route to check server health
