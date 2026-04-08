@@ -19,7 +19,7 @@
   position: absolute;
   right: var(--padding);
   cursor: pointer;
-  fill: var(--text-color-black);
+  fill: var(--color-text-black);
 }
 
 .room-details-header {
@@ -33,7 +33,7 @@
 
 .room-details-title {
   font-family: var(--font-title);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
 }
 
 .room-details-avatar {
@@ -55,12 +55,12 @@
 }
 
 .room-details-info {
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
   width: 100%;
   padding: var(--gap);
   border: var(--border-md);
   background: var(--background-color);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   line-height: 1.5rem;
 }
 .room-details-info h2 {
@@ -76,7 +76,7 @@
   padding: var(--gap);
   border: var(--border-md);
   background: var(--background-color);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
 }
 
 .person-details-info details {
@@ -86,7 +86,7 @@
 
 .person-details-info summary {
   cursor: pointer;
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
 }
 .person-details-info h2 {
   margin: 0;
@@ -104,14 +104,14 @@
 }
 
 .room-details-button {
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
   margin-top: 0; /* remove existing top margin */
   padding: 4px 8px; /* smaller than current var(--gap) */
   font-size: 0.8rem;
   border: var(--border);
   border-radius: var(--radius);
   background-color: var(--primary-color);
-  color: var(--text-color-white);
+  color: var(--color-text-white);
   cursor: pointer;
 }
 

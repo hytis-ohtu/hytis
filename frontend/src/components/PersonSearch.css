@@ -14,7 +14,7 @@
 }
 
 .person-search-input-wrapper:focus-within {
-  box-shadow: 0 0 0 2px var(--primary-color);
+  box-shadow: var(--shadow-md);
   border-radius: var(--radius-sm);
   border: var(--border);
 }
@@ -32,7 +32,7 @@
   padding: var(--padding-sm) var(--padding-sm) var(--padding-sm) 36px;
   border: 1px solid var(--muted-color);
   border-radius: var(--radius);
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   outline: none;
   transition:
@@ -68,10 +68,10 @@
 }
 
 .person-search-results-count {
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
 }
 
 .person-search-close {
@@ -91,7 +91,7 @@
 
 .person-search-close:hover {
   background: var(--muted-color);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
 }
 
 .person-search-results {
@@ -132,7 +132,7 @@
 .person-search-result-name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   margin-bottom: 4px;
 }
 

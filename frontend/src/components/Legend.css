@@ -26,7 +26,7 @@
 }
 
 .legend-label {
-  font-family: var(--font-plain);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: #333;
 }

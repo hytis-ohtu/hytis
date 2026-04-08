@@ -18,7 +18,7 @@
 }
 
 .personmodal-title {
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   font-size: 24px;
   margin-bottom: var(--gap);
   margin-right: 20px;
@@ -37,12 +37,12 @@
   right: 4px;
   background: transparent;
   border: none;
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   cursor: pointer;
 }
 
 .personmodal-close-button:hover {
-  color: var(--text-color-white);
+  color: var(--color-text-white);
 }
 
 .personmodal-save-button {
@@ -55,7 +55,7 @@
   padding: 8px 12px;
   border: none;
   background: var(--primary-color);
-  color: var(--text-color-white);
+  color: var(--color-text-white);
   text-align: center;
   cursor: pointer;
   border-radius: var(--radius);

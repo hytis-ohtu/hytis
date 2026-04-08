@@ -14,11 +14,11 @@
   border-radius: var(--radius);
   padding: var(--gap);
   min-width: 280px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
 }
 
 .confirmation-title {
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   font-size: 24px;
   margin-bottom: var(--gap);
   margin-right: 20px;
@@ -39,7 +39,7 @@
   padding: 8px 12px;
   border: none;
   background: var(--primary-color);
-  color: var(--text-color-white);
+  color: var(--color-text-white);
   text-align: center;
   cursor: pointer;
   border-radius: var(--radius);

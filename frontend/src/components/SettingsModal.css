@@ -18,7 +18,7 @@
 }
 
 .settings-modal-title {
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   font-size: 16px;
   margin-bottom: var(--gap);
   margin-right: 20px;
@@ -28,7 +28,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   font-size: 14px;
 }
 
@@ -39,7 +39,7 @@
   right: 4px;
   background: transparent;
   border: none;
-  color: var(--text-color-black);
+  color: var(--color-text-black);
   cursor: pointer;
 }
 
