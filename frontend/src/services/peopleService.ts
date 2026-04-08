@@ -65,3 +65,7 @@ export async function editPerson(
 
   return response.data;
 }
+
+export async function removeContract(contractId: number): Promise<void> {
+  await axios.delete(`${BASE_URL}/api/contracts/${contractId}`);
+}
