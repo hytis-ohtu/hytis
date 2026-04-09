@@ -9,8 +9,8 @@ import Redis from "ioredis";
 import passport from "passport";
 import { config, useHyLogin } from "./environmentConfig";
 
-export const configureSession = async (app: Application): Promise<void> => {
-  const sessionOptions = await createSessionOptions();
+export const configureSession = (app: Application): void => {
+  const sessionOptions = createSessionOptions();
   app.use(session(sessionOptions));
 
   app.use(passport.initialize());
@@ -19,7 +19,7 @@ export const configureSession = async (app: Application): Promise<void> => {
   configurePassportSerialization();
 };
 
-const createSessionOptions = async (): Promise<session.SessionOptions> => {
+const createSessionOptions = (): session.SessionOptions => {
   if (useHyLogin) {
     console.log("Setting up Redis session store for production");
 
