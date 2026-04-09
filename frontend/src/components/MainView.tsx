@@ -1,14 +1,13 @@
-import { Minus, Plus } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
-import { useRoomColors } from "../hooks/useRoomColors";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
-import Legend from "./Legend";
+import ColorToggle from "./ColorToggle";
 import "./MainView.css";
 import SidePanel from "./SidePanel";
+import ZoomButtons from "./ZoomButtons";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
@@ -20,8 +19,6 @@ function MainView() {
     handleZoomFunc,
     handleResetFunc,
   } = useMapTransform();
-  const { useAvailability, setUseAvailability } = useRoomColors();
-
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
@@ -158,35 +155,14 @@ function MainView() {
             <Exactum2 className="map" onClick={handleClick} />
           </div>
         </div>
-        <button
-          data-testid="zoom-increase-button"
-          onClick={(e) => handleZoomFunc(e, -1)}
-          className="zoom-in-button"
-        >
-          <Plus />
-        </button>
-        <button
-          data-testid="reset-transform-button"
-          onClick={handleResetFunc}
-          className="reset-button"
-        >
-          RESET
-        </button>
-        <button
-          data-testid="zoom-decrease-button"
-          onClick={(e) => handleZoomFunc(e, 1)}
-          className="zoom-out-button"
-        >
-          <Minus />
-        </button>
-        <button
-          data-testid="switch-color-mode"
-          onClick={() => setUseAvailability(!useAvailability)}
-          className="color-button"
-        >
-          {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
-        </button>
-        <Legend mode={useAvailability ? "availability" : "department"} />
+
+        <ZoomButtons
+          handleZoom={handleZoomFunc}
+          handleReset={handleResetFunc}
+        />
+
+        <ColorToggle />
+
         <AnimatePresence>
           {isSidePanelOpen && (
             <SidePanel
