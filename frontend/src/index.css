@@ -1,36 +1,42 @@
 :root {
-  --primary-color: #6146c5;
-  --topbar-color: rgb(72, 72, 72);
-  --secondary-color: #cec9e0;
-  --text-color-black: #0d0b15;
-  --text-color-white: #fff;
-  --background-color: #fff;
-  --muted-color: #ccc;
+  /* Colors */
+  --color-primary: #e5bb83;
+  --color-topbar: rgb(72, 72, 72);
+  --color-secondary: #cec9e0;
+  --color-text-black: #0d0b15;
+  --color-text-white: #fff;
+  --color-background: #fff;
+  --color-muted: #ccc;
 
-  --radius: 8px;
-  --radius-sm: 4px;
+  /* Borders */
+  --border-radius-md: 4px;
+  --border-radius-sm: 2px;
   --gap: 12px;
-  --padding: 16px;
+  --padding: 8px;
   --transition-fast: 0.15s;
-  --font-weight-bold: 600;
 
-  /* Font sizes */
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
+  /* Font */
+  --font-body: "roboto", regular;
+  --font-title: "montserrat", semibold;
+  --font-size-sm: 0.85rem;
+  --font-size-base: 1rem;
+  --font-weight-bold: 600;
 
   /* Spacing */
   --padding-sm: 0.5rem;
   --padding-md: 1rem;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --box-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --box-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
 
   --topbar-height: 64px;
   --button-size: 44px;
   --z-index-topbar: 1000;
 
-  --border-style: 3px solid var(--secondary-color);
+  /* border */
+  --border-sm: 1px solid var(--color-text-black);
+  --border-md: 2px solid var(--color-text-black);
   --border-radius-circle: calc(infinity * 1px);
 }
 
