@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../src/app";
 import { rooms } from "../src/data/rooms";
+import { disconnectDatabase } from "../src/db";
 import type { Contract } from "../src/models";
 import {
   connectToDatabase,
@@ -141,4 +142,8 @@ test("returns 500 when updating fails due to server error", async () => {
     .expect(500);
 
   expect(response.body.error).toBe("Failed to update room");
+});
+
+afterAll(async () => {
+  await disconnectDatabase();
 });
