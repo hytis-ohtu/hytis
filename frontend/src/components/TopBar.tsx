@@ -1,8 +1,9 @@
-import { User } from "lucide-react";
+import { Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import PersonSearch from "./PersonSearch";
+import SettingsModal from "./SettingsModal";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
-import PersonSearch from "./PersonSearch";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
@@ -18,6 +19,7 @@ interface TopBarProps {
 
 function TopBar({ title = "HYTiS" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [fontSize, setFontSize] = useState(
     Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
   );
@@ -35,6 +37,17 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
       <PersonSearch />
       <div className="topbar-actions">
         <button
+          data-testid="topbar-settings-button"
+          className="topbar-button"
+          aria-label="Settings"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSettingsOpen(true);
+          }}
+        >
+          <Settings className="size-6" />
+        </button>
+        <button
           data-testid="topbar-profile-button"
           className="topbar-button topbar-profile"
           onClick={(e) => {
@@ -44,13 +57,14 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
         >
           <User className="size-6" />
         </button>
-        {menuOpen && (
-          <TopBarMenu
-            onClose={() => setMenuOpen(false)}
+        {settingsOpen && (
+          <SettingsModal
+            onClose={() => setSettingsOpen(false)}
             fontSize={fontSize}
             setFontSize={setFontSize}
           />
         )}
+        {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
       </div>
     </header>
   );
