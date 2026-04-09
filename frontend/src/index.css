@@ -9,8 +9,8 @@
   --color-muted: #ccc;
 
   /* Borders */
-  --radius-md: 4px;
-  --radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-sm: 2px;
   --gap: 12px;
   --padding: 8px;
   --transition-fast: 0.15s;
@@ -27,8 +27,8 @@
   --padding-md: 1rem;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --box-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --box-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
 
   --topbar-height: 64px;
   --button-size: 44px;
@@ -37,7 +37,7 @@
   /* border */
   --border-sm: 1px solid var(--color-text-black);
   --border-md: 2px solid var(--color-text-black);
-  --border-radius-circle: calc(infinity * 1px);
+  --border-border-radius-circle: calc(infinity * 1px);
 }
 
 * {

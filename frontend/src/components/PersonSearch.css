@@ -9,13 +9,13 @@
   display: flex;
   align-items: center;
   background: var(--color-background);
-  border-radius: var(--radius-sm);
+  border-radius: var(--border-radius-sm);
   transition: box-shadow var(--transition-fast);
 }
 
 .person-search-input-wrapper:focus-within {
-  box-shadow: var(--shadow-md);
-  border-radius: var(--radius-sm);
+  box-shadow: var(--box-shadow-md);
+  border-radius: var(--border-radius-sm);
   border: var(--border);
 }
 
@@ -31,7 +31,7 @@
   width: 100%;
   padding: var(--padding-sm) var(--padding-sm) var(--padding-sm) 36px;
   border: 1px solid var(--color-muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--border-radius-md);
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   outline: none;
@@ -50,8 +50,8 @@
   left: 0;
   right: 0;
   background: var(--color-background);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-md);
   max-height: 400px;
   display: flex;
   flex-direction: column;
@@ -83,7 +83,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
+  border-radius: var(--border-radius-sm);
   transition:
     background var(--transition-fast),
     color var(--transition-fast);

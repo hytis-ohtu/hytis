@@ -40,7 +40,7 @@
   width: 10em;
   height: 10em;
   margin: var(--gap) auto;
-  border-radius: var(--border-radius-circle);
+  border-radius: var(--border-border-radius-circle);
   background-color: var(--color-primary);
   display: flex;
   align-items: center;
@@ -109,7 +109,7 @@
   padding: 4px 8px; /* smaller than current var(--gap) */
   font-size: 0.8rem;
   border: var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--border-radius-md);
   background-color: var(--color-primary);
   color: var(--color-text-white);
   cursor: pointer;

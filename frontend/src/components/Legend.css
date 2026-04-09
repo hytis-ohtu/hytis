@@ -8,8 +8,8 @@
   background-color: var(--color-background);
   border: var(--border-sm);
   padding: var(--padding-md);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-sm);
 }
 
 .legend-item {
@@ -21,7 +21,7 @@
 .legend-color-box {
   width: 20px;
   height: 20px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--border-radius-sm);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
