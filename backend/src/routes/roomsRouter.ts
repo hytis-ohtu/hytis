@@ -109,7 +109,7 @@ router.get(
 
 /**
  * PUT /api/rooms/:id
- * Updates a room with the capacity, freeText and roomType provided in the request body
+ * Updates a room with the capacity, departmentId freeText and roomType provided in the request body
  * Returns 404 if room not found
  */
 
@@ -133,7 +133,7 @@ router.put(
       return res.status(500).json({ error: "Failed to parse room input" });
     }
 
-    const { capacity, freeText, roomType } = roomInput;
+    const { capacity, departmentId, freeText, roomType } = roomInput;
 
     try {
       const room = await Room.findByPk(Number(roomId));
@@ -144,6 +144,7 @@ router.put(
 
       await room.update({
         capacity,
+        departmentId,
         freeText,
         roomType,
       });
