@@ -37,7 +37,7 @@
   /* border */
   --border-sm: 1px solid var(--color-text-black);
   --border-md: 2px solid var(--color-text-black);
-  --border-border-radius-circle: calc(infinity * 1px);
+  --border-radius-circle: calc(infinity * 1px);
 }
 
 * {

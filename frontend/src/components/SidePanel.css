@@ -40,7 +40,7 @@
   width: 10em;
   height: 10em;
   margin: var(--gap) auto;
-  border-radius: var(--border-border-radius-circle);
+  border-radius: var(--border-radius-circle);
   background-color: var(--color-primary);
   display: flex;
   align-items: center;
