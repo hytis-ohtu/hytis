@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 import { config, isProduction, useHyLogin } from "./config/environmentConfig";
-import { configurePassport } from "./config/oidcConfig";
 import { configureSession } from "./config/sessionConfig";
 import authRouter from "./routes/authRouter";
 import contractsRouter from "./routes/contractsRouter";
@@ -20,52 +19,35 @@ if (isProduction && !config.frontendUrl) {
   throw new Error("FRONTEND_URL required in production");
 }
 
-app.use(
-  cors({
-    origin: config.frontendUrl,
-    credentials: true,
-  }),
-);
+app.use(cors({ origin: config.frontendUrl, credentials: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const setUpApp = async () => {
-  await configureSession(app);
-  await configurePassport();
+configureSession(app);
 
-  app.use("/api", authRouter);
+app.use("/api", authRouter);
+app.use("/api/rooms", roomsRouter);
+app.use("/api/people", peopleRouter);
+app.use("/api/reference-data", referenceDataRouter);
+app.use("/api/contracts", contractsRouter);
 
-  app.use("/api/rooms", roomsRouter);
-
-  app.use("/api/people", peopleRouter);
-
-  app.use("/api/reference-data", referenceDataRouter);
-
-  app.use("/api/contracts", contractsRouter);
-
-  // Test route to check server health
-  app.get("/health", (req, res) => {
-    res.json({
-      status: "ok",
-      environment: config.nodeEnv,
-      timestamp: new Date().toISOString(),
-      redis: isProduction ? "enabled" : "disabled",
-    });
+// Test route to check server health
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    environment: config.nodeEnv,
+    timestamp: new Date().toISOString(),
+    redis: isProduction ? "enabled" : "disabled",
   });
-
-  if (!isProduction) {
-    app.use("/api/testing", testingRouter);
-  }
-
-  if (isProduction) {
-    app.use(express.static("build/dist"));
-  }
-};
-
-setUpApp().catch((err) => {
-  console.error("Error setting up the app:", err);
-  process.exit(1);
 });
+
+if (!isProduction) {
+  app.use("/api/testing", testingRouter);
+}
+
+if (isProduction) {
+  app.use(express.static("build/dist"));
+}
 
 export default app;
