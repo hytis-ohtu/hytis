@@ -8,7 +8,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: var(--background-color);
+  background: var(--color-background);
   border-radius: var(--radius-sm);
   transition: box-shadow var(--transition-fast);
 }
@@ -22,7 +22,7 @@
 .person-search-icon {
   position: absolute;
   left: var(--padding-sm);
-  color: var(--muted-color);
+  color: var(--color-muted);
   pointer-events: none;
   size: 18px;
 }
@@ -30,8 +30,8 @@
 .person-search-input {
   width: 100%;
   padding: var(--padding-sm) var(--padding-sm) var(--padding-sm) 36px;
-  border: 1px solid var(--muted-color);
-  border-radius: var(--radius);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   outline: none;
@@ -41,7 +41,7 @@
 }
 
 .person-search-input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
 }
 
 .person-search-dropdown {
@@ -49,8 +49,8 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: var(--background-color);
-  border-radius: var(--radius);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   max-height: 400px;
   display: flex;
@@ -63,8 +63,8 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--padding-sm) var(--padding-md);
-  border-bottom: 1px solid var(--muted-color);
-  background: var(--background-color);
+  border-bottom: 1px solid var(--color-muted);
+  background: var(--color-background);
 }
 
 .person-search-results-count {
@@ -79,7 +79,7 @@
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: var(--muted-color);
+  color: var(--color-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,7 +90,7 @@
 }
 
 .person-search-close:hover {
-  background: var(--muted-color);
+  background: var(--color-muted);
   color: var(--color-text-black);
 }
 
@@ -102,7 +102,7 @@
 .person-search-no-results {
   padding: var(--padding-md);
   text-align: center;
-  color: var(--muted-color);
+  color: var(--color-muted);
   font-size: var(--font-size-base);
 }
 
@@ -116,7 +116,7 @@
 
 .person-search-result {
   padding: var(--padding-md);
-  border-bottom: 1px solid var(--muted-color);
+  border-bottom: 1px solid var(--color-muted);
   cursor: pointer;
   transition: background var(--transition-fast);
 }
@@ -126,7 +126,7 @@
 }
 
 .person-search-result:hover {
-  background: var(--secondary-color);
+  background: var(--color-secondary);
 }
 
 .person-search-result-name {
@@ -151,7 +151,7 @@
 .person-search-result-title::after {
   content: "·";
   margin-left: 8px;
-  color: var(--muted-color);
+  color: var(--color-muted);
 }
 
 .person-search-result-title:last-child::after,

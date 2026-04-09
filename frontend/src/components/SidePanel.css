@@ -7,7 +7,7 @@
   overflow-x: hidden;
   max-width: 300px;
   padding: var(--padding);
-  background-color: var(--background-color);
+  background-color: var(--color-background);
   border-left: var(--border-md);
   display: block;
   flex-direction: column;
@@ -41,7 +41,7 @@
   height: 10em;
   margin: var(--gap) auto;
   border-radius: var(--border-radius-circle);
-  background-color: var(--primary-color);
+  background-color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +51,7 @@
   font-size: 3rem;
   font-weight: 600;
   font-family: var(--font-title);
-  color: var(--background-color);
+  color: var(--color-background);
 }
 
 .room-details-info {
@@ -59,7 +59,7 @@
   width: 100%;
   padding: var(--gap);
   border: var(--border-md);
-  background: var(--background-color);
+  background: var(--color-background);
   color: var(--color-text-black);
   line-height: 1.5rem;
 }
@@ -75,7 +75,7 @@
   width: 100%;
   padding: var(--gap);
   border: var(--border-md);
-  background: var(--background-color);
+  background: var(--color-background);
   color: var(--color-text-black);
 }
 
@@ -109,8 +109,8 @@
   padding: 4px 8px; /* smaller than current var(--gap) */
   font-size: 0.8rem;
   border: var(--border);
-  border-radius: var(--radius);
-  background-color: var(--primary-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
   color: var(--color-text-white);
   cursor: pointer;
 }

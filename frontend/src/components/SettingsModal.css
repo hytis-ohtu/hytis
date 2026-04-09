@@ -9,9 +9,9 @@
 
 .settings-modal {
   position: relative;
-  background: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
-  border-radius: var(--radius);
+  background: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--radius-md);
   padding: var(--gap);
   min-width: 280px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -44,5 +44,5 @@
 }
 
 .settings-modal-close-button:hover {
-  color: var(--primary-color);
+  color: var(--color-primary);
 }

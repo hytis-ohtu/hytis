@@ -5,7 +5,7 @@
   right: 0;
   width: 100%;
   height: var(--topbar-height);
-  background: var(--topbar-color);
+  background: var(--color-topbar);
   border-bottom: var(--border-style);
   display: flex;
   align-items: center;
@@ -44,18 +44,18 @@
 }
 
 .topbar-button:hover {
-  background: var(--secondary-color);
+  background: var(--color-secondary);
   color: var(--color-text-black);
 }
 
 .topbar-button:active {
   transform: scale(0.98);
-  background: var(--muted-color);
+  background: var(--color-muted);
   color: var(--color-text-black);
 }
 
 .topbar-profile {
-  background: var(--topbar-color);
+  background: var(--color-topbar);
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;
@@ -64,6 +64,6 @@
 }
 
 .topbar-profile:hover {
-  background: var(--secondary-color);
+  background: var(--color-secondary);
   color: var(--color-text-black);
 }

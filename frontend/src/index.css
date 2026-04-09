@@ -1,13 +1,15 @@
 :root {
-  --primary-color: #e5bb83;
-  --topbar-color: rgb(72, 72, 72);
-  --secondary-color: #cec9e0;
+  /* Colors */
+  --color-primary: #e5bb83;
+  --color-topbar: rgb(72, 72, 72);
+  --color-secondary: #cec9e0;
   --color-text-black: #0d0b15;
   --color-text-white: #fff;
-  --background-color: #fff;
-  --muted-color: #ccc;
+  --color-background: #fff;
+  --color-muted: #ccc;
 
-  --radius: 4px;
+  /* Borders */
+  --radius-md: 4px;
   --radius-sm: 2px;
   --gap: 12px;
   --padding: 8px;
