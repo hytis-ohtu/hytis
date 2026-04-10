@@ -193,6 +193,26 @@ test("assigning an existing person with invalid room ID fails", async () => {
   expect(response.body.error).toBe("Failed to add contract");
 });
 
+test("assigning an existing person to a room they already have a contract in fails", async () => {
+  // Person 1 already has a contract in room 1 (from seed data)
+  const assignExistingPerson = {
+    personId: 1,
+    roomId: 1,
+    startDate: "2026-06-01",
+    endDate: "2026-12-31",
+  };
+
+  const response = await api
+    .post("/api/people")
+    .send(assignExistingPerson)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe(
+    "Person already has a contract for this room",
+  );
+});
+
 describe("GET /api/people", () => {
   test("people are returned as a list", async () => {
     const response = await api
