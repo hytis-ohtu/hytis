@@ -2,7 +2,7 @@ import supertest from "supertest";
 import app from "../src/app";
 import { disconnectDatabase } from "../src/db";
 import type { Person as PersonType } from "../src/models";
-import { Person } from "../src/models";
+import { Contract, Person, Room } from "../src/models";
 import {
   connectToDatabase,
   createAllTables,
@@ -116,6 +116,81 @@ test("a person with invalid supervisor IDs cannot be created", async () => {
   };
 
   await api.post("/api/people").send(newPerson).expect(400);
+});
+
+test("an existing person can be assigned to a room with a new contract", async () => {
+  const person = await Person.findByPk(1, {
+    include: [
+      { model: Person, as: "supervisors", through: { attributes: [] } },
+      "department",
+      "title",
+      "researchGroup",
+      {
+        model: Contract,
+        as: "contracts",
+        include: [{ model: Room, as: "room" }],
+      },
+    ],
+  });
+
+  const contractsBefore = await Contract.count({
+    where: { personId: person!.id },
+  });
+  const peopleBefore = await Person.count();
+
+  const assignExistingPerson = {
+    personId: 1,
+    roomId: 2,
+    startDate: "2026-06-01",
+    endDate: "2026-12-31",
+  };
+
+  const response = await api
+    .post("/api/people")
+    .send(assignExistingPerson)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  const updatedPerson = response.body;
+  expect(updatedPerson.id).toBe(1);
+  expect(updatedPerson.contracts).toHaveLength(contractsBefore + 1);
+
+  const peopleAfter = await Person.count();
+  expect(peopleAfter).toBe(peopleBefore);
+});
+
+test("assigning a non-existent person to a room returns 404", async () => {
+  const assignExistingPerson = {
+    personId: 9999, // Non-existent person ID
+    roomId: 2,
+    startDate: "2026-06-01",
+    endDate: "2026-12-31",
+  };
+
+  const response = await api
+    .post("/api/people")
+    .send(assignExistingPerson)
+    .expect(404)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("Person not found");
+});
+
+test("assigning an existing person with invalid room ID fails", async () => {
+  const assignExistingPerson = {
+    personId: 1,
+    roomId: 9999, // Invalid room ID
+    startDate: "2026-06-01",
+    endDate: "2026-12-31",
+  };
+
+  const response = await api
+    .post("/api/people")
+    .send(assignExistingPerson)
+    .expect(500)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("Failed to add contract");
 });
 
 describe("GET /api/people", () => {
