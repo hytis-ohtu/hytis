@@ -20,5 +20,17 @@ export async function editRoom(
   id: number,
   values: Record<string, string>,
 ): Promise<void> {
-  await axios.put(`${BASE_URL}/api/rooms/${id}`, values);
+  const { department, capacity, ...rest } = values;
+
+  const body = {
+    ...rest,
+    ...(capacity !== undefined && {
+      capacity: capacity === "" ? null : Number(capacity),
+    }),
+    ...(department !== undefined && {
+      departmentId: department === "" ? null : Number(department),
+    }),
+  };
+
+  await axios.put(`${BASE_URL}/api/rooms/${id}`, body);
 }
