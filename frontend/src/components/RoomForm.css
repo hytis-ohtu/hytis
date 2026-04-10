@@ -17,20 +17,12 @@
   align-items: center;
 }
 
-.roomform-field--top {
-  align-items: flex-start;
-}
-
 .roomform-label {
   flex: 0 0 140px;
   text-align: center;
   margin-right: 0.5rem;
   font-weight: 600;
   color: var(--text-color-black);
-}
-
-.roomform-field--top .roomform-label {
-  padding-top: 0.5rem;
 }
 
 .roomform-input {
@@ -41,74 +33,4 @@
   border: 1px solid var(--secondary-color);
   border-radius: 4px;
   font-size: 1rem;
-}
-
-select.roomform-input {
-  cursor: pointer;
-}
-
-/* Supervisor widget */
-
-.roomform-supervisor {
-  flex: 1;
-  min-width: 0;
-  position: relative;
-}
-
-.roomform-supervisor .roomform-input {
-  width: 100%;
-  box-sizing: border-box;
-  flex: none;
-}
-
-.roomform-supervisor-selected {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-top: 0.25rem;
-}
-
-.roomform-supervisor-tag {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.15rem 0.4rem;
-  background: var(--secondary-color);
-  border-radius: 4px;
-  font-size: 0.875rem;
-}
-
-.roomform-supervisor-tag button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  font-size: 1rem;
-  color: inherit;
-}
-
-.roomform-supervisor-list {
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  background: var(--background-color, #fff);
-  border: 1px solid var(--secondary-color);
-  border-radius: 4px;
-  max-height: 160px;
-  overflow-y: auto;
-}
-
-.roomform-supervisor-option {
-  padding: 0.4rem 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.roomform-supervisor-option:hover,
-.roomform-supervisor-option.selected {
-  background: var(--secondary-color);
 }

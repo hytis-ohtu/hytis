@@ -55,8 +55,8 @@ function RoomInfo({
             onClose={() => setEditRoomOpen(false)}
             onSubmit={handleEditRoom}
             initial={{
-              area: String(roomProp.area),
-              capacity: String(roomProp.capacity),
+              capacity: String(roomProp.capacity ?? ""),
+              roomType: roomProp.roomType ?? "",
               department: String(roomProp.department?.id ?? ""),
               freeText: roomProp.freeText ?? "",
             }}

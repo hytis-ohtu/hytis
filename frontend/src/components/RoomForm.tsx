@@ -8,15 +8,24 @@ import "./RoomForm.css";
 interface FieldDef {
   id: string;
   label: string;
-  type: "text" | "int" | "select";
+  type: "text" | "number" | "select";
   required: boolean;
+  min?: number;
+  step?: string;
 }
 
 const FIELDS: FieldDef[] = [
-  { id: "area", label: "Pinta-ala:", type: "int", required: true },
-  { id: "capacity", label: "Kapasiteetti:", type: "int", required: true },
+  {
+    id: "capacity",
+    label: "Kapasiteetti:",
+    type: "number",
+    required: false,
+    min: 1,
+    step: "1",
+  },
+  { id: "roomType", label: "Huonetyyppi:", type: "text", required: false },
   { id: "department", label: "Osasto:", type: "select", required: false },
-  { id: "freeText", label: "Vapaa teksti:", type: "text", required: false },
+  { id: "freeText", label: "Lisätiedot:", type: "text", required: false },
 ];
 
 interface SelectOptions {
@@ -24,27 +33,22 @@ interface SelectOptions {
 }
 
 interface RoomFormProps {
-  initial?: Record<string, string>;
+  initial: Record<string, string>;
   onChange: (values: Record<string, string>, isValid: boolean) => void;
 }
 
-const isFormValid = (vals: Record<string, string>): boolean =>
-  FIELDS.filter((f) => f.required).every((f) => Boolean(vals[f.id]?.trim()));
-
-function RoomForm({ initial = {}, onChange }: RoomFormProps) {
+function RoomForm({ initial, onChange }: RoomFormProps) {
   const [values, setValues] = useState<Record<string, string>>({ ...initial });
-  const [options, setOptions] = useState<SelectOptions>({
-    department: [],
-  });
+  const [options, setOptions] = useState<SelectOptions>({ department: [] });
 
   useEffect(() => {
-    findAllDepartments().then((departments) => {
-      setOptions({ department: departments });
-    });
+    findAllDepartments().then((departments) =>
+      setOptions({ department: departments }),
+    );
   }, []);
 
   useEffect(() => {
-    onChange(values, isFormValid(values));
+    onChange(values, true);
   }, [values, onChange]);
 
   const handleChange = (
@@ -57,7 +61,7 @@ function RoomForm({ initial = {}, onChange }: RoomFormProps) {
   return (
     <div className="roomform-container">
       <div className="roomform-form">
-        {FIELDS.map(({ id, label, type, required }) => (
+        {FIELDS.map(({ id, label, type, required, min, step }) => (
           <div key={id} className="roomform-field">
             <label className="roomform-label" htmlFor={id}>
               {label}
@@ -82,11 +86,13 @@ function RoomForm({ initial = {}, onChange }: RoomFormProps) {
               <input
                 id={id}
                 name={id}
-                type={type === "int" ? "number" : "text"}
+                type={type}
                 value={values[id] ?? ""}
                 onChange={handleChange}
                 required={required}
                 className="roomform-input"
+                {...(min !== undefined && { min })}
+                {...(step !== undefined && { step })}
               />
             )}
           </div>
