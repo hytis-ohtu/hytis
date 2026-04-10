@@ -15,6 +15,7 @@ const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
   const {
+    personId,
     firstName,
     lastName,
     titleId,
@@ -26,6 +27,45 @@ router.post("/", async (req: Request, res: Response) => {
     startDate,
     endDate,
   } = req.body;
+
+  const personInclude = [
+    { model: Person, as: "supervisors", through: { attributes: [] } },
+    "department",
+    "title",
+    "researchGroup",
+    {
+      model: Contract,
+      as: "contracts",
+      include: [{ model: Room, as: "room" }],
+    },
+  ];
+
+  if (personId) {
+    try {
+      const existingPerson = await Person.findByPk(Number(personId), {
+        include: personInclude,
+      });
+
+      if (!existingPerson) {
+        return res.status(404).json({ error: "Person not found" });
+      }
+
+      if (roomId) {
+        await Contract.create({
+          personId: existingPerson.id,
+          roomId,
+          startDate,
+          endDate,
+        });
+      }
+
+      await existingPerson.reload({ include: personInclude });
+      return res.status(200).json(existingPerson);
+    } catch (error) {
+      console.error("Error adding contract to existing person:", error);
+      return res.status(500).json({ error: "Failed to add contract" });
+    }
+  }
 
   if (!firstName || !lastName) {
     return res
@@ -76,14 +116,7 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     const createdPerson = await Person.findByPk(newPerson.id, {
-      include: [
-        { model: Person, as: "supervisors", through: { attributes: [] } },
-        {
-          model: Contract,
-          as: "contracts",
-          include: [{ model: Room, as: "room" }],
-        },
-      ],
+      include: personInclude,
     });
     res.status(201).json(createdPerson);
   } catch (error) {
