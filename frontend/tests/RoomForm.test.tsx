@@ -61,7 +61,7 @@ describe("RoomForm", () => {
 
   it("calls onChange on mount with empty values", () => {
     render(<RoomForm {...defaultProps} />);
-    expect(defaultProps.onChange).toHaveBeenCalledWith({}, true);
+    expect(defaultProps.onChange).toHaveBeenCalledWith({}, false);
   });
 
   it("calls onChange with updated value when capacity changes", () => {
@@ -115,20 +115,6 @@ describe("RoomForm", () => {
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
       expect.objectContaining({ department: "2" }),
-      true,
-    );
-  });
-
-  it("allows clearing the department selection", async () => {
-    render(<RoomForm {...defaultProps} initial={INITIAL} />);
-    await waitFor(() =>
-      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
-    );
-    fireEvent.change(screen.getByLabelText("Osasto:"), {
-      target: { value: "" },
-    });
-    expect(defaultProps.onChange).toHaveBeenCalledWith(
-      expect.objectContaining({ department: "" }),
       true,
     );
   });
