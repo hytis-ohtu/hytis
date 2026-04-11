@@ -24,6 +24,7 @@ export async function addPerson(
     : undefined;
 
   const response = await axios.post<Person>(`${BASE_URL}/api/people`, {
+    personId: values.personId,
     firstName: values.firstName,
     lastName: values.lastName,
     departmentId: values.department || undefined,
