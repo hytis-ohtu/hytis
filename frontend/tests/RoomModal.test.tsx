@@ -49,6 +49,16 @@ describe("RoomModal", () => {
     expect(screen.getByText("Muokkaa huonetta")).toBeInTheDocument();
   });
 
+  it("save button is disabled when required fields are empty", async () => {
+    await renderAndWait();
+    expect(screen.getByText("Tallenna")).toBeDisabled();
+  });
+
+  it("save button is enabled when required fields are filled", async () => {
+    await renderAndWait({ initial: INITIAL });
+    await waitFor(() => expect(screen.getByText("Tallenna")).toBeEnabled());
+  });
+
   it("renders with initial values pre-filled", async () => {
     await renderAndWait({ initial: INITIAL });
     expect(screen.getByDisplayValue("10")).toBeInTheDocument();
