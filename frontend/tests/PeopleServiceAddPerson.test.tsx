@@ -228,6 +228,26 @@ describe("peopleService", () => {
         roomId: 1,
       });
     });
+
+    it("sends personId when selecting an existing person", async () => {
+      mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
+
+      const values = {
+        personId: "5",
+        firstName: "Jane",
+        lastName: "Doe",
+        misc: "",
+        startDate: "",
+        endDate: "",
+      };
+
+      await addPerson(values, 10);
+
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        "/api/people",
+        expect.objectContaining({ personId: "5", roomId: 10 }),
+      );
+    });
   });
 
   describe("editPerson", () => {
