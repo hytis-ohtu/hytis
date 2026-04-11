@@ -49,19 +49,22 @@ select.personform-input {
 
 /* Supervisor widget */
 
-.personform-supervisor {
+.personform-supervisor,
+.personform-existing-person {
   flex: 1;
   min-width: 0;
   position: relative;
 }
 
-.personform-supervisor .personform-input {
+.personform-supervisor .personform-input,
+.personform-existing-person .personform-input {
   width: 100%;
   box-sizing: border-box;
   flex: none;
 }
 
-.personform-supervisor-selected {
+.personform-supervisor-selected,
+.personform-existing-person-selected {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
@@ -88,7 +91,8 @@ select.personform-input {
   color: inherit;
 }
 
-.personform-supervisor-list {
+.personform-supervisor-list,
+.personform-existing-person-list {
   position: absolute;
   z-index: 10;
   width: 100%;
@@ -102,13 +106,16 @@ select.personform-input {
   overflow-y: auto;
 }
 
-.personform-supervisor-option {
+.personform-supervisor-option,
+.personform-existing-person-option {
   padding: 0.4rem 0.5rem;
   cursor: pointer;
   font-size: 1rem;
 }
 
 .personform-supervisor-option:hover,
-.personform-supervisor-option.selected {
+.personform-supervisor-option.selected,
+.personform-existing-person-option:hover,
+.personform-existing-person-option.selected {
   background: var(--color-secondary);
 }

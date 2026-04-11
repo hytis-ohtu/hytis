@@ -60,8 +60,11 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     researchgroup: [],
   });
   const [people, setPeople] = useState<Person[]>([]);
+  const [existingPersonSearch, setExistingPersonSearch] = useState("");
+  const [personOpen, setPersonOpen] = useState(false);
   const [supervisorSearch, setSupervisorSearch] = useState("");
   const [supervisorOpen, setSupervisorOpen] = useState(false);
+  const existingPersonRef = useRef<HTMLDivElement>(null);
   const supervisorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,6 +89,14 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
+      if (
+        existingPersonRef.current &&
+        !existingPersonRef.current.contains(e.target as Node)
+      ) {
+        setExistingPersonSearch("");
+        setPersonOpen(false);
+      }
+
       if (
         supervisorRef.current &&
         !supervisorRef.current.contains(e.target as Node)
@@ -116,6 +127,26 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     setValues((prev) => ({ ...prev, supervisors: updated.join(",") }));
   };
 
+  const applyExistingPerson = (person: Person) => {
+    setValues((prev) => ({
+      ...prev,
+      personId: String(person.id),
+      firstName: person.firstName,
+      lastName: person.lastName,
+      department: person.department ? String(person.department.id) : "",
+      jobtitle: person.title ? String(person.title.id) : "",
+      supervisors: person.supervisors?.length
+        ? person.supervisors
+            .map((supervisor) => String(supervisor.id))
+            .join(",")
+        : "",
+      researchgroup: person.researchGroup
+        ? String(person.researchGroup.id)
+        : "",
+      misc: person.freeText ?? "",
+    }));
+  };
+
   const filteredPeople = people.filter((p) => {
     const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
     return fullName.includes(supervisorSearch.toLowerCase());
@@ -124,6 +155,46 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
   return (
     <div className="personform-container">
       <div className="personform-form">
+        <div className="personform-field personform-field--top">
+          <label className="personform-label" htmlFor="person-search">
+            Hae henkilö:
+          </label>
+          <div className="personform-existing-person" ref={existingPersonRef}>
+            <input
+              id="person-search"
+              type="text"
+              className="personform-input"
+              placeholder="Hae..."
+              value={existingPersonSearch}
+              onFocus={() => setPersonOpen(true)}
+              onChange={(e) => setExistingPersonSearch(e.target.value)}
+            />
+            {(personOpen || existingPersonSearch) && (
+              <ul className="personform-existing-person-list">
+                {filteredPeople.length === 0 ? (
+                  <li className="personform-existing-person-empty">
+                    Ei tuloksia
+                  </li>
+                ) : (
+                  filteredPeople.map((person) => (
+                    <li
+                      key={person.id}
+                      className="personform-existing-person-option"
+                      onClick={() => {
+                        applyExistingPerson(person);
+                        setExistingPersonSearch("");
+                        setPersonOpen(false);
+                      }}
+                    >
+                      {person.firstName} {person.lastName}
+                    </li>
+                  ))
+                )}
+              </ul>
+            )}
+          </div>
+        </div>
+
         {FIELDS.map(({ id, label, type, required }) => (
           <div
             key={id}
