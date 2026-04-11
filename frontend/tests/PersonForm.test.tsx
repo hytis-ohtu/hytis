@@ -285,4 +285,95 @@ describe("PersonForm", () => {
     // ID 999 has no matching person — no tag should appear
     expect(screen.queryByLabelText(/^Poista /)).not.toBeInTheDocument();
   });
+
+  it("shows existing person search input", () => {
+    render(<PersonForm {...defaultProps} />);
+    expect(screen.getByLabelText("Hae henkilö:")).toBeInTheDocument();
+  });
+
+  it("filters existing people by name when typing in search", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "Joku" } });
+    await waitFor(() => {
+      expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    });
+    expect(screen.queryByText("Muu Esihenkilö")).not.toBeInTheDocument();
+  });
+
+  it("shows 'Ei tuloksia' when search matches no people", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "zzznomatch" } });
+    await waitFor(() => {
+      expect(screen.getByText("Ei tuloksia")).toBeInTheDocument();
+    });
+  });
+
+  it("populates form fields when existing person is selected", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "Joku" } });
+    await waitFor(() => {
+      expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("Joku")).toHaveValue("Joku");
+      expect(screen.getByDisplayValue("Esihenkilö")).toHaveValue("Esihenkilö");
+    });
+  });
+
+  it("disables person detail fields when existing person is selected", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "Joku" } });
+    await waitFor(() => {
+      expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Etunimi:")).toBeDisabled();
+      expect(screen.getByLabelText("Sukunimi:")).toBeDisabled();
+      expect(screen.getByLabelText("Osasto:")).toBeDisabled();
+      expect(screen.getByLabelText("Työnimike:")).toBeDisabled();
+      expect(screen.getByLabelText("Tutkimusryhmä:")).toBeDisabled();
+      expect(screen.getByLabelText("Muut tiedot:")).toBeDisabled();
+    });
+  });
+
+  it("keeps contract date fields editable when existing person is selected", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "Joku" } });
+    await waitFor(() => {
+      expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Sopimuksen alku:")).not.toBeDisabled();
+      expect(screen.getByLabelText("Sopimuksen loppu:")).not.toBeDisabled();
+    });
+  });
+
+  it("clears search input after selecting a person", async () => {
+    render(<PersonForm {...defaultProps} />);
+    const searchInput = screen.getByLabelText(
+      "Hae henkilö:",
+    ) as HTMLInputElement;
+    fireEvent.focus(searchInput);
+    fireEvent.change(searchInput, { target: { value: "Joku" } });
+    await waitFor(() => {
+      expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText("Joku Esihenkilö"));
+    await waitFor(() => {
+      expect(searchInput.value).toBe("");
+    });
+  });
 });
