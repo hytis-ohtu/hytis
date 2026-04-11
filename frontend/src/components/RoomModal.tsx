@@ -12,14 +12,19 @@ interface RoomModalProps {
 
 function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
+  const [isValid, setIsValid] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<"save" | "close" | null>(
     null,
   );
 
-  const handleFormChange = useCallback((values: Record<string, string>) => {
-    formDataRef.current = values;
-  }, []);
+  const handleFormChange = useCallback(
+    (values: Record<string, string>, valid: boolean) => {
+      formDataRef.current = values;
+      setIsValid(valid);
+    },
+    [],
+  );
 
   const handleSave = () => {
     onSubmit?.(formDataRef.current);
@@ -61,7 +66,11 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
         <RoomForm onChange={handleFormChange} initial={initial} />
 
         <div className="roommodal-actions">
-          <button className="roommodal-save-button" onClick={requestSave}>
+          <button
+            className="roommodal-save-button"
+            onClick={requestSave}
+            disabled={!isValid}
+          >
             Tallenna
           </button>
         </div>

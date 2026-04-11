@@ -19,12 +19,12 @@ const FIELDS: FieldDef[] = [
     id: "capacity",
     label: "Kapasiteetti:",
     type: "number",
-    required: false,
+    required: true,
     min: 1,
     step: "1",
   },
-  { id: "roomType", label: "Huonetyyppi:", type: "text", required: false },
-  { id: "department", label: "Osasto:", type: "select", required: false },
+  { id: "roomType", label: "Huonetyyppi:", type: "text", required: true },
+  { id: "department", label: "Osasto:", type: "select", required: true },
   { id: "freeText", label: "Lisätiedot:", type: "text", required: false },
 ];
 
@@ -37,6 +37,9 @@ interface RoomFormProps {
   onChange: (values: Record<string, string>, isValid: boolean) => void;
 }
 
+const isFormValid = (vals: Record<string, string>): boolean =>
+  FIELDS.filter((f) => f.required).every((f) => Boolean(vals[f.id]?.trim()));
+
 function RoomForm({ initial, onChange }: RoomFormProps) {
   const [values, setValues] = useState<Record<string, string>>({ ...initial });
   const [options, setOptions] = useState<SelectOptions>({ department: [] });
@@ -48,7 +51,7 @@ function RoomForm({ initial, onChange }: RoomFormProps) {
   }, []);
 
   useEffect(() => {
-    onChange(values, true);
+    onChange(values, isFormValid(values));
   }, [values, onChange]);
 
   const handleChange = (
