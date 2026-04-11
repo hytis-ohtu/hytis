@@ -147,6 +147,11 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     }));
   };
 
+  const filteredExistingPeople = people.filter((p) => {
+    const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
+    return fullName.includes(existingPersonSearch.toLowerCase());
+  });
+
   const filteredPeople = people.filter((p) => {
     const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
     return fullName.includes(supervisorSearch.toLowerCase());
@@ -173,12 +178,12 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
             />
             {(personOpen || existingPersonSearch) && (
               <ul className="personform-existing-person-list">
-                {filteredPeople.length === 0 ? (
+                {filteredExistingPeople.length === 0 ? (
                   <li className="personform-existing-person-empty">
                     Ei tuloksia
                   </li>
                 ) : (
-                  filteredPeople.map((person) => (
+                  filteredExistingPeople.map((person) => (
                     <li
                       key={person.id}
                       className="personform-existing-person-option"
