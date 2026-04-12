@@ -10,58 +10,60 @@ import {
 
 const api = supertest(app);
 
-beforeEach(async () => {
-  await connectToDatabase();
-  await dropAllTables();
-  await createAllTables();
-  await seedData();
-});
+describe("/api/reference-data", () => {
+  beforeEach(async () => {
+    await connectToDatabase();
+    await dropAllTables();
+    await createAllTables();
+    await seedData();
+  });
 
-test("departments data is returned as json", async () => {
-  await api
-    .get("/api/reference-data/departments")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+  it("departments data is returned as json", async () => {
+    await api
+      .get("/api/reference-data/departments")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("error handling works for departments endpoint", async () => {
-  await dropAllTables();
-  await api
-    .get("/api/reference-data/departments")
-    .expect(500)
-    .expect("Content-Type", /application\/json/);
-});
+  it("error handling works for departments endpoint", async () => {
+    await dropAllTables();
+    await api
+      .get("/api/reference-data/departments")
+      .expect(500)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("titles data is returned as json", async () => {
-  await api
-    .get("/api/reference-data/titles")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+  it("titles data is returned as json", async () => {
+    await api
+      .get("/api/reference-data/titles")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("error handling works for titles endpoint", async () => {
-  await dropAllTables();
-  await api
-    .get("/api/reference-data/titles")
-    .expect(500)
-    .expect("Content-Type", /application\/json/);
-});
+  it("error handling works for titles endpoint", async () => {
+    await dropAllTables();
+    await api
+      .get("/api/reference-data/titles")
+      .expect(500)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("research groups data is returned as json", async () => {
-  await api
-    .get("/api/reference-data/research-groups")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+  it("research groups data is returned as json", async () => {
+    await api
+      .get("/api/reference-data/research-groups")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("error handling works for research groups endpoint", async () => {
-  await dropAllTables();
-  await api
-    .get("/api/reference-data/research-groups")
-    .expect(500)
-    .expect("Content-Type", /application\/json/);
-});
+  it("error handling works for research groups endpoint", async () => {
+    await dropAllTables();
+    await api
+      .get("/api/reference-data/research-groups")
+      .expect(500)
+      .expect("Content-Type", /application\/json/);
+  });
 
-afterAll(async () => {
-  await disconnectDatabase();
+  afterAll(async () => {
+    await disconnectDatabase();
+  });
 });
