@@ -4,8 +4,8 @@ import type { Room } from "../types";
 interface RoomSelectionContextType {
   activeRoomId: string | null;
   setActiveRoomId: Dispatch<SetStateAction<string | null>>;
-  isRoomDetailsOpen: boolean;
-  setIsRoomDetailsOpen: Dispatch<SetStateAction<boolean>>;
+  isSidePanelOpen: boolean;
+  setIsSidePanelOpen: Dispatch<SetStateAction<boolean>>;
   room: Room | null;
   setRoom: Dispatch<SetStateAction<Room | null>>;
   selectRoom: (roomId: string, personId?: number) => Promise<void>;
@@ -29,14 +29,14 @@ interface RoomSelectionProviderProps {
 
 export function RoomSelectionProvider({ children, fetchRoomById }: RoomSelectionProviderProps) {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-  const [isRoomDetailsOpen, setIsRoomDetailsOpen] = useState<boolean>(false);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
 
   // Helper function to select a room and fetch its details
   const selectRoom = async (roomId: string, personId?: number) => {
     setActiveRoomId(roomId);
-    setIsRoomDetailsOpen(true);
+    setIsSidePanelOpen(true);
     setSelectedPersonId(personId ?? null);
     try {
       const roomData = await fetchRoomById(roomId);
@@ -49,8 +49,8 @@ export function RoomSelectionProvider({ children, fetchRoomById }: RoomSelection
   const value: RoomSelectionContextType = {
     activeRoomId,
     setActiveRoomId,
-    isRoomDetailsOpen,
-    setIsRoomDetailsOpen,
+    isSidePanelOpen,
+    setIsSidePanelOpen,
     room,
     setRoom,
     selectRoom,

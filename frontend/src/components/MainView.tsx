@@ -20,7 +20,7 @@ function MainView() {
     handleZoomFunc,
     handleResetFunc,
   } = useMapTransform();
-  const { activeRoomId, isRoomDetailsOpen, room, selectRoom, setActiveRoomId, setIsRoomDetailsOpen, selectedPersonId, setRoom } = useRoomSelection();
+  const { activeRoomId, isSidePanelOpen, room, selectRoom, setActiveRoomId, setIsSidePanelOpen, selectedPersonId, setRoom } = useRoomSelection();
 
   function createRoomInfoLabel(
     centerX: number,
@@ -139,7 +139,7 @@ function MainView() {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
         console.log("Clicked room with id:", target.id);
-        setIsRoomDetailsOpen(true);
+        setIsSidePanelOpen(true);
         setActiveRoomId(target.id);
         await findRoom(target.id);
       }
@@ -163,12 +163,12 @@ function MainView() {
         <ColorToggle />
 
         <AnimatePresence>
-          {isRoomDetailsOpen && (
+          {isSidePanelOpen && (
             <SidePanel
               room={room}
               selectedPersonId={selectedPersonId}
               handleClose={() => {
-                setIsRoomDetailsOpen(false);
+                setIsSidePanelOpen(false);
                 setActiveRoomId(null);
               }}
               onPersonSaved={() => findRoom(activeRoomId!)}
