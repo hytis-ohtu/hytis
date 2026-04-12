@@ -8,6 +8,7 @@ import {
 } from "../services/referenceDataService";
 import type { Person } from "../types";
 import "./PersonForm.css";
+import PersonSelector from "./PersonSelector";
 
 interface FieldDef {
   id: string;
@@ -147,16 +148,6 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     }));
   };
 
-  const filteredExistingPeople = people.filter((p) => {
-    const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
-    return fullName.includes(existingPersonSearch.toLowerCase());
-  });
-
-  const filteredPeople = people.filter((p) => {
-    const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
-    return fullName.includes(supervisorSearch.toLowerCase());
-  });
-
   const isExistingPersonSelected = !!values.personId;
 
   return (
@@ -166,40 +157,21 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
           <label className="personform-label" htmlFor="person-search">
             Hae henkilö:
           </label>
-          <div className="personform-existing-person" ref={existingPersonRef}>
-            <input
-              id="person-search"
-              type="text"
-              className="personform-input"
-              placeholder="Hae..."
-              value={existingPersonSearch}
-              onFocus={() => setPersonOpen(true)}
-              onChange={(e) => setExistingPersonSearch(e.target.value)}
-            />
-            {(personOpen || existingPersonSearch) && (
-              <ul className="personform-existing-person-list">
-                {filteredExistingPeople.length === 0 ? (
-                  <li className="personform-existing-person-empty">
-                    Ei tuloksia
-                  </li>
-                ) : (
-                  filteredExistingPeople.map((person) => (
-                    <li
-                      key={person.id}
-                      className={`personform-existing-person-option${String(person.id) === values.personId ? " selected" : ""}`}
-                      onClick={() => {
-                        applyExistingPerson(person);
-                        setExistingPersonSearch("");
-                        setPersonOpen(false);
-                      }}
-                    >
-                      {person.firstName} {person.lastName}
-                    </li>
-                  ))
-                )}
-              </ul>
-            )}
-          </div>
+          <PersonSelector
+            inputId="person-search"
+            personRef={existingPersonRef}
+            people={people}
+            personSearch={existingPersonSearch}
+            setPersonSearch={setExistingPersonSearch}
+            personOpen={personOpen}
+            onFocus={() => setPersonOpen(true)}
+            onSelect={(person: Person) => {
+              applyExistingPerson(person);
+              setExistingPersonSearch("");
+              setPersonOpen(false);
+            }}
+            selectedPersonIds={values.personId ? [values.personId] : []}
+          />
         </div>
 
         {FIELDS.map(({ id, label, type, required }) => {
@@ -231,18 +203,21 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
                   ))}
                 </select>
               ) : type === "supervisor" ? (
-                <div
-                  className={`personform-supervisor${isDisabled ? " personform-supervisor--disabled" : ""}`}
-                  ref={supervisorRef}
-                >
-                  <input
-                    id={id}
-                    type="text"
-                    className="personform-input"
-                    placeholder="Hae..."
-                    value={supervisorSearch}
+                <>
+                  <PersonSelector
+                    inputId={id}
+                    personRef={supervisorRef}
+                    people={people}
+                    personSearch={supervisorSearch}
+                    setPersonSearch={setSupervisorSearch}
+                    personOpen={supervisorOpen}
                     onFocus={() => setSupervisorOpen(true)}
-                    onChange={(e) => setSupervisorSearch(e.target.value)}
+                    onSelect={(person: Person) => {
+                      toggleSupervisor(String(person.id));
+                      setSupervisorSearch("");
+                      setSupervisorOpen(false);
+                    }}
+                    selectedPersonIds={selectedSupervisorIds}
                     disabled={isDisabled}
                   />
                   {selectedSupervisorIds.length > 0 && (
@@ -265,30 +240,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
                       })}
                     </div>
                   )}
-                  {(supervisorOpen || supervisorSearch) && (
-                    <ul className="personform-supervisor-list">
-                      {filteredPeople.length === 0 ? (
-                        <li className="personform-supervisor-empty">
-                          Ei tuloksia
-                        </li>
-                      ) : (
-                        filteredPeople.map((p) => (
-                          <li
-                            key={p.id}
-                            className={`personform-supervisor-option${selectedSupervisorIds.includes(String(p.id)) ? " selected" : ""}`}
-                            onClick={() => {
-                              toggleSupervisor(String(p.id));
-                              setSupervisorSearch("");
-                              setSupervisorOpen(false);
-                            }}
-                          >
-                            {p.firstName} {p.lastName}
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                  )}
-                </div>
+                </>
               ) : (
                 <input
                   id={id}
