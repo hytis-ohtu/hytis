@@ -186,7 +186,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
                   filteredExistingPeople.map((person) => (
                     <li
                       key={person.id}
-                      className="personform-existing-person-option"
+                      className={`personform-existing-person-option${String(person.id) === values.personId ? " selected" : ""}`}
                       onClick={() => {
                         applyExistingPerson(person);
                         setExistingPersonSearch("");
