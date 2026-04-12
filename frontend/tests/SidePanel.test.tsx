@@ -199,7 +199,7 @@ describe("RoomDetails", () => {
   it("opens edit mode with person initial values and saves edits", async () => {
     const user = userEvent.setup();
     vi.mocked(editPerson).mockResolvedValueOnce(
-      mockRoom_A210.contracts[0].person,
+      mockRoom_A210.contracts[0].person!,
     );
 
     render(
@@ -354,7 +354,7 @@ describe("RoomDetails", () => {
     );
 
     const contract = mockRoom_A210.contracts[0];
-    const fullName = `${contract.person.firstName} ${contract.person.lastName}`;
+    const fullName = `${contract.person!.firstName} ${contract.person!.lastName}`;
 
     const summary = screen.getByText(fullName);
     expect(summary).toBeInTheDocument();

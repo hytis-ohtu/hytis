@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import type { Room } from "../types";
 
 interface RoomSelectionContextType {

@@ -4,10 +4,9 @@ import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
 import { useRoomSelection } from "../contexts/RoomSelectionContext";
-import type { Room } from "../types";
 import ColorToggle from "./ColorToggle";
 import "./MainView.css";
-import SidePanel from "./SidePanel";
+import RoomDetails from "./RoomDetails";
 import ZoomButtons from "./ZoomButtons";
 
 const ROOM_LABEL_FONT_SIZE = 24;
@@ -20,7 +19,7 @@ function MainView() {
     handleZoomFunc,
     handleResetFunc,
   } = useMapTransform();
-  const { activeRoomId, isSidePanelOpen, room, selectRoom, setActiveRoomId, setIsSidePanelOpen, selectedPersonId, setRoom } = useRoomSelection();
+  const { activeRoomId, isSidePanelOpen, room, setActiveRoomId, setIsSidePanelOpen, selectedPersonId, setRoom } = useRoomSelection();
 
   function createRoomInfoLabel(
     centerX: number,
@@ -164,14 +163,14 @@ function MainView() {
 
         <AnimatePresence>
           {isSidePanelOpen && (
-            <SidePanel
+            <RoomDetails
               room={room}
               selectedPersonId={selectedPersonId}
               handleClose={() => {
                 setIsSidePanelOpen(false);
                 setActiveRoomId(null);
               }}
-              onPersonSaved={() => findRoom(activeRoomId!)}
+              onPersonAdded={() => findRoom(activeRoomId!)}
             />
           )}
         </AnimatePresence>

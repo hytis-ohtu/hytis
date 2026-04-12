@@ -6,7 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { addPerson } from "../services/peopleService";
 import type { Room } from "../types";
 import AddPersonModal from "./PersonModal";
-import "./RoomDetails.css";
+import "./SidePanel.css";
 
 function RoomDetails({
   room: roomProp,
@@ -97,17 +97,19 @@ function RoomDetails({
           <p>Ei sopimuksia.</p>
         ) : (
           contracts.map((contract) => (
-            <details key={contract.id || contract.person.id} open={selectedPersonId === contract.person.id}>
-              <summary>
-                {contract.person.firstName} {contract.person.lastName}
-              </summary>
-              <ul>
-                <li>Osasto: {contract.person.department.name}</li>
-                <li>Titteli: {contract.person.title.name}</li>
-                <li>Alkupvm: {contract.startDate}</li>
-                <li>Loppupvm: {contract.endDate}</li>
-              </ul>
-            </details>
+            contract.person ? (
+              <details key={contract.id || contract.person.id} open={selectedPersonId === contract.person.id}>
+                <summary>
+                  {contract.person.firstName} {contract.person.lastName}
+                </summary>
+                <ul>
+                  <li>Osasto: {contract.person.department?.name ?? "N/A"}</li>
+                  <li>Titteli: {contract.person.title?.name ?? "N/A"}</li>
+                  <li>Alkupvm: {contract.startDate}</li>
+                  <li>Loppupvm: {contract.endDate}</li>
+                </ul>
+              </details>
+            ) : null
           ))
         )}
       </section>
