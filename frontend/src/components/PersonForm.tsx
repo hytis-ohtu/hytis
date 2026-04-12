@@ -203,7 +203,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
                   ))}
                 </select>
               ) : type === "supervisor" ? (
-                <>
+                <div className="personform-supervisor">
                   <PersonSelector
                     inputId={id}
                     personRef={supervisorRef}
@@ -240,7 +240,7 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
                       })}
                     </div>
                   )}
-                </>
+                </div>
               ) : (
                 <input
                   id={id}
