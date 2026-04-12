@@ -3,12 +3,21 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import PersonSearch from "../src/components/PersonSearch";
+import { RoomSelectionProvider } from "../src/contexts/RoomSelectionContext";
 
 // Mock the peopleService
 const mockSearchPeople = vi.fn();
 vi.mock("../src/services/peopleService", () => ({
   searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
 }));
+
+const customRender = (ui: React.ReactElement) => {
+  return render(
+    <RoomSelectionProvider fetchRoomById={vi.fn()}>
+      {ui}
+    </RoomSelectionProvider>
+  );
+};
 
 describe("PersonSearch", () => {
   beforeEach(() => {
@@ -20,14 +29,14 @@ describe("PersonSearch", () => {
   });
 
   it("renders the search input", () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
     expect(searchInput).toBeInTheDocument();
   });
 
   it("does not show dropdown initially", () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const dropdown = screen.queryByTestId("person-search-dropdown");
     expect(dropdown).not.toBeInTheDocument();
@@ -47,7 +56,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup();
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -81,7 +90,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -122,7 +131,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -139,7 +148,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue([]);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -166,7 +175,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -200,7 +209,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -235,7 +244,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -277,7 +286,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText(
       "Hae henkilöä...",
@@ -306,7 +315,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue([]);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 
@@ -329,7 +338,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockRejectedValue(new Error("Network error"));
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
 

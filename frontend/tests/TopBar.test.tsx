@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import TopBar from "../src/components/TopBar.tsx";
+import { RoomSelectionProvider } from "../src/contexts/RoomSelectionContext";
 
 vi.mock("../src/hooks/useAuth", () => ({
   useAuth: () => ({
@@ -11,15 +12,23 @@ vi.mock("../src/hooks/useAuth", () => ({
   }),
 }));
 
+const customRender = (ui: React.ReactElement) => {
+  return render(
+    <RoomSelectionProvider fetchRoomById={vi.fn()}>
+      {ui}
+    </RoomSelectionProvider>
+  );
+};
+
 describe("TopBar", () => {
   it("renders the title correctly", () => {
-    render(<TopBar />);
+    customRender(<TopBar />);
     expect(screen.getByText("HYTiS")).toBeInTheDocument();
   });
 
   it("topbar menu can be opened", async () => {
     const user = userEvent.setup();
-    render(<TopBar />);
+    customRender(<TopBar />);
     const menuButton = screen.getByTestId("topbar-profile-button");
 
     expect(

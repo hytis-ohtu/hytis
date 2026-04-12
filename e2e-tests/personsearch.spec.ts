@@ -20,20 +20,22 @@ test.describe("PersonSearch", () => {
     const searchInput = page.getByPlaceholder("Hae henkilöä...");
     await searchInput.fill("Matti");
 
+    const dropdown = page.getByTestId("person-search-dropdown");
+
     // Check for result count
-    await expect(page.getByText("1 tulos")).toBeVisible();
+    await expect(dropdown.getByText("1 tulos")).toBeVisible();
 
     // Check for person name
-    await expect(page.getByText("Matti Virtanen")).toBeVisible();
+    await expect(dropdown.getByText("Matti Virtanen")).toBeVisible();
 
     // Check for room number
-    await expect(page.getByText("A210")).toBeVisible();
+    await expect(dropdown.getByText("A210")).toBeVisible();
 
     // Check for title
-    await expect(page.getByText("asiantuntija")).toBeVisible();
+    await expect(dropdown.getByText("asiantuntija")).toBeVisible();
 
     // Check for department
-    await expect(page.getByText("H516 MATHSTAT")).toBeVisible();
+    await expect(dropdown.getByText("H516 MATHSTAT")).toBeVisible();
   });
 
   test("search is case-insensitive", async ({ page }) => {
