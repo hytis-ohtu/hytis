@@ -1,0 +1,36 @@
+.roomform-container {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.roomform-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.roomform-field {
+  display: flex;
+  align-items: center;
+}
+
+.roomform-label {
+  flex: 0 0 140px;
+  text-align: center;
+  margin-right: 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-black);
+}
+
+.roomform-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-secondary);
+  border-radius: 4px;
+  font-size: 1rem;
+}
