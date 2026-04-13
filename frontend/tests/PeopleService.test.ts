@@ -57,7 +57,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         department: "2",
@@ -73,7 +72,6 @@ describe("peopleService", () => {
 
       expect(result).toEqual(mockPerson);
       expect(mockedAxios.post).toHaveBeenCalledWith("/api/people", {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         departmentId: "2",
@@ -101,7 +99,6 @@ describe("peopleService", () => {
       await addPerson(values, "room-42");
 
       expect(mockedAxios.post).toHaveBeenCalledWith("/api/people", {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         departmentId: undefined,
@@ -119,7 +116,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
@@ -139,7 +135,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
@@ -159,7 +154,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
@@ -180,7 +174,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockRejectedValue(error);
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         misc: "",
@@ -195,7 +188,6 @@ describe("peopleService", () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         department: "",
@@ -210,7 +202,6 @@ describe("peopleService", () => {
       await addPerson(values, 1);
 
       expect(mockedAxios.post).toHaveBeenCalledWith(expect.any(String), {
-        personId: undefined,
         firstName: "Jane",
         lastName: "Doe",
         departmentId: undefined,
@@ -222,26 +213,6 @@ describe("peopleService", () => {
         endDate: undefined,
         roomId: 1,
       });
-    });
-
-    it("sends personId when selecting an existing person", async () => {
-      mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
-
-      const values = {
-        personId: "5",
-        firstName: "Jane",
-        lastName: "Doe",
-        misc: "",
-        startDate: "",
-        endDate: "",
-      };
-
-      await addPerson(values, 10);
-
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        "/api/people",
-        expect.objectContaining({ personId: "5", roomId: 10 }),
-      );
     });
   });
 
