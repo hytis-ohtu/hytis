@@ -27,18 +27,6 @@ router.post("/", async (req: Request, res: Response) => {
     endDate,
   } = req.body;
 
-  const personInclude = [
-    { model: Person, as: "supervisors", through: { attributes: [] } },
-    "department",
-    "title",
-    "researchGroup",
-    {
-      model: Contract,
-      as: "contracts",
-      include: [{ model: Room, as: "room" }],
-    },
-  ];
-
   if (!firstName || !lastName) {
     return res
       .status(400)
@@ -88,7 +76,17 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     const createdPerson = await Person.findByPk(newPerson.id, {
-      include: personInclude,
+      include: [
+        { model: Person, as: "supervisors", through: { attributes: [] } },
+        "department",
+        "title",
+        "researchGroup",
+        {
+          model: Contract,
+          as: "contracts",
+          include: [{ model: Room, as: "room" }],
+        },
+      ],
     });
     res.status(201).json(createdPerson);
   } catch (error) {
