@@ -15,7 +15,6 @@ const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
   const {
-    personId,
     firstName,
     lastName,
     titleId,
@@ -39,46 +38,6 @@ router.post("/", async (req: Request, res: Response) => {
       include: [{ model: Room, as: "room" }],
     },
   ];
-
-  if (personId) {
-    try {
-      const existingPerson = await Person.findByPk(Number(personId), {
-        include: personInclude,
-      });
-
-      if (!existingPerson) {
-        return res.status(404).json({ error: "Person not found" });
-      }
-
-      if (roomId) {
-        const existingContract = await Contract.findOne({
-          where: {
-            personId: existingPerson.id,
-            roomId: Number(roomId),
-          },
-        });
-
-        if (existingContract) {
-          return res.status(400).json({
-            error: "Person already has a contract for this room",
-          });
-        }
-
-        await Contract.create({
-          personId: existingPerson.id,
-          roomId,
-          startDate,
-          endDate,
-        });
-      }
-
-      await existingPerson.reload({ include: personInclude });
-      return res.status(200).json(existingPerson);
-    } catch (error) {
-      console.error("Error adding contract to existing person:", error);
-      return res.status(500).json({ error: "Failed to add contract" });
-    }
-  }
 
   if (!firstName || !lastName) {
     return res
