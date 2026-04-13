@@ -27,6 +27,7 @@ const RoomSchema = z.object({
     .nonnegative("Capacity must be non-negative")
     .nullable()
     .optional(),
+  departmentId: z.number().nullable().optional(),
   freeText: z.string().nullable().optional(),
   roomType: z.string().nullable().optional(),
 });
