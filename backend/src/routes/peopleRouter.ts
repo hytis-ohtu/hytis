@@ -78,9 +78,6 @@ router.post("/", async (req: Request, res: Response) => {
     const createdPerson = await Person.findByPk(newPerson.id, {
       include: [
         { model: Person, as: "supervisors", through: { attributes: [] } },
-        "department",
-        "title",
-        "researchGroup",
         {
           model: Contract,
           as: "contracts",
