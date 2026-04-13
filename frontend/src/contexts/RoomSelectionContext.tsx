@@ -1,67 +1,15 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from "react";
-import type { Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
 import type { Room } from "../types";
 
-interface RoomSelectionContextType {
+export interface RoomSelectionContextType {
   activeRoomId: string | null;
-  setActiveRoomId: Dispatch<SetStateAction<string | null>>;
+  setActiveRoomId: (value: React.SetStateAction<string | null>) => void;
   isSidePanelOpen: boolean;
-  setIsSidePanelOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSidePanelOpen: (value: React.SetStateAction<boolean>) => void;
   room: Room | null;
-  setRoom: Dispatch<SetStateAction<Room | null>>;
+  setRoom: (value: React.SetStateAction<Room | null>) => void;
   selectRoom: (roomId: string, personId?: number) => Promise<void>;
   selectedPersonId: number | null;
 }
 
 export const RoomSelectionContext = createContext<RoomSelectionContextType | null>(null);
-
-export function useRoomSelection(): RoomSelectionContextType {
-  const context = useContext(RoomSelectionContext);
-  if (!context) {
-    throw new Error("useRoomSelection must be used within RoomSelectionProvider");
-  }
-  return context;
-}
-
-interface RoomSelectionProviderProps {
-  children: React.ReactNode;
-  fetchRoomById: (roomId: string) => Promise<Room>;
-}
-
-export function RoomSelectionProvider({ children, fetchRoomById }: RoomSelectionProviderProps) {
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
-  const [room, setRoom] = useState<Room | null>(null);
-  const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
-
-  // Helper function to select a room and fetch its details
-  const selectRoom = async (roomId: string, personId?: number) => {
-    setActiveRoomId(roomId);
-    setIsSidePanelOpen(true);
-    setSelectedPersonId(personId ?? null);
-    try {
-      const roomData = await fetchRoomById(roomId);
-      setRoom(roomData);
-    } catch (error) {
-      console.error("❌ Failed to fetch room details:", error);
-    }
-  };
-
-  const value: RoomSelectionContextType = {
-    activeRoomId,
-    setActiveRoomId,
-    isSidePanelOpen,
-    setIsSidePanelOpen,
-    room,
-    setRoom,
-    selectRoom,
-    selectedPersonId,
-  };
-
-  return (
-    <RoomSelectionContext.Provider value={value}>
-      {children}
-    </RoomSelectionContext.Provider>
-  );
-}

@@ -3,7 +3,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import TopBar from "../src/components/TopBar.tsx";
-import { RoomSelectionProvider } from "../src/contexts/RoomSelectionContext";
 
 vi.mock("../src/hooks/useAuth", () => ({
   useAuth: () => ({
@@ -12,12 +11,21 @@ vi.mock("../src/hooks/useAuth", () => ({
   }),
 }));
 
+vi.mock("../src/hooks/useRoomSelection", () => ({
+  useRoomSelection: () => ({
+    activeRoomId: null,
+    setActiveRoomId: vi.fn(),
+    isSidePanelOpen: false,
+    setIsSidePanelOpen: vi.fn(),
+    room: null,
+    setRoom: vi.fn(),
+    selectRoom: vi.fn(),
+    selectedPersonId: null,
+  }),
+}));
+
 const customRender = (ui: React.ReactElement) => {
-  return render(
-    <RoomSelectionProvider fetchRoomById={vi.fn()}>
-      {ui}
-    </RoomSelectionProvider>
-  );
+  return render(ui);
 };
 
 describe("TopBar", () => {

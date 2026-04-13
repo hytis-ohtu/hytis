@@ -3,7 +3,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import PersonSearch from "../src/components/PersonSearch";
-import { RoomSelectionProvider } from "../src/contexts/RoomSelectionContext";
 
 // Mock the peopleService
 const mockSearchPeople = vi.fn();
@@ -11,12 +10,21 @@ vi.mock("../src/services/peopleService", () => ({
   searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
 }));
 
+vi.mock("../src/hooks/useRoomSelection", () => ({
+  useRoomSelection: () => ({
+    activeRoomId: null,
+    setActiveRoomId: vi.fn(),
+    isSidePanelOpen: false,
+    setIsSidePanelOpen: vi.fn(),
+    room: null,
+    setRoom: vi.fn(),
+    selectRoom: vi.fn(),
+    selectedPersonId: null,
+  }),
+}));
+
 const customRender = (ui: React.ReactElement) => {
-  return render(
-    <RoomSelectionProvider fetchRoomById={vi.fn()}>
-      {ui}
-    </RoomSelectionProvider>
-  );
+  return render(ui);
 };
 
 describe("PersonSearch", () => {

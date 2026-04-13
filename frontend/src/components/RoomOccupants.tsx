@@ -14,9 +14,11 @@ import "./SidePanel.css";
 function RoomOccupants({
   room: roomProp,
   onPersonSaved,
+  selectedPersonId,
 }: {
   room: Room | null;
   onPersonSaved: () => void;
+  selectedPersonId: number | null;
 }) {
   const { id: roomId, contracts } = (roomProp ?? {}) as Partial<Room>;
 
@@ -115,7 +117,7 @@ function RoomOccupants({
       ) : (
         contracts.map((contract) => (
           contract.person ? (
-            <details key={contract.id}>
+            <details key={contract.id} open={contract.person.id === selectedPersonId}>
               <summary>
                 <span className="person-name">
                   {contract.person.firstName} {contract.person.lastName}

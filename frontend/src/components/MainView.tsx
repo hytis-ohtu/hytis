@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { findAllRooms, findRoomById } from "../services/roomsService";
-import { useRoomSelection } from "../contexts/RoomSelectionContext";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import ColorToggle from "./ColorToggle";
 import "./MainView.css";
-import RoomDetails from "./RoomDetails";
+import SidePanel from "./SidePanel";
 import ZoomButtons from "./ZoomButtons";
 
 const ROOM_LABEL_FONT_SIZE = 24;
@@ -163,14 +163,14 @@ function MainView() {
 
         <AnimatePresence>
           {isSidePanelOpen && (
-            <RoomDetails
+            <SidePanel
               room={room}
               selectedPersonId={selectedPersonId}
               handleClose={() => {
                 setIsSidePanelOpen(false);
                 setActiveRoomId(null);
               }}
-              onPersonAdded={() => findRoom(activeRoomId!)}
+              onPersonSaved={() => findRoom(activeRoomId!)}
             />
           )}
         </AnimatePresence>

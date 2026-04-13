@@ -142,6 +142,7 @@ describe("RoomDetails", () => {
         room={null}
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -158,6 +159,7 @@ describe("RoomDetails", () => {
         room={null}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
     expect(
@@ -180,6 +182,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -207,6 +210,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -242,6 +246,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -272,6 +277,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -309,6 +315,7 @@ describe("RoomDetails", () => {
         room={roomWithPersonMissingId}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -325,6 +332,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -350,6 +358,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -382,6 +391,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A219}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -395,6 +405,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -409,6 +420,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByTestId("remove-person-button-1")).toBeInTheDocument();
@@ -421,6 +433,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -438,6 +451,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -456,6 +470,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -472,6 +487,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -489,6 +505,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -514,6 +531,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        selectedPersonId={null}
       />,
     );
 

@@ -4,7 +4,7 @@ import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
-import { RoomSelectionProvider } from "./contexts/RoomSelectionContext";
+import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
 import { findRoomById } from "./services/roomsService";
 
 function App() {

@@ -1,7 +1,7 @@
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { searchPeople } from "../services/peopleService";
-import { useRoomSelection } from "../contexts/RoomSelectionContext";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { Person } from "../types";
 import "./PersonSearch.css";
 

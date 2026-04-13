@@ -209,7 +209,6 @@ describe("GET /api/people - search", () => {
       "Algebrallisten rakenteiden tutkimusryhmä",
     );
 
-    // New: Check contracts with room data
     expect(person.contracts).toBeDefined();
     expect(Array.isArray(person.contracts)).toBe(true);
     expect(person.contracts.length).toBeGreaterThan(0);
