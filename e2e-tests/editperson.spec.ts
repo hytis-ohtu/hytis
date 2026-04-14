@@ -81,3 +81,30 @@ test("cancelling from confirmation modal keeps the edit person modal open", asyn
 
   await expect(page.locator(".personmodal-content")).toBeVisible();
 });
+
+test("editing and saving person details displays updated info in the room list", async ({
+  page,
+}) => {
+  await openSidePanel(page);
+
+  await page.locator(".edit-person-button").first().click();
+  await expect(page.locator(".personmodal-content")).toBeVisible();
+
+  const firstNameInput = page.locator('input[name="firstName"]');
+  const lastNameInput = page.locator('input[name="lastName"]');
+
+  await firstNameInput.clear();
+  await firstNameInput.fill("Uusi nimi");
+
+  await lastNameInput.clear();
+  await lastNameInput.fill("Uusi sukunimi");
+
+  await page.locator(".personmodal-save-button").click();
+  await page.locator(".confirmation-button", { hasText: "Tallenna" }).click();
+
+  await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
+
+  await expect(page.locator("details .person-name").first()).toContainText(
+    "Uusi nimi Uusi sukunimi",
+  );
+});
