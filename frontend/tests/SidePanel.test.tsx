@@ -54,6 +54,7 @@ vi.mock("../src/components/PersonModal", () => ({
 
 const mockHandleClose = vi.fn();
 const mockOnPersonSaved = vi.fn();
+const mockOnRoomSaved = vi.fn();
 
 const mockRoom_A210: Room = {
   id: 1,
@@ -142,6 +143,7 @@ describe("RoomDetails", () => {
         room={null}
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -158,6 +160,7 @@ describe("RoomDetails", () => {
         room={null}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
     expect(
@@ -180,6 +183,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -207,6 +211,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -242,6 +247,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -272,6 +278,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -309,6 +316,7 @@ describe("RoomDetails", () => {
         room={roomWithPersonMissingId}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -325,6 +333,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -350,6 +359,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -382,6 +392,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A219}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -395,6 +406,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -409,6 +421,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
     expect(screen.getByTestId("remove-person-button-1")).toBeInTheDocument();
@@ -421,6 +434,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -438,6 +452,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -456,6 +471,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -472,6 +488,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -489,6 +506,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
@@ -514,6 +532,7 @@ describe("RoomDetails", () => {
         room={mockRoom_A210}
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
       />,
     );
 
