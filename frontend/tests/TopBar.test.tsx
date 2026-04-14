@@ -23,16 +23,16 @@ describe("TopBar", () => {
     const menuButton = screen.getByTestId("topbar-profile-button");
 
     expect(
-      screen.queryByTestId("topbar-settings-button"),
+      screen.queryByTestId("profile-menu-close-button"),
     ).not.toBeInTheDocument();
 
     await user.click(menuButton);
-    expect(screen.getByTestId("topbar-settings-button")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-menu-close-button")).toBeInTheDocument();
 
     await user.click(document.body);
     await waitFor(() => {
       expect(
-        screen.queryByTestId("topbar-settings-button"),
+        screen.queryByTestId("profile-menu-close-button"),
       ).not.toBeInTheDocument();
     });
   });

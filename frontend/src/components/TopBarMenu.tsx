@@ -14,9 +14,11 @@ function TopBarMenu({ onClose }: TopBarMenuProps) {
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       const target = e.target as HTMLElement;
-      if (target.closest(".topbar-profile")) {
+
+      if (target.closest('[data-testid="topbar-profile-button"]')) {
         return;
       }
+
       if (ref.current && !ref.current.contains(e.target as Node)) {
         onClose();
       }
