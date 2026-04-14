@@ -62,6 +62,7 @@ test("cancelling edit person without saving closes the modal", async ({
   await page.locator(".personmodal-close-button").click();
   await page.locator(".confirmation-button", { hasText: "Kyllä" }).click();
 
+  await expect(page.locator(".personmodal-content")).not.toBeVisible();
   await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
 });
 
@@ -102,6 +103,7 @@ test("editing and saving person details displays updated info in the room list",
   await page.locator(".personmodal-save-button").click();
   await page.locator(".confirmation-button", { hasText: "Tallenna" }).click();
 
+  await expect(page.locator(".personmodal-content")).not.toBeVisible();
   await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
 
   await expect(page.locator("details .person-name").first()).toContainText(
