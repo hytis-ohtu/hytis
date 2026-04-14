@@ -566,4 +566,52 @@ describe("RoomDetails", () => {
 
     consoleErrorSpy.mockRestore();
   });
+
+  it("auto-expands person details when selectedPersonId matches", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={1}
+      />,
+    );
+
+    // Find the details element - it should be expanded (open)
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).toHaveAttribute("open", "");
+  });
+
+  it("does not auto-expand person details when selectedPersonId does not match", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={999}
+      />,
+    );
+
+    // Find the details element - it should not be expanded
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).not.toHaveAttribute("open");
+  });
+
+  it("does not auto-expand when selectedPersonId is null", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
+      />,
+    );
+
+    // Find the details element - it should not be expanded
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).not.toHaveAttribute("open");
+  });
 });
