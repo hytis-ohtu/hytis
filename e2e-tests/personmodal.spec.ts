@@ -130,3 +130,15 @@ test("confirming save closes modal and persists person", async ({ page }) => {
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
 });
+
+test("searching for existing person returns matching results", async ({
+  page,
+}) => {
+  await openAddPersonModal(page);
+  await page.getByLabel("Hae henkilö:").fill("Ah");
+  await page.waitForSelector(".personform-person-option");
+  await expect(page.locator(".personform-person-option")).toHaveCount(1);
+  await expect(page.locator(".personform-person-option")).toContainText(
+    "Ahmed Ali",
+  );
+});
