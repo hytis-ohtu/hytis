@@ -24,19 +24,15 @@ vi.mock("../src/hooks/useRoomSelection", () => ({
   }),
 }));
 
-const customRender = (ui: React.ReactElement) => {
-  return render(ui);
-};
-
 describe("TopBar", () => {
   it("renders the title correctly", () => {
-    customRender(<TopBar />);
+    render(<TopBar />);
     expect(screen.getByText("HYTiS")).toBeInTheDocument();
   });
 
   it("topbar menu can be opened", async () => {
     const user = userEvent.setup();
-    customRender(<TopBar />);
+    render(<TopBar />);
     const menuButton = screen.getByTestId("topbar-profile-button");
 
     expect(

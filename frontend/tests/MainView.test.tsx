@@ -40,10 +40,6 @@ vi.mock("../src/hooks/useRoomSelection", () => ({
   }),
 }));
 
-const customRender = () => {
-  return render(<MainView />);
-};
-
 vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
   default: (props: Record<string, unknown>) => (
     <svg {...props} data-testid="mock-svg">
@@ -65,13 +61,13 @@ vi.mock("../src/services/roomsService");
 describe("MainView", () => {
   it("renders without crashing", () => {
     vi.mocked(findAllRooms).mockResolvedValue([]);
-    customRender();
+    render(<MainView />);
     expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
   });
 
   it("maps rooms data correctly to SVG elements", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
-    customRender();
+    render(<MainView />);
 
     await waitFor(() => {
       const availableRoom = document.querySelector(
@@ -101,7 +97,7 @@ describe("MainView", () => {
 
   it("room colors change correctly when showing departments", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
-    customRender();
+    render(<MainView />);
 
     const user = userEvent.setup();
     user.click(screen.getByTestId("switch-color-mode"));
@@ -123,7 +119,7 @@ describe("MainView", () => {
 
   it("renders legend with correct initial mode (availability)", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
-    customRender();
+    render(<MainView />);
 
     await waitFor(() => {
       const legend = screen.getByTestId("legend");
@@ -133,7 +129,7 @@ describe("MainView", () => {
 
   it("legend switches to department mode when button is clicked", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
-    customRender();
+    render(<MainView />);
 
     const user = userEvent.setup();
 
@@ -154,7 +150,7 @@ describe("MainView", () => {
   it("fetches room details when a room is clicked", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
     vi.mocked(findRoomById).mockResolvedValue(rooms[0]);
-    customRender();
+    render(<MainView />);
 
     await waitFor(() => {
       const room = document.querySelector('[data-room="A210"]');
@@ -176,7 +172,7 @@ describe("MainView", () => {
 describe("MapTransform", () => {
   describe("transform with buttons", () => {
     it("zoom buttons work", async () => {
-      customRender();
+      render(<MainView />);
 
       const user = userEvent.setup();
       const map = document.getElementsByClassName(
@@ -199,7 +195,7 @@ describe("MapTransform", () => {
     });
 
     it("zooming with button stops at maximum", async () => {
-      customRender();
+      render(<MainView />);
 
       const user = userEvent.setup();
       const map = document.getElementsByClassName(
@@ -218,7 +214,7 @@ describe("MapTransform", () => {
     });
 
     it("zooming with button stops at minimum", async () => {
-      customRender();
+      render(<MainView />);
 
       const user = userEvent.setup();
       const map = document.getElementsByClassName(
@@ -237,7 +233,7 @@ describe("MapTransform", () => {
     });
 
     it("while zooming with buttons the map is bounded from the left and top", async () => {
-      customRender();
+      render(<MainView />);
 
       const user = userEvent.setup();
       const inputDiv = document.getElementsByClassName(
@@ -270,7 +266,7 @@ describe("MapTransform", () => {
     });
 
     it("while zooming with buttons the map is bounded from the right and bottom", async () => {
-      customRender();
+      render(<MainView />);
 
       const user = userEvent.setup();
       const inputDiv = document.getElementsByClassName(
@@ -312,7 +308,7 @@ describe("MapTransform", () => {
   describe("transform with mouse", () => {
     describe("zooming", () => {
       it("zooming in increases scale", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -333,7 +329,7 @@ describe("MapTransform", () => {
       });
 
       it("zooming out decreases scale", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -354,7 +350,7 @@ describe("MapTransform", () => {
       });
 
       it("zooming stops at maximum", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -379,7 +375,7 @@ describe("MapTransform", () => {
       });
 
       it("zooming stops at minimum", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -404,7 +400,7 @@ describe("MapTransform", () => {
       });
 
       it("zooming in moves the map outward", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -429,7 +425,7 @@ describe("MapTransform", () => {
       });
 
       it("zooming out moves the map inward", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -454,7 +450,7 @@ describe("MapTransform", () => {
       });
 
       it("while zooming the map is bounded from the left and top", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -491,7 +487,7 @@ describe("MapTransform", () => {
       });
 
       it("while zooming the map is bounded from the right and bottom", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -536,7 +532,7 @@ describe("MapTransform", () => {
 
     describe("moving", () => {
       it("moving map works", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -577,7 +573,7 @@ describe("MapTransform", () => {
       });
 
       it("moving is bounded from the left and top", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -611,7 +607,7 @@ describe("MapTransform", () => {
       });
 
       it("moving is bounded from the right and bottom", () => {
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
@@ -652,7 +648,7 @@ describe("MapTransform", () => {
 
       it("moving the map disables room hovering", async () => {
         vi.mocked(findAllRooms).mockResolvedValue(rooms);
-        customRender();
+        render(<MainView />);
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
