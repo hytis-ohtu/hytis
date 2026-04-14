@@ -210,3 +210,29 @@ test("saving existing person without contract dates closes the modal and persist
     page.locator(".person-name", { hasText: "Ahmed Ali" }),
   ).toBeVisible();
 });
+
+test("saving existing person with contract dates closes the modal and persists person", async ({
+  page,
+}) => {
+  await openAddPersonModal(page);
+  await searchAndSelectExistingPerson(page, "Ah");
+  await page.getByLabel("Sopimuksen alku:").fill("2025-06-01");
+  await page.getByLabel("Sopimuksen loppu:").fill("2026-06-01");
+  await page
+    .locator(".personmodal-actions")
+    .getByRole("button", { name: "Lisää", exact: true })
+    .click();
+  await page
+    .locator(".confirmation-modal")
+    .getByRole("button", { name: "Tallenna" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Lisää henkilö" }),
+  ).not.toBeVisible();
+
+  const personItem = page.locator("details", {
+    has: page.locator(".person-name", { hasText: "Ahmed Ali" }),
+  });
+  await expect(personItem).toContainText("Alkupvm: 2025-06-01");
+  await expect(personItem).toContainText("Loppupvm: 2026-06-01");
+});
