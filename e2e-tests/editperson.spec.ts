@@ -23,3 +23,17 @@ test("edit person modal opens when edit button is clicked", async ({
   await expect(page.locator(".personmodal-overlay")).toBeVisible();
   await expect(page.locator(".personmodal-content")).toBeVisible();
 });
+
+test("clicking outside edit person modal triggers cancel confirmation dialog", async ({
+  page,
+}) => {
+  await openSidePanel(page);
+  await page.locator(".edit-person-button").first().click();
+
+  // Click on overlay background outside the topbar and modal (top-left corner)
+  await page
+    .locator(".personmodal-overlay")
+    .click({ position: { x: 200, y: 200 } });
+
+  await expect(page.locator(".confirmation-title")).toBeVisible();
+});
