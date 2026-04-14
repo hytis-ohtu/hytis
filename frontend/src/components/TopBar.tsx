@@ -49,7 +49,7 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
         </button>
         <button
           data-testid="topbar-profile-button"
-          className="topbar-button topbar-profile"
+          className="topbar-button"
           onClick={(e) => {
             e.stopPropagation();
             setMenuOpen((v) => !v);

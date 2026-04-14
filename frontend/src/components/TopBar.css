@@ -30,9 +30,9 @@
 .topbar-button {
   width: var(--button-size);
   height: var(--button-size);
-  border: none;
-  border-radius: 50%;
-  background: transparent;
+  border-radius: var(--border-radius-md);
+  border: var(--border-sm);
+  background: var(--color-primary);
   color: var(--color-text-black);
   cursor: pointer;
   display: flex;
@@ -61,9 +61,4 @@
   font-weight: 600;
   color: var(--color-text-black);
   letter-spacing: 0.02em;
-}
-
-.topbar-profile:hover {
-  background: var(--color-secondary);
-  color: var(--color-text-black);
 }
