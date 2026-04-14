@@ -160,3 +160,22 @@ test("selecting existing person populates person form fields", async ({
   await expect(supervisorTag).toHaveCount(1);
   await expect(supervisorTag).toContainText("Päivi Koskinen");
 });
+
+test("existing person form fields are read-only except contract dates", async ({
+  page,
+}) => {
+  await openAddPersonModal(page);
+  await page.getByLabel("Hae henkilö:").fill("Ah");
+  await page.waitForSelector(".personform-person-option");
+  await page.locator(".personform-person-option").first().click();
+  await expect(page.getByLabel("Etunimi:")).toBeDisabled();
+  await expect(page.getByLabel("Sukunimi:")).toBeDisabled();
+  await expect(page.getByLabel("Osasto:")).toBeDisabled();
+  await expect(page.getByLabel("Työnimike:")).toBeDisabled();
+
+  const supervisorTag = page.locator(".personform-supervisor-tag").first();
+  await expect(supervisorTag.locator("button")).toBeDisabled();
+
+  await expect(page.getByLabel("Sopimuksen alku:")).toBeEnabled();
+  await expect(page.getByLabel("Sopimuksen loppu:")).toBeEnabled();
+});
