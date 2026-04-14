@@ -25,6 +25,17 @@ async function searchAndSelectExistingPerson(page: Page, name: string) {
   await page.locator(".personform-person-option").first().click();
 }
 
+async function saveAndConfirmPerson(page: Page) {
+  await page
+    .locator(".personmodal-actions")
+    .getByRole("button", { name: "Lisää", exact: true })
+    .click();
+  await page
+    .locator(".confirmation-modal")
+    .getByRole("button", { name: "Tallenna" })
+    .click();
+}
+
 test("person modal can be opened", async ({ page }) => {
   await openAddPersonModal(page);
   await expect(
@@ -124,14 +135,7 @@ test("cancelling save confirmation keeps modal open", async ({ page }) => {
 test("confirming save closes modal and persists person", async ({ page }) => {
   await openAddPersonModal(page);
   await fillRequiredFields(page);
-  await page
-    .locator(".personmodal-actions")
-    .getByRole("button", { name: "Lisää", exact: true })
-    .click();
-  await page
-    .locator(".confirmation-modal")
-    .getByRole("button", { name: "Tallenna" })
-    .click();
+  await saveAndConfirmPerson(page);
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
@@ -195,14 +199,7 @@ test("saving existing person without contract dates closes the modal and persist
 }) => {
   await openAddPersonModal(page);
   await searchAndSelectExistingPerson(page, "Ah");
-  await page
-    .locator(".personmodal-actions")
-    .getByRole("button", { name: "Lisää", exact: true })
-    .click();
-  await page
-    .locator(".confirmation-modal")
-    .getByRole("button", { name: "Tallenna" })
-    .click();
+  await saveAndConfirmPerson(page);
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
@@ -218,14 +215,7 @@ test("saving existing person with contract dates closes the modal and persists p
   await searchAndSelectExistingPerson(page, "Ah");
   await page.getByLabel("Sopimuksen alku:").fill("2025-06-01");
   await page.getByLabel("Sopimuksen loppu:").fill("2026-06-01");
-  await page
-    .locator(".personmodal-actions")
-    .getByRole("button", { name: "Lisää", exact: true })
-    .click();
-  await page
-    .locator(".confirmation-modal")
-    .getByRole("button", { name: "Tallenna" })
-    .click();
+  await saveAndConfirmPerson(page);
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
