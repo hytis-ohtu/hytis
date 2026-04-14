@@ -1,12 +1,7 @@
-import { expect, Page } from "@playwright/test";
-import { test } from "./testHelper";
+import { expect } from "@playwright/test";
+import { test, openSidePanel } from "./testHelper";
 
 test.use({ viewport: { width: 1920, height: 1080 } });
-
-async function openSidePanel(page: Page) {
-  await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
-}
 
 test("edit person button is visible for each room occupant", async ({
   page,
