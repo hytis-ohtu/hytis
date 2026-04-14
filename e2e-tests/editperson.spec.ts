@@ -64,3 +64,20 @@ test("cancelling edit person without saving closes the modal", async ({
 
   await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
 });
+
+test("cancelling from confirmation modal keeps the edit person modal open", async ({
+  page,
+}) => {
+  await openSidePanel(page);
+  await page.locator(".edit-person-button").first().click();
+  await expect(page.locator(".personmodal-content")).toBeVisible();
+
+  const firstNameInput = page.locator('input[name="firstName"]');
+  await firstNameInput.clear();
+  await firstNameInput.fill("Uusi nimi");
+
+  await page.locator(".personmodal-save-button").click();
+  await page.locator(".confirmation-button", { hasText: "Peruuta" }).click();
+
+  await expect(page.locator(".personmodal-content")).toBeVisible();
+});
