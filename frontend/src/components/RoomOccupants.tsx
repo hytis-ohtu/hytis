@@ -125,9 +125,12 @@ function RoomOccupants({
       ) : contracts.length === 0 ? (
         <p>Ei sopimuksia.</p>
       ) : (
-        contracts.map((contract) => (
+        contracts.map((contract) =>
           contract.person ? (
-            <details key={contract.id} open={contract.person.id === selectedPersonId}>
+            <details
+              key={contract.id}
+              open={contract.person.id === selectedPersonId}
+            >
               <summary>
                 <span className="person-name">
                   {contract.person.firstName} {contract.person.lastName}
@@ -161,7 +164,10 @@ function RoomOccupants({
                 />
               </summary>
               <ul>
-                <Field label="Osasto" value={contract.person.department?.name} />
+                <Field
+                  label="Osasto"
+                  value={contract.person.department?.name}
+                />
                 <Field
                   label="Tutkimusryhmä"
                   value={contract.person.researchGroup?.name}
@@ -181,8 +187,8 @@ function RoomOccupants({
                 <Field label="Lisätiedot" value={contract.person.freeText} />
               </ul>
             </details>
-          ) : null
-        ))
+          ) : null,
+        )
       )}
 
       <ConfirmationButton

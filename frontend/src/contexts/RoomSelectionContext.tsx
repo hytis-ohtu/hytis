@@ -12,4 +12,5 @@ export interface RoomSelectionContextType {
   selectedPersonId: number | null;
 }
 
-export const RoomSelectionContext = createContext<RoomSelectionContextType | null>(null);
+export const RoomSelectionContext =
+  createContext<RoomSelectionContextType | null>(null);

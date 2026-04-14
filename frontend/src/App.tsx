@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import "./App.css";
 import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
+import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
-import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
 import { findRoomById } from "./services/roomsService";
 
 function App() {
