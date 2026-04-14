@@ -19,6 +19,12 @@ async function fillRequiredFields(page: Page) {
   await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
 }
 
+async function searchAndSelectExistingPerson(page: Page, name: string) {
+  await page.getByLabel("Hae henkilö:").fill(name);
+  await page.waitForSelector(".personform-person-option");
+  await page.locator(".personform-person-option").first().click();
+}
+
 test("person modal can be opened", async ({ page }) => {
   await openAddPersonModal(page);
   await expect(
@@ -147,9 +153,7 @@ test("selecting existing person populates person form fields", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await page.getByLabel("Hae henkilö:").fill("Ah");
-  await page.waitForSelector(".personform-person-option");
-  await page.locator(".personform-person-option").first().click();
+  await searchAndSelectExistingPerson(page, "Ah");
   await expect(page.getByLabel("Etunimi:")).toHaveValue("Ahmed");
   await expect(page.getByLabel("Sukunimi:")).toHaveValue("Ali");
   await expect(page.getByLabel("Osasto:")).toContainText("H523 CS");
@@ -165,9 +169,7 @@ test("existing person form fields are read-only except contract dates", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await page.getByLabel("Hae henkilö:").fill("Ah");
-  await page.waitForSelector(".personform-person-option");
-  await page.locator(".personform-person-option").first().click();
+  await searchAndSelectExistingPerson(page, "Ah");
   await expect(page.getByLabel("Etunimi:")).toBeDisabled();
   await expect(page.getByLabel("Sukunimi:")).toBeDisabled();
   await expect(page.getByLabel("Osasto:")).toBeDisabled();
