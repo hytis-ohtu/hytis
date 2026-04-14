@@ -38,7 +38,11 @@ function SidePanel({
 
       <RoomInfo room={roomProp} onRoomSaved={onRoomSaved} />
 
-      <RoomOccupants room={roomProp} onPersonSaved={onPersonSaved} selectedPersonId={selectedPersonId} />
+      <RoomOccupants
+        room={roomProp}
+        onPersonSaved={onPersonSaved}
+        selectedPersonId={selectedPersonId}
+      />
     </motion.div>
   );
 }

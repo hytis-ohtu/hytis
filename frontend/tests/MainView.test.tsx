@@ -147,27 +147,27 @@ describe("MainView", () => {
   });
 });
 
-  it("fetches room details when a room is clicked", async () => {
-    vi.mocked(findAllRooms).mockResolvedValue(rooms);
-    vi.mocked(findRoomById).mockResolvedValue(rooms[0]);
-    render(<MainView />);
+it("fetches room details when a room is clicked", async () => {
+  vi.mocked(findAllRooms).mockResolvedValue(rooms);
+  vi.mocked(findRoomById).mockResolvedValue(rooms[0]);
+  render(<MainView />);
 
-    await waitFor(() => {
-      const room = document.querySelector('[data-room="A210"]');
-      expect(room).toHaveAttribute("id", "1");
-    });
-
+  await waitFor(() => {
     const room = document.querySelector('[data-room="A210"]');
-    expect(room).toBeTruthy();
-
-    if (room instanceof SVGElement) {
-      fireEvent.click(room);
-    }
-
-    await waitFor(() => {
-      expect(findRoomById).toHaveBeenCalledWith("1");
-    });
+    expect(room).toHaveAttribute("id", "1");
   });
+
+  const room = document.querySelector('[data-room="A210"]');
+  expect(room).toBeTruthy();
+
+  if (room instanceof SVGElement) {
+    fireEvent.click(room);
+  }
+
+  await waitFor(() => {
+    expect(findRoomById).toHaveBeenCalledWith("1");
+  });
+});
 
 describe("MapTransform", () => {
   describe("transform with buttons", () => {

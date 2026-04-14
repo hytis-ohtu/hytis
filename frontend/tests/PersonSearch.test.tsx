@@ -461,9 +461,7 @@ describe("PersonSearch", () => {
     const personResult = screen.getByText("Matti Virtanen");
     await user.click(personResult);
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      "Person has no room assignment",
-    );
+    expect(consoleLogSpy).toHaveBeenCalledWith("Person has no room assignment");
 
     consoleLogSpy.mockRestore();
   });

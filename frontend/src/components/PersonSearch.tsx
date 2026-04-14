@@ -1,7 +1,7 @@
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { searchPeople } from "../services/peopleService";
 import { useRoomSelection } from "../hooks/useRoomSelection";
+import { searchPeople } from "../services/peopleService";
 import type { Person } from "../types";
 import "./PersonSearch.css";
 
@@ -77,9 +77,10 @@ function PersonSearch() {
 
   const handlePersonClick = (person: Person) => {
     // Get the person's first contract (regardless of end date for demo purposes)
-    const contract = person.contracts && person.contracts.length > 0
-      ? person.contracts[0]
-      : null;
+    const contract =
+      person.contracts && person.contracts.length > 0
+        ? person.contracts[0]
+        : null;
 
     if (contract?.room) {
       // Select the room and pass person ID to auto-expand their details
@@ -107,9 +108,15 @@ function PersonSearch() {
       </div>
 
       {isOpen && (
-        <div className="person-search-dropdown" data-testid="person-search-dropdown">
+        <div
+          className="person-search-dropdown"
+          data-testid="person-search-dropdown"
+        >
           <div className="person-search-header">
-            <span className="person-search-results-count" data-testid="person-search-results-count">
+            <span
+              className="person-search-results-count"
+              data-testid="person-search-results-count"
+            >
               {results.length} {results.length === 1 ? "tulos" : "tulosta"}
             </span>
             <button
@@ -142,11 +149,13 @@ function PersonSearch() {
                   {person.firstName} {person.lastName}
                 </div>
                 <div className="person-search-result-details">
-                  {person.contracts && person.contracts.length > 0 && person.contracts[0].room && (
-                    <span className="person-search-result-room">
-                      {person.contracts[0].room.name}
-                    </span>
-                  )}
+                  {person.contracts &&
+                    person.contracts.length > 0 &&
+                    person.contracts[0].room && (
+                      <span className="person-search-result-room">
+                        {person.contracts[0].room.name}
+                      </span>
+                    )}
                   {person.title?.name && (
                     <span className="person-search-result-title">
                       {person.title.name}

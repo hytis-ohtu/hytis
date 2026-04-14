@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useRoomSelection } from "../src/hooks/useRoomSelection";
 import { RoomSelectionProvider } from "../src/components/RoomSelectionProvider";
+import { useRoomSelection } from "../src/hooks/useRoomSelection";
 import type { Room } from "../src/types";
 
 const mockRoom: Room = {
@@ -200,7 +200,9 @@ describe("RoomSelectionProvider", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("active-room-id")).toHaveTextContent("999");
-      expect(screen.getByTestId("is-side-panel-open")).toHaveTextContent("true");
+      expect(screen.getByTestId("is-side-panel-open")).toHaveTextContent(
+        "true",
+      );
     });
   });
 
@@ -210,9 +212,7 @@ describe("RoomSelectionProvider", () => {
 
       return (
         <div>
-          <span data-testid="room-name">
-            {context.room?.name ?? "null"}
-          </span>
+          <span data-testid="room-name">{context.room?.name ?? "null"}</span>
           <button
             onClick={() => context.setRoom(mockRoom)}
             data-testid="set-room"

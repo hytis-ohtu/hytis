@@ -1,14 +1,17 @@
 import { useState } from "react";
-import type { Room } from "../types";
 import type { RoomSelectionContextType } from "../contexts/RoomSelectionContext";
 import { RoomSelectionContext } from "../contexts/RoomSelectionContext";
+import type { Room } from "../types";
 
 interface RoomSelectionProviderProps {
   children: React.ReactNode;
   fetchRoomById: (roomId: string) => Promise<Room>;
 }
 
-export function RoomSelectionProvider({ children, fetchRoomById }: RoomSelectionProviderProps) {
+export function RoomSelectionProvider({
+  children,
+  fetchRoomById,
+}: RoomSelectionProviderProps) {
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
   const [room, setRoom] = useState<Room | null>(null);
