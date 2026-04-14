@@ -181,3 +181,11 @@ test("existing person form fields are read-only except contract dates", async ({
   await expect(page.getByLabel("Sopimuksen alku:")).toBeEnabled();
   await expect(page.getByLabel("Sopimuksen loppu:")).toBeEnabled();
 });
+
+test("selecting existing person enables save button", async ({ page }) => {
+  await openAddPersonModal(page);
+  await searchAndSelectExistingPerson(page, "Ah");
+  await expect(
+    page.getByRole("button", { name: "Lisää", exact: true }),
+  ).toBeEnabled();
+});
