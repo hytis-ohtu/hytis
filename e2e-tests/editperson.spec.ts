@@ -37,3 +37,17 @@ test("clicking outside edit person modal triggers cancel confirmation dialog", a
 
   await expect(page.locator(".confirmation-title")).toBeVisible();
 });
+
+test("edit person save button is disabled when required fields are empty", async ({
+  page,
+}) => {
+  await openSidePanel(page);
+  await page.locator(".edit-person-button").first().click();
+  await expect(page.locator(".personmodal-content")).toBeVisible();
+
+  const firstNameInput = page.locator('input[name="firstName"]');
+  await firstNameInput.clear();
+
+  const saveButton = page.locator(".personmodal-save-button");
+  await expect(saveButton).toBeDisabled();
+});
