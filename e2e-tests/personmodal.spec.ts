@@ -189,3 +189,24 @@ test("selecting existing person enables save button", async ({ page }) => {
     page.getByRole("button", { name: "Lisää", exact: true }),
   ).toBeEnabled();
 });
+
+test("saving existing person without contract dates closes the modal and persists person", async ({
+  page,
+}) => {
+  await openAddPersonModal(page);
+  await searchAndSelectExistingPerson(page, "Ah");
+  await page
+    .locator(".personmodal-actions")
+    .getByRole("button", { name: "Lisää", exact: true })
+    .click();
+  await page
+    .locator(".confirmation-modal")
+    .getByRole("button", { name: "Tallenna" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Lisää henkilö" }),
+  ).not.toBeVisible();
+  await expect(
+    page.locator(".person-name", { hasText: "Ahmed Ali" }),
+  ).toBeVisible();
+});
