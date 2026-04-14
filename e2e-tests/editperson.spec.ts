@@ -51,3 +51,16 @@ test("edit person save button is disabled when required fields are empty", async
   const saveButton = page.locator(".personmodal-save-button");
   await expect(saveButton).toBeDisabled();
 });
+
+test("cancelling edit person without saving closes the modal", async ({
+  page,
+}) => {
+  await openSidePanel(page);
+  await page.locator(".edit-person-button").first().click();
+  await expect(page.locator(".personmodal-content")).toBeVisible();
+
+  await page.locator(".personmodal-close-button").click();
+  await page.locator(".confirmation-button", { hasText: "Kyllä" }).click();
+
+  await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
+});
