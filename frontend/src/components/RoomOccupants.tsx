@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { createContract } from "../services/contractsService";
 import {
   addPerson,
   editPerson,
@@ -29,7 +30,16 @@ function RoomOccupants({
   const handleAddPerson = async (values: Record<string, string>) => {
     if (roomId === undefined) return;
     try {
-      await addPerson(values, roomId);
+      if (values.personId) {
+        await createContract(
+          Number(values.personId),
+          Number(roomId),
+          values.startDate || null,
+          values.endDate || null,
+        );
+      } else {
+        await addPerson(values, roomId);
+      }
       onPersonSaved();
     } catch (error) {
       console.error("Failed to add person:", error);

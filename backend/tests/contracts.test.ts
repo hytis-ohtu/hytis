@@ -65,6 +65,145 @@ test("delete contract returns 500 on internal server error", async () => {
   spy.mockRestore();
 });
 
+test("creates a contract with all fields", async () => {
+  const contractData = {
+    personId: 1,
+    roomId: 2,
+    startDate: "2026-06-01",
+    endDate: "2026-12-31",
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const contract: Contract = response.body;
+  expect(contract.personId).toBe(1);
+  expect(contract.roomId).toBe(2);
+  expect(contract.startDate).toBe("2026-06-01");
+  expect(contract.endDate).toBe("2026-12-31");
+});
+
+test("creates a contract without dates", async () => {
+  const contractData = {
+    personId: 1,
+    roomId: 2,
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const contract: Contract = response.body;
+  expect(contract.personId).toBe(1);
+  expect(contract.roomId).toBe(2);
+  expect(contract.startDate).toBeNull();
+  expect(contract.endDate).toBeNull();
+});
+
+test("returns 400 when personId is missing", async () => {
+  const contractData = {
+    roomId: 2,
+    startDate: "2026-06-01",
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("personId is required");
+});
+
+test("returns 400 when roomId is missing", async () => {
+  const contractData = {
+    personId: 1,
+    startDate: "2026-06-01",
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("roomId is required");
+});
+
+test("returns 404 when person does not exist", async () => {
+  const contractData = {
+    personId: 9999,
+    roomId: 2,
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(404)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("Person not found");
+});
+
+test("returns 404 when room does not exist", async () => {
+  const contractData = {
+    personId: 1,
+    roomId: 9999,
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(404)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("Room not found");
+});
+
+test("returns 400 when person already has a contract for the room", async () => {
+  // Person 1 already has a contract in room 1 (from seed data)
+  const contractData = {
+    personId: 1,
+    roomId: 1,
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe(
+    "Person already has a contract for this room",
+  );
+});
+
+test("returns 500 on internal server error", async () => {
+  const spy = jest
+    .spyOn(Contract, "create")
+    .mockRejectedValueOnce(new Error("Database error"));
+
+  const contractData = {
+    personId: 1,
+    roomId: 2,
+  };
+
+  const response = await api
+    .post("/api/contracts")
+    .send(contractData)
+    .expect(500)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.error).toBe("Failed to create contract");
+
+  spy.mockRestore();
+});
+
 afterAll(async () => {
   await disconnectDatabase();
 });
