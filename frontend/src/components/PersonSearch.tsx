@@ -8,13 +8,13 @@ import "./PersonSearch.css";
 const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
   name: "Nimi",
   supervisor: "Esihenkilö",
-  endDate: "Sopimuksen päättymispvm",
+  endDate: "Sopimuksen päättymispäivä",
 };
 
 const SEARCH_TYPE_PLACEHOLDERS: Record<SearchType, string> = {
   name: "Hae henkilöä nimellä...",
   supervisor: "Hae henkilöä esihenkilöllä...",
-  endDate: "Hae päättymispäivällä (vvvv-kk-pp)...",
+  endDate: "Hae henkilöä päättymispäivällä (vvvv-kk-pp)...",
 };
 
 function PersonSearch() {
