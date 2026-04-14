@@ -142,3 +142,21 @@ test("searching for existing person returns matching results", async ({
     "Ahmed Ali",
   );
 });
+
+test("selecting existing person populates person form fields", async ({
+  page,
+}) => {
+  await openAddPersonModal(page);
+  await page.getByLabel("Hae henkilö:").fill("Ah");
+  await page.waitForSelector(".personform-person-option");
+  await page.locator(".personform-person-option").first().click();
+  await expect(page.getByLabel("Etunimi:")).toHaveValue("Ahmed");
+  await expect(page.getByLabel("Sukunimi:")).toHaveValue("Ali");
+  await expect(page.getByLabel("Osasto:")).toContainText("H523 CS");
+  await expect(page.getByLabel("Työnimike:")).toContainText("professori");
+
+  const supervisorTag = page.locator(".personform-supervisor-tag");
+
+  await expect(supervisorTag).toHaveCount(1);
+  await expect(supervisorTag).toContainText("Päivi Koskinen");
+});
