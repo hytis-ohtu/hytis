@@ -243,6 +243,12 @@ router.get("/", async (req: Request, res: Response) => {
     // No query parameter - fetch all people
     try {
       const people = await Person.findAll({
+        include: [
+          { model: Person, as: "supervisors", through: { attributes: [] } },
+          "department",
+          "title",
+          "researchGroup",
+        ],
         order: [
           ["lastName", "ASC"],
           ["firstName", "ASC"],

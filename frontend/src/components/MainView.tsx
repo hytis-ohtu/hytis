@@ -171,6 +171,7 @@ function MainView() {
                 setActiveRoomId(null);
               }}
               onPersonSaved={() => findRoom(activeRoomId!)}
+              onRoomSaved={() => findRoom(activeRoomId!)}
             />
           )}
         </AnimatePresence>
