@@ -1,9 +1,9 @@
 :root {
   /* Colors */
   --color-primary: #e5bb83;
-  --color-topbar: rgb(32, 32, 32);
-  --color-secondary: #ffefd9;
-  --color-text-black: #0d0b15;
+  --color-secondary: #cec9e0;
+  --color-topbar: #484848;
+  --color-text-black: #222;
   --color-text-white: #fff;
   --color-background: #fff;
   --color-background-gray: #edebeb;
@@ -17,9 +17,9 @@
   --transition-fast: 0.15s;
 
   /* Font */
-  --font-body: "roboto", regular;
-  --font-title: "montserrat", semibold;
-  --font-size-sm: 0.85rem;
+  --font-body: 400 1rem "Roboto Variable", sans-serif;
+  --font-title: 600 1rem "Montserrat Variable", sans-serif;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-weight-bold: 600;
 
@@ -28,8 +28,8 @@
   --padding-md: 1rem;
 
   /* Shadows */
-  --box-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --box-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --box-shadow-sm: 0 4px var(--color-text-black);
+  --box-shadow-md: 0 8px var(--color-text-black);
 
   --topbar-height: 52px;
   --button-size: 50px;
@@ -38,14 +38,16 @@
   /* border */
   --border-sm: 1px solid var(--color-text-black);
   --border-md: 2px solid var(--color-text-black);
-  --border-radius-circle: calc(infinity * 1px);
-}
-
-* {
-  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  overflow: hidden;
+  font: var(--font-body);
+  color: var(--color-text-black);
+}
+
+.button-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }

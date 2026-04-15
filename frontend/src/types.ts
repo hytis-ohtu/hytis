@@ -39,8 +39,8 @@ export interface Contract {
   id: number;
   startDate: string;
   endDate: string;
-  person?: Person;
-  room?: Room;
+  person: Person;
+  room: Room;
 }
 
 export interface RoomType {
@@ -57,11 +57,6 @@ export interface Room {
   contracts: Contract[];
   freeText: string;
   roomType: RoomType;
-}
-
-export interface FieldProps {
-  label: string;
-  value: string | null | undefined;
 }
 
 export interface UserData {

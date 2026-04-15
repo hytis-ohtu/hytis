@@ -19,31 +19,23 @@ function MainView() {
     handleResetFunc,
   } = useMapTransform();
 
-  const { useAvailability, setUseAvailability, onUpdate } = useRoomProperties();
-  const {
-    activeRoomId,
-    isSidePanelOpen,
-    room,
-    setActiveRoomId,
-    setIsSidePanelOpen,
-    selectedPersonId,
-    setRoom,
-  } = useRoomSelection();
+  const { useAvailability, setUseAvailability } = useRoomProperties();
+
+  const { room, setRoom } = useRoomSelection();
 
   useEffect(() => {
-    const rooms = document.querySelectorAll("path[data-room]");
-    rooms.forEach((room) => {
-      room.classList.toggle("active", room.id === activeRoomId);
+    const roomPaths = document.querySelectorAll("path[data-room]");
+    roomPaths.forEach((roomPath) => {
+      roomPath.classList.toggle("active", +roomPath.id === room?.id);
     });
-  }, [activeRoomId]);
+  }, [room]);
 
-  async function findRoom(id: string) {
+  async function selectRoomById(id: string) {
     try {
-      const result = await findRoomById(id);
-      console.log("✅ Room details:", result);
-      setRoom(result);
+      const room = await findRoomById(id);
+      setRoom(room);
     } catch (error: unknown) {
-      let errorMessage = "❌ Failed to fetch room details: ";
+      let errorMessage = "Failed to fetch room details: ";
       if (error instanceof Error) {
         errorMessage += error.message;
       }
@@ -57,54 +49,37 @@ function MainView() {
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
-        console.log("Clicked room with id:", target.id);
-        setIsSidePanelOpen(true);
-        setActiveRoomId(target.id);
-        await findRoom(target.id);
+        await selectRoomById(target.id);
       }
     }
   }
 
-  async function onRoomChange() {
-    findRoom(activeRoomId!);
-    onUpdate();
-  }
-
   return (
-    <>
-      <div className="wrapper">
-        <div ref={inputContainer} className="click-container">
-          <div ref={mapContainer} className="map-container">
-            <Exactum2 className="map" onClick={handleClick} />
-          </div>
+    <div className="wrapper">
+      <div ref={inputContainer} className="click-container">
+        <div ref={mapContainer} className="map-container">
+          <Exactum2 className="map" onClick={handleClick} />
         </div>
-
-        <ZoomButtons
-          handleZoom={handleZoomFunc}
-          handleReset={handleResetFunc}
-        />
-
-        <ColorToggle
-          useAvailability={useAvailability}
-          setUseAvailability={setUseAvailability}
-        />
-
-        <AnimatePresence>
-          {isSidePanelOpen && (
-            <SidePanel
-              room={room}
-              selectedPersonId={selectedPersonId}
-              handleClose={() => {
-                setIsSidePanelOpen(false);
-                setActiveRoomId(null);
-              }}
-              onPersonSaved={() => onRoomChange()}
-              onRoomSaved={() => onRoomChange()}
-            />
-          )}
-        </AnimatePresence>
       </div>
-    </>
+
+      <ZoomButtons handleZoom={handleZoomFunc} handleReset={handleResetFunc} />
+
+      <ColorToggle
+        useAvailability={useAvailability}
+        setUseAvailability={setUseAvailability}
+      />
+
+      <AnimatePresence>
+        {room && (
+          <SidePanel
+            room={room}
+            handleClose={() => setRoom(null)}
+            onPersonSaved={() => setRoom(room)}
+            onRoomSaved={() => setRoom(room)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

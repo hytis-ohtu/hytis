@@ -12,6 +12,8 @@
     "coverage": "vitest run tests --coverage"
   },
   "dependencies": {
+    "@fontsource-variable/montserrat": "^5.2.8",
+    "@fontsource-variable/roboto": "^5.2.10",
     "axios": "^1.13.6",
     "lucide-react": "^0.563.0",
     "motion": "^12.36.0",

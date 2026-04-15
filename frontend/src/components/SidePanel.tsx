@@ -1,48 +1,32 @@
-import { X } from "lucide-react";
 import { motion } from "motion/react";
-import "react-loading-skeleton/dist/skeleton.css";
 import type { Room } from "../types";
 import RoomInfo from "./RoomInfo";
-import RoomOccupants from "./RoomOccupants";
+import RoomPeople from "./RoomPeople";
 import "./SidePanel.css";
 
-function SidePanel({
-  room: roomProp,
-  handleClose,
-  onPersonSaved,
-  onRoomSaved,
-  selectedPersonId,
-}: {
-  room: Room | null;
+interface SidePanelProps {
+  room: Room;
   handleClose: () => void;
   onPersonSaved: () => void;
   onRoomSaved: () => void;
-  selectedPersonId: number | null;
-}) {
+}
+
+function SidePanel({
+  room,
+  handleClose,
+  onPersonSaved,
+  onRoomSaved,
+}: SidePanelProps) {
   return (
     <motion.div
       initial={{ x: "100%" }}
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="room-details"
+      className="side-panel"
     >
-      <header className="room-details-header">
-        <h1 className="room-details-title">Huone</h1>
-        <X
-          data-testid="close-room-details-panel"
-          className="room-details-close-button"
-          onClick={handleClose}
-        />
-      </header>
-
-      <RoomInfo room={roomProp} onRoomSaved={onRoomSaved} />
-
-      <RoomOccupants
-        room={roomProp}
-        onPersonSaved={onPersonSaved}
-        selectedPersonId={selectedPersonId}
-      />
+      <RoomInfo room={room} onClose={handleClose} onRoomSaved={onRoomSaved} />
+      <RoomPeople room={room} onPersonSaved={onPersonSaved} />
     </motion.div>
   );
 }
