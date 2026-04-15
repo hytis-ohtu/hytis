@@ -8,7 +8,7 @@ export async function findAllRooms(): Promise<Room[]> {
   return response.data;
 }
 
-export async function findRoomById(id: string): Promise<Room> {
+export async function findRoomById(id: number): Promise<Room> {
   const response = await axios.get<Promise<Room>>(
     `${BASE_URL}/api/rooms/${id}`,
   );

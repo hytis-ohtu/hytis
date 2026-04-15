@@ -9,35 +9,23 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import { editRoom } from "../services/roomsService";
-import type { Room } from "../types";
+import { renderValue } from "../utils/renderValue";
 import RoomModal from "./RoomModal";
 import "./SidePanel.css";
 
-interface RoomInfoProps {
-  room: Room;
-  onClose: () => void;
-  onRoomSaved: () => void;
-}
-
-function RoomInfo({ room, onClose, onRoomSaved }: RoomInfoProps) {
+function RoomInfo() {
+  const { activeRoom, selectRoom, closeSidePanel } = useRoomSelection();
   const [editRoomOpen, setEditRoomOpen] = useState(false);
-  const {
-    id: roomId,
-    name = <Skeleton />,
-    area = <Skeleton />,
-    capacity = <Skeleton />,
-    roomType,
-    department,
-    freeText = <Skeleton />,
-  } = room;
+  const roomId = activeRoom?.id;
+  const isLoaded = activeRoom !== null && activeRoom !== undefined;
 
   const handleEditRoom = async (values: Record<string, string>) => {
-    if (roomId === undefined) return;
+    if (roomId == null) return;
     try {
       await editRoom(roomId, values);
-      onRoomSaved();
+      selectRoom(roomId);
     } catch (error) {
       console.error("Failed to edit room:", error);
     }
@@ -45,48 +33,66 @@ function RoomInfo({ room, onClose, onRoomSaved }: RoomInfoProps) {
 
   return (
     <section className="room-info">
+      {/* Room Info Header */}
       <header>
         <Map />
-        <h2>{name}</h2>
+        <h2>
+          {renderValue(activeRoom?.name, (value) => value, "-", {
+            skeletonProps: {
+              baseColor: "#cf9f60",
+              highlightColor: "#efd1a9",
+            },
+          })}
+        </h2>
         <ChevronDown />
         <button className="button-icon" onClick={() => setEditRoomOpen(true)}>
           <SquarePen />
         </button>
-        <button className="button-icon" onClick={onClose}>
+        <button className="button-icon" onClick={closeSidePanel}>
           <X />
         </button>
       </header>
+
+      {/* Room Details */}
       <div className="room-details">
         <div className="room-detail">
           <LandPlot />
-          <p>{area} m²</p>
+          <p>{renderValue(activeRoom?.area, (value) => `${value} m²`)}</p>
         </div>
         <div className="room-detail">
           <User />
-          <p>{capacity}</p>
+          <p>{renderValue(activeRoom?.capacity, (value) => String(value))}</p>
         </div>
         <div className="room-detail">
           <Container />
-          <p>{roomType?.name ?? <Skeleton />}</p>
+          <p>{renderValue(activeRoom?.roomType, (value) => value.name)}</p>
         </div>
         <div className="room-detail">
           <Section />
-          <p>{department?.name ?? <Skeleton />}</p>
+          <p>{renderValue(activeRoom?.department, (value) => value.name)}</p>
         </div>
         <div className="room-description">
           <p className="room-description-title">Lisätiedot</p>
-          <p>{freeText}</p>
+          <p>
+            {renderValue(
+              activeRoom?.freeText,
+              (value) => value,
+              "Ei lisätietoja",
+            )}
+          </p>
         </div>
       </div>
-      {editRoomOpen && (
+
+      {/* Edit Room Modal */}
+      {editRoomOpen && isLoaded && (
         <RoomModal
           onClose={() => setEditRoomOpen(false)}
           onSubmit={handleEditRoom}
           initial={{
-            capacity: String(room.capacity ?? ""),
-            roomType: String(room.roomType?.id ?? ""),
-            department: String(room.department?.id ?? ""),
-            freeText: room.freeText ?? "",
+            capacity: String(activeRoom.capacity ?? ""),
+            roomType: String(activeRoom.roomType.id ?? ""),
+            department: String(activeRoom.department?.id ?? ""),
+            freeText: activeRoom.freeText ?? "",
           }}
         />
       )}

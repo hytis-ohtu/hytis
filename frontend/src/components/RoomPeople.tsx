@@ -1,52 +1,48 @@
 import { ChevronDown, Pencil, Plus, Trash2, Users } from "lucide-react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
-import type { Contract, Person, Room } from "../types";
+import type { Contract, Person } from "../types";
 import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";
 import "./SidePanel.css";
 
-interface RoomPeopleProps {
-  room: Room;
-  onPersonSaved: () => void;
-}
+function RoomPeople() {
+  const { activeRoom, selectRoom, highlightedPersonId } = useRoomSelection();
 
-function RoomPeople({ room, onPersonSaved }: RoomPeopleProps) {
-  const { id: roomId, contracts } = room;
-
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+  const [activePerson, setActivePerson] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [contractToRemove, setContractToRemove] = useState<Contract | null>(
     null,
   );
 
   const handleAddPerson = async (values: Record<string, string>) => {
-    if (roomId === undefined) return;
+    if (activeRoom?.id === undefined) return;
     try {
-      await addPerson(values, roomId);
-      onPersonSaved();
+      await addPerson(values, activeRoom.id);
+      selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to add person:", error);
     }
   };
 
   const handleEditPerson = async (values: Record<string, string>) => {
-    if (roomId === undefined || selectedPerson?.id === undefined) return;
+    if (activeRoom?.id === undefined || highlightedPersonId === null) return;
     try {
-      await editPerson(selectedPerson.id, values, roomId);
-      onPersonSaved();
+      await editPerson(highlightedPersonId, values, activeRoom.id);
+      selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to edit person:", error);
     }
   };
 
   const handleRemoveContract = async () => {
-    if (!contractToRemove) return;
+    if (activeRoom?.id === undefined || !contractToRemove) return;
     try {
       await removeContract(contractToRemove.id);
-      onPersonSaved();
+      selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to remove contract:", error);
     } finally {
@@ -67,13 +63,15 @@ function RoomPeople({ room, onPersonSaved }: RoomPeopleProps) {
       </header>
 
       {/* Contracts */}
-      {!contracts ? (
-        <Skeleton count={3} />
-      ) : !contracts.length ? (
+      {activeRoom?.contracts === undefined ? (
+        <div className="contracts contracts-skeleton">
+          <Skeleton count={6} />
+        </div>
+      ) : activeRoom?.contracts === null ? (
         <p>Ei henkilöitä.</p>
       ) : (
         <div className="contracts">
-          {contracts.map((contract) => (
+          {activeRoom.contracts.map((contract) => (
             <article className="contract" key={contract.id}>
               <header>
                 <div>
@@ -88,7 +86,7 @@ function RoomPeople({ room, onPersonSaved }: RoomPeopleProps) {
                   <button
                     className="button-icon edit-person"
                     onClick={() => {
-                      setSelectedPerson(contract.person);
+                      setActivePerson(contract.person);
                       setAddPersonOpen(true);
                     }}
                   >
@@ -141,29 +139,31 @@ function RoomPeople({ room, onPersonSaved }: RoomPeopleProps) {
         <PersonModal
           onClose={() => {
             setAddPersonOpen(false);
-            setSelectedPerson(null);
+            setActivePerson(null);
           }}
-          onSubmit={selectedPerson ? handleEditPerson : handleAddPerson}
+          onSubmit={activePerson ? handleEditPerson : handleAddPerson}
           initial={
-            selectedPerson
+            activePerson
               ? {
-                  firstName: selectedPerson.firstName,
-                  lastName: selectedPerson.lastName,
-                  department: String(selectedPerson.department?.id),
-                  jobtitle: String(selectedPerson.title?.id),
-                  supervisors: selectedPerson.supervisors?.length
-                    ? selectedPerson.supervisors
+                  firstName: activePerson.firstName,
+                  lastName: activePerson.lastName,
+                  department: String(activePerson.department?.id),
+                  jobtitle: String(activePerson.title?.id),
+                  supervisors: activePerson.supervisors?.length
+                    ? activePerson.supervisors
                         .map((s) => String(s.id))
                         .join(",")
                     : "",
                   startDate:
-                    contracts?.find((c) => c.person.id === selectedPerson.id)
-                      ?.startDate ?? "",
+                    activeRoom?.contracts?.find(
+                      (c) => c.person.id === activePerson.id,
+                    )?.startDate ?? "",
                   endDate:
-                    contracts?.find((c) => c.person.id === selectedPerson.id)
-                      ?.endDate ?? "",
-                  researchgroup: String(selectedPerson?.researchGroup?.id),
-                  misc: selectedPerson.freeText ?? "",
+                    activeRoom?.contracts?.find(
+                      (c) => c.person.id === activePerson.id,
+                    )?.endDate ?? "",
+                  researchgroup: String(activePerson?.researchGroup?.id),
+                  misc: activePerson.freeText ?? "",
                 }
               : {}
           }

@@ -19,7 +19,8 @@ function MainView() {
   } = useMapTransform();
 
   const { useAvailability, setUseAvailability } = useRoomProperties();
-  const { activeRoom, setActiveRoom, selectRoom } = useRoomSelection();
+  const { activeRoom, isSidePanelOpen, selectRoom, handleSidePanelExited } =
+    useRoomSelection();
 
   useEffect(() => {
     const roomPaths = document.querySelectorAll("path[data-room]");
@@ -34,7 +35,7 @@ function MainView() {
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
-        await selectRoom(target.id);
+        await selectRoom(+target.id);
       }
     }
   }
@@ -54,15 +55,8 @@ function MainView() {
         setUseAvailability={setUseAvailability}
       />
 
-      <AnimatePresence>
-        {activeRoom && (
-          <SidePanel
-            room={activeRoom}
-            onClose={() => setActiveRoom(null)}
-            onPersonSaved={() => setActiveRoom(activeRoom)}
-            onRoomSaved={() => setActiveRoom(activeRoom)}
-          />
-        )}
+      <AnimatePresence onExitComplete={handleSidePanelExited}>
+        {isSidePanelOpen && <SidePanel />}
       </AnimatePresence>
     </div>
   );

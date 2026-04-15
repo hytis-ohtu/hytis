@@ -51,11 +51,11 @@ export interface RoomType {
 export interface Room {
   id: number;
   name: string;
-  area: string;
-  capacity: number;
-  department: Department;
+  area: string | null;
+  capacity: number | null;
+  department: Department | null;
   contracts: Contract[];
-  freeText: string;
+  freeText: string | null;
   roomType: RoomType;
 }
 
