@@ -204,6 +204,15 @@ describe("/api/people", () => {
     it("search returns people with department, title, research group, and contracts", async () => {
       const response = await api.get("/api/people?q=Matti").expect(200);
 
+      expect(response.body).toHaveLength(1);
+      const person = response.body[0];
+
+      expect(person.department).toBeDefined();
+      expect(person.department.name).toBe("H516 MATHSTAT");
+
+      expect(person.title).toBeDefined();
+      expect(person.title.name).toBe("asiantuntija");
+
       expect(person.researchGroup).toBeDefined();
       expect(person.researchGroup.name).toBe(
         "Algebrallisten rakenteiden tutkimusryhmä",
