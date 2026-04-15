@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "ignoreDeprecations": "6.0",
     //"types": [],
     // For nodejs:

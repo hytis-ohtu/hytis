@@ -2,8 +2,8 @@ import { X } from "lucide-react";
 import { motion } from "motion/react";
 import "react-loading-skeleton/dist/skeleton.css";
 import type { Room } from "../types";
-import RoomOccupants from "./RoomOccupants";
 import RoomInfo from "./RoomInfo";
+import RoomOccupants from "./RoomOccupants";
 import "./SidePanel.css";
 
 function SidePanel({
