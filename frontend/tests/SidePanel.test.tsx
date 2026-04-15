@@ -144,6 +144,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -161,6 +162,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
     expect(
@@ -184,6 +186,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={onPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -203,7 +206,7 @@ describe("RoomDetails", () => {
   it("opens edit mode with person initial values and saves edits", async () => {
     const user = userEvent.setup();
     vi.mocked(editPerson).mockResolvedValueOnce(
-      mockRoom_A210.contracts[0].person,
+      mockRoom_A210.contracts[0].person!,
     );
 
     render(
@@ -212,6 +215,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -248,6 +252,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -279,6 +284,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -317,6 +323,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -334,6 +341,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -360,11 +368,12 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
     const contract = mockRoom_A210.contracts[0];
-    const fullName = `${contract.person.firstName} ${contract.person.lastName}`;
+    const fullName = `${contract.person!.firstName} ${contract.person!.lastName}`;
 
     const summary = screen.getByText(fullName);
     expect(summary).toBeInTheDocument();
@@ -393,6 +402,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
@@ -407,6 +417,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -422,6 +433,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
     expect(screen.getByTestId("remove-person-button-1")).toBeInTheDocument();
@@ -435,6 +447,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -453,6 +466,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -472,6 +486,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -489,6 +504,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -507,6 +523,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -533,6 +550,7 @@ describe("RoomDetails", () => {
         handleClose={mockHandleClose}
         onPersonSaved={mockOnPersonSaved}
         onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
       />,
     );
 
@@ -547,5 +565,53 @@ describe("RoomDetails", () => {
     );
 
     consoleErrorSpy.mockRestore();
+  });
+
+  it("auto-expands person details when selectedPersonId matches", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={1}
+      />,
+    );
+
+    // Find the details element - it should be expanded (open)
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).toHaveAttribute("open", "");
+  });
+
+  it("does not auto-expand person details when selectedPersonId does not match", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={999}
+      />,
+    );
+
+    // Find the details element - it should not be expanded
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).not.toHaveAttribute("open");
+  });
+
+  it("does not auto-expand when selectedPersonId is null", () => {
+    render(
+      <SidePanel
+        room={mockRoom_A210}
+        handleClose={mockHandleClose}
+        onPersonSaved={mockOnPersonSaved}
+        onRoomSaved={mockOnRoomSaved}
+        selectedPersonId={null}
+      />,
+    );
+
+    // Find the details element - it should not be expanded
+    const personDetails = screen.getByText("Matti Virtanen").closest("details");
+    expect(personDetails).not.toHaveAttribute("open");
   });
 });

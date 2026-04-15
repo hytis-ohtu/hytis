@@ -2,13 +2,17 @@ import { useEffect } from "react";
 import "./App.css";
 import AuthProvider from "./components/AuthProvider";
 import MainView from "./components/MainView";
+import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
+import { findRoomById } from "./services/roomsService";
 
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <RoomSelectionProvider fetchRoomById={findRoomById}>
+        <AppContent />
+      </RoomSelectionProvider>
     </AuthProvider>
   );
 }

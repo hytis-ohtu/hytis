@@ -11,6 +11,19 @@ vi.mock("../src/hooks/useAuth", () => ({
   }),
 }));
 
+vi.mock("../src/hooks/useRoomSelection", () => ({
+  useRoomSelection: () => ({
+    activeRoomId: null,
+    setActiveRoomId: vi.fn(),
+    isSidePanelOpen: false,
+    setIsSidePanelOpen: vi.fn(),
+    room: null,
+    setRoom: vi.fn(),
+    selectRoom: vi.fn(),
+    selectedPersonId: null,
+  }),
+}));
+
 describe("TopBar", () => {
   it("renders the title correctly", () => {
     render(<TopBar />);

@@ -10,6 +10,21 @@ vi.mock("../src/services/peopleService", () => ({
   searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
 }));
 
+const mockSelectRoom = vi.fn();
+
+vi.mock("../src/hooks/useRoomSelection", () => ({
+  useRoomSelection: () => ({
+    activeRoomId: null,
+    setActiveRoomId: vi.fn(),
+    isSidePanelOpen: false,
+    setIsSidePanelOpen: vi.fn(),
+    room: null,
+    setRoom: vi.fn(),
+    selectRoom: mockSelectRoom,
+    selectedPersonId: null,
+  }),
+}));
+
 describe("PersonSearch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -95,6 +110,43 @@ describe("PersonSearch", () => {
       expect(screen.getByText("professori")).toBeInTheDocument();
       expect(screen.getByText("H516 MATHSTAT")).toBeInTheDocument();
       expect(screen.getByText("H523 CS")).toBeInTheDocument();
+    });
+  });
+
+  it("displays room number in search results when person has contract", async () => {
+    const mockResults = [
+      {
+        id: 1,
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: { id: 1, name: "H516 MATHSTAT" },
+        title: { name: "asiantuntija" },
+        contracts: [
+          {
+            id: 1,
+            personId: 1,
+            roomId: 1,
+            startDate: "2023-01-01",
+            endDate: "2025-12-31",
+            room: { id: 1, name: "A210" },
+          },
+        ],
+      },
+    ];
+
+    mockSearchPeople.mockResolvedValue(mockResults);
+
+    const user = userEvent.setup({ delay: null });
+    render(<PersonSearch />);
+
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+
+    await user.type(searchInput, "Matti");
+
+    await waitFor(() => {
+      expect(screen.getByText("A210")).toBeInTheDocument();
+      expect(screen.getByText("asiantuntija")).toBeInTheDocument();
+      expect(screen.getByText("H516 MATHSTAT")).toBeInTheDocument();
     });
   });
 
@@ -307,5 +359,110 @@ describe("PersonSearch", () => {
     const errorMessage = screen.getByText("Virhe henkilöiden haussa");
     expect(dropdown).toBeInTheDocument();
     expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("calls selectRoom with correct parameters when clicking person with contract", async () => {
+    const mockResults = [
+      {
+        id: 1,
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: { id: 1, name: "H516 MATHSTAT" },
+        title: { name: "asiantuntija" },
+        contracts: [
+          {
+            id: 1,
+            personId: 1,
+            roomId: 1,
+            startDate: "2023-01-01",
+            endDate: "2025-12-31",
+            room: { id: 42, name: "A210" },
+          },
+        ],
+      },
+    ];
+
+    mockSearchPeople.mockResolvedValue(mockResults);
+
+    const user = userEvent.setup({ delay: null });
+    render(<PersonSearch />);
+
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    await user.type(searchInput, "Matti");
+
+    await waitFor(() => {
+      expect(screen.getByText("Matti Virtanen")).toBeInTheDocument();
+    });
+
+    const personResult = screen.getByText("Matti Virtanen");
+    await user.click(personResult);
+
+    expect(mockSelectRoom).toHaveBeenCalledWith("42", 1);
+  });
+
+  it("does not call selectRoom when clicking person without contract", async () => {
+    const mockResults = [
+      {
+        id: 1,
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: { id: 1, name: "H516 MATHSTAT" },
+        title: { name: "asiantuntija" },
+        contracts: [],
+      },
+    ];
+
+    mockSearchPeople.mockResolvedValue(mockResults);
+
+    const user = userEvent.setup({ delay: null });
+    render(<PersonSearch />);
+
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    await user.type(searchInput, "Matti");
+
+    await waitFor(() => {
+      expect(screen.getByText("Matti Virtanen")).toBeInTheDocument();
+    });
+
+    const personResult = screen.getByText("Matti Virtanen");
+    await user.click(personResult);
+
+    expect(mockSelectRoom).not.toHaveBeenCalled();
+  });
+
+  it("logs to console when person has no room assignment", async () => {
+    const consoleLogSpy = vi
+      .spyOn(console, "log")
+      .mockImplementation(() => undefined);
+
+    const mockResults = [
+      {
+        id: 1,
+        firstName: "Matti",
+        lastName: "Virtanen",
+        department: { id: 1, name: "H516 MATHSTAT" },
+        title: { name: "asiantuntija" },
+        contracts: [],
+      },
+    ];
+
+    mockSearchPeople.mockResolvedValue(mockResults);
+
+    const user = userEvent.setup({ delay: null });
+    render(<PersonSearch />);
+
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    await user.type(searchInput, "Matti");
+
+    await waitFor(() => {
+      expect(screen.getByText("Matti Virtanen")).toBeInTheDocument();
+    });
+
+    const personResult = screen.getByText("Matti Virtanen");
+    await user.click(personResult);
+
+    expect(consoleLogSpy).toHaveBeenCalledWith("Person has no room assignment");
+
+    consoleLogSpy.mockRestore();
   });
 });
