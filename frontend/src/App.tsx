@@ -22,7 +22,10 @@ function AppContent() {
 
   useEffect(() => {
     if (needsLogin) {
-      login();
+      const timer = setTimeout(() => {
+        login();
+      }, 2000);
+      return () => clearTimeout(timer);
     }
   }, [needsLogin, login]);
 
