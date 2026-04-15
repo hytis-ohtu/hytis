@@ -207,58 +207,45 @@ router.put(
 router.get("/", async (req: Request, res: Response) => {
   const { q } = req.query;
 
-  // If query parameter 'q' is provided, search people
-  if (q && typeof q === "string") {
-    if (q.length > 100) {
-      return res.status(400).json({ error: "Query too long" });
+  try {
+    if (q && typeof q === "string") {
+      if (q.length > 100) {
+        return res.status(400).json({ error: "Query too long" });
+      }
     }
 
-    try {
-      const people = await Person.findAll({
-        where: {
+    const where = q
+      ? {
           [Op.or]: [
             { firstName: { [Op.iLike]: `%${q}%` } },
             { lastName: { [Op.iLike]: `%${q}%` } },
           ],
-        },
-        include: [
-          { model: Person, as: "supervisors", through: { attributes: [] } },
-          "department",
-          "title",
-          "researchGroup",
-          {
-            model: Contract,
-            as: "contracts",
-            include: [{ model: Room, as: "room" }],
-          },
-        ],
-      });
+        }
+      : {};
 
-      res.json(people);
-    } catch (error) {
-      console.error("Error searching people:", error);
-      res.status(500).json({ error: "Failed to search people" });
-    }
-  } else {
-    // No query parameter - fetch all people
-    try {
-      const people = await Person.findAll({
-        include: [
-          { model: Person, as: "supervisors", through: { attributes: [] } },
-          "department",
-          "title",
-          "researchGroup",
-        ],
-        order: [
-          ["lastName", "ASC"],
-          ["firstName", "ASC"],
-        ],
-      });
-      res.status(200).json(people);
-    } catch (error) {
-      console.error("Error fetching people:", error);
-      res.status(500).json({ error: "Failed to fetch people" });
-    }
+    const people = await Person.findAll({
+      where,
+      include: [
+        { model: Person, as: "supervisors", through: { attributes: [] } },
+        "department",
+        "title",
+        "researchGroup",
+        {
+          model: Contract,
+          as: "contracts",
+          include: [{ model: Room, as: "room" }],
+        },
+      ],
+      order: [
+        ["lastName", "ASC"],
+        ["firstName", "ASC"],
+      ],
+    });
+
+    res.json(people);
+  } catch (error) {
+    console.error("Error fetching people:", error);
+    res.status(500).json({ error: "Failed to fetch people" });
   }
 });
 
