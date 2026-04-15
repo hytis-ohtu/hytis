@@ -8,6 +8,7 @@ import {
 } from "../services/referenceDataService";
 import type { Person } from "../types";
 import "./PersonForm.css";
+import PersonSelector from "./PersonSelector";
 
 interface FieldDef {
   id: string;
@@ -60,8 +61,11 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     researchgroup: [],
   });
   const [people, setPeople] = useState<Person[]>([]);
+  const [existingPersonSearch, setExistingPersonSearch] = useState("");
+  const [personOpen, setPersonOpen] = useState(false);
   const [supervisorSearch, setSupervisorSearch] = useState("");
   const [supervisorOpen, setSupervisorOpen] = useState(false);
+  const existingPersonRef = useRef<HTMLDivElement>(null);
   const supervisorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,6 +90,14 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
+      if (
+        existingPersonRef.current &&
+        !existingPersonRef.current.contains(e.target as Node)
+      ) {
+        setExistingPersonSearch("");
+        setPersonOpen(false);
+      }
+
       if (
         supervisorRef.current &&
         !supervisorRef.current.contains(e.target as Node)
@@ -116,105 +128,134 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
     setValues((prev) => ({ ...prev, supervisors: updated.join(",") }));
   };
 
-  const filteredPeople = people.filter((p) => {
-    const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
-    return fullName.includes(supervisorSearch.toLowerCase());
-  });
+  const applyExistingPerson = (person: Person) => {
+    setValues((prev) => ({
+      ...prev,
+      personId: String(person.id),
+      firstName: person.firstName,
+      lastName: person.lastName,
+      department: person.department ? String(person.department.id) : "",
+      jobtitle: person.title ? String(person.title.id) : "",
+      supervisors: person.supervisors?.length
+        ? person.supervisors
+            .map((supervisor) => String(supervisor.id))
+            .join(",")
+        : "",
+      researchgroup: person.researchGroup
+        ? String(person.researchGroup.id)
+        : "",
+      misc: person.freeText ?? "",
+    }));
+  };
+
+  const isExistingPersonSelected = !!values.personId;
 
   return (
     <div className="personform-container">
       <div className="personform-form">
-        {FIELDS.map(({ id, label, type, required }) => (
-          <div
-            key={id}
-            className={`personform-field${type === "supervisor" ? " personform-field--top" : ""}`}
-          >
-            <label className="personform-label" htmlFor={id}>
-              {label}
-            </label>
-            {type === "select" ? (
-              <select
-                id={id}
-                name={id}
-                value={values[id] ?? ""}
-                onChange={handleChange}
-                required={required}
-                className="personform-input"
-              >
-                <option value=""> Valitse </option>
-                {options[id as keyof SelectOptions].map((item) => (
-                  <option key={item.id} value={String(item.id)}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            ) : type === "supervisor" ? (
-              <div className="personform-supervisor" ref={supervisorRef}>
+        <div className="personform-field personform-field--top">
+          <label className="personform-label" htmlFor="person-search">
+            Hae henkilö:
+          </label>
+          <PersonSelector
+            inputId="person-search"
+            personRef={existingPersonRef}
+            people={people}
+            personSearch={existingPersonSearch}
+            setPersonSearch={setExistingPersonSearch}
+            personOpen={personOpen}
+            onFocus={() => setPersonOpen(true)}
+            onSelect={(person: Person) => {
+              applyExistingPerson(person);
+              setExistingPersonSearch("");
+              setPersonOpen(false);
+            }}
+            selectedPersonIds={values.personId ? [values.personId] : []}
+          />
+        </div>
+
+        {FIELDS.map(({ id, label, type, required }) => {
+          const isDisabled =
+            isExistingPersonSelected && id !== "startDate" && id !== "endDate";
+          return (
+            <div
+              key={id}
+              className={`personform-field${type === "supervisor" ? " personform-field--top" : ""}${isDisabled ? " personform-field--disabled" : ""}`}
+            >
+              <label className="personform-label" htmlFor={id}>
+                {label}
+              </label>
+              {type === "select" ? (
+                <select
+                  id={id}
+                  name={id}
+                  value={values[id] ?? ""}
+                  onChange={handleChange}
+                  required={required}
+                  disabled={isDisabled}
+                  className="personform-input"
+                >
+                  <option value=""> Valitse </option>
+                  {options[id as keyof SelectOptions].map((item) => (
+                    <option key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              ) : type === "supervisor" ? (
+                <div className="personform-supervisor">
+                  <PersonSelector
+                    inputId={id}
+                    personRef={supervisorRef}
+                    people={people}
+                    personSearch={supervisorSearch}
+                    setPersonSearch={setSupervisorSearch}
+                    personOpen={supervisorOpen}
+                    onFocus={() => setSupervisorOpen(true)}
+                    onSelect={(person: Person) => {
+                      toggleSupervisor(String(person.id));
+                      setSupervisorSearch("");
+                      setSupervisorOpen(false);
+                    }}
+                    selectedPersonIds={selectedSupervisorIds}
+                    disabled={isDisabled}
+                  />
+                  {selectedSupervisorIds.length > 0 && (
+                    <div className="personform-supervisor-selected">
+                      {selectedSupervisorIds.map((sid) => {
+                        const p = people.find((p) => String(p.id) === sid);
+                        return p ? (
+                          <span key={sid} className="personform-supervisor-tag">
+                            {p.firstName} {p.lastName}
+                            <button
+                              type="button"
+                              onClick={() => toggleSupervisor(sid)}
+                              disabled={isDisabled}
+                              aria-label={`Poista ${p.firstName} ${p.lastName}`}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <input
                   id={id}
-                  type="text"
+                  name={id}
+                  type={type}
+                  value={values[id] ?? ""}
+                  onChange={handleChange}
+                  required={required}
+                  disabled={isDisabled}
                   className="personform-input"
-                  placeholder="Hae..."
-                  value={supervisorSearch}
-                  onFocus={() => setSupervisorOpen(true)}
-                  onChange={(e) => setSupervisorSearch(e.target.value)}
                 />
-                {selectedSupervisorIds.length > 0 && (
-                  <div className="personform-supervisor-selected">
-                    {selectedSupervisorIds.map((sid) => {
-                      const p = people.find((p) => String(p.id) === sid);
-                      return p ? (
-                        <span key={sid} className="personform-supervisor-tag">
-                          {p.firstName} {p.lastName}
-                          <button
-                            type="button"
-                            onClick={() => toggleSupervisor(sid)}
-                            aria-label={`Poista ${p.firstName} ${p.lastName}`}
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ) : null;
-                    })}
-                  </div>
-                )}
-                {(supervisorOpen || supervisorSearch) && (
-                  <ul className="personform-supervisor-list">
-                    {filteredPeople.length === 0 ? (
-                      <li className="personform-supervisor-empty">
-                        Ei tuloksia
-                      </li>
-                    ) : (
-                      filteredPeople.map((p) => (
-                        <li
-                          key={p.id}
-                          className={`personform-supervisor-option${selectedSupervisorIds.includes(String(p.id)) ? " selected" : ""}`}
-                          onClick={() => {
-                            toggleSupervisor(String(p.id));
-                            setSupervisorSearch("");
-                            setSupervisorOpen(false);
-                          }}
-                        >
-                          {p.firstName} {p.lastName}
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                )}
-              </div>
-            ) : (
-              <input
-                id={id}
-                name={id}
-                type={type}
-                value={values[id] ?? ""}
-                onChange={handleChange}
-                required={required}
-                className="personform-input"
-              />
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

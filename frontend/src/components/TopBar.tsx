@@ -1,8 +1,8 @@
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+import PersonSearch from "./PersonSearch";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
-import PersonSearch from "./PersonSearch";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 

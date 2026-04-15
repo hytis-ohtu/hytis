@@ -1,10 +1,11 @@
 import { AnimatePresence } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { useRoomProperties } from "../hooks/useRoomProperties";
-import { findRoomById } from "../services/roomsService";
 import type { Room } from "../types";
+import { useRoomSelection } from "../hooks/useRoomSelection";
+import { findAllRooms, findRoomById } from "../services/roomsService";
 import ColorToggle from "./ColorToggle";
 import "./MainView.css";
 import SidePanel from "./SidePanel";
@@ -20,10 +21,15 @@ function MainView() {
   } = useMapTransform();
 
   const { useAvailability, setUseAvailability, onUpdate } = useRoomProperties();
-
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
-  const [room, setRoom] = useState<Room | null>(null);
+  const {
+    activeRoomId,
+    isSidePanelOpen,
+    room,
+    setActiveRoomId,
+    setIsSidePanelOpen,
+    selectedPersonId,
+    setRoom,
+  } = useRoomSelection();
 
   useEffect(() => {
     const rooms = document.querySelectorAll("path[data-room]");
@@ -88,11 +94,13 @@ function MainView() {
           {isSidePanelOpen && (
             <SidePanel
               room={room}
+              selectedPersonId={selectedPersonId}
               handleClose={() => {
                 setIsSidePanelOpen(false);
                 setActiveRoomId(null);
               }}
               onPersonSaved={() => onRoomChange()}
+              onRoomSaved={() => onRoomChange()}
             />
           )}
         </AnimatePresence>

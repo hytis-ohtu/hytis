@@ -27,6 +27,19 @@ vi.mock("../src/contexts/AuthContext", () => ({
   }),
 }));
 
+vi.mock("../src/hooks/useRoomSelection", () => ({
+  useRoomSelection: () => ({
+    activeRoomId: null,
+    setActiveRoomId: vi.fn(),
+    isSidePanelOpen: false,
+    setIsSidePanelOpen: vi.fn(),
+    room: null,
+    setRoom: vi.fn(),
+    selectRoom: vi.fn(),
+    selectedPersonId: null,
+  }),
+}));
+
 vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
   default: (props: Record<string, unknown>) => (
     <svg {...props} data-testid="mock-svg">
