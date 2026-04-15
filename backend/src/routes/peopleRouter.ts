@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import type { FindOptions } from "sequelize";
 import { Op } from "sequelize";
 import { z } from "zod";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
@@ -201,11 +202,11 @@ router.put(
 
 /**
  * GET /api/people
- * Fetches all people, or searches if query parameter 'q' is provided
- * Query parameter 'q' is used for partial matching on first/last name
+ * Fetches all people, or searches based on query parameter 'q' and 'type'
+ * Supported types: personName (default), supervisorName, contractEndDate
  */
 router.get("/", async (req: Request, res: Response) => {
-  const { q } = req.query;
+  const { q, type } = req.query;
 
   try {
     if (q && typeof q === "string") {
@@ -214,34 +215,82 @@ router.get("/", async (req: Request, res: Response) => {
       }
     }
 
-    const where = q
-      ? {
-          [Op.or]: [
-            { firstName: { [Op.iLike]: `%${q}%` } },
-            { lastName: { [Op.iLike]: `%${q}%` } },
-          ],
-        }
-      : {};
+    const baseSupervisorsInclude = {
+      model: Person,
+      as: "supervisors",
+      through: { attributes: [] },
+    };
 
-    const people = await Person.findAll({
-      where,
+    const baseContractsInclude = {
+      model: Contract,
+      as: "contracts",
+      include: [{ model: Room, as: "room" }],
+    };
+
+    let findOptions: FindOptions = {
       include: [
-        { model: Person, as: "supervisors", through: { attributes: [] } },
+        baseSupervisorsInclude,
         "department",
         "title",
         "researchGroup",
-        {
-          model: Contract,
-          as: "contracts",
-          include: [{ model: Room, as: "room" }],
-        },
+        baseContractsInclude,
       ],
       order: [
         ["lastName", "ASC"],
         ["firstName", "ASC"],
       ],
-    });
+    };
 
+    switch (type) {
+      case "supervisorName":
+        findOptions.include = [
+          {
+            ...baseSupervisorsInclude,
+            where: {
+              [Op.or]: [
+                { firstName: { [Op.iLike]: `%${q}%` } },
+                { lastName: { [Op.iLike]: `%${q}%` } },
+              ],
+            },
+            required: true,
+          },
+          "department",
+          "title",
+          "researchGroup",
+          baseContractsInclude,
+        ];
+        break;
+
+      case "contractEndDate":
+        findOptions.include = [
+          baseSupervisorsInclude,
+          "department",
+          "title",
+          "researchGroup",
+          {
+            ...baseContractsInclude,
+            where: {
+              endDate: {
+                [Op.lte]: q,
+              },
+            },
+            required: true,
+          },
+        ];
+        break;
+
+      case "personName":
+      default:
+        findOptions.where = {
+          [Op.or]: [
+            { firstName: { [Op.iLike]: `%${q}%` } },
+            { lastName: { [Op.iLike]: `%${q}%` } },
+          ],
+        };
+        break;
+    }
+
+    const people = await Person.findAll(findOptions);
     res.json(people);
   } catch (error) {
     console.error("Error fetching people:", error);
