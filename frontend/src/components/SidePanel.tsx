@@ -6,14 +6,14 @@ import "./SidePanel.css";
 
 interface SidePanelProps {
   room: Room;
-  handleClose: () => void;
+  onClose: () => void;
   onPersonSaved: () => void;
   onRoomSaved: () => void;
 }
 
 function SidePanel({
   room,
-  handleClose,
+  onClose,
   onPersonSaved,
   onRoomSaved,
 }: SidePanelProps) {
@@ -25,7 +25,7 @@ function SidePanel({
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className="side-panel"
     >
-      <RoomInfo room={room} onClose={handleClose} onRoomSaved={onRoomSaved} />
+      <RoomInfo room={room} onClose={onClose} onRoomSaved={onRoomSaved} />
       <RoomPeople room={room} onPersonSaved={onPersonSaved} />
     </motion.div>
   );

@@ -5,40 +5,34 @@ import type { Room } from "../types";
 
 interface RoomSelectionProviderProps {
   children: React.ReactNode;
-  fetchRoomById: (roomId: string) => Promise<Room>;
+  findRoomById: (roomId: string) => Promise<Room>;
 }
 
 export function RoomSelectionProvider({
   children,
-  fetchRoomById,
+  findRoomById,
 }: RoomSelectionProviderProps) {
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
-  const [room, setRoom] = useState<Room | null>(null);
-  const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
+  const [activeRoom, setActiveRoom] = useState<Room | null>(null);
+  const [highlightedPersonId, setHighlightedPersonId] = useState<number | null>(
+    null,
+  );
 
-  // Helper function to select a room and fetch its details
   const selectRoom = async (roomId: string, personId?: number) => {
-    setActiveRoomId(roomId);
-    setIsSidePanelOpen(true);
-    setSelectedPersonId(personId ?? null);
+    setHighlightedPersonId(personId ?? null);
     try {
-      const roomData = await fetchRoomById(roomId);
-      setRoom(roomData);
+      const room = await findRoomById(roomId);
+      setActiveRoom(room);
     } catch (error) {
-      console.error("❌ Failed to fetch room details:", error);
+      console.error("Failed to fetch room details:", error);
     }
   };
 
   const value: RoomSelectionContextType = {
-    activeRoomId,
-    setActiveRoomId,
-    isSidePanelOpen,
-    setIsSidePanelOpen,
-    room,
-    setRoom,
+    activeRoom,
+    setActiveRoom,
+    highlightedPersonId,
+    setHighlightedPersonId,
     selectRoom,
-    selectedPersonId,
   };
 
   return (

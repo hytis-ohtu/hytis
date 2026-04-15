@@ -4,7 +4,6 @@ import Exactum2 from "../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../hooks/useMapTransform";
 import { useRoomProperties } from "../hooks/useRoomProperties";
 import { useRoomSelection } from "../hooks/useRoomSelection";
-import { findRoomById } from "../services/roomsService";
 import ColorToggle from "./ColorToggle";
 import "./MainView.css";
 import SidePanel from "./SidePanel";
@@ -20,28 +19,14 @@ function MainView() {
   } = useMapTransform();
 
   const { useAvailability, setUseAvailability } = useRoomProperties();
-
-  const { room, setRoom } = useRoomSelection();
+  const { activeRoom, setActiveRoom, selectRoom } = useRoomSelection();
 
   useEffect(() => {
     const roomPaths = document.querySelectorAll("path[data-room]");
     roomPaths.forEach((roomPath) => {
-      roomPath.classList.toggle("active", +roomPath.id === room?.id);
+      roomPath.classList.toggle("active", +roomPath.id === activeRoom?.id);
     });
-  }, [room]);
-
-  async function selectRoomById(id: string) {
-    try {
-      const room = await findRoomById(id);
-      setRoom(room);
-    } catch (error: unknown) {
-      let errorMessage = "Failed to fetch room details: ";
-      if (error instanceof Error) {
-        errorMessage += error.message;
-      }
-      console.log(errorMessage);
-    }
-  }
+  }, [activeRoom]);
 
   async function handleClick(event: React.MouseEvent<SVGSVGElement>) {
     if (hasMoved.current) return;
@@ -49,7 +34,7 @@ function MainView() {
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id) {
-        await selectRoomById(target.id);
+        await selectRoom(target.id);
       }
     }
   }
@@ -70,12 +55,12 @@ function MainView() {
       />
 
       <AnimatePresence>
-        {room && (
+        {activeRoom && (
           <SidePanel
-            room={room}
-            handleClose={() => setRoom(null)}
-            onPersonSaved={() => setRoom(room)}
-            onRoomSaved={() => setRoom(room)}
+            room={activeRoom}
+            onClose={() => setActiveRoom(null)}
+            onPersonSaved={() => setActiveRoom(activeRoom)}
+            onRoomSaved={() => setActiveRoom(activeRoom)}
           />
         )}
       </AnimatePresence>
