@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import type { FindOptions } from "sequelize";
+import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
 import { z } from "zod";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
@@ -215,25 +215,29 @@ router.get("/", async (req: Request, res: Response) => {
       }
     }
 
-    const baseSupervisorsInclude = {
+    const supervisorsInclude = {
       model: Person,
       as: "supervisors",
       through: { attributes: [] },
+      where: {},
+      required: false,
     };
 
-    const baseContractsInclude = {
+    const contractsInclude = {
       model: Contract,
       as: "contracts",
       include: [{ model: Room, as: "room" }],
+      where: {},
+      required: false,
     };
 
-    let findOptions: FindOptions = {
+    const findOptions: FindOptions<InferAttributes<Person>> = {
       include: [
-        baseSupervisorsInclude,
+        supervisorsInclude,
         "department",
         "title",
         "researchGroup",
-        baseContractsInclude,
+        contractsInclude,
       ],
       order: [
         ["lastName", "ASC"],
@@ -243,40 +247,22 @@ router.get("/", async (req: Request, res: Response) => {
 
     switch (type) {
       case "supervisorName":
-        findOptions.include = [
-          {
-            ...baseSupervisorsInclude,
-            where: {
-              [Op.or]: [
-                { firstName: { [Op.iLike]: `%${q}%` } },
-                { lastName: { [Op.iLike]: `%${q}%` } },
-              ],
-            },
-            required: true,
-          },
-          "department",
-          "title",
-          "researchGroup",
-          baseContractsInclude,
-        ];
+        supervisorsInclude.where = {
+          [Op.or]: [
+            { firstName: { [Op.iLike]: `%${q}%` } },
+            { lastName: { [Op.iLike]: `%${q}%` } },
+          ],
+        };
+        supervisorsInclude.required = true;
         break;
 
       case "contractEndDate":
-        findOptions.include = [
-          baseSupervisorsInclude,
-          "department",
-          "title",
-          "researchGroup",
-          {
-            ...baseContractsInclude,
-            where: {
-              endDate: {
-                [Op.lte]: q,
-              },
-            },
-            required: true,
+        contractsInclude.where = {
+          endDate: {
+            [Op.lte]: q,
           },
-        ];
+        };
+        contractsInclude.required = true;
         break;
 
       case "personName":
