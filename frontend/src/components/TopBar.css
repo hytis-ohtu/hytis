@@ -6,11 +6,12 @@
   width: 100%;
   height: var(--topbar-height);
   background: var(--color-topbar);
-  border-bottom: var(--border-style);
+  border-bottom: var(--border-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--gap);
+  padding-right: var(--padding-sm);
   z-index: var(--z-index-topbar);
 }
 
@@ -23,14 +24,13 @@
 
 .topbar-actions {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .topbar-button {
-  width: var(--button-size);
-  height: var(--button-size);
-  border-radius: var(--border-radius-md);
+  width: calc(var(--topbar-height) - var(--padding-sm));
+  height: calc(var(--topbar-height) - var(--padding-sm));
   border: var(--border-sm);
   background: var(--color-primary);
   color: var(--color-text-black);

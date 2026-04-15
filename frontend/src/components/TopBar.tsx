@@ -45,17 +45,17 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
             setSettingsOpen(true);
           }}
         >
-          <Settings className="size-6" />
+          <Settings size={26} />
         </button>
         <button
           data-testid="topbar-profile-button"
-          className="topbar-button"
+          className="topbar-button topbar-profile-button"
           onClick={(e) => {
             e.stopPropagation();
             setMenuOpen((v) => !v);
           }}
         >
-          <User className="size-6" />
+          <User size={26} />
         </button>
         {settingsOpen && (
           <SettingsModal

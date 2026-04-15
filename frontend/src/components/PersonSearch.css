@@ -1,6 +1,8 @@
 .person-search {
-  position: relative;
-  width: 320px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(400px, calc(100vw - 220px));
   z-index: 1001;
 }
 
@@ -10,6 +12,7 @@
   align-items: center;
   background: var(--color-background);
   border-radius: var(--border-radius-sm);
+  height: calc(var(--topbar-height) - var(--padding-md));
   transition: box-shadow var(--transition-fast);
 }
 
@@ -29,6 +32,7 @@
 
 .person-search-input {
   width: 100%;
+  height: calc(var(--topbar-height) - var(--padding-md));
   padding: var(--padding-sm) var(--padding-sm) var(--padding-sm) 36px;
   border: 1px solid var(--color-muted);
   border-radius: var(--border-radius-md);
