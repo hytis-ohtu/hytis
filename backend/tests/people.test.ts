@@ -290,6 +290,44 @@ describe("GET /api/people - search", () => {
     expect(response.body.error).toBe("Failed to fetch people");
     findAllSpy.mockRestore();
   });
+
+  test("can search by supervisor name", async () => {
+    const response = await api
+      .get("/api/people?q=Matti&type=supervisorName")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.supervisors).toBeDefined();
+      const hasMattisupervisor = person.supervisors?.some((supervisor) =>
+        supervisor.firstName.toLowerCase().includes("matti"),
+      );
+      expect(hasMattisupervisor).toBe(true);
+    });
+  });
+
+  test("supervisor name search is case-insensitive", async () => {
+    const lowercaseResponse = await api
+      .get("/api/people?q=matti&type=supervisorName")
+      .expect(200);
+
+    const uppercaseResponse = await api
+      .get("/api/people?q=MATTI&type=supervisorName")
+      .expect(200);
+
+    expect(lowercaseResponse.body.length).toBeGreaterThan(0);
+    expect(uppercaseResponse.body.length).toBeGreaterThan(0);
+    expect(lowercaseResponse.body.length).toBe(uppercaseResponse.body.length);
+  });
+
+  test("supervisor name search returns empty array when no matches found", async () => {
+    const response = await api
+      .get("/api/people?q=NonexistentSupervisor&type=supervisorName")
+      .expect(200);
+
+    expect(response.body).toHaveLength(0);
+  });
 });
 
 test("a person can be updated", async () => {
