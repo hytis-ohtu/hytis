@@ -1,5 +1,6 @@
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { SearchType } from "../services/peopleService";
 import { searchPeople } from "../services/peopleService";
 import type { Person } from "../types";
@@ -25,6 +26,7 @@ function PersonSearch() {
   const [searchType, setSearchType] = useState<SearchType>("name");
   const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { selectRoom } = useRoomSelection();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -95,6 +97,23 @@ function PersonSearch() {
     setQuery("");
     setResults([]);
     setIsOpen(false);
+  };
+
+  const handlePersonClick = (person: Person) => {
+    // Get the person's first contract (regardless of end date for demo purposes)
+    const contract =
+      person.contracts && person.contracts.length > 0
+        ? person.contracts[0]
+        : null;
+
+    if (contract?.room) {
+      // Select the room and pass person ID to auto-expand their details
+      selectRoom(String(contract.room.id), person.id);
+    } else {
+      // Person has no room - show notification
+      console.log("Person has no room assignment");
+      // Could add a toast notification here
+    }
   };
 
   return (
@@ -178,15 +197,19 @@ function PersonSearch() {
               <div
                 key={person.id}
                 className="person-search-result"
-                onClick={() => {
-                  // TODO: Handle person selection
-                  console.log("Selected person:", person);
-                }}
+                onClick={() => handlePersonClick(person)}
               >
                 <div className="person-search-result-name">
                   {person.firstName} {person.lastName}
                 </div>
                 <div className="person-search-result-details">
+                  {person.contracts &&
+                    person.contracts.length > 0 &&
+                    person.contracts[0].room && (
+                      <span className="person-search-result-room">
+                        {person.contracts[0].room.name}
+                      </span>
+                    )}
                   {person.title?.name && (
                     <span className="person-search-result-title">
                       {person.title.name}

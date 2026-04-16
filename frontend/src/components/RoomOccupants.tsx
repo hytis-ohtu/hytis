@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { createContract } from "../services/contractsService";
 import {
   addPerson,
   editPerson,
@@ -14,9 +15,11 @@ import "./SidePanel.css";
 function RoomOccupants({
   room: roomProp,
   onPersonSaved,
+  selectedPersonId,
 }: {
   room: Room | null;
   onPersonSaved: () => void;
+  selectedPersonId: number | null;
 }) {
   const { id: roomId, contracts } = (roomProp ?? {}) as Partial<Room>;
 
@@ -29,7 +32,16 @@ function RoomOccupants({
   const handleAddPerson = async (values: Record<string, string>) => {
     if (roomId === undefined) return;
     try {
-      await addPerson(values, roomId);
+      if (values.personId) {
+        await createContract(
+          Number(values.personId),
+          Number(roomId),
+          values.startDate || null,
+          values.endDate || null,
+        );
+      } else {
+        await addPerson(values, roomId);
+      }
       onPersonSaved();
     } catch (error) {
       console.error("Failed to add person:", error);
@@ -95,10 +107,10 @@ function RoomOccupants({
                           .join(",")
                       : "",
                     startDate:
-                      contracts?.find((c) => c.person.id === personDetails.id)
+                      contracts?.find((c) => c.person?.id === personDetails.id)
                         ?.startDate ?? "",
                     endDate:
-                      contracts?.find((c) => c.person.id === personDetails.id)
+                      contracts?.find((c) => c.person?.id === personDetails.id)
                         ?.endDate ?? "",
                     researchgroup: String(personDetails?.researchGroup?.id),
                     misc: personDetails.freeText ?? "",
@@ -113,67 +125,75 @@ function RoomOccupants({
       ) : contracts.length === 0 ? (
         <p>Ei sopimuksia.</p>
       ) : (
-        contracts.map((contract) => (
-          <details key={contract.id}>
-            <summary>
-              <span className="person-name">
-                {contract.person.firstName} {contract.person.lastName}
-              </span>
-              <span
-                onClick={(e) => e.preventDefault()}
-                className="cursor-gap"
-              ></span>
-              <Pencil
-                data-testid={`edit-person-button-${contract.person.id}`}
-                size={16}
-                onClick={(event) => {
-                  event.preventDefault();
-                  setPersonDetails(contract.person);
-                  setAddPersonOpen(true);
-                }}
-                className="edit-person-button"
-              />
-              <span
-                onClick={(e) => e.preventDefault()}
-                className="cursor-gap"
-              ></span>
-              <Trash2
-                data-testid={`remove-person-button-${contract.person.id}`}
-                size={16}
-                onClick={(event) => {
-                  event.preventDefault();
-                  setContractToRemove(contract);
-                }}
-                className="remove-person-button"
-              />
-            </summary>
-            <ul>
-              <Field label="Osasto" value={contract.person.department?.name} />
-              <Field
-                label="Tutkimusryhmä"
-                value={contract.person.researchGroup?.name}
-              />
-              <Field label="Titteli" value={contract.person.title?.name} />
-              {contract.person.supervisors &&
-                contract.person.supervisors.length > 0 && (
-                  <li>
-                    Esihenkilöt:{" "}
-                    {contract.person.supervisors
-                      .map((s) => s.firstName + " " + s.lastName)
-                      .join(", ")}
-                  </li>
-                )}
-              <Field label="Alkupvm" value={contract.startDate} />
-              <Field label="Loppupvm" value={contract.endDate} />
-              <Field label="Lisätiedot" value={contract.person.freeText} />
-            </ul>
-          </details>
-        ))
+        contracts.map((contract) =>
+          contract.person ? (
+            <details
+              key={contract.id}
+              open={contract.person.id === selectedPersonId}
+            >
+              <summary>
+                <span className="person-name">
+                  {contract.person.firstName} {contract.person.lastName}
+                </span>
+                <span
+                  onClick={(e) => e.preventDefault()}
+                  className="cursor-gap"
+                ></span>
+                <Pencil
+                  data-testid={`edit-person-button-${contract.person.id}`}
+                  size={16}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setPersonDetails(contract.person ?? null);
+                    setAddPersonOpen(true);
+                  }}
+                  className="edit-person-button"
+                />
+                <span
+                  onClick={(e) => e.preventDefault()}
+                  className="cursor-gap"
+                ></span>
+                <Trash2
+                  data-testid={`remove-person-button-${contract.person.id}`}
+                  size={16}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setContractToRemove(contract);
+                  }}
+                  className="remove-person-button"
+                />
+              </summary>
+              <ul>
+                <Field
+                  label="Osasto"
+                  value={contract.person.department?.name}
+                />
+                <Field
+                  label="Tutkimusryhmä"
+                  value={contract.person.researchGroup?.name}
+                />
+                <Field label="Titteli" value={contract.person.title?.name} />
+                {contract.person.supervisors &&
+                  contract.person.supervisors.length > 0 && (
+                    <li>
+                      Esihenkilöt:{" "}
+                      {contract.person.supervisors
+                        .map((s) => s.firstName + " " + s.lastName)
+                        .join(", ")}
+                    </li>
+                  )}
+                <Field label="Alkupvm" value={contract.startDate} />
+                <Field label="Loppupvm" value={contract.endDate} />
+                <Field label="Lisätiedot" value={contract.person.freeText} />
+              </ul>
+            </details>
+          ) : null,
+        )
       )}
 
       <ConfirmationButton
         open={contractToRemove !== null}
-        title={`Poista ${contractToRemove?.person.firstName} ${contractToRemove?.person.lastName}?`}
+        title={`Poista ${contractToRemove?.person?.firstName ?? ""} ${contractToRemove?.person?.lastName ?? ""}?`}
         confirmText="Poista"
         cancelText="Peruuta"
         onConfirm={handleRemoveContract}
