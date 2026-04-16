@@ -108,7 +108,7 @@ function PersonSearch() {
 
     if (contract?.room) {
       // Select the room and pass person ID to auto-expand their details
-      selectRoom(String(contract.room.id), person.id);
+      selectRoom(contract.room.id, person.id);
     } else {
       // Person has no room - show notification
       console.log("Person has no room assignment");

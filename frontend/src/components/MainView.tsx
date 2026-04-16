@@ -19,15 +19,15 @@ function MainView() {
   } = useMapTransform();
 
   const { useAvailability, setUseAvailability } = useRoomProperties();
-  const { activeRoom, isSidePanelOpen, selectRoom, handleSidePanelExited } =
+  const { displayedRoomId, selectRoom, handleSidePanelExited } =
     useRoomSelection();
 
   useEffect(() => {
     const roomPaths = document.querySelectorAll("path[data-room]");
     roomPaths.forEach((roomPath) => {
-      roomPath.classList.toggle("active", +roomPath.id === activeRoom?.id);
+      roomPath.classList.toggle("active", +roomPath.id === displayedRoomId);
     });
-  }, [activeRoom]);
+  }, [displayedRoomId]);
 
   async function handleClick(event: React.MouseEvent<SVGSVGElement>) {
     if (hasMoved.current) return;
@@ -56,7 +56,7 @@ function MainView() {
       />
 
       <AnimatePresence onExitComplete={handleSidePanelExited}>
-        {isSidePanelOpen && <SidePanel />}
+        {displayedRoomId !== null && <SidePanel />}
       </AnimatePresence>
     </div>
   );

@@ -7,7 +7,7 @@ export interface RoomSelectionContextType {
     roomId: number | null,
     personId?: number | null,
   ) => Promise<void>;
-  isSidePanelOpen: boolean;
+  displayedRoomId: number | null;
   closeSidePanel: () => void;
   handleSidePanelExited: () => void;
   highlightedPersonId: number | null;

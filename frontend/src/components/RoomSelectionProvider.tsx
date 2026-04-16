@@ -15,7 +15,7 @@ export function RoomSelectionProvider({
   findRoomById,
 }: RoomSelectionProviderProps) {
   const [activeRoom, setActiveRoom] = useState<Room | null | undefined>(null);
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [displayedRoomId, setDisplayedRoomId] = useState<number | null>(null);
   const [highlightedPersonId, setHighlightedPersonId] = useState<number | null>(
     null,
   );
@@ -39,11 +39,11 @@ export function RoomSelectionProvider({
     requestIdRef.current++;
     clearSkeletonTimer();
     setHighlightedPersonId(null);
-    setIsSidePanelOpen(false);
+    setDisplayedRoomId(null);
   };
 
   const handleSidePanelExited = () => {
-    if (isSidePanelOpen) return;
+    if (displayedRoomId !== null) return;
     setActiveRoom(null);
   };
 
@@ -58,7 +58,7 @@ export function RoomSelectionProvider({
       return;
     }
 
-    setIsSidePanelOpen(true);
+    setDisplayedRoomId(roomId);
     setHighlightedPersonId(personId ?? null);
     clearSkeletonTimer();
     skeletonDelayTimerRef.current = setTimeout(() => {
@@ -84,7 +84,7 @@ export function RoomSelectionProvider({
 
   const value: RoomSelectionContextType = {
     activeRoom,
-    isSidePanelOpen,
+    displayedRoomId,
     selectRoom,
     closeSidePanel,
     handleSidePanelExited,
