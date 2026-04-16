@@ -92,8 +92,8 @@ function RoomPeople() {
           Henkilöt
           {renderValue(
             activeRoom?.contracts.length,
-            (value) => ` (${value})`,
             "(0)",
+            (value) => ` (${value})`,
             {
               skeletonProps: {
                 width: "3ch",

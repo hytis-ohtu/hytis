@@ -42,7 +42,7 @@ function RoomInfo() {
         <Map />
         <h2>
           Huone
-          {renderValue(activeRoom?.name, (value) => " " + value, "-", {
+          {renderValue(activeRoom?.name, "–", (value) => " " + value, {
             skeletonProps: {
               width: "4ch",
               style: { marginLeft: "0.5rem" },
@@ -84,19 +84,25 @@ function RoomInfo() {
             <div className="room-details">
               <div className="room-detail">
                 <LandPlot />
-                <p>{renderValue(activeRoom?.area, (value) => `${value} m²`)}</p>
+                <p>
+                  {renderValue(
+                    activeRoom?.area,
+                    "Ei pinta-alaa",
+                    (value) => `${value} m²`,
+                  )}
+                </p>
               </div>
               <div className="room-detail">
                 <User />
-                <p>{renderValue(activeRoom?.capacity, (value) => value)}</p>
+                <p>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</p>
               </div>
               <div className="room-detail">
                 <Container />
                 <p title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
                   {renderValue(
                     activeRoom?.roomType,
-                    (value) => value.name,
                     "Ei tyyppiä",
+                    (value) => value.name,
                   )}
                 </p>
               </div>
@@ -105,20 +111,14 @@ function RoomInfo() {
                 <p title={activeRoom?.department?.name ?? "Ei osastoa"}>
                   {renderValue(
                     activeRoom?.department,
-                    (value) => value.name,
                     "Ei osastoa",
+                    (value) => value.name,
                   )}
                 </p>
               </div>
               <div className="room-description">
                 <p className="room-description-title">Lisätiedot</p>
-                <p>
-                  {renderValue(
-                    activeRoom?.freeText,
-                    (value) => value,
-                    "Ei lisätietoja",
-                  )}
-                </p>
+                <p>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</p>
               </div>
             </div>
           </motion.div>
