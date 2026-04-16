@@ -102,11 +102,57 @@
 
 .contract > header {
   display: grid;
-  grid-template-columns: auto 1fr auto auto auto;
   gap: 0.5rem;
-  align-items: center;
   padding: 0.5rem;
   background: var(--color-background);
+}
+
+.contract-header-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.contract-timeline {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.contract-timeline-date {
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.contract-timeline-track {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+  border: var(--border-sm);
+  border-radius: var(--border-radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.contract-timeline-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  clip-path: inset(0 calc(100% - var(--timeline-progress, 0%)) 0 0);
+}
+
+.contract-timeline-status {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.625rem;
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
 
 .contract ul {
