@@ -1,4 +1,4 @@
-import { ChevronDown, Pencil, Plus, Trash2, Users } from "lucide-react";
+import { ChevronDown, Plus, Users } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -9,6 +9,7 @@ import type { Contract, Person } from "../types";
 import { renderValue } from "../utils/renderValue";
 import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";
+import RoomPersonCard from "./RoomPersonCard";
 import "./SidePanel.css";
 
 function RoomPeople() {
@@ -144,66 +145,15 @@ function RoomPeople() {
             ) : (
               <div className="contracts">
                 {activeRoom.contracts.map((contract) => (
-                  <article className="contract" key={contract.id}>
-                    <header>
-                      <div>
-                        <p>
-                          {contract.person.lastName} {contract.person.firstName}
-                        </p>
-                        <button className="button-icon">
-                          <ChevronDown size={18} />
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          className="button-icon edit-person"
-                          onClick={() => {
-                            setActivePerson(contract.person);
-                            setAddPersonOpen(true);
-                          }}
-                        >
-                          <Pencil size={18} />
-                        </button>
-                        <button
-                          className="button-icon remove-contract"
-                          onClick={() => setContractToRemove(contract)}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </header>
-                    <ul>
-                      <li>
-                        <p>Osasto: {contract.person.department?.name}</p>
-                      </li>
-                      <li>
-                        <p>
-                          Tutkimusryhmä: {contract.person.researchGroup?.name}
-                        </p>
-                      </li>
-                      <li>
-                        <p>Titteli: {contract.person.title?.name}</p>
-                      </li>
-                      {contract.person.supervisors &&
-                        contract.person.supervisors.length > 0 && (
-                          <li>
-                            Esihenkilöt:{" "}
-                            {contract.person.supervisors
-                              .map((s) => s.firstName + " " + s.lastName)
-                              .join(", ")}
-                          </li>
-                        )}
-                      <li>
-                        <p>Alkupvm: {contract.startDate}</p>
-                      </li>
-                      <li>
-                        <p>Loppupvm: {contract.endDate}</p>
-                      </li>
-                      <li>
-                        <p>Lisätiedot: {contract.person.freeText}</p>
-                      </li>
-                    </ul>
-                  </article>
+                  <RoomPersonCard
+                    key={contract.id}
+                    contract={contract}
+                    onEdit={() => {
+                      setActivePerson(contract.person);
+                      setAddPersonOpen(true);
+                    }}
+                    onRemove={() => setContractToRemove(contract)}
+                  />
                 ))}
               </div>
             )}
