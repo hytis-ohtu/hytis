@@ -102,17 +102,14 @@
 
 .contract > header {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto auto auto;
+  gap: 0.5rem;
+  align-items: center;
   padding: 0.5rem;
   background: var(--color-background);
 }
 
-.contract > header > div {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.contract > ul {
+.contract ul {
   display: grid;
   gap: 0.25rem;
   padding: 0.5rem;
