@@ -66,7 +66,7 @@ function RoomInfo() {
         </div>
         <div className="room-detail">
           <Container />
-          <p>
+          <p title={activeRoom?.roomType?.name || "Ei tyyppiä"}>
             {renderValue(
               activeRoom?.roomType,
               (value) => value.name,
@@ -76,7 +76,7 @@ function RoomInfo() {
         </div>
         <div className="room-detail">
           <Section />
-          <p>
+          <p title={activeRoom?.department?.name || "Ei osastoa"}>
             {renderValue(
               activeRoom?.department,
               (value) => value.name,
