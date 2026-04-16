@@ -40,8 +40,6 @@ function RoomInfo() {
           Huone
           {renderValue(activeRoom?.name, (value) => " " + value, "-", {
             skeletonProps: {
-              baseColor: "#cf9f60",
-              highlightColor: "#efd1a9",
               width: "4ch",
               style: { marginLeft: "0.5rem" },
             },

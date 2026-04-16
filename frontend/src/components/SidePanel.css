@@ -24,7 +24,12 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: var(--color-primary);
+  background: var(--color-secondary);
+}
+
+.side-panel > section > header .react-loading-skeleton {
+  --base-color: var(--color-secondary-skeleton-base);
+  --highlight-color: var(--color-secondary-skeleton-highlight);
 }
 
 /* RoomDetails */

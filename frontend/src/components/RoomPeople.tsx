@@ -64,8 +64,6 @@ function RoomPeople() {
             "(0)",
             {
               skeletonProps: {
-                baseColor: "#cf9f60",
-                highlightColor: "#efd1a9",
                 width: "3ch",
                 style: { marginLeft: "0.5rem" },
               },

@@ -1,13 +1,17 @@
 :root {
   /* Colors */
-  --color-primary: #e5bb83;
-  --color-secondary: #cec9e0;
+  --color-primary: #e1c0f6;
+  --color-secondary: #e5bb83;
   --color-topbar: #484848;
   --color-text-black: #222;
   --color-text-white: #fff;
   --color-background: #fff;
   --color-background-gray: #edebeb;
   --color-muted: #0d0b1594;
+
+  /* Skeleton Colors */
+  --color-secondary-skeleton-base: #cf9f60;
+  --color-secondary-skeleton-highlight: #efd1a9;
 
   /* Borders */
   --border-radius-md: 4px;
