@@ -8,6 +8,7 @@ import {
   User,
   X,
 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { editRoom } from "../services/roomsService";
@@ -18,8 +19,11 @@ import "./SidePanel.css";
 function RoomInfo() {
   const { activeRoom, selectRoom, closeSidePanel } = useRoomSelection();
   const [editRoomOpen, setEditRoomOpen] = useState(false);
+  const [detailsCollapsed, setDetailsCollapsed] = useState(false);
   const roomId = activeRoom?.id;
   const isLoaded = activeRoom !== null && activeRoom !== undefined;
+
+  const toggleDetails = () => setDetailsCollapsed((previous) => !previous);
 
   const handleEditRoom = async (values: Record<string, string>) => {
     if (roomId == null) return;
@@ -45,7 +49,20 @@ function RoomInfo() {
             },
           })}
         </h2>
-        <ChevronDown />
+        <button
+          className="button-icon"
+          onClick={toggleDetails}
+          aria-label={
+            detailsCollapsed ? "Avaa huoneen tiedot" : "Sulje huoneen tiedot"
+          }
+          aria-expanded={!detailsCollapsed}
+        >
+          <ChevronDown
+            className={
+              detailsCollapsed ? "section-chevron collapsed" : "section-chevron"
+            }
+          />
+        </button>
         <button className="button-icon" onClick={() => setEditRoomOpen(true)}>
           <SquarePen />
         </button>
@@ -55,46 +72,58 @@ function RoomInfo() {
       </header>
 
       {/* Room Details */}
-      <div className="room-details">
-        <div className="room-detail">
-          <LandPlot />
-          <p>{renderValue(activeRoom?.area, (value) => `${value} m²`)}</p>
-        </div>
-        <div className="room-detail">
-          <User />
-          <p>{renderValue(activeRoom?.capacity, (value) => value)}</p>
-        </div>
-        <div className="room-detail">
-          <Container />
-          <p title={activeRoom?.roomType?.name || "Ei tyyppiä"}>
-            {renderValue(
-              activeRoom?.roomType,
-              (value) => value.name,
-              "Ei tyyppiä",
-            )}
-          </p>
-        </div>
-        <div className="room-detail">
-          <Section />
-          <p title={activeRoom?.department?.name || "Ei osastoa"}>
-            {renderValue(
-              activeRoom?.department,
-              (value) => value.name,
-              "Ei osastoa",
-            )}
-          </p>
-        </div>
-        <div className="room-description">
-          <p className="room-description-title">Lisätiedot</p>
-          <p>
-            {renderValue(
-              activeRoom?.freeText,
-              (value) => value,
-              "Ei lisätietoja",
-            )}
-          </p>
-        </div>
-      </div>
+      <AnimatePresence initial={false}>
+        {!detailsCollapsed && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="room-details">
+              <div className="room-detail">
+                <LandPlot />
+                <p>{renderValue(activeRoom?.area, (value) => `${value} m²`)}</p>
+              </div>
+              <div className="room-detail">
+                <User />
+                <p>{renderValue(activeRoom?.capacity, (value) => value)}</p>
+              </div>
+              <div className="room-detail">
+                <Container />
+                <p title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
+                  {renderValue(
+                    activeRoom?.roomType,
+                    (value) => value.name,
+                    "Ei tyyppiä",
+                  )}
+                </p>
+              </div>
+              <div className="room-detail">
+                <Section />
+                <p title={activeRoom?.department?.name ?? "Ei osastoa"}>
+                  {renderValue(
+                    activeRoom?.department,
+                    (value) => value.name,
+                    "Ei osastoa",
+                  )}
+                </p>
+              </div>
+              <div className="room-description">
+                <p className="room-description-title">Lisätiedot</p>
+                <p>
+                  {renderValue(
+                    activeRoom?.freeText,
+                    (value) => value,
+                    "Ei lisätietoja",
+                  )}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Edit Room Modal */}
       {editRoomOpen && isLoaded && (

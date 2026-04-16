@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { RoomSelectionContextType } from "../contexts/RoomSelectionContext";
+import type {
+  RoomPeopleExpandRequest,
+  RoomSelectionContextType,
+} from "../contexts/RoomSelectionContext";
 import { RoomSelectionContext } from "../contexts/RoomSelectionContext";
 import type { Room } from "../types";
 
@@ -16,9 +19,9 @@ export function RoomSelectionProvider({
 }: RoomSelectionProviderProps) {
   const [activeRoom, setActiveRoom] = useState<Room | null | undefined>(null);
   const [displayedRoomId, setDisplayedRoomId] = useState<number | null>(null);
-  const [highlightedPersonId, setHighlightedPersonId] = useState<number | null>(
-    null,
-  );
+  const [roomPeopleExpandRequest, setRoomPeopleExpandRequest] =
+    useState<RoomPeopleExpandRequest | null>(null);
+  const expandRequestIdRef = useRef(0);
   const requestIdRef = useRef(0);
   const skeletonDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -38,7 +41,7 @@ export function RoomSelectionProvider({
   const closeSidePanel = () => {
     requestIdRef.current++;
     clearSkeletonTimer();
-    setHighlightedPersonId(null);
+    setRoomPeopleExpandRequest(null);
     setDisplayedRoomId(null);
   };
 
@@ -59,7 +62,20 @@ export function RoomSelectionProvider({
     }
 
     setDisplayedRoomId(roomId);
-    setHighlightedPersonId(personId ?? null);
+    if (personId != null) {
+      setRoomPeopleExpandRequest({
+        requestId: ++expandRequestIdRef.current,
+        personId,
+      });
+    } else {
+      setRoomPeopleExpandRequest(null);
+    }
+
+    if (personId != null && activeRoom?.id === roomId) {
+      clearSkeletonTimer();
+      return;
+    }
+
     clearSkeletonTimer();
     skeletonDelayTimerRef.current = setTimeout(() => {
       if (requestIdRef.current === requestId) {
@@ -88,8 +104,7 @@ export function RoomSelectionProvider({
     selectRoom,
     closeSidePanel,
     handleSidePanelExited,
-    highlightedPersonId,
-    setHighlightedPersonId,
+    roomPeopleExpandRequest,
   };
 
   return (

@@ -1,6 +1,11 @@
 import { createContext } from "react";
 import type { Room } from "../types";
 
+export interface RoomPeopleExpandRequest {
+  requestId: number;
+  personId: number;
+}
+
 export interface RoomSelectionContextType {
   activeRoom: Room | null | undefined;
   selectRoom: (
@@ -10,8 +15,7 @@ export interface RoomSelectionContextType {
   displayedRoomId: number | null;
   closeSidePanel: () => void;
   handleSidePanelExited: () => void;
-  highlightedPersonId: number | null;
-  setHighlightedPersonId: (value: React.SetStateAction<number | null>) => void;
+  roomPeopleExpandRequest: RoomPeopleExpandRequest | null;
 }
 
 export const RoomSelectionContext =

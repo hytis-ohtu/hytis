@@ -1,5 +1,6 @@
 import { ChevronDown, Pencil, Plus, Trash2, Users } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
@@ -11,13 +12,43 @@ import PersonModal from "./PersonModal";
 import "./SidePanel.css";
 
 function RoomPeople() {
-  const { activeRoom, selectRoom, highlightedPersonId } = useRoomSelection();
+  const { activeRoom, selectRoom, roomPeopleExpandRequest } =
+    useRoomSelection();
 
   const [activePerson, setActivePerson] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
+  const [contractsCollapsed, setContractsCollapsed] = useState(false);
+  const lastHandledExpandRequestIdRef = useRef<number | null>(null);
   const [contractToRemove, setContractToRemove] = useState<Contract | null>(
     null,
   );
+
+  const toggleContracts = () => setContractsCollapsed((previous) => !previous);
+
+  useEffect(() => {
+    if (roomPeopleExpandRequest === null) {
+      return;
+    }
+
+    if (
+      lastHandledExpandRequestIdRef.current ===
+      roomPeopleExpandRequest.requestId
+    ) {
+      return;
+    }
+
+    const highlightedPersonIsInActiveRoom = activeRoom?.contracts?.some(
+      (contract) => contract.person.id === roomPeopleExpandRequest.personId,
+    );
+
+    if (!highlightedPersonIsInActiveRoom) {
+      return;
+    }
+
+    setContractsCollapsed(false);
+
+    lastHandledExpandRequestIdRef.current = roomPeopleExpandRequest.requestId;
+  }, [activeRoom?.contracts, roomPeopleExpandRequest]);
 
   const handleAddPerson = async (values: Record<string, string>) => {
     if (activeRoom?.id === undefined) return;
@@ -30,9 +61,10 @@ function RoomPeople() {
   };
 
   const handleEditPerson = async (values: Record<string, string>) => {
-    if (activeRoom?.id === undefined || highlightedPersonId === null) return;
+    if (activeRoom?.id === undefined || activePerson === null) return;
     try {
-      await editPerson(highlightedPersonId, values, activeRoom.id);
+      await editPerson(activePerson.id, values, activeRoom.id);
+      setActivePerson(null);
       selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to edit person:", error);
@@ -70,83 +102,114 @@ function RoomPeople() {
             },
           )}
         </h2>
-        <ChevronDown />
+        <button
+          className="button-icon"
+          onClick={toggleContracts}
+          aria-label={
+            contractsCollapsed
+              ? "Avaa huoneen henkilöt"
+              : "Sulje huoneen henkilöt"
+          }
+          aria-expanded={!contractsCollapsed}
+        >
+          <ChevronDown
+            className={
+              contractsCollapsed
+                ? "section-chevron collapsed"
+                : "section-chevron"
+            }
+          />
+        </button>
         <button className="button-icon" onClick={() => setAddPersonOpen(true)}>
           <Plus />
         </button>
       </header>
 
       {/* Contracts */}
-      {activeRoom?.contracts === undefined ? (
-        <div className="contracts contracts-skeleton">
-          <Skeleton count={6} />
-        </div>
-      ) : activeRoom?.contracts === null ? (
-        <p>Ei henkilöitä.</p>
-      ) : (
-        <div className="contracts">
-          {activeRoom.contracts.map((contract) => (
-            <article className="contract" key={contract.id}>
-              <header>
-                <div>
-                  <p>
-                    {contract.person.lastName} {contract.person.firstName}
-                  </p>
-                  <button className="button-icon">
-                    <ChevronDown size={18} />
-                  </button>
-                </div>
-                <div>
-                  <button
-                    className="button-icon edit-person"
-                    onClick={() => {
-                      setActivePerson(contract.person);
-                      setAddPersonOpen(true);
-                    }}
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    className="button-icon remove-contract"
-                    onClick={() => setContractToRemove(contract)}
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </header>
-              <ul>
-                <li>
-                  <p>Osasto: {contract.person.department?.name}</p>
-                </li>
-                <li>
-                  <p>Tutkimusryhmä: {contract.person.researchGroup?.name}</p>
-                </li>
-                <li>
-                  <p>Titteli: {contract.person.title?.name}</p>
-                </li>
-                {contract.person.supervisors &&
-                  contract.person.supervisors.length > 0 && (
-                    <li>
-                      Esihenkilöt:{" "}
-                      {contract.person.supervisors
-                        .map((s) => s.firstName + " " + s.lastName)
-                        .join(", ")}
-                    </li>
-                  )}
-                <li>
-                  <p>Alkupvm: {contract.startDate}</p>
-                </li>
-                <li>
-                  <p>Loppupvm: {contract.endDate}</p>
-                </li>
-                <li>
-                  <p>Lisätiedot: {contract.person.freeText}</p>
-                </li>
-              </ul>
-            </article>
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {!contractsCollapsed && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            {activeRoom?.contracts === undefined ? (
+              <div className="contracts contracts-skeleton">
+                <Skeleton count={6} />
+              </div>
+            ) : activeRoom?.contracts === null ? (
+              <p>Ei henkilöitä.</p>
+            ) : (
+              <div className="contracts">
+                {activeRoom.contracts.map((contract) => (
+                  <article className="contract" key={contract.id}>
+                    <header>
+                      <div>
+                        <p>
+                          {contract.person.lastName} {contract.person.firstName}
+                        </p>
+                        <button className="button-icon">
+                          <ChevronDown size={18} />
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          className="button-icon edit-person"
+                          onClick={() => {
+                            setActivePerson(contract.person);
+                            setAddPersonOpen(true);
+                          }}
+                        >
+                          <Pencil size={18} />
+                        </button>
+                        <button
+                          className="button-icon remove-contract"
+                          onClick={() => setContractToRemove(contract)}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </header>
+                    <ul>
+                      <li>
+                        <p>Osasto: {contract.person.department?.name}</p>
+                      </li>
+                      <li>
+                        <p>
+                          Tutkimusryhmä: {contract.person.researchGroup?.name}
+                        </p>
+                      </li>
+                      <li>
+                        <p>Titteli: {contract.person.title?.name}</p>
+                      </li>
+                      {contract.person.supervisors &&
+                        contract.person.supervisors.length > 0 && (
+                          <li>
+                            Esihenkilöt:{" "}
+                            {contract.person.supervisors
+                              .map((s) => s.firstName + " " + s.lastName)
+                              .join(", ")}
+                          </li>
+                        )}
+                      <li>
+                        <p>Alkupvm: {contract.startDate}</p>
+                      </li>
+                      <li>
+                        <p>Loppupvm: {contract.endDate}</p>
+                      </li>
+                      <li>
+                        <p>Lisätiedot: {contract.person.freeText}</p>
+                      </li>
+                    </ul>
+                  </article>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Person Modal */}
       {addPersonOpen && (
