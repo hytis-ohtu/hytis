@@ -30,9 +30,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await authService.logout();
+    const shouldRedirectToLogin = await authService.logout();
     setUser(null);
-    setNeedsLogin(true);
+    if (shouldRedirectToLogin) {
+      setNeedsLogin(true);
+    }
   };
 
   return (

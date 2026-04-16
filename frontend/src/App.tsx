@@ -17,15 +17,12 @@ function App() {
   );
 }
 
-function AppContent() {
+export function AppContent() {
   const { isLoading, needsLogin, login } = useAuth();
 
   useEffect(() => {
     if (needsLogin) {
-      const timer = setTimeout(() => {
-        login();
-      }, 2000);
-      return () => clearTimeout(timer);
+      login();
     }
   }, [needsLogin, login]);
 
