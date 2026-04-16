@@ -27,10 +27,6 @@
   background: var(--color-primary);
 }
 
-.side-panel > section > header > h2 {
-  font: var(--font-title);
-}
-
 /* RoomDetails */
 
 .room-info > header {
@@ -66,7 +62,7 @@
 /* RoomPeople */
 
 .room-people > header {
-  grid-template-columns: auto auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
 }
 
 .contracts {

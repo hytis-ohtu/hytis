@@ -5,6 +5,7 @@ import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
 import type { Contract, Person } from "../types";
+import { renderValue } from "../utils/renderValue";
 import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";
 import "./SidePanel.css";
@@ -55,7 +56,22 @@ function RoomPeople() {
       {/* Header */}
       <header>
         <Users />
-        <h2>Henkilöt</h2>
+        <h2>
+          Henkilöt
+          {renderValue(
+            activeRoom?.contracts.length,
+            (value) => ` (${value})`,
+            "(0)",
+            {
+              skeletonProps: {
+                baseColor: "#cf9f60",
+                highlightColor: "#efd1a9",
+                width: "3ch",
+                style: { marginLeft: "0.5rem" },
+              },
+            },
+          )}
+        </h2>
         <ChevronDown />
         <button className="button-icon" onClick={() => setAddPersonOpen(true)}>
           <Plus />
