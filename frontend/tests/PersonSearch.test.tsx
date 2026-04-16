@@ -466,3 +466,33 @@ describe("PersonSearch", () => {
     consoleLogSpy.mockRestore();
   });
 });
+
+describe("search type selection", () => {
+  it("opens search type dropdown when clicking search type button", async () => {
+    render(<PersonSearch />);
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    expect(screen.getByTestId("person-search-type-menu")).toBeInTheDocument();
+  });
+
+  it("changes search type placeholder when selecting an option", async () => {
+    render(<PersonSearch />);
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    await userEvent.click(screen.getByText("Esihenkilö"));
+    expect(
+      screen.getByPlaceholderText("Hae henkilöä esihenkilöllä..."),
+    ).toBeInTheDocument();
+  });
+
+  it("forwards correct search type to API", async () => {
+    vi.mocked(mockSearchPeople).mockResolvedValue([]);
+    render(<PersonSearch />);
+
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    await userEvent.click(screen.getByText("Esihenkilö"));
+    await userEvent.type(screen.getByTestId("person-search-input"), "Matti");
+
+    await waitFor(() =>
+      expect(mockSearchPeople).toHaveBeenCalledWith("Matti", "supervisor"),
+    );
+  });
+});
