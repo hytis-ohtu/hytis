@@ -209,10 +209,10 @@ router.get("/", async (req: Request, res: Response) => {
   const { q, type } = req.query;
 
   try {
-    if (q && typeof q === "string") {
-      if (q.length > 100) {
-        return res.status(400).json({ error: "Query too long" });
-      }
+    const queryStr = q && typeof q === "string" ? q : undefined;
+
+    if (queryStr && queryStr.length > 100) {
+      return res.status(400).json({ error: "Query too long" });
     }
 
     const supervisorsInclude = {
@@ -245,35 +245,37 @@ router.get("/", async (req: Request, res: Response) => {
       ],
     };
 
-    switch (type) {
-      case "supervisorName":
-        supervisorsInclude.where = {
-          [Op.or]: [
-            { firstName: { [Op.iLike]: `%${q}%` } },
-            { lastName: { [Op.iLike]: `%${q}%` } },
-          ],
-        };
-        supervisorsInclude.required = true;
-        break;
+    if (queryStr) {
+      switch (type) {
+        case "supervisorName":
+          supervisorsInclude.where = {
+            [Op.or]: [
+              { firstName: { [Op.iLike]: `%${queryStr}%` } },
+              { lastName: { [Op.iLike]: `%${queryStr}%` } },
+            ],
+          };
+          supervisorsInclude.required = true;
+          break;
 
-      case "contractEndDate":
-        contractsInclude.where = {
-          endDate: {
-            [Op.lte]: q,
-          },
-        };
-        contractsInclude.required = true;
-        break;
+        case "contractEndDate":
+          contractsInclude.where = {
+            endDate: {
+              [Op.lte]: queryStr,
+            },
+          };
+          contractsInclude.required = true;
+          break;
 
-      case "personName":
-      default:
-        findOptions.where = {
-          [Op.or]: [
-            { firstName: { [Op.iLike]: `%${q}%` } },
-            { lastName: { [Op.iLike]: `%${q}%` } },
-          ],
-        };
-        break;
+        case "personName":
+        default:
+          findOptions.where = {
+            [Op.or]: [
+              { firstName: { [Op.iLike]: `%${queryStr}%` } },
+              { lastName: { [Op.iLike]: `%${queryStr}%` } },
+            ],
+          };
+          break;
+      }
     }
 
     const people = await Person.findAll(findOptions);
