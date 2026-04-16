@@ -20,7 +20,7 @@ export async function editRoom(
   id: number,
   values: Record<string, string>,
 ): Promise<void> {
-  const { department, capacity, roomType, ...rest } = values;
+  const { department, capacity, roomType, freeText, ...rest } = values;
 
   const body = {
     ...rest,
@@ -29,6 +29,9 @@ export async function editRoom(
     }),
     ...(department !== undefined && {
       departmentId: department === "" ? null : Number(department),
+    }),
+    ...(freeText !== undefined && {
+      freeText: freeText === "" ? null : freeText,
     }),
     ...(roomType !== undefined && {
       roomTypeId: roomType === "" ? null : Number(roomType),

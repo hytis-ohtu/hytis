@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import Skeleton from "react-loading-skeleton";
 import type { SkeletonProps } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 type RenderValueOptions = {
@@ -14,6 +14,6 @@ export function renderValue<T>(
   options?: RenderValueOptions,
 ): ReactNode {
   if (value === undefined) return <Skeleton {...options?.skeletonProps} />;
-  if (value === null || value === "") return noData;
+  if (value === null) return noData;
   return render(value);
 }

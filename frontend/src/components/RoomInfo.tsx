@@ -64,15 +64,27 @@ function RoomInfo() {
         </div>
         <div className="room-detail">
           <User />
-          <p>{renderValue(activeRoom?.capacity, (value) => String(value))}</p>
+          <p>{renderValue(activeRoom?.capacity, (value) => value)}</p>
         </div>
         <div className="room-detail">
           <Container />
-          <p>{renderValue(activeRoom?.roomType, (value) => value.name)}</p>
+          <p>
+            {renderValue(
+              activeRoom?.roomType,
+              (value) => value.name,
+              "Ei tyyppiä",
+            )}
+          </p>
         </div>
         <div className="room-detail">
           <Section />
-          <p>{renderValue(activeRoom?.department, (value) => value.name)}</p>
+          <p>
+            {renderValue(
+              activeRoom?.department,
+              (value) => value.name,
+              "Ei osastoa",
+            )}
+          </p>
         </div>
         <div className="room-description">
           <p className="room-description-title">Lisätiedot</p>
