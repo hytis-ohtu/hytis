@@ -287,7 +287,7 @@ describe("GET /api/people - search", () => {
       .expect(500)
       .expect("Content-Type", /application\/json/);
 
-    expect(response.body.error).toBe("Failed to search people");
+    expect(response.body.error).toBe("Failed to fetch people");
     findAllSpy.mockRestore();
   });
 });
