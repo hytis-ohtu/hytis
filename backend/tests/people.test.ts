@@ -328,6 +328,34 @@ describe("GET /api/people - search", () => {
 
     expect(response.body).toHaveLength(0);
   });
+
+  test("can search by contract end date", async () => {
+    const response = await api
+      .get("/api/people?q=2025-12-31&type=contractEndDate")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.contracts).toBeDefined();
+      const hasMatchingContract = person.contracts?.some((contract) => {
+        if (!contract.endDate) return false;
+        const endDateStr = new Date(contract.endDate)
+          .toISOString()
+          .split("T")[0];
+        return endDateStr <= "2025-12-31";
+      });
+      expect(hasMatchingContract).toBe(true);
+    });
+  });
+
+  test("contract end date search returns empty array when no matches found", async () => {
+    const response = await api
+      .get("/api/people?q=2020-01-01&type=contractEndDate")
+      .expect(200);
+
+    expect(response.body).toHaveLength(0);
+  });
 });
 
 test("a person can be updated", async () => {
