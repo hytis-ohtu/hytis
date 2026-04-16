@@ -1,10 +1,5 @@
 import { Request, Response, Router } from "express";
-import {
-  connectToDatabase,
-  createAllTables,
-  dropAllTables,
-  seedData,
-} from "../seed";
+import { createAllTables, dropAllTables, seedData } from "../seed";
 
 const router = Router();
 
@@ -18,7 +13,6 @@ router.post(
     _req: Request,
     res: Response,
   ): Promise<Response<{ message: string }>> => {
-    await connectToDatabase();
     await dropAllTables();
     await createAllTables();
     await seedData();
