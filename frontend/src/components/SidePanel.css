@@ -32,11 +32,11 @@
   --highlight-color: var(--color-secondary-skeleton-highlight);
 }
 
-.section-chevron {
+.collapse-icon {
   transition: transform 200ms ease;
 }
 
-.section-chevron.collapsed {
+.collapse-icon.collapsed {
   transform: rotate(-90deg);
 }
 

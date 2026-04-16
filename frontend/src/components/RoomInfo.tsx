@@ -59,7 +59,7 @@ function RoomInfo() {
         >
           <ChevronDown
             className={
-              detailsCollapsed ? "section-chevron collapsed" : "section-chevron"
+              detailsCollapsed ? "collapse-icon collapsed" : "collapse-icon"
             }
           />
         </button>

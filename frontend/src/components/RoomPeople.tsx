@@ -115,9 +115,7 @@ function RoomPeople() {
         >
           <ChevronDown
             className={
-              contractsCollapsed
-                ? "section-chevron collapsed"
-                : "section-chevron"
+              contractsCollapsed ? "collapse-icon collapsed" : "collapse-icon"
             }
           />
         </button>
