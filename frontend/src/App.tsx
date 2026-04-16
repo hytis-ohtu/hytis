@@ -11,10 +11,7 @@ function AppContent() {
 
   useEffect(() => {
     if (needsLogin) {
-      const timer = setTimeout(() => {
-        login();
-      }, 100);
-      return () => clearTimeout(timer);
+      login();
     }
   }, [needsLogin, login]);
 

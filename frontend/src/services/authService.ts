@@ -9,16 +9,16 @@ export async function getCurrentUser(): Promise<UserData> {
   return response.data;
 }
 
-export async function logout(): Promise<void> {
-  const response = await axios.post<{ logoutUrl?: string }>(
-    `${BASE_URL}/api/logout`,
-    undefined,
-    { withCredentials: true },
-  );
+export async function logout(): Promise<boolean> {
+  const response = await axios.post(`${BASE_URL}/api/logout`, {}, {
+    withCredentials: true,
+  });
   const data = response.data;
   if (data.logoutUrl) {
     window.location.href = data.logoutUrl;
+    return false;
   }
+  return true;
 }
 
 export function login(): void {
