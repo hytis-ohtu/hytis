@@ -136,7 +136,6 @@ function PersonSearch() {
           <button
             className="person-search-type-button"
             onClick={() => setIsTypeMenuOpen((prev) => !prev)}
-            aria-label="Valitse hakutyyppi"
             data-testid="person-search-type-button"
           >
             <SlidersHorizontal size={16} />
