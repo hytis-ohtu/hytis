@@ -118,7 +118,7 @@
 
 .person-search-type-option.active {
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  color: var(--color-text-black);
 }
 
 .person-search-input:focus {
