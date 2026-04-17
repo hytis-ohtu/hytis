@@ -165,6 +165,17 @@ describe("GET /api/people - search", () => {
     expect(response.body[0].lastName).toBe("Virtanen");
   });
 
+  test("people can be searched by full name", async () => {
+    const response = await api
+      .get("/api/people?q=Matti Virtanen")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.body[0].firstName).toBe("Matti");
+    expect(response.body[0].lastName).toBe("Virtanen");
+  });
+
   test("search is case-insensitive", async () => {
     const lowercaseResponse = await api.get("/api/people?q=matti").expect(200);
 
