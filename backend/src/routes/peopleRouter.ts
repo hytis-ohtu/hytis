@@ -231,14 +231,22 @@ router.get("/", async (req: Request, res: Response) => {
       required: false,
     };
 
-    const findOptions: FindOptions<InferAttributes<Person>> = {
-      include: [
-        supervisorsInclude,
-        "department",
-        "title",
-        "researchGroup",
-        contractsInclude,
+    const sharedIncludes = [
+      "department",
+      "title",
+      "researchGroup",
+      contractsInclude,
+    ];
+
+    const nameSearchWhere = {
+      [Op.or]: [
+        { firstName: { [Op.iLike]: `%${queryStr}%` } },
+        { lastName: { [Op.iLike]: `%${queryStr}%` } },
       ],
+    };
+
+    const findOptions: FindOptions<InferAttributes<Person>> = {
+      include: [supervisorsInclude, ...sharedIncludes],
       order: [
         ["lastName", "ASC"],
         ["firstName", "ASC"],
@@ -248,14 +256,46 @@ router.get("/", async (req: Request, res: Response) => {
     if (queryStr) {
       switch (type) {
         case "supervisorName":
-          supervisorsInclude.where = {
-            [Op.or]: [
-              { firstName: { [Op.iLike]: `%${queryStr}%` } },
-              { lastName: { [Op.iLike]: `%${queryStr}%` } },
+          const supervisorSearchOptions = {
+            ...findOptions,
+            where: nameSearchWhere,
+            include: [
+              ...sharedIncludes,
+              {
+                model: Person,
+                as: "subordinates",
+                through: { attributes: [] },
+                required: true,
+              },
             ],
           };
-          supervisorsInclude.required = true;
-          break;
+
+          const matchingSupervisors = await Person.findAll(
+            supervisorSearchOptions,
+          );
+
+          if (matchingSupervisors.length === 1) {
+            const subordinatesSearchOptions = {
+              ...findOptions,
+              include: [
+                {
+                  model: Person,
+                  as: "supervisors",
+                  through: { attributes: [] },
+                  where: { id: matchingSupervisors[0].id },
+                  required: true,
+                },
+                ...sharedIncludes,
+              ],
+            };
+
+            const subordinates = await Person.findAll(
+              subordinatesSearchOptions,
+            );
+            return res.json(subordinates);
+          }
+
+          return res.json(matchingSupervisors);
 
         case "contractEndDate":
           contractsInclude.where = {
@@ -268,12 +308,7 @@ router.get("/", async (req: Request, res: Response) => {
 
         case "personName":
         default:
-          findOptions.where = {
-            [Op.or]: [
-              { firstName: { [Op.iLike]: `%${queryStr}%` } },
-              { lastName: { [Op.iLike]: `%${queryStr}%` } },
-            ],
-          };
+          findOptions.where = nameSearchWhere;
           break;
       }
     }
