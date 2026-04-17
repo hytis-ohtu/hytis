@@ -34,7 +34,7 @@ function MainView() {
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id && (+target?.id !== activeRoom?.id || !activeRoomId)) {
-        await selectRoom(+target.id);
+        await selectRoom(+target.id, null, false);
       }
     }
   }

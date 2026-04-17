@@ -46,9 +46,18 @@ export function RoomSelectionProvider({
   const selectRoom = async (
     roomId: number | null,
     personId?: number | null,
+    refresh: boolean = true,
   ): Promise<void> => {
     const roomReqId = ++reqRef.current.room;
+    const isSameRoom = activeRoom?.id === roomId;
 
+    // The clicked room is the last closed one
+    if (!refresh && isSameRoom) {
+      setActiveRoomId(roomId);
+      return;
+    }
+
+    // Side panel was closed
     if (roomId === null) {
       closeSidePanel();
       return;
@@ -56,6 +65,7 @@ export function RoomSelectionProvider({
 
     setActiveRoomId(roomId);
     if (personId != null) {
+      // Search result was clicked
       setExpandReq({
         reqId: ++reqRef.current.expand,
         personId,
@@ -64,15 +74,18 @@ export function RoomSelectionProvider({
       setExpandReq(null);
     }
 
-    if (activeRoom === null) {
+    // The clicked room is a different one
+    if (!isSameRoom) {
       setActiveRoom(undefined);
     }
 
-    if (personId != null && activeRoom?.id === roomId) {
+    // The room is open and a person is selected
+    if (personId != null && isSameRoom) {
       clearSkeletonTimer();
       return;
     }
 
+    // Delay showing skeleton to prevent flashing on fast loads
     clearSkeletonTimer();
     skeletonDelayTimerRef.current = setTimeout(() => {
       if (reqRef.current.room === roomReqId) {

@@ -11,6 +11,7 @@ export interface RoomSelectionContextType {
   selectRoom: (
     roomId: number | null,
     personId?: number | null,
+    refresh?: boolean,
   ) => Promise<void>;
   activeRoomId: number | null;
   closeSidePanel: () => void;
