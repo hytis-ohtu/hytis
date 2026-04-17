@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
 import { z } from "zod";
+import { sequelize } from "../db";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
 import type { PersonInput } from "../utils";
 import toPersonInput from "../utils";
@@ -242,6 +243,17 @@ router.get("/", async (req: Request, res: Response) => {
       [Op.or]: [
         { firstName: { [Op.iLike]: `%${queryStr}%` } },
         { lastName: { [Op.iLike]: `%${queryStr}%` } },
+        // Search by full name
+        sequelize.where(
+          sequelize.fn(
+            "CONCAT",
+            sequelize.col("person.first_name"),
+            " ",
+            sequelize.col("person.last_name"),
+          ),
+          Op.iLike,
+          `%${queryStr}%`,
+        ),
       ],
     };
 
