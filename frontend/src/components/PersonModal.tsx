@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import ConfirmationButton from "./ConfirmationButton";
+import ConfirmationDialog from "./ConfirmationDialog";
 import PersonForm from "./PersonForm";
 import "./PersonModal.css";
 
@@ -82,7 +82,7 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
           </button>
         </div>
 
-        <ConfirmationButton
+        <ConfirmationDialog
           open={confirmOpen}
           title={
             confirmAction === "save"
