@@ -40,6 +40,20 @@
   transform: rotate(-90deg);
 }
 
+.entry-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.entry-value {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
 /* RoomDetails */
 
 .room-info > header {
@@ -66,10 +80,6 @@
   grid-template-columns: unset;
   grid-template-rows: auto;
   gap: 0.25rem;
-}
-
-.room-description-title {
-  font-weight: bold;
 }
 
 .room-detail p,
@@ -170,17 +180,4 @@
 
 .contract-detail:not(:first-child) {
   border-top: 1.5px dotted var(--color-text-black);
-}
-
-.contract-detail .label {
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.contract-detail .value {
-  font-size: 0.875rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

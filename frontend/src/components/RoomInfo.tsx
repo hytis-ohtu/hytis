@@ -1,11 +1,11 @@
 import {
   ChevronDown,
-  Container,
+  DoorOpen,
+  GraduationCap,
   LandPlot,
   Map,
-  Section,
   SquarePen,
-  User,
+  Users,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -93,11 +93,11 @@ function RoomInfo() {
                 </p>
               </div>
               <div className="room-detail">
-                <User />
+                <Users />
                 <p>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</p>
               </div>
               <div className="room-detail">
-                <Container />
+                <DoorOpen />
                 <p title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
                   {renderValue(
                     activeRoom?.roomType,
@@ -107,7 +107,7 @@ function RoomInfo() {
                 </p>
               </div>
               <div className="room-detail">
-                <Section />
+                <GraduationCap />
                 <p title={activeRoom?.department?.name ?? "Ei osastoa"}>
                   {renderValue(
                     activeRoom?.department,
@@ -117,7 +117,7 @@ function RoomInfo() {
                 </p>
               </div>
               <div className="room-description">
-                <p className="room-description-title">Lisätiedot</p>
+                <p className="entry-label">Lisätiedot</p>
                 <p>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</p>
               </div>
             </div>

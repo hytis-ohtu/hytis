@@ -174,26 +174,26 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
           >
             <div className="contract-details">
               <div className="contract-detail">
-                <span className="label">Osasto</span>
-                <p className="value">
+                <span className="entry-label">Osasto</span>
+                <p className="entry-value">
                   {renderValue(contract.person.department?.name)}
                 </p>
               </div>
               <div className="contract-detail">
-                <span className="label">Titteli</span>
-                <p className="value">
+                <span className="entry-label">Titteli</span>
+                <p className="entry-value">
                   {renderValue(contract.person.title?.name)}
                 </p>
               </div>
               <div className="contract-detail">
-                <span className="label">Tutkimusryhmä</span>
-                <p className="value">
+                <span className="entry-label">Tutkimusryhmä</span>
+                <p className="entry-value">
                   {renderValue(contract.person.researchGroup?.name)}
                 </p>
               </div>
               <div className="contract-detail">
-                <span className="label">Esihenkilöt</span>
-                <p className="value">
+                <span className="entry-label">Esihenkilöt</span>
+                <p className="entry-value">
                   {renderValue(
                     contract.person.supervisors?.length
                       ? contract.person.supervisors
@@ -206,8 +206,8 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
               </div>
 
               <div className="contract-detail">
-                <span className="label">Lisätiedot</span>
-                <p className="value">
+                <span className="entry-label">Lisätiedot</span>
+                <p className="entry-value">
                   {renderValue(contract.person.freeText, "Ei lisätietoja")}
                 </p>
               </div>
