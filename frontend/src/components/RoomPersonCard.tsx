@@ -99,6 +99,9 @@ function getTimelineProgress(
     return 0;
   }
 
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
   const totalDuration = +endDate - +startDate;
 
   if (totalDuration <= 0) {
