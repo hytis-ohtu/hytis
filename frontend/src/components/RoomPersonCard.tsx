@@ -155,9 +155,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
           </span>
           <div className="contract-timeline-track" aria-hidden="true">
             <div className="contract-timeline-fill" />
-            {contractStatus !== "" && (
-              <span className="contract-timeline-status">{contractStatus}</span>
-            )}
+            <span className="contract-timeline-status">{contractStatus}</span>
           </div>
           <span className="contract-timeline-date">
             {formatContractDate(parsedEndDate)}
