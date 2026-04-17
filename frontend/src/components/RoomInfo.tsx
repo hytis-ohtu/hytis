@@ -74,62 +74,61 @@ function RoomInfo() {
       {/* Room Details */}
       <AnimatePresence initial={false}>
         {!detailsCollapsed && (
-          <motion.div
+          <motion.dl
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
+            className="room-details"
           >
-            <dl className="room-details">
-              <div className="room-detail">
-                <dt>
-                  <LandPlot />
-                </dt>
-                <dd>
-                  {renderValue(
-                    activeRoom?.area,
-                    "Ei pinta-alaa",
-                    (value) => `${value} m²`,
-                  )}
-                </dd>
-              </div>
-              <div className="room-detail">
-                <dt>
-                  <Users />
-                </dt>
-                <dd>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</dd>
-              </div>
-              <div className="room-detail">
-                <dt>
-                  <DoorOpen />
-                </dt>
-                <dd title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
-                  {renderValue(
-                    activeRoom?.roomType,
-                    "Ei tyyppiä",
-                    (value) => value.name,
-                  )}
-                </dd>
-              </div>
-              <div className="room-detail">
-                <dt>
-                  <GraduationCap />
-                </dt>
-                <dd title={activeRoom?.department?.name ?? "Ei osastoa"}>
-                  {renderValue(
-                    activeRoom?.department,
-                    "Ei osastoa",
-                    (value) => value.name,
-                  )}
-                </dd>
-              </div>
-              <div className="room-description">
-                <dt className="entry-label">Lisätiedot</dt>
-                <dd>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</dd>
-              </div>
-            </dl>
-          </motion.div>
+            <div className="room-detail">
+              <dt>
+                <LandPlot />
+              </dt>
+              <dd>
+                {renderValue(
+                  activeRoom?.area,
+                  "Ei pinta-alaa",
+                  (value) => `${value} m²`,
+                )}
+              </dd>
+            </div>
+            <div className="room-detail">
+              <dt>
+                <Users />
+              </dt>
+              <dd>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</dd>
+            </div>
+            <div className="room-detail">
+              <dt>
+                <DoorOpen />
+              </dt>
+              <dd title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
+                {renderValue(
+                  activeRoom?.roomType,
+                  "Ei tyyppiä",
+                  (value) => value.name,
+                )}
+              </dd>
+            </div>
+            <div className="room-detail">
+              <dt>
+                <GraduationCap />
+              </dt>
+              <dd title={activeRoom?.department?.name ?? "Ei osastoa"}>
+                {renderValue(
+                  activeRoom?.department,
+                  "Ei osastoa",
+                  (value) => value.name,
+                )}
+              </dd>
+            </div>
+            <div className="room-description">
+              <dt className="entry-label">Lisätiedot</dt>
+              <dd>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</dd>
+            </div>
+          </motion.dl>
         )}
       </AnimatePresence>
 

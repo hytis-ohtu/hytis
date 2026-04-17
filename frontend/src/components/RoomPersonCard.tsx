@@ -197,27 +197,33 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
       {/* Person Details */}
       <AnimatePresence initial={false}>
         {!detailsCollapsed && (
-          <motion.div
+          <motion.dl
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
-            className="contract-details"
+            className="person-details"
           >
-            <dl>
+            <div className="person-detail">
               <dt className="entry-label">Osasto</dt>
               <dd className="entry-value">
                 {renderValue(contract.person.department?.name)}
               </dd>
+            </div>
+            <div className="person-detail">
               <dt className="entry-label">Titteli</dt>
               <dd className="entry-value">
                 {renderValue(contract.person.title?.name)}
               </dd>
+            </div>
+            <div className="person-detail">
               <dt className="entry-label">Tutkimusryhmä</dt>
               <dd className="entry-value">
                 {renderValue(contract.person.researchGroup?.name)}
               </dd>
+            </div>
+            <div className="person-detail">
               <dt className="entry-label">Esihenkilöt</dt>
               <dd className="entry-value">
                 {renderValue(
@@ -229,12 +235,14 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
                   "Ei esihenkilöitä",
                 )}
               </dd>
+            </div>
+            <div className="person-detail">
               <dt className="entry-label">Lisätiedot</dt>
               <dd className="entry-value">
                 {renderValue(contract.person.freeText, "Ei lisätietoja")}
               </dd>
-            </dl>
-          </motion.div>
+            </div>
+          </motion.dl>
         )}
       </AnimatePresence>
     </article>
