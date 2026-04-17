@@ -1,4 +1,4 @@
-import { test as base } from "@playwright/test";
+import { Page, test as base } from "@playwright/test";
 
 export const test = base.extend<{ forEachTest: void }>({
   forEachTest: [
@@ -14,3 +14,8 @@ export const test = base.extend<{ forEachTest: void }>({
     { auto: true },
   ], // automatically starts for every test.
 });
+
+export async function openSidePanel(page: Page) {
+  await page.locator('[data-room="A210"]').click();
+  await page.waitForSelector(".room-details-button", { state: "visible" });
+}
