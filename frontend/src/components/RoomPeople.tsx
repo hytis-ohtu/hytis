@@ -1,6 +1,6 @@
 import { ChevronDown, Plus, Users } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
@@ -15,17 +15,72 @@ import "./SidePanel.css";
 
 let seenExpandReqId: number | null = null;
 
+type State = {
+  activePerson: Person | null;
+  addPersonOpen: boolean;
+  contractsCollapsed: boolean;
+  contractToRemove: Contract | null;
+};
+
+type Action =
+  | { type: "toggle-contracts" }
+  | { type: "open-add-person" }
+  | { type: "open-edit-person"; person: Person }
+  | { type: "close-person-modal" }
+  | { type: "request-remove-contract"; contract: Contract }
+  | { type: "cancel-remove-contract" };
+
+const initialState: State = {
+  activePerson: null,
+  addPersonOpen: false,
+  contractsCollapsed: false,
+  contractToRemove: null,
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "toggle-contracts":
+      return {
+        ...state,
+        contractsCollapsed: !state.contractsCollapsed,
+      };
+    case "open-add-person":
+      return {
+        ...state,
+        activePerson: null,
+        addPersonOpen: true,
+      };
+    case "open-edit-person":
+      return {
+        ...state,
+        activePerson: action.person,
+        addPersonOpen: true,
+      };
+    case "close-person-modal":
+      return {
+        ...state,
+        activePerson: null,
+        addPersonOpen: false,
+      };
+    case "request-remove-contract":
+      return {
+        ...state,
+        contractToRemove: action.contract,
+      };
+    case "cancel-remove-contract":
+      return {
+        ...state,
+        contractToRemove: null,
+      };
+    default:
+      return state;
+  }
+}
+
 function RoomPeople() {
   const { activeRoom, selectRoom, expandReq } = useRoomSelection();
 
-  const [activePerson, setActivePerson] = useState<Person | null>(null);
-  const [addPersonOpen, setAddPersonOpen] = useState(false);
-  const [contractsCollapsed, setContractsCollapsed] = useState(false);
-  const [contractToRemove, setContractToRemove] = useState<Contract | null>(
-    null,
-  );
-
-  const toggleContracts = () => setContractsCollapsed((previous) => !previous);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (expandReq === null) {
@@ -44,40 +99,42 @@ function RoomPeople() {
       return;
     }
 
-    setContractsCollapsed(false);
-    seenExpandReqId = expandReq.reqId;
-  }, [activeRoom?.contracts, expandReq]);
-
-  const handleAddPerson = async (values: Record<string, string>) => {
-    if (activeRoom?.id === undefined) return;
-    try {
-      await addPerson(values, activeRoom.id);
-      selectRoom(activeRoom.id);
-    } catch (error) {
-      console.error("Failed to add person:", error);
+    if (state.contractsCollapsed) {
+      dispatch({ type: "toggle-contracts" });
     }
-  };
+    seenExpandReqId = expandReq.reqId;
+  }, [activeRoom?.contracts, expandReq, state.contractsCollapsed]);
 
-  const handleEditPerson = async (values: Record<string, string>) => {
-    if (activeRoom?.id === undefined || activePerson === null) return;
+  const handlePersonSubmit = async (values: Record<string, string>) => {
+    if (activeRoom?.id === undefined) return;
+
     try {
-      await editPerson(activePerson.id, values, activeRoom.id);
-      setActivePerson(null);
+      if (state.activePerson) {
+        await editPerson(state.activePerson.id, values, activeRoom.id);
+      } else {
+        await addPerson(values, activeRoom.id);
+      }
+
+      dispatch({ type: "close-person-modal" });
       selectRoom(activeRoom.id);
     } catch (error) {
-      console.error("Failed to edit person:", error);
+      console.error(
+        state.activePerson ? "Failed to edit person:" : "Failed to add person:",
+        error,
+      );
     }
   };
 
   const handleRemoveContract = async () => {
-    if (activeRoom?.id === undefined || !contractToRemove) return;
+    if (activeRoom?.id === undefined || !state.contractToRemove) return;
+
     try {
-      await removeContract(contractToRemove.id);
+      await removeContract(state.contractToRemove.id);
       selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to remove contract:", error);
     } finally {
-      setContractToRemove(null);
+      dispatch({ type: "cancel-remove-contract" });
     }
   };
 
@@ -102,28 +159,33 @@ function RoomPeople() {
         </h2>
         <button
           className="button-icon"
-          onClick={toggleContracts}
+          onClick={() => dispatch({ type: "toggle-contracts" })}
           aria-label={
-            contractsCollapsed
+            state.contractsCollapsed
               ? "Avaa huoneen henkilöt"
               : "Sulje huoneen henkilöt"
           }
-          aria-expanded={!contractsCollapsed}
+          aria-expanded={!state.contractsCollapsed}
         >
           <ChevronDown
             className={
-              contractsCollapsed ? "collapse-icon collapsed" : "collapse-icon"
+              state.contractsCollapsed
+                ? "collapse-icon collapsed"
+                : "collapse-icon"
             }
           />
         </button>
-        <button className="button-icon" onClick={() => setAddPersonOpen(true)}>
+        <button
+          className="button-icon"
+          onClick={() => dispatch({ type: "open-add-person" })}
+        >
           <Plus />
         </button>
       </header>
 
       {/* Contracts */}
       <AnimatePresence initial={false}>
-        {!contractsCollapsed && (
+        {!state.contractsCollapsed && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -148,10 +210,14 @@ function RoomPeople() {
                   key={contract.id}
                   contract={contract}
                   onEdit={() => {
-                    setActivePerson(contract.person);
-                    setAddPersonOpen(true);
+                    dispatch({
+                      type: "open-edit-person",
+                      person: contract.person,
+                    });
                   }}
-                  onRemove={() => setContractToRemove(contract)}
+                  onRemove={() =>
+                    dispatch({ type: "request-remove-contract", contract })
+                  }
                 />
               ))
             )}
@@ -160,35 +226,34 @@ function RoomPeople() {
       </AnimatePresence>
 
       {/* Person Modal */}
-      {addPersonOpen && (
+      {state.addPersonOpen && (
         <PersonModal
           onClose={() => {
-            setAddPersonOpen(false);
-            setActivePerson(null);
+            dispatch({ type: "close-person-modal" });
           }}
-          onSubmit={activePerson ? handleEditPerson : handleAddPerson}
+          onSubmit={handlePersonSubmit}
           initial={
-            activePerson
+            state.activePerson
               ? {
-                  firstName: activePerson.firstName,
-                  lastName: activePerson.lastName,
-                  department: String(activePerson.department?.id),
-                  jobtitle: String(activePerson.title?.id),
-                  supervisors: activePerson.supervisors?.length
-                    ? activePerson.supervisors
+                  firstName: state.activePerson.firstName,
+                  lastName: state.activePerson.lastName,
+                  department: String(state.activePerson.department?.id),
+                  jobtitle: String(state.activePerson.title?.id),
+                  supervisors: state.activePerson.supervisors?.length
+                    ? state.activePerson.supervisors
                         .map((s) => String(s.id))
                         .join(",")
                     : "",
                   startDate:
                     activeRoom?.contracts?.find(
-                      (c) => c.person.id === activePerson.id,
+                      (c) => c.person.id === state.activePerson?.id,
                     )?.startDate ?? "",
                   endDate:
                     activeRoom?.contracts?.find(
-                      (c) => c.person.id === activePerson.id,
+                      (c) => c.person.id === state.activePerson?.id,
                     )?.endDate ?? "",
-                  researchgroup: String(activePerson?.researchGroup?.id),
-                  misc: activePerson.freeText ?? "",
+                  researchgroup: String(state.activePerson?.researchGroup?.id),
+                  misc: state.activePerson.freeText ?? "",
                 }
               : {}
           }
@@ -197,12 +262,12 @@ function RoomPeople() {
 
       {/* Confirmation Button */}
       <ConfirmationDialog
-        open={contractToRemove !== null}
-        title={`Poista ${contractToRemove?.person.firstName} ${contractToRemove?.person.lastName}?`}
+        open={state.contractToRemove !== null}
+        title={`Poista ${state.contractToRemove?.person.firstName} ${state.contractToRemove?.person.lastName}?`}
         confirmText="Poista"
         cancelText="Peruuta"
         onConfirm={handleRemoveContract}
-        onCancel={() => setContractToRemove(null)}
+        onCancel={() => dispatch({ type: "cancel-remove-contract" })}
       />
     </section>
   );
