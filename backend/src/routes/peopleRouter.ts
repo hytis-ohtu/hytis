@@ -226,6 +226,11 @@ router.get("/", async (req: Request, res: Response) => {
           "department",
           "title",
           "researchGroup",
+          {
+            model: Contract,
+            as: "contracts",
+            include: [{ model: Room, as: "room" }],
+          },
         ],
       });
 

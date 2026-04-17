@@ -32,13 +32,15 @@ export interface Person {
   title?: Title | null;
   supervisors?: Person[];
   freeText?: string | null;
+  contracts?: Contract[];
 }
 
 export interface Contract {
   id: number;
   startDate: string;
   endDate: string;
-  person: Person;
+  person?: Person;
+  room?: Room;
 }
 
 export interface Room {

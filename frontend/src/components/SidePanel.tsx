@@ -11,11 +11,13 @@ function SidePanel({
   handleClose,
   onPersonSaved,
   onRoomSaved,
+  selectedPersonId,
 }: {
   room: Room | null;
   handleClose: () => void;
   onPersonSaved: () => void;
   onRoomSaved: () => void;
+  selectedPersonId: number | null;
 }) {
   return (
     <motion.div
@@ -36,7 +38,11 @@ function SidePanel({
 
       <RoomInfo room={roomProp} onRoomSaved={onRoomSaved} />
 
-      <RoomOccupants room={roomProp} onPersonSaved={onPersonSaved} />
+      <RoomOccupants
+        room={roomProp}
+        onPersonSaved={onPersonSaved}
+        selectedPersonId={selectedPersonId}
+      />
     </motion.div>
   );
 }

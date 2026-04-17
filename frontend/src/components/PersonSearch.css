@@ -143,17 +143,20 @@
   color: #666;
 }
 
+.person-search-result-room,
 .person-search-result-title,
 .person-search-result-department {
   display: inline-block;
 }
 
+.person-search-result-room::after,
 .person-search-result-title::after {
   content: "·";
   margin-left: 8px;
   color: var(--color-muted);
 }
 
+.person-search-result-room:last-child::after,
 .person-search-result-title:last-child::after,
 .person-search-result-department:last-child::after {
   content: "";
