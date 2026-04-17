@@ -6,6 +6,7 @@ import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
 import type { Contract, Person } from "../types";
+import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import { renderValue } from "../utils/renderValue";
 import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";
@@ -127,7 +128,7 @@ function RoomPeople() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={EXPAND_COLLAPSE_TRANSITION}
             style={{ overflow: "hidden" }}
             className={
               activeRoom?.contracts === undefined

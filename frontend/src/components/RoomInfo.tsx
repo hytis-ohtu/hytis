@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { editRoom } from "../services/roomsService";
+import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import { renderValue } from "../utils/renderValue";
 import RoomModal from "./RoomModal";
 import "./SidePanel.css";
@@ -78,7 +79,7 @@ function RoomInfo() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={EXPAND_COLLAPSE_TRANSITION}
             style={{ overflow: "hidden" }}
             className="room-details"
           >

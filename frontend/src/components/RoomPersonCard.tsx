@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { Contract } from "../types";
+import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import { renderValue } from "../utils/renderValue";
 
 let seenExpandReqId: number | null = null;
@@ -201,7 +202,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={EXPAND_COLLAPSE_TRANSITION}
             style={{ overflow: "hidden" }}
             className="person-details"
           >

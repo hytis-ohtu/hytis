@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import RoomInfo from "./RoomInfo";
 import RoomPeople from "./RoomPeople";
 import "./SidePanel.css";
@@ -9,7 +10,7 @@ function SidePanel() {
       initial={{ x: "100%" }}
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      transition={EXPAND_COLLAPSE_TRANSITION}
       className="side-panel"
     >
       <RoomInfo />
