@@ -329,6 +329,41 @@ describe("GET /api/people - search", () => {
     expect(response.body).toHaveLength(0);
   });
 
+  test("supervisor name search returns subordinates when exactly one supervisor matches", async () => {
+    const response = await api
+      .get("/api/people?q=Matti&type=supervisorName")
+      .expect(200);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.firstName).not.toBe("Matti");
+      const hasMattisupervisor = person.supervisors?.some(
+        (supervisor) => supervisor.firstName === "Matti",
+      );
+      expect(hasMattisupervisor).toBe(true);
+    });
+  });
+
+  test("supervisor name search returns supervisors when multiple supervisors match", async () => {
+    const response = await api
+      .get("/api/people?q=a&type=supervisorName")
+      .expect(200);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      const matchesFirstName = person.firstName.toLowerCase().includes("a");
+      const matchesLastName = person.lastName.toLowerCase().includes("a");
+      expect(matchesFirstName || matchesLastName).toBe(true);
+      expect(person?.subordinates?.length).toBeGreaterThan(0);
+    });
+
+    const firstNames = response.body.map(
+      (person: PersonType) => person.firstName,
+    );
+    expect(firstNames).toContain("Sanna");
+    expect(firstNames).toContain("Matti");
+  });
+
   test("can search by contract end date", async () => {
     const response = await api
       .get("/api/people?q=2025-12-31&type=contractEndDate")
