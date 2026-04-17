@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type {
-  RoomPeopleExpandRequest,
+  ExpandReq,
   RoomSelectionContextType,
 } from "../contexts/RoomSelectionContext";
 import { RoomSelectionContext } from "../contexts/RoomSelectionContext";
@@ -19,10 +19,8 @@ export function RoomSelectionProvider({
 }: RoomSelectionProviderProps) {
   const [activeRoom, setActiveRoom] = useState<Room | null | undefined>(null);
   const [displayedRoomId, setDisplayedRoomId] = useState<number | null>(null);
-  const [roomPeopleExpandRequest, setRoomPeopleExpandRequest] =
-    useState<RoomPeopleExpandRequest | null>(null);
-  const expandRequestIdRef = useRef(0);
-  const requestIdRef = useRef(0);
+  const [expandReq, setExpandReq] = useState<ExpandReq | null>(null);
+  const reqRef = useRef({ room: 0, expand: 0 });
   const skeletonDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -39,9 +37,9 @@ export function RoomSelectionProvider({
   }, []);
 
   const closeSidePanel = () => {
-    requestIdRef.current++;
+    reqRef.current.room++;
     clearSkeletonTimer();
-    setRoomPeopleExpandRequest(null);
+    setExpandReq(null);
     setDisplayedRoomId(null);
   };
 
@@ -54,7 +52,7 @@ export function RoomSelectionProvider({
     roomId: number | null,
     personId?: number | null,
   ) => {
-    const requestId = ++requestIdRef.current;
+    const roomReqId = ++reqRef.current.room;
 
     if (roomId === null) {
       closeSidePanel();
@@ -63,12 +61,12 @@ export function RoomSelectionProvider({
 
     setDisplayedRoomId(roomId);
     if (personId != null) {
-      setRoomPeopleExpandRequest({
-        requestId: ++expandRequestIdRef.current,
+      setExpandReq({
+        reqId: ++reqRef.current.expand,
         personId,
       });
     } else {
-      setRoomPeopleExpandRequest(null);
+      setExpandReq(null);
     }
 
     if (personId != null && activeRoom?.id === roomId) {
@@ -78,19 +76,19 @@ export function RoomSelectionProvider({
 
     clearSkeletonTimer();
     skeletonDelayTimerRef.current = setTimeout(() => {
-      if (requestIdRef.current === requestId) {
+      if (reqRef.current.room === roomReqId) {
         setActiveRoom(undefined);
       }
     }, SKELETON_DELAY_MS);
 
     try {
       const room = await findRoomById(roomId);
-      if (requestIdRef.current !== requestId) return;
+      if (reqRef.current.room !== roomReqId) return;
 
       clearSkeletonTimer();
       setActiveRoom(room);
     } catch (error) {
-      if (requestIdRef.current !== requestId) return;
+      if (reqRef.current.room !== roomReqId) return;
 
       clearSkeletonTimer();
       console.error("Failed to fetch room details:", error);
@@ -104,7 +102,7 @@ export function RoomSelectionProvider({
     selectRoom,
     closeSidePanel,
     handleSidePanelExited,
-    roomPeopleExpandRequest,
+    expandReq,
   };
 
   return (

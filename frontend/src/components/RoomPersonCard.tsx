@@ -1,7 +1,8 @@
 import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { Contract } from "../types";
 import { renderValue } from "../utils/renderValue";
 
@@ -99,7 +100,9 @@ function getTimelineProgress(startDate: Date | null, endDate: Date | null) {
 }
 
 function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
+  const { expandReq } = useRoomSelection();
   const [detailsCollapsed, setDetailsCollapsed] = useState(true);
+  const seenReqIdRef = useRef<number | null>(null);
   const parsedStartDate = parseContractDate(contract.startDate);
   const parsedEndDate = parseContractDate(contract.endDate);
 
@@ -107,6 +110,23 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   const contractStatus = getContractStatus(parsedStartDate, parsedEndDate);
 
   const toggleDetails = () => setDetailsCollapsed((previous) => !previous);
+
+  useEffect(() => {
+    if (expandReq === null) {
+      return;
+    }
+
+    if (seenReqIdRef.current === expandReq.reqId) {
+      return;
+    }
+
+    if (expandReq.personId !== contract.person.id) {
+      return;
+    }
+
+    setDetailsCollapsed(false);
+    seenReqIdRef.current = expandReq.reqId;
+  }, [contract.person.id, expandReq]);
 
   return (
     <article className="contract">

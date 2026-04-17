@@ -13,13 +13,12 @@ import RoomPersonCard from "./RoomPersonCard";
 import "./SidePanel.css";
 
 function RoomPeople() {
-  const { activeRoom, selectRoom, roomPeopleExpandRequest } =
-    useRoomSelection();
+  const { activeRoom, selectRoom, expandReq } = useRoomSelection();
 
   const [activePerson, setActivePerson] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [contractsCollapsed, setContractsCollapsed] = useState(false);
-  const lastHandledExpandRequestIdRef = useRef<number | null>(null);
+  const seenReqIdRef = useRef<number | null>(null);
   const [contractToRemove, setContractToRemove] = useState<Contract | null>(
     null,
   );
@@ -27,19 +26,16 @@ function RoomPeople() {
   const toggleContracts = () => setContractsCollapsed((previous) => !previous);
 
   useEffect(() => {
-    if (roomPeopleExpandRequest === null) {
+    if (expandReq === null) {
       return;
     }
 
-    if (
-      lastHandledExpandRequestIdRef.current ===
-      roomPeopleExpandRequest.requestId
-    ) {
+    if (seenReqIdRef.current === expandReq.reqId) {
       return;
     }
 
     const highlightedPersonIsInActiveRoom = activeRoom?.contracts?.some(
-      (contract) => contract.person.id === roomPeopleExpandRequest.personId,
+      (contract) => contract.person.id === expandReq.personId,
     );
 
     if (!highlightedPersonIsInActiveRoom) {
@@ -47,9 +43,8 @@ function RoomPeople() {
     }
 
     setContractsCollapsed(false);
-
-    lastHandledExpandRequestIdRef.current = roomPeopleExpandRequest.requestId;
-  }, [activeRoom?.contracts, roomPeopleExpandRequest]);
+    seenReqIdRef.current = expandReq.reqId;
+  }, [activeRoom?.contracts, expandReq]);
 
   const handleAddPerson = async (values: Record<string, string>) => {
     if (activeRoom?.id === undefined) return;

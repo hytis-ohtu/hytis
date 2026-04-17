@@ -1,8 +1,8 @@
 import { createContext } from "react";
 import type { Room } from "../types";
 
-export interface RoomPeopleExpandRequest {
-  requestId: number;
+export interface ExpandReq {
+  reqId: number;
   personId: number;
 }
 
@@ -15,7 +15,7 @@ export interface RoomSelectionContextType {
   displayedRoomId: number | null;
   closeSidePanel: () => void;
   handleSidePanelExited: () => void;
-  roomPeopleExpandRequest: RoomPeopleExpandRequest | null;
+  expandReq: ExpandReq | null;
 }
 
 export const RoomSelectionContext =
