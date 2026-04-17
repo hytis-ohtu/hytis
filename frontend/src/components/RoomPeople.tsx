@@ -1,6 +1,6 @@
 import { ChevronDown, Plus, Users } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
@@ -12,13 +12,14 @@ import PersonModal from "./PersonModal";
 import RoomPersonCard from "./RoomPersonCard";
 import "./SidePanel.css";
 
+let seenExpandReqId: number | null = null;
+
 function RoomPeople() {
   const { activeRoom, selectRoom, expandReq } = useRoomSelection();
 
   const [activePerson, setActivePerson] = useState<Person | null>(null);
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [contractsCollapsed, setContractsCollapsed] = useState(false);
-  const seenReqIdRef = useRef<number | null>(null);
   const [contractToRemove, setContractToRemove] = useState<Contract | null>(
     null,
   );
@@ -30,7 +31,7 @@ function RoomPeople() {
       return;
     }
 
-    if (seenReqIdRef.current === expandReq.reqId) {
+    if (seenExpandReqId === expandReq.reqId) {
       return;
     }
 
@@ -43,7 +44,7 @@ function RoomPeople() {
     }
 
     setContractsCollapsed(false);
-    seenReqIdRef.current = expandReq.reqId;
+    seenExpandReqId = expandReq.reqId;
   }, [activeRoom?.contracts, expandReq]);
 
   const handleAddPerson = async (values: Record<string, string>) => {
@@ -128,27 +129,28 @@ function RoomPeople() {
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
+            className={
+              activeRoom?.contracts === undefined
+                ? "contracts contracts-skeleton"
+                : "contracts"
+            }
           >
             {activeRoom?.contracts === undefined ? (
-              <div className="contracts contracts-skeleton">
-                <Skeleton count={6} />
-              </div>
+              <Skeleton count={6} />
             ) : activeRoom?.contracts === null ? (
               <p>Ei henkilöitä.</p>
             ) : (
-              <div className="contracts">
-                {activeRoom.contracts.map((contract) => (
-                  <RoomPersonCard
-                    key={contract.id}
-                    contract={contract}
-                    onEdit={() => {
-                      setActivePerson(contract.person);
-                      setAddPersonOpen(true);
-                    }}
-                    onRemove={() => setContractToRemove(contract)}
-                  />
-                ))}
-              </div>
+              activeRoom.contracts.map((contract) => (
+                <RoomPersonCard
+                  key={contract.id}
+                  contract={contract}
+                  onEdit={() => {
+                    setActivePerson(contract.person);
+                    setAddPersonOpen(true);
+                  }}
+                  onRemove={() => setContractToRemove(contract)}
+                />
+              ))
             )}
           </motion.div>
         )}

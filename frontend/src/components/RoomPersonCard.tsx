@@ -1,10 +1,12 @@
 import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { Contract } from "../types";
 import { renderValue } from "../utils/renderValue";
+
+let seenExpandReqId: number | null = null;
 
 interface RoomPersonCardProps {
   contract: Contract;
@@ -102,7 +104,6 @@ function getTimelineProgress(startDate: Date | null, endDate: Date | null) {
 function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   const { expandReq } = useRoomSelection();
   const [detailsCollapsed, setDetailsCollapsed] = useState(true);
-  const seenReqIdRef = useRef<number | null>(null);
   const parsedStartDate = parseContractDate(contract.startDate);
   const parsedEndDate = parseContractDate(contract.endDate);
 
@@ -116,7 +117,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
       return;
     }
 
-    if (seenReqIdRef.current === expandReq.reqId) {
+    if (seenExpandReqId === expandReq.reqId) {
       return;
     }
 
@@ -125,7 +126,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
     }
 
     setDetailsCollapsed(false);
-    seenReqIdRef.current = expandReq.reqId;
+    seenExpandReqId = expandReq.reqId;
   }, [contract.person.id, expandReq]);
 
   return (
@@ -191,46 +192,45 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             exit={{ height: 0, opacity: 0, pointerEvents: "none" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
+            className="contract-details"
           >
-            <div className="contract-details">
-              <div className="contract-detail">
-                <span className="entry-label">Osasto</span>
-                <p className="entry-value">
-                  {renderValue(contract.person.department?.name)}
-                </p>
-              </div>
-              <div className="contract-detail">
-                <span className="entry-label">Titteli</span>
-                <p className="entry-value">
-                  {renderValue(contract.person.title?.name)}
-                </p>
-              </div>
-              <div className="contract-detail">
-                <span className="entry-label">Tutkimusryhmä</span>
-                <p className="entry-value">
-                  {renderValue(contract.person.researchGroup?.name)}
-                </p>
-              </div>
-              <div className="contract-detail">
-                <span className="entry-label">Esihenkilöt</span>
-                <p className="entry-value">
-                  {renderValue(
-                    contract.person.supervisors?.length
-                      ? contract.person.supervisors
-                          ?.map((s) => `${s.firstName} ${s.lastName}`)
-                          .join(", ")
-                      : null,
-                    "Ei esihenkilöitä",
-                  )}
-                </p>
-              </div>
+            <div className="contract-detail">
+              <span className="entry-label">Osasto</span>
+              <p className="entry-value">
+                {renderValue(contract.person.department?.name)}
+              </p>
+            </div>
+            <div className="contract-detail">
+              <span className="entry-label">Titteli</span>
+              <p className="entry-value">
+                {renderValue(contract.person.title?.name)}
+              </p>
+            </div>
+            <div className="contract-detail">
+              <span className="entry-label">Tutkimusryhmä</span>
+              <p className="entry-value">
+                {renderValue(contract.person.researchGroup?.name)}
+              </p>
+            </div>
+            <div className="contract-detail">
+              <span className="entry-label">Esihenkilöt</span>
+              <p className="entry-value">
+                {renderValue(
+                  contract.person.supervisors?.length
+                    ? contract.person.supervisors
+                        ?.map((s) => `${s.firstName} ${s.lastName}`)
+                        .join(", ")
+                    : null,
+                  "Ei esihenkilöitä",
+                )}
+              </p>
+            </div>
 
-              <div className="contract-detail">
-                <span className="entry-label">Lisätiedot</span>
-                <p className="entry-value">
-                  {renderValue(contract.person.freeText, "Ei lisätietoja")}
-                </p>
-              </div>
+            <div className="contract-detail">
+              <span className="entry-label">Lisätiedot</span>
+              <p className="entry-value">
+                {renderValue(contract.person.freeText, "Ei lisätietoja")}
+              </p>
             </div>
           </motion.div>
         )}
