@@ -4,6 +4,11 @@ import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { Contract } from "../types";
+import {
+  formatContractDate,
+  formatContractStatus,
+  getContractDateMeta,
+} from "../utils/contractDates";
 import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import { renderValue } from "../utils/renderValue";
 
@@ -15,113 +20,16 @@ interface RoomPersonCardProps {
   onRemove: () => void;
 }
 
-function parseContractDate(dateString: string): Date | null {
-  const parsedDate = new Date(dateString);
-  return +parsedDate ? parsedDate : null;
-}
-
-function formatContractDate(date: Date | null): string {
-  if (date === null) {
-    return "--.--.----";
-  }
-
-  return new Intl.DateTimeFormat("fi-FI", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
-
-function getContractDaysUntil(
-  startDate: Date | null,
-  endDate: Date | null,
-): [number | null, number | null] {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  startDate?.setHours(0, 0, 0, 0);
-  endDate?.setHours(0, 0, 0, 0);
-
-  const daysUntilStart = startDate
-    ? Math.floor((+startDate - +today) / (1000 * 60 * 60 * 24))
-    : null;
-  const daysUntilEnd = endDate
-    ? Math.floor((+endDate - +today) / (1000 * 60 * 60 * 24))
-    : null;
-
-  return [daysUntilStart, daysUntilEnd];
-}
-
-function getContractStatus(
-  startDate: Date | null,
-  endDate: Date | null,
-): string {
-  const [daysUntilStart, daysUntilEnd] = getContractDaysUntil(
-    startDate,
-    endDate,
-  );
-
-  if (daysUntilStart !== null && daysUntilStart > 0) {
-    return `Alkaa ${daysUntilStart} pv kuluttua`;
-  }
-
-  if (daysUntilEnd !== null) {
-    const isActiveOrStartsToday =
-      daysUntilStart === null || daysUntilStart <= 0;
-
-    if (isActiveOrStartsToday && daysUntilEnd === 0) {
-      return "Päättyy tänään";
-    }
-    if (isActiveOrStartsToday && daysUntilEnd > 0) {
-      return `Päättyy ${daysUntilEnd} pv kuluttua`;
-    }
-    if (daysUntilEnd < 0) {
-      return `Päättyi ${Math.abs(daysUntilEnd)} pv sitten`;
-    }
-  }
-
-  if (daysUntilStart !== null) {
-    if (daysUntilStart === 0) {
-      return "Alkaa tänään";
-    }
-    if (daysUntilStart < 0) {
-      return `Alkanut ${Math.abs(daysUntilStart)} pv sitten`;
-    }
-  }
-
-  return "Voimassa toistaiseksi";
-}
-
-function getTimelineProgress(
-  startDate: Date | null,
-  endDate: Date | null,
-): number {
-  if (startDate === null || endDate === null) {
-    return 0;
-  }
-
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
-
-  const totalDuration = +endDate - +startDate;
-
-  if (totalDuration <= 0) {
-    return 0;
-  }
-
-  const now = new Date();
-  const elapsedDuration = +now - +startDate;
-
-  return Math.min(1, Math.max(0, elapsedDuration / totalDuration));
-}
-
 function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   const { expandReq } = useRoomSelection();
   const [detailsCollapsed, setDetailsCollapsed] = useState(true);
-  const parsedStartDate = parseContractDate(contract.startDate);
-  const parsedEndDate = parseContractDate(contract.endDate);
+  const contractDateMeta = getContractDateMeta(
+    contract.startDate,
+    contract.endDate,
+  );
 
-  const timelineProgress = getTimelineProgress(parsedStartDate, parsedEndDate);
-  const contractStatus = getContractStatus(parsedStartDate, parsedEndDate);
+  const timelineProgress = contractDateMeta.progress;
+  const contractStatus = formatContractStatus(contractDateMeta);
 
   const toggleDetails = () => setDetailsCollapsed((previous) => !previous);
 
@@ -186,14 +94,14 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
           }
         >
           <p className="contract-timeline-date">
-            {formatContractDate(parsedStartDate)}
+            {formatContractDate(contractDateMeta.startDate)}
           </p>
           <div className="contract-timeline-track" aria-hidden="true">
             <div className="contract-timeline-fill" />
             <span className="contract-timeline-status">{contractStatus}</span>
           </div>
           <p className="contract-timeline-date">
-            {formatContractDate(parsedEndDate)}
+            {formatContractDate(contractDateMeta.endDate)}
           </p>
         </div>
       </header>
