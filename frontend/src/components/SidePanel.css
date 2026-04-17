@@ -155,9 +155,32 @@
   white-space: nowrap;
 }
 
-.contract ul {
+/* Contract Details */
+
+.contract-details {
   display: grid;
-  gap: 0.25rem;
-  padding: 0.5rem;
+}
+
+.contract-detail {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.25rem 0.5rem;
   background: var(--color-background);
+}
+
+.contract-detail:not(:first-child) {
+  border-top: 1.5px dotted var(--color-text-black);
+}
+
+.contract-detail .label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contract-detail .value {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

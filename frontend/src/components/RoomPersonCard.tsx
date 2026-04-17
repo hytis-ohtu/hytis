@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import type { Contract } from "../types";
+import { renderValue } from "../utils/renderValue";
 
 interface RoomPersonCardProps {
   contract: Contract;
@@ -171,29 +172,46 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
           >
-            <ul>
-              <li>
-                <p>Osasto: {contract.person.department?.name}</p>
-              </li>
-              <li>
-                <p>Tutkimusryhmä: {contract.person.researchGroup?.name}</p>
-              </li>
-              <li>
-                <p>Titteli: {contract.person.title?.name}</p>
-              </li>
-              {contract.person.supervisors &&
-                contract.person.supervisors.length > 0 && (
-                  <li>
-                    Esihenkilöt:{" "}
-                    {contract.person.supervisors
-                      .map((s) => s.firstName + " " + s.lastName)
-                      .join(", ")}
-                  </li>
-                )}
-              <li>
-                <p>Lisätiedot: {contract.person.freeText}</p>
-              </li>
-            </ul>
+            <div className="contract-details">
+              <div className="contract-detail">
+                <span className="label">Osasto</span>
+                <p className="value">
+                  {renderValue(contract.person.department?.name)}
+                </p>
+              </div>
+              <div className="contract-detail">
+                <span className="label">Titteli</span>
+                <p className="value">
+                  {renderValue(contract.person.title?.name)}
+                </p>
+              </div>
+              <div className="contract-detail">
+                <span className="label">Tutkimusryhmä</span>
+                <p className="value">
+                  {renderValue(contract.person.researchGroup?.name)}
+                </p>
+              </div>
+              <div className="contract-detail">
+                <span className="label">Esihenkilöt</span>
+                <p className="value">
+                  {renderValue(
+                    contract.person.supervisors?.length
+                      ? contract.person.supervisors
+                          ?.map((s) => `${s.firstName} ${s.lastName}`)
+                          .join(", ")
+                      : null,
+                    "Ei esihenkilöitä",
+                  )}
+                </p>
+              </div>
+
+              <div className="contract-detail">
+                <span className="label">Lisätiedot</span>
+                <p className="value">
+                  {renderValue(contract.person.freeText, "Ei lisätietoja")}
+                </p>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
