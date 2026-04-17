@@ -18,7 +18,7 @@ export function RoomSelectionProvider({
   findRoomById,
 }: RoomSelectionProviderProps) {
   const [activeRoom, setActiveRoom] = useState<Room | null | undefined>(null);
-  const [displayedRoomId, setDisplayedRoomId] = useState<number | null>(null);
+  const [activeRoomId, setActiveRoomId] = useState<number | null>(null);
   const [expandReq, setExpandReq] = useState<ExpandReq | null>(null);
   const reqRef = useRef({ room: 0, expand: 0 });
   const skeletonDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -40,18 +40,13 @@ export function RoomSelectionProvider({
     reqRef.current.room++;
     clearSkeletonTimer();
     setExpandReq(null);
-    setDisplayedRoomId(null);
-  };
-
-  const handleSidePanelExited = () => {
-    if (displayedRoomId !== null) return;
-    setActiveRoom(null);
+    setActiveRoomId(null);
   };
 
   const selectRoom = async (
     roomId: number | null,
     personId?: number | null,
-  ) => {
+  ): Promise<void> => {
     const roomReqId = ++reqRef.current.room;
 
     if (roomId === null) {
@@ -59,7 +54,7 @@ export function RoomSelectionProvider({
       return;
     }
 
-    setDisplayedRoomId(roomId);
+    setActiveRoomId(roomId);
     if (personId != null) {
       setExpandReq({
         reqId: ++reqRef.current.expand,
@@ -67,6 +62,10 @@ export function RoomSelectionProvider({
       });
     } else {
       setExpandReq(null);
+    }
+
+    if (activeRoom === null) {
+      setActiveRoom(undefined);
     }
 
     if (personId != null && activeRoom?.id === roomId) {
@@ -98,10 +97,9 @@ export function RoomSelectionProvider({
 
   const value: RoomSelectionContextType = {
     activeRoom,
-    displayedRoomId,
+    activeRoomId,
     selectRoom,
     closeSidePanel,
-    handleSidePanelExited,
     expandReq,
   };
 

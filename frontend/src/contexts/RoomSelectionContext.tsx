@@ -12,9 +12,8 @@ export interface RoomSelectionContextType {
     roomId: number | null,
     personId?: number | null,
   ) => Promise<void>;
-  displayedRoomId: number | null;
+  activeRoomId: number | null;
   closeSidePanel: () => void;
-  handleSidePanelExited: () => void;
   expandReq: ExpandReq | null;
 }
 
