@@ -81,46 +81,54 @@ function RoomInfo() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div className="room-details">
+            <dl className="room-details">
               <div className="room-detail">
-                <LandPlot />
-                <p>
+                <dt>
+                  <LandPlot />
+                </dt>
+                <dd>
                   {renderValue(
                     activeRoom?.area,
                     "Ei pinta-alaa",
                     (value) => `${value} m²`,
                   )}
-                </p>
+                </dd>
               </div>
               <div className="room-detail">
-                <Users />
-                <p>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</p>
+                <dt>
+                  <Users />
+                </dt>
+                <dd>{renderValue(activeRoom?.capacity, "Ei kapasiteettia")}</dd>
               </div>
               <div className="room-detail">
-                <DoorOpen />
-                <p title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
+                <dt>
+                  <DoorOpen />
+                </dt>
+                <dd title={activeRoom?.roomType?.name ?? "Ei tyyppiä"}>
                   {renderValue(
                     activeRoom?.roomType,
                     "Ei tyyppiä",
                     (value) => value.name,
                   )}
-                </p>
+                </dd>
               </div>
               <div className="room-detail">
-                <GraduationCap />
-                <p title={activeRoom?.department?.name ?? "Ei osastoa"}>
+                <dt>
+                  <GraduationCap />
+                </dt>
+                <dd title={activeRoom?.department?.name ?? "Ei osastoa"}>
                   {renderValue(
                     activeRoom?.department,
                     "Ei osastoa",
                     (value) => value.name,
                   )}
-                </p>
+                </dd>
               </div>
               <div className="room-description">
-                <p className="entry-label">Lisätiedot</p>
-                <p>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</p>
+                <dt className="entry-label">Lisätiedot</dt>
+                <dd>{renderValue(activeRoom?.freeText, "Ei lisätietoja")}</dd>
               </div>
-            </div>
+            </dl>
           </motion.div>
         )}
       </AnimatePresence>
@@ -132,7 +140,7 @@ function RoomInfo() {
           onSubmit={handleEditRoom}
           initial={{
             capacity: String(activeRoom.capacity ?? ""),
-            roomType: String(activeRoom.roomType.id ?? ""),
+            roomType: String(activeRoom.roomType?.id ?? ""),
             department: String(activeRoom.department?.id ?? ""),
             freeText: activeRoom.freeText ?? "",
           }}

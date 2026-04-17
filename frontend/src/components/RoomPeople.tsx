@@ -137,8 +137,10 @@ function RoomPeople() {
           >
             {activeRoom?.contracts === undefined ? (
               <Skeleton count={6} />
-            ) : activeRoom?.contracts === null ? (
-              <p>Ei henkilöitä.</p>
+            ) : activeRoom.contracts.length === 0 ? (
+              <div className="no-contracts">
+                <p>Ei henkilöitä.</p>
+              </div>
             ) : (
               activeRoom.contracts.map((contract) => (
                 <RoomPersonCard

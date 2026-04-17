@@ -144,9 +144,9 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
         {/* Main Header */}
         <div className="contract-header-main">
           <User size={18} />
-          <p>
+          <h3>
             {contract.person.lastName} {contract.person.firstName}
-          </p>
+          </h3>
           <button
             className="button-icon"
             onClick={toggleDetails}
@@ -181,18 +181,20 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             } as CSSProperties
           }
         >
-          <span className="contract-timeline-date">
+          <p className="contract-timeline-date">
             {formatContractDate(parsedStartDate)}
-          </span>
+          </p>
           <div className="contract-timeline-track" aria-hidden="true">
             <div className="contract-timeline-fill" />
             <span className="contract-timeline-status">{contractStatus}</span>
           </div>
-          <span className="contract-timeline-date">
+          <p className="contract-timeline-date">
             {formatContractDate(parsedEndDate)}
-          </span>
+          </p>
         </div>
       </header>
+
+      {/* Person Details */}
       <AnimatePresence initial={false}>
         {!detailsCollapsed && (
           <motion.div
@@ -203,27 +205,21 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             style={{ overflow: "hidden" }}
             className="contract-details"
           >
-            <div className="contract-detail">
-              <span className="entry-label">Osasto</span>
-              <p className="entry-value">
+            <dl>
+              <dt className="entry-label">Osasto</dt>
+              <dd className="entry-value">
                 {renderValue(contract.person.department?.name)}
-              </p>
-            </div>
-            <div className="contract-detail">
-              <span className="entry-label">Titteli</span>
-              <p className="entry-value">
+              </dd>
+              <dt className="entry-label">Titteli</dt>
+              <dd className="entry-value">
                 {renderValue(contract.person.title?.name)}
-              </p>
-            </div>
-            <div className="contract-detail">
-              <span className="entry-label">Tutkimusryhmä</span>
-              <p className="entry-value">
+              </dd>
+              <dt className="entry-label">Tutkimusryhmä</dt>
+              <dd className="entry-value">
                 {renderValue(contract.person.researchGroup?.name)}
-              </p>
-            </div>
-            <div className="contract-detail">
-              <span className="entry-label">Esihenkilöt</span>
-              <p className="entry-value">
+              </dd>
+              <dt className="entry-label">Esihenkilöt</dt>
+              <dd className="entry-value">
                 {renderValue(
                   contract.person.supervisors?.length
                     ? contract.person.supervisors
@@ -232,15 +228,12 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
                     : null,
                   "Ei esihenkilöitä",
                 )}
-              </p>
-            </div>
-
-            <div className="contract-detail">
-              <span className="entry-label">Lisätiedot</span>
-              <p className="entry-value">
+              </dd>
+              <dt className="entry-label">Lisätiedot</dt>
+              <dd className="entry-value">
                 {renderValue(contract.person.freeText, "Ei lisätietoja")}
-              </p>
-            </div>
+              </dd>
+            </dl>
           </motion.div>
         )}
       </AnimatePresence>

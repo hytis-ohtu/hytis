@@ -27,6 +27,10 @@
   background: var(--color-secondary);
 }
 
+.side-panel > section > header > h2 {
+  font-weight: 600;
+}
+
 .side-panel > section > header .react-loading-skeleton {
   --base-color: var(--color-secondary-skeleton-base);
   --highlight-color: var(--color-secondary-skeleton-highlight);
@@ -70,23 +74,25 @@
 .room-description {
   display: grid;
   grid-template-columns: auto 1fr;
+  align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
   background: var(--color-background);
 }
 
-.room-description {
+.room-details .room-description {
   grid-column: 1 / 3;
   grid-template-columns: unset;
   grid-template-rows: auto;
   gap: 0.25rem;
 }
 
-.room-detail p,
-.room-description p {
+.room-details dd {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 0.875rem;
+  min-width: 0;
 }
 
 /* RoomPeople */
@@ -100,7 +106,8 @@
   gap: 2px;
 }
 
-.contracts-skeleton {
+.contracts-skeleton,
+.no-contracts {
   padding: 1rem;
   background: var(--color-background);
 }
@@ -171,13 +178,22 @@
   display: grid;
 }
 
-.contract-detail {
-  display: grid;
-  gap: 0.125rem;
-  padding: 0.25rem 0.5rem;
-  background: var(--color-background);
+.contract-details > dl {
+  display: contents;
 }
 
-.contract-detail:not(:first-child) {
+.contract-details dt {
+  padding: 0.25rem 0.5rem;
+  background: var(--color-background);
   border-top: 1.5px dotted var(--color-text-black);
+}
+
+.contract-details dt:first-of-type {
+  border-top: none;
+}
+
+.contract-details dd {
+  padding: 0.25rem 0.5rem;
+  background: var(--color-background);
+  margin: 0;
 }

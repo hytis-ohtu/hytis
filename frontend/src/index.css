@@ -21,8 +21,8 @@
   --transition-fast: 0.15s;
 
   /* Font */
-  --font-body: 400 1rem "Roboto Variable", sans-serif;
-  --font-title: 600 1rem "Montserrat Variable", sans-serif;
+  --font-body: 1rem "Roboto Variable", sans-serif;
+  --font-title: 1rem "Montserrat Variable", sans-serif;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-weight-bold: 600;
@@ -55,7 +55,7 @@ h3,
 h4,
 h5,
 h6 {
-  font: var(--font-title);
+  font: unset;
 }
 
 .button-icon {
