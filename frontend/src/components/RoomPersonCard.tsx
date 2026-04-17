@@ -14,12 +14,12 @@ interface RoomPersonCardProps {
   onRemove: () => void;
 }
 
-function parseContractDate(dateString: string) {
+function parseContractDate(dateString: string): Date | null {
   const parsedDate = new Date(dateString);
   return +parsedDate ? parsedDate : null;
 }
 
-function formatContractDate(date: Date | null) {
+function formatContractDate(date: Date | null): string {
   if (date === null) {
     return "--.--.----";
   }
@@ -31,7 +31,10 @@ function formatContractDate(date: Date | null) {
   }).format(date);
 }
 
-function getContractDaysUntil(startDate: Date | null, endDate: Date | null) {
+function getContractDaysUntil(
+  startDate: Date | null,
+  endDate: Date | null,
+): [number | null, number | null] {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   startDate?.setHours(0, 0, 0, 0);
@@ -47,7 +50,10 @@ function getContractDaysUntil(startDate: Date | null, endDate: Date | null) {
   return [daysUntilStart, daysUntilEnd];
 }
 
-function getContractStatus(startDate: Date | null, endDate: Date | null) {
+function getContractStatus(
+  startDate: Date | null,
+  endDate: Date | null,
+): string {
   const [daysUntilStart, daysUntilEnd] = getContractDaysUntil(
     startDate,
     endDate,
@@ -84,7 +90,10 @@ function getContractStatus(startDate: Date | null, endDate: Date | null) {
   return "Voimassa toistaiseksi";
 }
 
-function getTimelineProgress(startDate: Date | null, endDate: Date | null) {
+function getTimelineProgress(
+  startDate: Date | null,
+  endDate: Date | null,
+): number {
   if (startDate === null || endDate === null) {
     return 0;
   }
