@@ -25,23 +25,23 @@ export function RoomSelectionProvider({
     null,
   );
 
-  const clearSkeletonTimer = () => {
+  function clearSkeletonTimer() {
     if (skeletonDelayTimerRef.current !== null) {
       clearTimeout(skeletonDelayTimerRef.current);
       skeletonDelayTimerRef.current = null;
     }
-  };
+  }
 
   useEffect(() => {
     return () => clearSkeletonTimer();
   }, []);
 
-  const closeSidePanel = () => {
+  function closeSidePanel() {
     reqRef.current.room++;
     clearSkeletonTimer();
     setExpandReq(null);
     setActiveRoomId(null);
-  };
+  }
 
   const selectRoom = async (
     roomId: number | null,
@@ -112,7 +112,6 @@ export function RoomSelectionProvider({
     activeRoom,
     activeRoomId,
     selectRoom,
-    closeSidePanel,
     expandReq,
   };
 

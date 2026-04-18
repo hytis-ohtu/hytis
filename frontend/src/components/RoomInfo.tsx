@@ -18,7 +18,7 @@ import RoomModal from "./RoomModal";
 import "./SidePanel.css";
 
 function RoomInfo() {
-  const { activeRoom, selectRoom, closeSidePanel } = useRoomSelection();
+  const { activeRoom, selectRoom } = useRoomSelection();
   const [editRoomOpen, setEditRoomOpen] = useState(false);
   const [detailsCollapsed, setDetailsCollapsed] = useState(false);
   const roomId = activeRoom?.id;
@@ -67,7 +67,7 @@ function RoomInfo() {
         <button className="button-icon" onClick={() => setEditRoomOpen(true)}>
           <SquarePen />
         </button>
-        <button className="button-icon" onClick={closeSidePanel}>
+        <button className="button-icon" onClick={() => selectRoom(null)}>
           <X />
         </button>
       </header>
