@@ -9,11 +9,9 @@ export async function findAllRooms(): Promise<Room[]> {
 }
 
 export async function findRoomById(id: number): Promise<Room> {
-  const response = await axios.get<Promise<Room>>(
-    `${BASE_URL}/api/rooms/${id}`,
-  );
+  const response = await axios.get<Room>(`${BASE_URL}/api/rooms/${id}`);
 
-  return await response.data;
+  return response.data;
 }
 
 export async function editRoom(

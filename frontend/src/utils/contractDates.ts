@@ -103,12 +103,14 @@ function getContractDateState(
 }
 
 export function getContractDateMeta(
-  startDateString: string,
-  endDateString: string,
+  startDateString: string | null,
+  endDateString: string | null,
   now: Date = new Date(),
 ): ContractDateMeta {
-  const startDate = parseContractDate(startDateString);
-  const endDate = parseContractDate(endDateString);
+  const startDate =
+    startDateString !== null ? parseContractDate(startDateString) : null;
+  const endDate =
+    endDateString !== null ? parseContractDate(endDateString) : null;
   const nowTimestamp = toStartOfDayTimestamp(now);
 
   const daysUntilStart = calculateDaysUntil(startDate, nowTimestamp);

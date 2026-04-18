@@ -110,8 +110,8 @@ export function RoomSelectionProvider({
 
   const value: RoomSelectionContextType = {
     activeRoom,
-    activeRoomId,
     selectRoom,
+    activeRoomId,
     expandReq,
   };
 
