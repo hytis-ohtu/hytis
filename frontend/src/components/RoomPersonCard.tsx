@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
-import type { Contract } from "../types";
+import type { RoomContract } from "../types";
 import {
   formatContractDate,
   formatContractStatus,
@@ -15,7 +15,7 @@ import { renderValue } from "../utils/renderValue";
 let seenExpandReqId: number | null = null;
 
 interface RoomPersonCardProps {
-  contract: Contract;
+  contract: RoomContract;
   onEdit: () => void;
   onRemove: () => void;
 }

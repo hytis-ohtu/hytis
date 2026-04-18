@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import { removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
-import type { Contract, Person } from "../types";
+import type { Person, RoomContract } from "../types";
 import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
 import { renderValue } from "../utils/renderValue";
 import ConfirmationDialog from "./ConfirmationDialog";
@@ -19,7 +19,7 @@ type State = {
   activePerson: Person | null;
   addPersonOpen: boolean;
   contractsCollapsed: boolean;
-  contractToRemove: Contract | null;
+  contractToRemove: RoomContract | null;
 };
 
 type Action =
@@ -27,7 +27,7 @@ type Action =
   | { type: "open-add-person" }
   | { type: "open-edit-person"; person: Person }
   | { type: "close-person-modal" }
-  | { type: "request-remove-contract"; contract: Contract }
+  | { type: "request-remove-contract"; contract: RoomContract }
   | { type: "cancel-remove-contract" };
 
 const initialState: State = {

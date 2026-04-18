@@ -18,45 +18,46 @@ export interface ResearchGroup {
   name: string;
 }
 
-export interface PersonSupervisor {
-  supervisorId: number;
-  subordinateId: number;
+export interface Room {
+  id: number;
+  name: string;
+  area: string | null;
+  capacity: number | null;
+  freeText: string | null;
+  roomType: string | null;
+  department: Department | null;
+  contracts: RoomContract[];
 }
 
 export interface Person {
   id: number;
   firstName: string;
   lastName: string;
-  department?: Department | null;
+  freeText?: string | null;
   researchGroup?: ResearchGroup | null;
+  department?: Department | null;
   title?: Title | null;
   supervisors?: Person[];
-  freeText?: string | null;
-  contracts?: Contract[];
+  contracts?: PersonContract[];
+}
+
+export interface PersonSupervisor {
+  supervisorId: number;
+  subordinateId: number;
 }
 
 export interface Contract {
   id: number;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
+}
+
+export interface RoomContract extends Contract {
   person: Person;
+}
+
+export interface PersonContract extends Contract {
   room: Room;
-}
-
-export interface RoomType {
-  id: number;
-  name: string;
-}
-
-export interface Room {
-  id: number;
-  name: string;
-  area: string | null;
-  capacity: number | null;
-  department: Department | null;
-  contracts: Contract[];
-  freeText: string | null;
-  roomType: RoomType;
 }
 
 export interface UserData {
