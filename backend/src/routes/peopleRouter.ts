@@ -1,6 +1,8 @@
 import { Request, Response, Router } from "express";
+import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
 import { z } from "zod";
+import { sequelize } from "../db";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
 import type { PersonInput } from "../utils";
 import toPersonInput from "../utils";
@@ -201,64 +203,133 @@ router.put(
 
 /**
  * GET /api/people
- * Fetches all people, or searches if query parameter 'q' is provided
- * Query parameter 'q' is used for partial matching on first/last name
+ * Fetches all people, or searches based on query parameter 'q' and 'type'
+ * Supported types: personName (default), supervisorName, contractEndDate
  */
 router.get("/", async (req: Request, res: Response) => {
-  const { q } = req.query;
+  const { q, type } = req.query;
 
-  // If query parameter 'q' is provided, search people
-  if (q && typeof q === "string") {
-    if (q.length > 100) {
+  try {
+    const queryStr = q && typeof q === "string" ? q : undefined;
+
+    if (queryStr && queryStr.length > 100) {
       return res.status(400).json({ error: "Query too long" });
     }
 
-    try {
-      const people = await Person.findAll({
-        where: {
-          [Op.or]: [
-            { firstName: { [Op.iLike]: `%${q}%` } },
-            { lastName: { [Op.iLike]: `%${q}%` } },
-          ],
-        },
-        include: [
-          { model: Person, as: "supervisors", through: { attributes: [] } },
-          "department",
-          "title",
-          "researchGroup",
-          {
-            model: Contract,
-            as: "contracts",
-            include: [{ model: Room, as: "room" }],
-          },
-        ],
-      });
+    const supervisorsInclude = {
+      model: Person,
+      as: "supervisors",
+      through: { attributes: [] },
+      where: {},
+      required: false,
+    };
 
-      res.json(people);
-    } catch (error) {
-      console.error("Error searching people:", error);
-      res.status(500).json({ error: "Failed to search people" });
+    const contractsInclude = {
+      model: Contract,
+      as: "contracts",
+      include: [{ model: Room, as: "room" }],
+      where: {},
+      required: false,
+    };
+
+    const sharedIncludes = [
+      "department",
+      "title",
+      "researchGroup",
+      contractsInclude,
+    ];
+
+    const nameSearchWhere = {
+      [Op.or]: [
+        { firstName: { [Op.iLike]: `%${queryStr}%` } },
+        { lastName: { [Op.iLike]: `%${queryStr}%` } },
+        // Search by full name
+        sequelize.where(
+          sequelize.fn(
+            "CONCAT",
+            sequelize.col("person.first_name"),
+            " ",
+            sequelize.col("person.last_name"),
+          ),
+          Op.iLike,
+          `%${queryStr}%`,
+        ),
+      ],
+    };
+
+    const findOptions: FindOptions<InferAttributes<Person>> = {
+      include: [supervisorsInclude, ...sharedIncludes],
+      order: [
+        ["lastName", "ASC"],
+        ["firstName", "ASC"],
+      ],
+    };
+
+    if (queryStr) {
+      switch (type) {
+        case "supervisorName":
+          const supervisorSearchOptions = {
+            ...findOptions,
+            where: nameSearchWhere,
+            include: [
+              ...sharedIncludes,
+              {
+                model: Person,
+                as: "subordinates",
+                through: { attributes: [] },
+                required: true,
+              },
+            ],
+          };
+
+          const matchingSupervisors = await Person.findAll(
+            supervisorSearchOptions,
+          );
+
+          if (matchingSupervisors.length === 1) {
+            const subordinatesSearchOptions = {
+              ...findOptions,
+              include: [
+                {
+                  model: Person,
+                  as: "supervisors",
+                  through: { attributes: [] },
+                  where: { id: matchingSupervisors[0].id },
+                  required: true,
+                },
+                ...sharedIncludes,
+              ],
+            };
+
+            const subordinates = await Person.findAll(
+              subordinatesSearchOptions,
+            );
+            return res.json(subordinates);
+          }
+
+          return res.json(matchingSupervisors);
+
+        case "contractEndDate":
+          contractsInclude.where = {
+            endDate: {
+              [Op.lte]: queryStr,
+            },
+          };
+          contractsInclude.required = true;
+          break;
+
+        case "personName":
+        default:
+          findOptions.where = nameSearchWhere;
+          break;
+      }
     }
-  } else {
-    // No query parameter - fetch all people
-    try {
-      const people = await Person.findAll({
-        include: [
-          { model: Person, as: "supervisors", through: { attributes: [] } },
-          "department",
-          "title",
-          "researchGroup",
-        ],
-        order: [
-          ["lastName", "ASC"],
-          ["firstName", "ASC"],
-        ],
-      });
-      res.status(200).json(people);
-    } catch (error) {
-      console.error("Error fetching people:", error);
-      res.status(500).json({ error: "Failed to fetch people" });
-    }
+
+    const people = await Person.findAll(findOptions);
+    res.json(people);
+  } catch (error) {
+    console.error("Error fetching people:", error);
+    res.status(500).json({ error: "Failed to fetch people" });
   }
 });
 
