@@ -28,10 +28,10 @@ describe("roomsService", () => {
     await editRoom(1, {
       capacity: "10",
       department: "3",
-      roomType: "Toimisto",
+      roomType: "1",
     });
     expect(axios.put).toHaveBeenCalledWith(`${BASE_URL}/api/rooms/1`, {
-      roomType: "Toimisto",
+      roomTypeId: 1,
       capacity: 10,
       departmentId: 3,
     });

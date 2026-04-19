@@ -8,11 +8,15 @@ vi.mock("../src/services/referenceDataService", () => ({
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },
   ]),
+  findAllRoomTypes: vi.fn().mockResolvedValue([
+    { id: 1, name: "konferenssihuone" },
+    { id: 2, name: "työhuone" },
+  ]),
 }));
 
 const INITIAL = {
   capacity: "10",
-  roomType: "Toimisto",
+  roomType: "1",
   department: "1",
   freeText: "Lisätietoja",
 };

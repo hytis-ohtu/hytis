@@ -112,7 +112,8 @@ const mockRoom_A210: Room = {
     name: "H523 CS",
   },
   freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
+  roomTypeId: 1,
+  roomType: { id: 1, name: "konferenssihuone" },
 };
 
 const mockRoom_A219: Room = {
@@ -126,7 +127,8 @@ const mockRoom_A219: Room = {
     name: "H523 CS",
   },
   freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
+  roomTypeId: 1,
+  roomType: { id: 1, name: "konferenssihuone" },
 };
 
 describe("RoomDetails", () => {
