@@ -1,15 +1,30 @@
-import { Search, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
+import type { SearchType } from "../services/peopleService";
 import { searchPeople } from "../services/peopleService";
 import type { Person } from "../types";
 import "./PersonSearch.css";
+
+const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
+  name: "Nimi",
+  supervisor: "Esihenkilö",
+  endDate: "Sopimuksen päättymispäivä",
+};
+
+const SEARCH_TYPE_PLACEHOLDERS: Record<SearchType, string> = {
+  name: "Hae henkilöä nimellä...",
+  supervisor: "Hae henkilöä esihenkilöllä...",
+  endDate: "Hae henkilöä päättymispäivällä (vvvv-kk-pp)...",
+};
 
 function PersonSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Person[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(false);
+  const [searchType, setSearchType] = useState<SearchType>("name");
+  const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { selectRoom } = useRoomSelection();
 
@@ -21,6 +36,7 @@ function PersonSearch() {
         !searchRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
+        setIsTypeMenuOpen(false);
       }
     }
 
@@ -41,7 +57,7 @@ function PersonSearch() {
       }
 
       try {
-        const people = await searchPeople(query);
+        const people = await searchPeople(query, searchType);
         setResults(people);
         setIsOpen(true);
         setError(false);
@@ -59,7 +75,7 @@ function PersonSearch() {
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [query]);
+  }, [query, searchType]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -72,6 +88,14 @@ function PersonSearch() {
   };
 
   const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleTypeSelect = (type: SearchType) => {
+    setSearchType(type);
+    setIsTypeMenuOpen(false);
+    setQuery("");
+    setResults([]);
     setIsOpen(false);
   };
 
@@ -94,17 +118,46 @@ function PersonSearch() {
 
   return (
     <div className="person-search" ref={searchRef}>
-      <div className="person-search-input-wrapper">
-        <Search className="person-search-icon" />
-        <input
-          type="text"
-          className="person-search-input"
-          placeholder="Hae henkilöä..."
-          value={query}
-          onChange={handleInputChange}
-          onFocus={handleFocus}
-          data-testid="person-search-input"
-        />
+      <div className="person-search-row">
+        <div className="person-search-input-wrapper">
+          <Search className="person-search-icon" />
+          <input
+            type="text"
+            className="person-search-input"
+            placeholder={SEARCH_TYPE_PLACEHOLDERS[searchType]}
+            value={query}
+            onChange={handleInputChange}
+            onFocus={handleFocus}
+            data-testid="person-search-input"
+          />
+        </div>
+
+        <div className="person-search-type-wrapper">
+          <button
+            className="person-search-type-button"
+            onClick={() => setIsTypeMenuOpen((prev) => !prev)}
+            data-testid="person-search-type-button"
+          >
+            <SlidersHorizontal size={16} />
+          </button>
+
+          {isTypeMenuOpen && (
+            <div
+              className="person-search-type-menu"
+              data-testid="person-search-type-menu"
+            >
+              {(Object.keys(SEARCH_TYPE_LABELS) as SearchType[]).map((type) => (
+                <button
+                  key={type}
+                  className={`person-search-type-option${searchType === type ? " active" : ""}`}
+                  onClick={() => handleTypeSelect(type)}
+                >
+                  {SEARCH_TYPE_LABELS[type]}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {isOpen && (
