@@ -26,7 +26,5 @@ export const config = {
     issuer: process.env.OIDC_ISSUER,
   },
 
-  frontendUrl: isProduction
-    ? process.env.FRONTEND_URL
-    : "http://localhost:5173",
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
 } as const;

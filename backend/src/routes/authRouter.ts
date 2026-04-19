@@ -29,7 +29,7 @@ if (useHyLogin) {
   router.get("/login", passport.authenticate("oidc"));
 } else {
   router.get("/login", mockAuthMiddleware, (_req: Request, res: Response) => {
-    res.redirect(config.frontendUrl || "http://localhost:5173");
+    res.redirect(config.frontendUrl);
   });
 }
 
@@ -48,7 +48,7 @@ if (useHyLogin) {
       failureMessage: true,
     }) as express.RequestHandler,
     (_req: Request, res: Response) => {
-      res.redirect(config.frontendUrl || "/");
+      res.redirect(config.frontendUrl);
     },
   );
 } else {
