@@ -2,17 +2,17 @@ import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import PersonSearch from "../src/components/PersonSearch";
+import PersonSearch from "../../src/components/PersonSearch";
 
 // Mock the peopleService
 const mockSearchPeople = vi.fn();
-vi.mock("../src/services/peopleService", () => ({
+vi.mock("../../src/services/peopleService", () => ({
   searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
 }));
 
 const mockSelectRoom = vi.fn();
 
-vi.mock("../src/hooks/useRoomSelection", () => ({
+vi.mock("../../src/hooks/useRoomSelection", () => ({
   useRoomSelection: () => ({
     activeRoomId: null,
     setActiveRoomId: vi.fn(),

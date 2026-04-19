@@ -5,7 +5,7 @@ import {
   findAllResearchGroups,
   findAllTitles,
   type ReferenceItem,
-} from "../src/services/referenceDataService";
+} from "../../src/services/referenceDataService";
 
 vi.mock("axios", () => ({
   default: {

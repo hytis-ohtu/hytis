@@ -7,10 +7,10 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import RoomModal from "../src/components/RoomModal.tsx";
-import { findAllDepartments } from "../src/services/referenceDataService";
+import RoomModal from "../../src/components/RoomModal.tsx";
+import { findAllDepartments } from "../../src/services/referenceDataService.ts";
 
-vi.mock("../src/services/referenceDataService", () => ({
+vi.mock("../../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },

@@ -1,11 +1,11 @@
 import axios from "axios";
 import { describe, expect, it, vi } from "vitest";
-import { BASE_URL } from "../src/constants";
+import { BASE_URL } from "../../src/constants";
 import {
   editRoom,
   findAllRooms,
   findRoomById,
-} from "../src/services/roomsService";
+} from "../../src/services/roomsService";
 
 vi.mock("axios");
 

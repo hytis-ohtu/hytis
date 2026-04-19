@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { RoomSelectionProvider } from "../src/components/RoomSelectionProvider";
-import { useRoomSelection } from "../src/hooks/useRoomSelection";
-import type { Room } from "../src/types";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
+import { useRoomSelection } from "../../src/hooks/useRoomSelection";
+import type { Room } from "../../src/types";
 
 const mockRoom: Room = {
   id: 1,

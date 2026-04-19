@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import RoomForm from "../src/components/RoomForm.tsx";
+import RoomForm from "../../src/components/RoomForm.tsx";
 
-vi.mock("../src/services/referenceDataService", () => ({
+vi.mock("../../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },
