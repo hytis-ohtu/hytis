@@ -16,8 +16,8 @@ vi.mock("../../src/services/referenceDataService", () => ({
     { id: 2, name: "HR" },
   ]),
   findAllRoomTypes: vi.fn().mockResolvedValue([
-    { id: 1, name: "konferenssihuone" },
-    { id: 2, name: "työhuone" },
+    { id: 1, name: "Konferenssihuone" },
+    { id: 2, name: "Työhuone" },
   ]),
 }));
 
@@ -66,7 +66,7 @@ describe("RoomModal", () => {
   it("renders with initial values pre-filled", async () => {
     await renderAndWait({ initial: INITIAL });
     expect(screen.getByDisplayValue("10")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Toimisto")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Konferenssihuone")).toBeInTheDocument();
   });
 
   it("shows confirmation when clicking close button", async () => {

@@ -9,8 +9,8 @@ vi.mock("../../src/services/referenceDataService", () => ({
     { id: 2, name: "HR" },
   ]),
   findAllRoomTypes: vi.fn().mockResolvedValue([
-    { id: 1, name: "konferenssihuone" },
-    { id: 2, name: "työhuone" },
+    { id: 1, name: "Konferenssihuone" },
+    { id: 2, name: "Työhuone" },
   ]),
 }));
 
@@ -51,10 +51,17 @@ describe("RoomForm", () => {
     expect(screen.getByLabelText("Osasto:")).toHaveValue("");
   });
 
-  it("renders with initial values pre-filled", () => {
+  it("renders with initial values pre-filled", async () => {
     render(<RoomForm {...defaultProps} initial={INITIAL} />);
+    await waitFor(() => {
+      expect(
+        screen.getByRole("option", { name: "Konferenssihuone" }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument();
+    });
     expect(screen.getByDisplayValue("10")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Toimisto")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Konferenssihuone")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("IT")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Lisätietoja")).toBeInTheDocument();
   });
 
@@ -79,13 +86,18 @@ describe("RoomForm", () => {
     );
   });
 
-  it("calls onChange with updated value when roomType changes", () => {
+  it("calls onChange with updated value when roomType changes", async () => {
     render(<RoomForm {...defaultProps} initial={INITIAL} />);
+    await waitFor(() =>
+      expect(
+        screen.getByRole("option", { name: "Konferenssihuone" }),
+      ).toBeInTheDocument(),
+    );
     fireEvent.change(screen.getByLabelText("Huonetyyppi:"), {
-      target: { value: "Laboratorio" },
+      target: { value: "2" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
-      expect.objectContaining({ roomType: "Laboratorio" }),
+      expect.objectContaining({ roomType: "2" }),
       true,
     );
   });
