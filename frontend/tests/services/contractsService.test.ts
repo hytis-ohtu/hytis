@@ -1,6 +1,6 @@
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createContract } from "../src/services/contractsService";
+import { createContract } from "../../src/services/contractsService";
 
 vi.mock("axios", () => ({
   default: {
