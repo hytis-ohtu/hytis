@@ -1,7 +1,7 @@
 .zoom-buttons {
   position: absolute;
-  left: 40px;
-  bottom: 40px;
+  left: 15px;
+  bottom: 15px;
   display: flex;
   align-items: center;
   border: var(--border-sm);
@@ -12,20 +12,16 @@
 .zoom-in-button {
   border: 0;
   border-right: var(--border-sm);
+  border-radius: var(--border-radius-sm);
   background-color: var(--color-background);
-}
-
-.zoom-in-button:hover {
   cursor: pointer;
 }
 
 .zoom-out-button {
   border: 0;
   border-left: var(--border-sm);
+  border-radius: var(--border-radius-sm);
   background-color: var(--color-background);
-}
-
-.zoom-out-button:hover {
   cursor: pointer;
 }
 
@@ -34,8 +30,5 @@
   font-family: var(--font-body);
   background-color: var(--color-background);
   border: 0;
-}
-
-.zoom-reset-button:hover {
   cursor: pointer;
 }
