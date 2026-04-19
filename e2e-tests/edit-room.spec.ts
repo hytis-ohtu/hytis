@@ -80,11 +80,11 @@ test("saved changes are reflected in room info after modal closes", async ({
   page,
 }) => {
   await openEditRoomModal(page);
-  await page.getByLabel("Huonetyyppi:").selectOption("työhuone");
+  await page.getByLabel("Huonetyyppi:").selectOption({ label: "Työhuone" });
   await page.locator(".roommodal-save-button").click();
   await page
     .locator(".confirmation-modal")
     .getByRole("button", { name: "Tallenna" })
     .click();
-  await expect(page.getByText("työhuone")).toBeVisible();
+  await expect(page.getByText("Työhuone")).toBeVisible();
 });
