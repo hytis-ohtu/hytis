@@ -8,7 +8,7 @@ import {
   removeContract,
 } from "../services/peopleService";
 import type { Contract, FieldProps, Person, Room } from "../types";
-import ConfirmationButton from "./ConfirmationButton";
+import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";
 import "./SidePanel.css";
 
@@ -191,7 +191,7 @@ function RoomOccupants({
         )
       )}
 
-      <ConfirmationButton
+      <ConfirmationDialog
         open={contractToRemove !== null}
         title={`Poista ${contractToRemove?.person?.firstName ?? ""} ${contractToRemove?.person?.lastName ?? ""}?`}
         confirmText="Poista"
