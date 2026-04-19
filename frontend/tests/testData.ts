@@ -89,7 +89,8 @@ export const rooms = [
     area: "14.60",
     capacity: 3,
     freeText: "",
-    roomType: "",
+    roomTypeId: 0,
+    roomType: { id: 0, name: "" },
     department: {
       id: 1,
       name: "H516 MATHSTAT",
@@ -149,7 +150,8 @@ export const rooms = [
     area: "9.70",
     capacity: 2,
     freeText: "",
-    roomType: "",
+    roomTypeId: 0,
+    roomType: { id: 0, name: "" },
     department: {
       id: 1,
       name: "H516 MATHSTAT",
