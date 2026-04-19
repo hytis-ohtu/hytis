@@ -65,7 +65,7 @@ function RoomInfo({
         <ul>
           <li>Pinta-ala: {area} m²</li>
           <li>Kapasiteetti: {capacity}</li>
-          <li>Huonetyyppi: {roomType?.name ?? <Skeleton />}</li>
+          <li>Huonetyyppi: {roomType?.name}</li>
           <li>Osasto: {department?.name ?? <Skeleton />}</li>
           <li>Lisätiedot: {freeText}</li>
         </ul>
