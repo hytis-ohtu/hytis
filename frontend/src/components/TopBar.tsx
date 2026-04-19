@@ -34,7 +34,9 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
   return (
     <header className="topbar">
       <span className="topbar-title">{title}</span>
-      <PersonSearch />
+      <div className="topbar-search">
+        <PersonSearch />
+      </div>
       <div className="topbar-actions">
         <button
           data-testid="topbar-settings-button"

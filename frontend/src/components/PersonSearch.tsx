@@ -94,18 +94,16 @@ function PersonSearch() {
 
   return (
     <div className="person-search" ref={searchRef}>
-      <div className="person-search-input-wrapper">
-        <Search className="person-search-icon" />
-        <input
-          type="text"
-          className="person-search-input"
-          placeholder="Hae henkilöä..."
-          value={query}
-          onChange={handleInputChange}
-          onFocus={handleFocus}
-          data-testid="person-search-input"
-        />
-      </div>
+      <Search className="person-search-icon" />
+      <input
+        type="text"
+        className="person-search-input"
+        placeholder="Hae henkilöä..."
+        value={query}
+        onChange={handleInputChange}
+        onFocus={handleFocus}
+        data-testid="person-search-input"
+      />
 
       {isOpen && (
         <div

@@ -1,7 +1,7 @@
 .topbar-menu {
   position: absolute;
   top: var(--topbar-height);
-  right: 8px;
+  right: 0px;
   background: var(--color-background);
   border: var(--border-sm);
   border-radius: var(--border-radius-md);

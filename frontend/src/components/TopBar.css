@@ -7,11 +7,12 @@
   height: var(--topbar-height);
   background: var(--color-topbar);
   border-bottom: var(--border-md);
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  justify-content: space-between;
-  padding: var(--gap);
+  padding: 0px;
   padding-right: 0px;
+  column-gap: var(--gap);
   z-index: var(--z-index-topbar);
 }
 
@@ -20,18 +21,30 @@
   font-size: 20px;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
+  padding-left: var(--padding-md);
 }
 
 .topbar-actions {
   display: flex;
   gap: 0px;
   flex-shrink: 0;
+  justify-self: end;
+}
+
+.topbar-search {
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  border: 0px;
 }
 
 .topbar-button {
-  width: var(--topbar-height);
-  height: var(--topbar-height);
+  width: calc(var(--topbar-height));
   border: var(--border-sm);
+  border-bottom: var(--border-md);
+  aspect-ratio: 1;
   background: var(--color-primary);
   color: var(--color-text-black);
   cursor: pointer;
