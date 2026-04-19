@@ -7,10 +7,10 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import PersonModal from "../src/components/PersonModal.tsx";
-import { findAllDepartments } from "../src/services/referenceDataService";
+import PersonModal from "../../src/components/PersonModal.tsx";
+import { findAllDepartments } from "../../src/services/referenceDataService.ts";
 
-vi.mock("../src/services/referenceDataService", () => ({
+vi.mock("../../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },
@@ -25,7 +25,7 @@ vi.mock("../src/services/referenceDataService", () => ({
   ]),
 }));
 
-vi.mock("../src/services/peopleService", () => ({
+vi.mock("../../src/services/peopleService", () => ({
   findAllPeople: vi
     .fn()
     .mockResolvedValue([{ id: 1, firstName: "Supervisor", lastName: "One" }]),
