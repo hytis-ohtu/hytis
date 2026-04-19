@@ -19,7 +19,7 @@ class Room extends Model<InferAttributes<Room>, InferCreationAttributes<Room>> {
   declare department?: Department;
   declare contracts?: Contract[];
   declare freeText?: string | null;
-  declare roomTypeId?: number | null;
+  declare roomTypeId: number | null;
 }
 
 Room.init(
