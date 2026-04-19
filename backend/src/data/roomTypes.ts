@@ -1,6 +1,6 @@
 export const roomTypes = [
-  { name: "konferenssihuone" },
-  { name: "flexitila" },
-  { name: "työhuone" },
-  { name: "vetäytymistila" },
+  { name: "Konferenssihuone" },
+  { name: "Flexitila" },
+  { name: "Työhuone" },
+  { name: "Vetäytymistila" },
 ];
