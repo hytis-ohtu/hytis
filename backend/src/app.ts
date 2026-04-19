@@ -15,10 +15,6 @@ if (useHyLogin) {
   app.set("trust proxy", 1);
 }
 
-if (isProduction && !config.frontendUrl) {
-  throw new Error("FRONTEND_URL required in production");
-}
-
 app.use(cors({ origin: config.frontendUrl, credentials: true }));
 
 app.use(express.json());
