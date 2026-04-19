@@ -57,7 +57,7 @@ Room.init(
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: "roomTypes",
+        model: "room_types",
         key: "id",
       },
     },
