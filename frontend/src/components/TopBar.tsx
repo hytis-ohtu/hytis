@@ -45,7 +45,7 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
             setSettingsOpen(true);
           }}
         >
-          <Settings size={26} />
+          <Settings size={24} strokeWidth={1.7} />
         </button>
         <button
           data-testid="topbar-profile-button"
@@ -55,7 +55,7 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
             setMenuOpen((v) => !v);
           }}
         >
-          <User size={26} />
+          <User size={24} strokeWidth={1.7} />
         </button>
         {settingsOpen && (
           <SettingsModal

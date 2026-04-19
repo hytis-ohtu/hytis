@@ -2,7 +2,7 @@
   position: absolute;
   top: var(--topbar-height);
   right: 8px;
-  background: var(--color-secondary);
+  background: var(--color-background);
   border: var(--border-sm);
   border-radius: var(--border-radius-md);
   padding: var(--gap);

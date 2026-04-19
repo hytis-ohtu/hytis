@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--gap);
-  padding-right: var(--padding-sm);
+  padding-right: 0px;
   z-index: var(--z-index-topbar);
 }
 
@@ -24,13 +24,13 @@
 
 .topbar-actions {
   display: flex;
-  gap: 4px;
+  gap: 0px;
   flex-shrink: 0;
 }
 
 .topbar-button {
-  width: calc(var(--topbar-height) - var(--padding-sm));
-  height: calc(var(--topbar-height) - var(--padding-sm));
+  width: var(--topbar-height);
+  height: var(--topbar-height);
   border: var(--border-sm);
   background: var(--color-primary);
   color: var(--color-text-black);

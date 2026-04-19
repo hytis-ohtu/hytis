@@ -4,6 +4,8 @@
   transform: translateX(-50%);
   width: min(400px, calc(100vw - 220px));
   z-index: 1001;
+  height: calc(var(--topbar-height) - var(--padding-sm));
+  padding-top: calc(var(--padding-sm) / 2);
 }
 
 .person-search-input-wrapper {
@@ -13,6 +15,8 @@
   background: var(--color-background);
   border-radius: var(--border-radius-sm);
   height: calc(var(--topbar-height) - var(--padding-md));
+  padding-top: var(--padding-sm);
+  padding-bottom: var(--padding-sm);
   transition: box-shadow var(--transition-fast);
 }
 
