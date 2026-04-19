@@ -37,7 +37,7 @@ describe("PersonSearch", () => {
   it("renders the search input", () => {
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     expect(searchInput).toBeInTheDocument();
   });
 
@@ -64,12 +64,12 @@ describe("PersonSearch", () => {
     const user = userEvent.setup();
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
     await waitFor(() => {
-      expect(mockSearchPeople).toHaveBeenCalledWith("Matti");
+      expect(mockSearchPeople).toHaveBeenCalledWith("Matti", "name");
       const dropdown = screen.getByTestId("person-search-dropdown");
       expect(dropdown).toBeInTheDocument();
     });
@@ -98,7 +98,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
@@ -139,7 +139,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
@@ -156,7 +156,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Nonexistent");
 
@@ -183,7 +183,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
@@ -217,7 +217,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
@@ -252,7 +252,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     // Type to open dropdown
     await user.type(searchInput, "Matti");
@@ -295,7 +295,7 @@ describe("PersonSearch", () => {
     render(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText(
-      "Hae henkilöä...",
+      "Hae henkilöä nimellä...",
     ) as HTMLInputElement;
 
     await user.type(searchInput, "Matti");
@@ -323,7 +323,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     // Type multiple characters quickly
     await user.type(searchInput, "Matti");
@@ -346,12 +346,12 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
     await waitFor(() => {
-      expect(mockSearchPeople).toHaveBeenCalledWith("Matti");
+      expect(mockSearchPeople).toHaveBeenCalledWith("Matti", "name");
     });
 
     // Should show error message in dropdown
@@ -387,7 +387,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     await user.type(searchInput, "Matti");
 
     await waitFor(() => {
@@ -417,7 +417,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     await user.type(searchInput, "Matti");
 
     await waitFor(() => {
@@ -451,7 +451,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     render(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä...");
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     await user.type(searchInput, "Matti");
 
     await waitFor(() => {
@@ -464,5 +464,35 @@ describe("PersonSearch", () => {
     expect(consoleLogSpy).toHaveBeenCalledWith("Person has no room assignment");
 
     consoleLogSpy.mockRestore();
+  });
+});
+
+describe("search type selection", () => {
+  it("opens search type dropdown when clicking search type button", async () => {
+    render(<PersonSearch />);
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    expect(screen.getByTestId("person-search-type-menu")).toBeInTheDocument();
+  });
+
+  it("changes search type placeholder when selecting an option", async () => {
+    render(<PersonSearch />);
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    await userEvent.click(screen.getByText("Esihenkilö"));
+    expect(
+      screen.getByPlaceholderText("Hae henkilöä esihenkilöllä..."),
+    ).toBeInTheDocument();
+  });
+
+  it("forwards correct search type to API", async () => {
+    vi.mocked(mockSearchPeople).mockResolvedValue([]);
+    render(<PersonSearch />);
+
+    await userEvent.click(screen.getByTestId("person-search-type-button"));
+    await userEvent.click(screen.getByText("Esihenkilö"));
+    await userEvent.type(screen.getByTestId("person-search-input"), "Matti");
+
+    await waitFor(() =>
+      expect(mockSearchPeople).toHaveBeenCalledWith("Matti", "supervisor"),
+    );
   });
 });

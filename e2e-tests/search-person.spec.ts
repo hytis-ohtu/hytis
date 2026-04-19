@@ -3,13 +3,15 @@ import { test } from "./testHelper";
 
 test.describe("PersonSearch", () => {
   test("search input is visible in the top bar", async ({ page }) => {
-    await expect(page.getByPlaceholder("Hae henkilöä...")).toBeVisible();
+    await expect(
+      page.getByPlaceholder("Hae henkilöä nimellä..."),
+    ).toBeVisible();
   });
 
   test("dropdown appears and shows correct result data when typing", async ({
     page,
   }) => {
-    await page.getByPlaceholder("Hae henkilöä...").fill("Matti");
+    await page.getByPlaceholder("Hae henkilöä nimellä...").fill("Matti");
 
     const dropdown = page.getByTestId("person-search-dropdown");
     await expect(dropdown).toBeVisible();
@@ -23,7 +25,7 @@ test.describe("PersonSearch", () => {
   test("search is case-insensitive and supports partial matching", async ({
     page,
   }) => {
-    const input = page.getByPlaceholder("Hae henkilöä...");
+    const input = page.getByPlaceholder("Hae henkilöä nimellä...");
 
     await input.fill("matti");
     await expect(page.getByText("Matti Virtanen")).toBeVisible();
@@ -33,14 +35,16 @@ test.describe("PersonSearch", () => {
   });
 
   test("no results message is shown for unmatched query", async ({ page }) => {
-    await page.getByPlaceholder("Hae henkilöä...").fill("NonexistentPersonXYZ");
+    await page
+      .getByPlaceholder("Hae henkilöä nimellä...")
+      .fill("NonexistentPersonXYZ");
     await expect(
       page.getByText('Ei tuloksia haulle "NonexistentPersonXYZ"'),
     ).toBeVisible();
   });
 
   test("dropdown closes when clicking outside", async ({ page }) => {
-    await page.getByPlaceholder("Hae henkilöä...").fill("Matti");
+    await page.getByPlaceholder("Hae henkilöä nimellä...").fill("Matti");
     const dropdown = page.getByTestId("person-search-dropdown");
     await expect(dropdown).toBeVisible();
 
@@ -49,7 +53,7 @@ test.describe("PersonSearch", () => {
   });
 
   test("dropdown closes when clicking X button", async ({ page }) => {
-    await page.getByPlaceholder("Hae henkilöä...").fill("Matti");
+    await page.getByPlaceholder("Hae henkilöä nimellä...").fill("Matti");
     const dropdown = page.getByTestId("person-search-dropdown");
     await expect(dropdown).toBeVisible();
 
@@ -59,7 +63,7 @@ test.describe("PersonSearch", () => {
 });
 
 test("dropdown reopens when clicking search input", async ({ page }) => {
-  const searchInput = page.getByPlaceholder("Hae henkilöä...");
+  const searchInput = page.getByPlaceholder("Hae henkilöä nimellä...");
   await searchInput.fill("Matti");
 
   const dropdown = page.getByTestId("person-search-dropdown");
