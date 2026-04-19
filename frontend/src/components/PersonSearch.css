@@ -5,21 +5,7 @@
   align-items: center;
   background: var(--color-background);
   border: var(--border-md);
-  /* border-radius: var(--border-radius-sm); */
 }
-
-/* .person-search-input-wrapper {
-  height: calc(var(--topbar-height) - var(--padding-md));
-  padding-top: var(--padding-sm);
-  padding-bottom: var(--padding-sm);
-  transition: box-shadow var(--transition-fast);
-} */
-
-/* .person-search-input-wrapper:focus-within {
-  box-shadow: var(--box-shadow-md);
-  border-radius: var(--border-radius-sm);
-  border: var(--border);
-} */
 
 .person-search-icon {
   position: relative;
@@ -34,7 +20,6 @@
   height: calc(var(--topbar-height) - var(--padding-md));
   padding: var(--padding-md);
   border: none;
-  /* border-radius: var(--border-radius-md); */
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   outline: none;
@@ -75,7 +60,6 @@
 .person-search-results-count {
   font-family: var(--font-body);
   font-size: var(--font-size-md);
-  /* font-weight: var(--font-weight-bold); */
   color: var(--color-text-black);
 }
 
