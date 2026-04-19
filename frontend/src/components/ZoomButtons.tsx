@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 import "./ZoomButtons.css";
 
 interface ZoomButtonsProps {
@@ -13,16 +13,20 @@ function ZoomButtons({ handleZoom, handleReset }: ZoomButtonsProps) {
         data-testid="zoom-increase-button"
         onClick={(e) => handleZoom(e, -1)}
       >
-        <Plus />
+        <ZoomIn size={22} />
       </button>
-      <button data-testid="reset-transform-button" onClick={handleReset}>
-        RESET
+      <button
+        data-testid="reset-transform-button"
+        onClick={handleReset}
+        className="zoom-reset-button"
+      >
+        Nollaa
       </button>
       <button
         data-testid="zoom-decrease-button"
         onClick={(e) => handleZoom(e, 1)}
       >
-        <Minus />
+        <ZoomOut size={22} />
       </button>
     </div>
   );
