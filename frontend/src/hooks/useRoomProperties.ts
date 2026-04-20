@@ -69,6 +69,13 @@ function getRoomAvailability(
   return "full";
 }
 
+export function getElementBBox(element: SVGElement): DOMRect {
+  if (element instanceof SVGGraphicsElement) {
+    return element.getBBox();
+  }
+  return new DOMRect(0, 0, 1, 1);
+}
+
 export function useRoomProperties() {
   const [useAvailability, setUseAvailability] = useState(true);
 
@@ -92,7 +99,7 @@ export function useRoomProperties() {
         element.classList.remove(...element.classList);
         element.classList.add("room");
 
-        if (!(element instanceof SVGGraphicsElement)) continue;
+        if (!(element instanceof SVGElement)) continue;
 
         if (useAvailability) {
           const availabilityState = getRoomAvailability(
@@ -104,10 +111,10 @@ export function useRoomProperties() {
         } else {
           element.style.fill = getDepartmentColor(room.department.name);
         }
-
-        const bbox = element.getBBox();
-        const centerX = bbox.x + bbox.width / 2;
-        const centerY = bbox.y + bbox.height / 2;
+        
+        const oldText = element.parentElement?.getElementsByClassName("room-label")[0];
+        const centerX = Number(oldText?.getAttribute("x"));
+        const centerY = Number(oldText?.getAttribute("y"));
 
         const lines = [
           roomName,
@@ -122,7 +129,7 @@ export function useRoomProperties() {
           .replaceWith(label);
       }
     } catch (error: unknown) {
-      let errorMessage = "❌ Failed to map rooms: ";
+      let errorMessage = "❌ Failed to update rooms: ";
       if (error instanceof Error) {
         errorMessage += error.message;
       }
@@ -131,7 +138,7 @@ export function useRoomProperties() {
   }
 
   useEffect(() => {
-    async function mapColorsToRoomElements() {
+    async function addColorToRooms() {
       try {
         const result = await findAllRooms();
 
@@ -170,11 +177,11 @@ export function useRoomProperties() {
         console.log(errorMessage);
       }
     }
-    mapColorsToRoomElements();
+    addColorToRooms();
   }, [useAvailability]);
 
   useEffect(() => {
-    async function mapDataToRoomElements() {
+    async function addTextToRooms() {
       try {
         const result = await findAllRooms();
 
@@ -196,7 +203,7 @@ export function useRoomProperties() {
           element.id = String(room.id);
           element.classList.add("room");
 
-          if (!(element instanceof SVGGraphicsElement)) continue;
+          if (!(element instanceof SVGElement)) continue;
 
           const parent = document.createElementNS(
             "http://www.w3.org/2000/svg",
@@ -205,8 +212,8 @@ export function useRoomProperties() {
           parent.classList.add("room-group");
           element.parentElement?.appendChild(parent);
           parent.appendChild(element);
-
-          const bbox = element.getBBox();
+          
+          const bbox = getElementBBox(element);
           const centerX = bbox.x + bbox.width / 2;
           const centerY = bbox.y + bbox.height / 2;
 
@@ -220,14 +227,14 @@ export function useRoomProperties() {
           parent.appendChild(label);
         }
       } catch (error: unknown) {
-        let errorMessage = "❌ Failed to map rooms: ";
+        let errorMessage = "❌ Failed to add text to rooms: ";
         if (error instanceof Error) {
           errorMessage += error.message;
         }
         console.log(errorMessage);
       }
     }
-    mapDataToRoomElements();
+    addTextToRooms();
   }, []);
 
   return {
