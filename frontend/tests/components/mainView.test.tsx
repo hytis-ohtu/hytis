@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import MainView from "../../src/components/MainView.tsx";
 import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider.tsx";
@@ -26,13 +27,12 @@ vi.mock("../../src/services/roomsService", () => ({
   findRoomById: vi.fn(),
 }));
 
-const findAllRoomsMock = vi.mocked(findAllRooms);
-const findRoomByIdMock = vi.mocked(findRoomById);
+vi.mocked(findAllRooms).mockResolvedValue(testRooms);
+const findRoomByIdMock = vi
+  .mocked(findRoomById)
+  .mockResolvedValue(testRooms[0]);
 
-findAllRoomsMock.mockResolvedValue(testRooms);
-findRoomByIdMock.mockResolvedValue(testRooms[0]);
-
-const customRender = (ui: React.ReactElement) => {
+const customRender = (ui: ReactElement) => {
   return render(
     <RoomSelectionProvider findRoomById={findRoomByIdMock}>
       {ui}
