@@ -18,13 +18,18 @@ export interface ResearchGroup {
   name: string;
 }
 
+export interface RoomType {
+  id: number;
+  name: string;
+}
+
 export interface Room {
   id: number;
   name: string;
   area: string | null;
   capacity: number | null;
   freeText: string | null;
-  roomType: string | null;
+  roomType: RoomType | null;
   department: Department | null;
   contracts: RoomContract[];
 }
