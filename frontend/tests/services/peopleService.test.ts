@@ -310,9 +310,12 @@ describe("peopleService", () => {
 
       const result = await searchPeople("Matti");
 
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("/api/people?q=Matti"),
-      );
+      expect(axios.get).toHaveBeenCalledWith("/api/people", {
+        params: {
+          q: "Matti",
+          type: "personName",
+        },
+      });
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -322,9 +325,12 @@ describe("peopleService", () => {
 
       await searchPeople("Matti Meikäläinen");
 
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("q=Matti%20Meik%C3%A4l%C3%A4inen"),
-      );
+      expect(axios.get).toHaveBeenCalledWith("/api/people", {
+        params: {
+          q: "Matti Meikäläinen",
+          type: "personName",
+        },
+      });
     });
 
     it("handles special characters in search query", async () => {
@@ -333,9 +339,12 @@ describe("peopleService", () => {
 
       await searchPeople("Ölä Åå");
 
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("q=%C3%96l%C3%A4%20%C3%85%C3%A5"),
-      );
+      expect(axios.get).toHaveBeenCalledWith("/api/people", {
+        params: {
+          q: "Ölä Åå",
+          type: "personName",
+        },
+      });
     });
 
     it("returns empty array when no results found", async () => {
@@ -360,9 +369,12 @@ describe("peopleService", () => {
 
       await searchPeople("test");
 
-      const callArgs = vi.mocked(axios.get).mock.calls[0][0];
-      expect(callArgs).toContain("/api/people");
-      expect(callArgs).toContain("q=test");
+      expect(axios.get).toHaveBeenCalledWith("/api/people", {
+        params: {
+          q: "test",
+          type: "personName",
+        },
+      });
     });
   });
 });
