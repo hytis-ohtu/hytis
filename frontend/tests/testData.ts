@@ -1,3 +1,43 @@
+export const testPerson = {
+  id: 1,
+  firstName: "Matti",
+  lastName: "Virtanen",
+  freeText: "Tämä on testihenkilö",
+  department: {
+    id: 516,
+    name: "H516 MATHSTAT",
+  },
+  title: {
+    id: 1,
+    name: "asiantuntija",
+  },
+  researchGroup: {
+    id: 1,
+    name: "Algoritmit ja optimointi",
+  },
+  supervisors: [
+    {
+      id: 2,
+      firstName: "Liisa",
+      lastName: "Lahtinen",
+      freeText: null,
+      department: {
+        id: 517,
+        name: "H517 CS",
+      },
+      title: {
+        id: 2,
+        name: "professori",
+      },
+      researchGroup: {
+        id: 2,
+        name: "Tietokannat",
+      },
+      supervisors: [],
+    },
+  ],
+};
+
 export const testRooms = [
   {
     id: 1,
@@ -15,24 +55,7 @@ export const testRooms = [
         id: 1,
         startDate: "2023-01-01",
         endDate: "2025-12-31",
-        person: {
-          id: 1,
-          firstName: "Matti",
-          lastName: "Virtanen",
-          freeText: null,
-          department: {
-            id: 1,
-            name: "H516 MATHSTAT",
-          },
-          title: {
-            id: 1,
-            name: "asiantuntija",
-          },
-          researchGroup: {
-            id: 1,
-            name: "Algebrallisten rakenteiden tutkimusryhmä",
-          },
-        },
+        person: testPerson,
       },
       {
         id: 2,
