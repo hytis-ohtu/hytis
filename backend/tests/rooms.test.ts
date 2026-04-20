@@ -56,7 +56,7 @@ test("single room is returned", async () => {
   expect(returnedRoom.name).toBe(mockRoom.name);
   expect(parseFloat(returnedRoom.area)).toBe(mockRoom.area);
   expect(returnedRoom.freeText).toBe(mockRoom.freeText);
-  expect(returnedRoom.roomType).toBe(mockRoom.roomType);
+  expect(returnedRoom.roomTypeId).toBe(mockRoom.roomTypeId);
   expect(returnedRoom.contracts).toHaveLength(mockContracts.length);
 
   returnedRoom.contracts.forEach((contract: Contract, index: number) =>
@@ -84,7 +84,7 @@ describe("PUT /api/rooms/:id", () => {
       capacity: 10,
       departmentId: 1,
       freeText: "Päivitetty vapaa teksti",
-      roomType: "Päivitetty huonetyyppi",
+      roomTypeId: 3,
     };
 
     const response = await api
@@ -95,7 +95,7 @@ describe("PUT /api/rooms/:id", () => {
     const updatedRoom = response.body;
     expect(updatedRoom.capacity).toBe(updatedRoomData.capacity);
     expect(updatedRoom.freeText).toBe(updatedRoomData.freeText);
-    expect(updatedRoom.roomType).toBe(updatedRoomData.roomType);
+    expect(updatedRoom.roomTypeId).toBe(updatedRoomData.roomTypeId);
   });
 
   it("returns 404 when updating non-existing room", async () => {
@@ -103,7 +103,7 @@ describe("PUT /api/rooms/:id", () => {
       capacity: 10,
       departmentId: 1,
       freeText: "Päivitetty vapaa teksti",
-      roomType: "Päivitetty huonetyyppi",
+      roomTypeId: 3,
     };
 
     const response = await api
@@ -119,7 +119,7 @@ describe("PUT /api/rooms/:id", () => {
       capacity: -5, // Invalid capacity
       departmentId: 1,
       freeText: "Päivitetty vapaa teksti",
-      roomType: "Päivitetty huonetyyppi",
+      roomTypeId: 3,
     };
 
     const response = await api
@@ -135,7 +135,7 @@ describe("PUT /api/rooms/:id", () => {
       capacity: 10,
       departmentId: 1,
       freeText: "Päivitetty vapaa teksti",
-      roomType: "Päivitetty huonetyyppi",
+      roomTypeId: 3,
     };
 
     // Simulate server error by disconnecting from the database
