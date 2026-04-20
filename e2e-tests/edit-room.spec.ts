@@ -5,8 +5,7 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 
 async function openEditRoomModal(page: Page) {
   await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
-  await page.locator('[data-testid="edit-room-button"]').click();
+  await page.getByRole("button", { name: "Muokkaa huoneen tietoja" }).click();
 }
 
 async function fillRoomFields(page: Page) {

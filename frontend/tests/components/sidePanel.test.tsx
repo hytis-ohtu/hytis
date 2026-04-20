@@ -38,6 +38,10 @@ vi.mock("../../src/services/referenceDataService", () => ({
     { id: 517, name: "H517 CS" },
     { id: 2, name: "H523 CS" },
   ]),
+  findAllRoomTypes: vi.fn().mockResolvedValue([
+    { id: 1, name: "konferenssihuone" },
+    { id: 2, name: "laboratorio" },
+  ]),
   findAllTitles: vi.fn().mockResolvedValue([
     { id: 1, name: "asiantuntija" },
     { id: 2, name: "professori" },
@@ -146,7 +150,7 @@ describe("RoomInfo", () => {
 
     expect(screen.getByText("Muokkaa huonetta")).toBeInTheDocument();
     expect(screen.getByDisplayValue("15")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Konferenssihuone")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("konferenssihuone")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Tallenna" }));
 

@@ -8,6 +8,11 @@ export interface Title {
   name: string;
 }
 
+export interface RoomType {
+  id: number;
+  name: string;
+}
+
 export interface researchGroup {
   id: number;
   name: string;

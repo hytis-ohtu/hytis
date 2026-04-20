@@ -179,9 +179,7 @@ test("saving existing person without contract dates closes the modal and persist
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
-  await expect(
-    page.locator(".person-name", { hasText: "Ahmed Ali" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ali Ahmed" })).toBeVisible();
 });
 
 test("saving existing person with contract dates closes the modal and persists person", async ({
@@ -196,9 +194,7 @@ test("saving existing person with contract dates closes the modal and persists p
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
 
-  const personItem = page.locator("details", {
-    has: page.locator(".person-name", { hasText: "Ahmed Ali" }),
-  });
-  await expect(personItem).toContainText("Alkupvm: 2025-06-01");
-  await expect(personItem).toContainText("Loppupvm: 2026-06-01");
+  const personCard = page.getByRole("article", { name: "Ali Ahmed" });
+  await expect(personCard).toContainText("01.06.2025");
+  await expect(personCard).toContainText("01.06.2026");
 });

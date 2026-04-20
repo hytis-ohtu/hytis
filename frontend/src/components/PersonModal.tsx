@@ -60,8 +60,8 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
     <div className="personmodal-overlay" onClick={requestClose}>
       <div className="personmodal-content" onClick={(e) => e.stopPropagation()}>
         <button
-          aria-label="close"
           className="personmodal-close-button"
+          aria-label="Sulje"
           onClick={requestClose}
         >
           <X size={16} />
