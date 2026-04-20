@@ -5,7 +5,6 @@ export const rooms = [
     area: "63.60",
     capacity: 15,
     freeText: "Hätäpoistumistie",
-    roomTypeId: 1,
     roomType: { id: 1, name: "konferenssihuone" },
     department: {
       id: 2,
@@ -89,7 +88,6 @@ export const rooms = [
     area: "14.60",
     capacity: 3,
     freeText: "",
-    roomTypeId: 0,
     roomType: { id: 0, name: "" },
     department: {
       id: 1,
@@ -150,7 +148,6 @@ export const rooms = [
     area: "9.70",
     capacity: 2,
     freeText: "",
-    roomTypeId: 0,
     roomType: { id: 0, name: "" },
     department: {
       id: 1,

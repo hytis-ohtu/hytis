@@ -4,7 +4,7 @@ import { Person } from "./person";
 import { PersonSupervisor } from "./personSupervisor";
 import { ResearchGroup } from "./researchGroup";
 import { Room } from "./room";
-import { RoomType } from "./roomTypes";
+import { RoomType } from "./roomType";
 import { Title } from "./title";
 
 Department.hasMany(Person, { foreignKey: "departmentId", as: "people" });

@@ -56,7 +56,6 @@ export interface Room {
   department: Department;
   contracts: Contract[];
   freeText: string;
-  roomTypeId: number;
   roomType: RoomType;
 }
 
