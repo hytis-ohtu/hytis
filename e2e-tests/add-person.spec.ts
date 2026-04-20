@@ -5,8 +5,9 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 
 async function openAddPersonModal(page: Page) {
   await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
-  await page.getByRole("button", { name: "Lisää henkilö" }).click();
+  await page
+    .getByRole("button", { name: /sijoita henkilö huoneeseen/i })
+    .click();
 }
 
 async function fillRequiredFields(page: Page) {
