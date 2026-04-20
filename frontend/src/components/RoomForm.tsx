@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import {
   findAllDepartments,
+  findAllRoomTypes,
   type ReferenceItem,
 } from "../services/referenceDataService";
 import "./RoomForm.css";
@@ -23,13 +24,14 @@ const FIELDS: FieldDef[] = [
     min: 1,
     step: "1",
   },
-  { id: "roomType", label: "Huonetyyppi:", type: "text", required: true },
+  { id: "roomType", label: "Huonetyyppi:", type: "select", required: true },
   { id: "department", label: "Osasto:", type: "select", required: true },
   { id: "freeText", label: "Lisätiedot:", type: "text", required: false },
 ];
 
 interface SelectOptions {
   department: ReferenceItem[];
+  roomType: ReferenceItem[];
 }
 
 interface RoomFormProps {
@@ -42,11 +44,17 @@ const isFormValid = (vals: Record<string, string>): boolean =>
 
 function RoomForm({ initial, onChange }: RoomFormProps) {
   const [values, setValues] = useState<Record<string, string>>({ ...initial });
-  const [options, setOptions] = useState<SelectOptions>({ department: [] });
+  const [options, setOptions] = useState<SelectOptions>({
+    department: [],
+    roomType: [],
+  });
 
   useEffect(() => {
-    findAllDepartments().then((departments) =>
-      setOptions({ department: departments }),
+    Promise.all([
+      findAllDepartments(),
+      findAllRoomTypes(), // Add this
+    ]).then(([departments, roomTypes]) =>
+      setOptions({ department: departments, roomType: roomTypes }),
     );
   }, []);
 

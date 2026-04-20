@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { Department, ResearchGroup, Title } from "../models";
+import { Department, ResearchGroup, RoomType, Title } from "../models";
 
 const router = Router();
 
@@ -56,6 +56,24 @@ router.get(
       return res.status(200).json(researchGroups);
     } catch {
       return res.status(500).json({ error: "Failed to fetch research groups" });
+    }
+  },
+);
+
+/**
+ * GET /api/reference-data/room-types
+ * Returns a list of all room types with id and name
+ */
+router.get(
+  "/room-types",
+  async (_req: Request, res: Response): Promise<Response> => {
+    try {
+      const roomTypes = await RoomType.findAll({
+        attributes: ["id", "name"],
+      });
+      return res.status(200).json(roomTypes);
+    } catch {
+      return res.status(500).json({ error: "Failed to fetch room types" });
     }
   },
 );

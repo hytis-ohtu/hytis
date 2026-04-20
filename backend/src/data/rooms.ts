@@ -5,7 +5,7 @@ export const rooms = [
     capacity: 15,
     departmentId: 2,
     freeText: "Hätäpoistumistie",
-    roomType: "Konferenssihuone",
+    roomTypeId: 1,
   },
   {
     name: "A211",
@@ -13,7 +13,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "Hello World",
-    roomType: "Työhuone",
+    roomTypeId: 3,
   },
   {
     name: "A212",
@@ -21,7 +21,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A213",
@@ -29,7 +29,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A214",
@@ -37,7 +37,7 @@ export const rooms = [
     capacity: 6,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A215",
@@ -45,7 +45,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A216",
@@ -53,7 +53,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A217",
@@ -61,7 +61,7 @@ export const rooms = [
     capacity: 4,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A218a",
@@ -69,7 +69,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A218b",
@@ -77,7 +77,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A219",
@@ -85,7 +85,7 @@ export const rooms = [
     capacity: 5,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A220",
@@ -93,7 +93,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A221",
@@ -101,7 +101,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A222",
@@ -109,7 +109,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A223",
@@ -117,7 +117,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A224",
@@ -125,7 +125,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A229",
@@ -133,7 +133,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A230",
@@ -141,7 +141,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A231",
@@ -149,7 +149,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A232",
@@ -157,7 +157,7 @@ export const rooms = [
     capacity: 5,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A236",
@@ -165,7 +165,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A237",
@@ -173,7 +173,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A238",
@@ -181,7 +181,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A239a",
@@ -189,7 +189,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A239b",
@@ -197,7 +197,7 @@ export const rooms = [
     capacity: 4,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A240",
@@ -205,7 +205,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A241",
@@ -213,7 +213,7 @@ export const rooms = [
     capacity: 4,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "A242",
@@ -221,7 +221,7 @@ export const rooms = [
     capacity: 16,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B211",
@@ -229,7 +229,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B212",
@@ -237,7 +237,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B213",
@@ -245,7 +245,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B214",
@@ -253,7 +253,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B215",
@@ -261,7 +261,7 @@ export const rooms = [
     capacity: 6,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B216",
@@ -269,7 +269,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B217",
@@ -277,7 +277,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B218",
@@ -285,7 +285,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B226",
@@ -293,7 +293,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B227",
@@ -301,7 +301,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B228",
@@ -309,7 +309,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B229a",
@@ -317,7 +317,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B230",
@@ -325,7 +325,7 @@ export const rooms = [
     capacity: 7,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B231",
@@ -333,7 +333,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B232",
@@ -341,7 +341,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "B233",
@@ -349,7 +349,7 @@ export const rooms = [
     capacity: 11,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C210",
@@ -357,7 +357,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C211",
@@ -365,7 +365,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C212",
@@ -373,7 +373,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C213",
@@ -381,7 +381,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C214",
@@ -389,7 +389,7 @@ export const rooms = [
     capacity: 6,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C215",
@@ -397,7 +397,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C216",
@@ -405,7 +405,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C217",
@@ -413,7 +413,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C227",
@@ -421,7 +421,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C228",
@@ -429,7 +429,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C229",
@@ -437,7 +437,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C230a",
@@ -445,7 +445,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C230b",
@@ -453,7 +453,7 @@ export const rooms = [
     capacity: 4,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C231",
@@ -461,7 +461,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C232",
@@ -469,7 +469,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "C233",
@@ -477,7 +477,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D211",
@@ -485,7 +485,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D212",
@@ -493,7 +493,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D213",
@@ -501,7 +501,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D214",
@@ -509,7 +509,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D215",
@@ -517,7 +517,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D219",
@@ -525,7 +525,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D220",
@@ -533,7 +533,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D221",
@@ -541,7 +541,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D222",
@@ -549,7 +549,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D223",
@@ -557,7 +557,7 @@ export const rooms = [
     capacity: 6,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D224",
@@ -565,7 +565,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D225",
@@ -573,7 +573,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D226",
@@ -581,7 +581,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D227",
@@ -589,7 +589,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D228",
@@ -597,7 +597,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D229",
@@ -605,7 +605,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D230",
@@ -613,7 +613,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D231",
@@ -621,7 +621,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D232",
@@ -629,7 +629,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D233",
@@ -637,7 +637,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D235",
@@ -645,7 +645,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D236",
@@ -653,7 +653,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D237",
@@ -661,7 +661,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D238",
@@ -669,7 +669,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D239",
@@ -677,7 +677,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D240a",
@@ -685,7 +685,7 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D240b",
@@ -693,7 +693,7 @@ export const rooms = [
     capacity: 4,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D241",
@@ -701,7 +701,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D242",
@@ -709,7 +709,7 @@ export const rooms = [
     capacity: 2,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
   {
     name: "D243",
@@ -717,6 +717,6 @@ export const rooms = [
     capacity: 3,
     departmentId: 1,
     freeText: "",
-    roomType: "",
+    roomTypeId: null,
   },
 ];

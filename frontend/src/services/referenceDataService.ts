@@ -26,3 +26,10 @@ export async function findAllResearchGroups(): Promise<ReferenceItem[]> {
   );
   return response.data;
 }
+
+export async function findAllRoomTypes(): Promise<ReferenceItem[]> {
+  const response = await axios.get<ReferenceItem[]>(
+    `${BASE_URL}/api/reference-data/room-types`,
+  );
+  return response.data;
+}

@@ -20,7 +20,7 @@ function RoomInfo({
     name = <Skeleton />,
     area = <Skeleton />,
     capacity = <Skeleton />,
-    roomType = <Skeleton />,
+    roomType,
     department,
     freeText = <Skeleton />,
   } = (roomProp ?? {}) as Partial<Room>;
@@ -56,7 +56,7 @@ function RoomInfo({
             onSubmit={handleEditRoom}
             initial={{
               capacity: String(roomProp.capacity ?? ""),
-              roomType: roomProp.roomType ?? "",
+              roomType: String(roomProp.roomType.id ?? ""),
               department: String(roomProp.department?.id ?? ""),
               freeText: roomProp.freeText ?? "",
             }}
@@ -65,7 +65,7 @@ function RoomInfo({
         <ul>
           <li>Pinta-ala: {area} m²</li>
           <li>Kapasiteetti: {capacity}</li>
-          <li>Huonetyyppi: {roomType}</li>
+          <li>Huonetyyppi: {roomType?.name}</li>
           <li>Osasto: {department?.name ?? <Skeleton />}</li>
           <li>Lisätiedot: {freeText}</li>
         </ul>
