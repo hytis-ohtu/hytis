@@ -6,8 +6,8 @@ import {
   editPerson,
   findAllPeople,
   searchPeople,
-} from "../src/services/peopleService";
-import type { Person } from "../src/types";
+} from "../../src/services/peopleService";
+import type { Person } from "../../src/types";
 
 vi.mock("axios");
 

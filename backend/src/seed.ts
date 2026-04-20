@@ -4,6 +4,7 @@ import { people } from "./data/people";
 import { personSupervisors } from "./data/personSupervisors";
 import { researchGroups } from "./data/researchGroups";
 import { rooms } from "./data/rooms";
+import { roomTypes } from "./data/roomTypes";
 import { titles } from "./data/titles";
 import { connectToDatabase, disconnectDatabase } from "./db";
 import {
@@ -13,6 +14,7 @@ import {
   PersonSupervisor,
   ResearchGroup,
   Room,
+  RoomType,
   Title,
 } from "./models/index";
 
@@ -25,6 +27,7 @@ export const dropAllTables = async () => {
   await PersonSupervisor.drop({ cascade: true });
   await Person.drop({ cascade: true });
   await Room.drop({ cascade: true });
+  await RoomType.drop({ cascade: true });
   await Title.drop({ cascade: true });
   await Department.drop({ cascade: true });
   await ResearchGroup.drop({ cascade: true });
@@ -35,6 +38,7 @@ export const createAllTables = async () => {
   console.log("Creating tables...");
   await Department.sync();
   await Title.sync();
+  await RoomType.sync();
   await Room.sync();
   await ResearchGroup.sync();
   await Person.sync();
@@ -48,6 +52,7 @@ export const seedData = async () => {
 
   await Department.bulkCreate(departments);
   await Title.bulkCreate(titles);
+  await RoomType.bulkCreate(roomTypes);
   await Room.bulkCreate(rooms);
   await ResearchGroup.bulkCreate(researchGroups);
   await Person.bulkCreate(people);

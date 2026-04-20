@@ -7,9 +7,21 @@ export async function findAllPeople(): Promise<Person[]> {
   return response.data;
 }
 
-export async function searchPeople(query: string): Promise<Person[]> {
+export type SearchType = "name" | "supervisor" | "endDate";
+
+const SEARCH_PARAM: Record<SearchType, string> = {
+  name: "personName",
+  supervisor: "supervisorName",
+  endDate: "contractEndDate",
+};
+
+export async function searchPeople(
+  query: string,
+  type: SearchType = "name",
+): Promise<Person[]> {
+  const param = SEARCH_PARAM[type];
   const response = await axios.get<Person[]>(
-    `${BASE_URL}/api/people?q=${encodeURIComponent(query)}`,
+    `${BASE_URL}/api/people?q=${encodeURIComponent(query)}&type=${param}`,
   );
 
   return response.data;

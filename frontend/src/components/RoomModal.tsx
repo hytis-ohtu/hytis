@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import ConfirmationButton from "./ConfirmationButton";
+import ConfirmationDialog from "./ConfirmationDialog";
 import RoomForm from "./RoomForm";
 import "./RoomModal.css";
 
@@ -75,7 +75,7 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
           </button>
         </div>
 
-        <ConfirmationButton
+        <ConfirmationDialog
           open={confirmOpen}
           title={
             confirmAction === "save"

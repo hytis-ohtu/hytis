@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import MainView from "../src/components/MainView.tsx";
+import MainView from "../../src/components/MainView.tsx";
 import {
   DEFAULT_SCALE,
   getBottomBound,
@@ -12,7 +12,7 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
   MOVE_THRESHOLD,
-} from "../src/hooks/useMapTransform.ts";
+} from "../../src/hooks/useMapTransform.ts";
 import {
   AvailabilityColors,
   getDepartmentColor,
@@ -20,14 +20,14 @@ import {
 import { findAllRooms, findRoomById } from "../src/services/roomsService";
 import { rooms } from "./testData.ts";
 
-vi.mock("../src/contexts/AuthContext", () => ({
+vi.mock("../../src/contexts/AuthContext", () => ({
   useAuth: () => ({
     user: { name: "Test User" },
     logout: vi.fn(),
   }),
 }));
 
-vi.mock("../src/hooks/useRoomSelection", () => ({
+vi.mock("../../src/hooks/useRoomSelection", () => ({
   useRoomSelection: () => ({
     activeRoomId: null,
     setActiveRoomId: vi.fn(),
@@ -40,7 +40,7 @@ vi.mock("../src/hooks/useRoomSelection", () => ({
   }),
 }));
 
-vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
+vi.mock("../../src/assets/exactum-2.min.svg?react", () => ({
   default: (props: Record<string, unknown>) => (
     <svg {...props} data-testid="mock-svg">
       <path
@@ -56,7 +56,7 @@ vi.mock("../src/assets/exactum-2.min.svg?react", () => ({
   ),
 }));
 
-vi.mock("../src/services/roomsService");
+vi.mock("../../src/services/roomsService");
 
 describe("MainView", () => {
   it("renders without crashing", () => {
