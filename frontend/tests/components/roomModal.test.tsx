@@ -7,19 +7,23 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import RoomModal from "../src/components/RoomModal.tsx";
-import { findAllDepartments } from "../src/services/referenceDataService";
+import RoomModal from "../../src/components/RoomModal.tsx";
+import { findAllDepartments } from "../../src/services/referenceDataService.ts";
 
-vi.mock("../src/services/referenceDataService", () => ({
+vi.mock("../../src/services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },
+  ]),
+  findAllRoomTypes: vi.fn().mockResolvedValue([
+    { id: 1, name: "Konferenssihuone" },
+    { id: 2, name: "Työhuone" },
   ]),
 }));
 
 const INITIAL = {
   capacity: "10",
-  roomType: "Toimisto",
+  roomType: "1",
   department: "1",
   freeText: "Lisätietoja",
 };
@@ -62,7 +66,7 @@ describe("RoomModal", () => {
   it("renders with initial values pre-filled", async () => {
     await renderAndWait({ initial: INITIAL });
     expect(screen.getByDisplayValue("10")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Toimisto")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Konferenssihuone")).toBeInTheDocument();
   });
 
   it("shows confirmation when clicking close button", async () => {

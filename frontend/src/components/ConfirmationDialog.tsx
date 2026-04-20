@@ -1,4 +1,4 @@
-import "./ConfirmationButton.css";
+import "./ConfirmationDialog.css";
 
 interface ConfirmDialogProps {
   open: boolean;

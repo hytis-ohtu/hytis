@@ -43,6 +43,11 @@ export interface Contract {
   room?: Room;
 }
 
+export interface RoomType {
+  id: number;
+  name: string;
+}
+
 export interface Room {
   id: number;
   name: string;
@@ -51,7 +56,7 @@ export interface Room {
   department: Department;
   contracts: Contract[];
   freeText: string;
-  roomType: string;
+  roomType: RoomType;
 }
 
 export interface FieldProps {

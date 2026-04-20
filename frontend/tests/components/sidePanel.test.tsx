@@ -2,21 +2,21 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import SidePanel from "../src/components/SidePanel.tsx";
+import SidePanel from "../../src/components/SidePanel.tsx";
 import {
   addPerson,
   editPerson,
   removeContract,
-} from "../src/services/peopleService.ts";
-import type { Room } from "../src/types.ts";
+} from "../../src/services/peopleService.ts";
+import type { Room } from "../../src/types.ts";
 
-vi.mock("../src/services/peopleService", () => ({
+vi.mock("../../src/services/peopleService", () => ({
   addPerson: vi.fn(),
   editPerson: vi.fn(),
   removeContract: vi.fn(),
 }));
 
-vi.mock("../src/components/PersonModal", () => ({
+vi.mock("../../src/components/PersonModal", () => ({
   default: ({
     onClose,
     onSubmit,
@@ -112,7 +112,7 @@ const mockRoom_A210: Room = {
     name: "H523 CS",
   },
   freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
+  roomType: { id: 1, name: "Konferenssihuone" },
 };
 
 const mockRoom_A219: Room = {
@@ -126,7 +126,7 @@ const mockRoom_A219: Room = {
     name: "H523 CS",
   },
   freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
+  roomType: { id: 1, name: "Konferenssihuone" },
 };
 
 describe("RoomDetails", () => {

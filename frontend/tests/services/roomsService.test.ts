@@ -1,11 +1,11 @@
 import axios from "axios";
 import { describe, expect, it, vi } from "vitest";
-import { BASE_URL } from "../src/constants";
+import { BASE_URL } from "../../src/constants";
 import {
   editRoom,
   findAllRooms,
   findRoomById,
-} from "../src/services/roomsService";
+} from "../../src/services/roomsService";
 
 vi.mock("axios");
 
@@ -28,10 +28,10 @@ describe("roomsService", () => {
     await editRoom(1, {
       capacity: "10",
       department: "3",
-      roomType: "Toimisto",
+      roomType: "1",
     });
     expect(axios.put).toHaveBeenCalledWith(`${BASE_URL}/api/rooms/1`, {
-      roomType: "Toimisto",
+      roomTypeId: 1,
       capacity: 10,
       departmentId: 3,
     });
