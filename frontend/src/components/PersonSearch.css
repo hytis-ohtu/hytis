@@ -1,10 +1,21 @@
 .person-search {
   width: min(600px, calc(100vw - 220px));
   position: relative;
-  display: flex;
-  align-items: center;
+  flex: 1;
+}
+
+.person-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: stretch;
   background: var(--color-background);
   border: var(--border-md);
+}
+
+.person-search-input-wrapper {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .person-search-icon {
@@ -23,9 +34,76 @@
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   outline: none;
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+  background: transparent;
+}
+
+.person-search-type-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  padding: 0;
+  background: var(--color-secondary, #f0f0f0);
+  border-left: var(--border-sm);
+  color: var(--color-text-black);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.person-search-type-button:hover {
+  background: var(--color-muted);
+}
+
+.person-search-type-chevron {
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.person-search-type-chevron.open {
+  transform: rotate(180deg);
+}
+
+.person-search-type-menu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 4px);
+  background: var(--color-background);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-md);
+  overflow: hidden;
+  min-width: 200px;
+  z-index: 1002;
+}
+
+.person-search-type-option {
+  display: block;
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-black);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.person-search-type-option:last-child {
+  border-bottom: none;
+}
+
+.person-search-type-option:hover {
+  background: var(--color-secondary);
+}
+
+.person-search-type-option.active {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-black);
 }
 
 .person-search-input:focus {
@@ -45,6 +123,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 1px solid var(--color-muted);
 }
 
 .person-search-header {

@@ -6,4 +6,5 @@
   top: calc(var(--topbar-height) + 12px);
   font-size: 16px;
   cursor: pointer;
+  background-color: var(--color-muted);
 }

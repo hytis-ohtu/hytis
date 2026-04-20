@@ -165,6 +165,17 @@ describe("GET /api/people - search", () => {
     expect(response.body[0].lastName).toBe("Virtanen");
   });
 
+  test("people can be searched by full name", async () => {
+    const response = await api
+      .get("/api/people?q=Matti Virtanen")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.body[0].firstName).toBe("Matti");
+    expect(response.body[0].lastName).toBe("Virtanen");
+  });
+
   test("search is case-insensitive", async () => {
     const lowercaseResponse = await api.get("/api/people?q=matti").expect(200);
 
@@ -287,8 +298,109 @@ describe("GET /api/people - search", () => {
       .expect(500)
       .expect("Content-Type", /application\/json/);
 
-    expect(response.body.error).toBe("Failed to search people");
+    expect(response.body.error).toBe("Failed to fetch people");
     findAllSpy.mockRestore();
+  });
+
+  test("can search by supervisor name", async () => {
+    const response = await api
+      .get("/api/people?q=Matti&type=supervisorName")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.supervisors).toBeDefined();
+      const hasMattisupervisor = person.supervisors?.some((supervisor) =>
+        supervisor.firstName.toLowerCase().includes("matti"),
+      );
+      expect(hasMattisupervisor).toBe(true);
+    });
+  });
+
+  test("supervisor name search is case-insensitive", async () => {
+    const lowercaseResponse = await api
+      .get("/api/people?q=matti&type=supervisorName")
+      .expect(200);
+
+    const uppercaseResponse = await api
+      .get("/api/people?q=MATTI&type=supervisorName")
+      .expect(200);
+
+    expect(lowercaseResponse.body.length).toBeGreaterThan(0);
+    expect(uppercaseResponse.body.length).toBeGreaterThan(0);
+    expect(lowercaseResponse.body.length).toBe(uppercaseResponse.body.length);
+  });
+
+  test("supervisor name search returns empty array when no matches found", async () => {
+    const response = await api
+      .get("/api/people?q=NonexistentSupervisor&type=supervisorName")
+      .expect(200);
+
+    expect(response.body).toHaveLength(0);
+  });
+
+  test("supervisor name search returns subordinates when exactly one supervisor matches", async () => {
+    const response = await api
+      .get("/api/people?q=Matti&type=supervisorName")
+      .expect(200);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.firstName).not.toBe("Matti");
+      const hasMattisupervisor = person.supervisors?.some(
+        (supervisor) => supervisor.firstName === "Matti",
+      );
+      expect(hasMattisupervisor).toBe(true);
+    });
+  });
+
+  test("supervisor name search returns supervisors when multiple supervisors match", async () => {
+    const response = await api
+      .get("/api/people?q=a&type=supervisorName")
+      .expect(200);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      const matchesFirstName = person.firstName.toLowerCase().includes("a");
+      const matchesLastName = person.lastName.toLowerCase().includes("a");
+      expect(matchesFirstName || matchesLastName).toBe(true);
+      expect(person?.subordinates?.length).toBeGreaterThan(0);
+    });
+
+    const firstNames = response.body.map(
+      (person: PersonType) => person.firstName,
+    );
+    expect(firstNames).toContain("Sanna");
+    expect(firstNames).toContain("Matti");
+  });
+
+  test("can search by contract end date", async () => {
+    const response = await api
+      .get("/api/people?q=2025-12-31&type=contractEndDate")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((person: PersonType) => {
+      expect(person.contracts).toBeDefined();
+      const hasMatchingContract = person.contracts?.some((contract) => {
+        if (!contract.endDate) return false;
+        const endDateStr = new Date(contract.endDate)
+          .toISOString()
+          .split("T")[0];
+        return endDateStr <= "2025-12-31";
+      });
+      expect(hasMatchingContract).toBe(true);
+    });
+  });
+
+  test("contract end date search returns empty array when no matches found", async () => {
+    const response = await api
+      .get("/api/people?q=2020-01-01&type=contractEndDate")
+      .expect(200);
+
+    expect(response.body).toHaveLength(0);
   });
 });
 
