@@ -177,6 +177,7 @@ function RoomPeople() {
         </button>
         <button
           className="button-icon"
+          aria-label="Sijoita henkilö huoneeseen"
           onClick={() => dispatch({ type: "open-add-person" })}
         >
           <Plus />

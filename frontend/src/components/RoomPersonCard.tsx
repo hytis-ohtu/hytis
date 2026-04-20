@@ -1,7 +1,7 @@
 import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { RoomContract } from "../types";
 import {
@@ -21,6 +21,9 @@ interface RoomPersonCardProps {
 }
 
 function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
+  const reactId = useId();
+  const headingId = `room-person-heading-${contract.person.id}-${reactId}`;
+
   const { expandReq } = useRoomSelection();
   const [detailsCollapsed, setDetailsCollapsed] = useState(true);
   const contractDateMeta = getContractDateMeta(
@@ -51,12 +54,12 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   }, [contract.person.id, expandReq]);
 
   return (
-    <article className="contract">
+    <article className="contract" aria-labelledby={headingId}>
       <header>
         {/* Main Header */}
         <div className="contract-header-main">
           <User size={18} />
-          <h3>
+          <h3 id={headingId}>
             {contract.person.lastName} {contract.person.firstName}
           </h3>
           <button
@@ -76,10 +79,18 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
               }
             />
           </button>
-          <button className="button-icon" onClick={onEdit}>
+          <button
+            className="button-icon"
+            aria-label="Muokkaa henkilön tietoja"
+            onClick={onEdit}
+          >
             <Pencil size={18} />
           </button>
-          <button className="button-icon" onClick={onRemove}>
+          <button
+            className="button-icon"
+            aria-label="Poista henkilö"
+            onClick={onRemove}
+          >
             <Trash2 size={18} />
           </button>
         </div>

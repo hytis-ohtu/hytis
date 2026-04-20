@@ -64,10 +64,18 @@ function RoomInfo() {
             }
           />
         </button>
-        <button className="button-icon" onClick={() => setEditRoomOpen(true)}>
+        <button
+          className="button-icon"
+          aria-label="Muokkaa huoneen tietoja"
+          onClick={() => setEditRoomOpen(true)}
+        >
           <SquarePen />
         </button>
-        <button className="button-icon" onClick={() => selectRoom(null)}>
+        <button
+          className="button-icon"
+          aria-label="Sulje huone"
+          onClick={() => selectRoom(null)}
+        >
           <X />
         </button>
       </header>
