@@ -2,14 +2,17 @@
   width: min(600px, calc(100vw - 220px));
   position: relative;
   flex: 1;
+  padding: 0px;
 }
 
 .person-search-row {
+  height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   align-items: stretch;
   background: var(--color-background);
   border: var(--border-md);
+  padding: 0px;
 }
 
 .person-search-input-wrapper {
@@ -21,6 +24,7 @@
 .person-search-icon {
   position: relative;
   left: var(--padding-sm);
+  aspect-ratio: 1;
   color: var(--color-muted);
   pointer-events: none;
   size: 18px;
@@ -41,11 +45,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  aspect-ratio: 1;
   height: 100%;
+  width: 100%;
   padding: 0;
-  background: var(--color-secondary, #f0f0f0);
-  border-left: var(--border-sm);
+  background: var(--color-primary, #f0f0f0);
+  outline: var(--border-sm);
+  border: 0px;
   color: var(--color-text-black);
   cursor: pointer;
   flex-shrink: 0;
@@ -53,7 +59,7 @@
 }
 
 .person-search-type-button:hover {
-  background: var(--color-muted);
+  background: var(--color-secondary);
 }
 
 .person-search-type-chevron {
@@ -68,10 +74,10 @@
 .person-search-type-menu {
   position: absolute;
   top: 0;
-  left: calc(100% + 4px);
+  left: calc(100%);
   background: var(--color-background);
-  border: 1px solid var(--color-muted);
-  border-radius: var(--border-radius-md);
+  border: var(--border-sm);
+  border-radius: var(--border-radius-sm);
   box-shadow: var(--box-shadow-md);
   overflow: hidden;
   min-width: 200px;
