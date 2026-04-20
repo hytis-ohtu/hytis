@@ -3,16 +3,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SidePanel from "../../src/components/SidePanel.tsx";
-import {
-  addPerson,
-  editPerson,
-  removeContract,
-} from "../../src/services/peopleService.ts";
+import { removeContract } from "../../src/services/contractsService.ts";
+import { addPerson, editPerson } from "../../src/services/peopleService.ts";
 import type { Room } from "../../src/types.ts";
 
 vi.mock("../../src/services/peopleService", () => ({
   addPerson: vi.fn(),
   editPerson: vi.fn(),
+}));
+
+vi.mock("../../src/services/contractsService", () => ({
   removeContract: vi.fn(),
 }));
 
