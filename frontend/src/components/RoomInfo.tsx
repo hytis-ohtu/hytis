@@ -30,10 +30,14 @@ function RoomInfo() {
     if (roomId == null) return;
     try {
       await editRoom(roomId, values);
-      selectRoom(roomId);
+      await selectRoom(roomId);
     } catch (error) {
       console.error("Failed to edit room:", error);
     }
+  };
+
+  const submitEditRoom = (values: Record<string, string>) => {
+    void handleEditRoom(values);
   };
 
   return (
@@ -74,7 +78,7 @@ function RoomInfo() {
         <button
           className="button-icon"
           aria-label="Sulje huone"
-          onClick={() => selectRoom(null)}
+          onClick={() => void selectRoom(null)}
         >
           <X />
         </button>
@@ -145,7 +149,7 @@ function RoomInfo() {
       {editRoomOpen && isLoaded && (
         <RoomModal
           onClose={() => setEditRoomOpen(false)}
-          onSubmit={handleEditRoom}
+          onSubmit={submitEditRoom}
           initial={{
             capacity: String(activeRoom.capacity ?? ""),
             roomType: String(activeRoom.roomType?.id ?? ""),

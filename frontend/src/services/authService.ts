@@ -3,21 +3,23 @@ import { BASE_URL } from "../constants";
 import type { UserData } from "../types";
 
 export async function getCurrentUser(): Promise<UserData> {
-  const response = await axios.get<Promise<UserData>>(`${BASE_URL}/api/user`, {
+  const response = await axios.get<UserData>(`${BASE_URL}/api/user`, {
     withCredentials: true,
   });
 
-  if (response.statusText != "OK") {
+  if (response.status !== 200) {
     throw new Error("Not authenticated");
   }
   return response.data;
 }
 
 export async function logout(): Promise<void> {
-  const response = await axios.post(`${BASE_URL}/api/logout`, {
-    withCredentials: true,
-  });
-  const data = await response.data;
+  const response = await axios.post<{ logoutUrl?: string }>(
+    `${BASE_URL}/api/logout`,
+    undefined,
+    { withCredentials: true },
+  );
+  const data = response.data;
   if (data.logoutUrl) {
     window.location.href = data.logoutUrl;
   }

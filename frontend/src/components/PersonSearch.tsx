@@ -71,7 +71,7 @@ function PersonSearch() {
 
     // Debounce search to avoid too many API calls
     const timeoutId = setTimeout(() => {
-      search();
+      void search();
     }, 300);
 
     return () => clearTimeout(timeoutId);
@@ -103,7 +103,7 @@ function PersonSearch() {
     const contract = person.contracts?.[0];
 
     if (contract) {
-      selectRoom(contract.room.id, person.id);
+      void selectRoom(contract.room.id, person.id);
     } else {
       console.log("Person has no room assignment");
     }
@@ -181,7 +181,7 @@ function PersonSearch() {
               </div>
             ) : results.length === 0 ? (
               <div className="person-search-no-results">
-                Ei tuloksia haulle "{query}"
+                Ei tuloksia haulle {`"${query}"`}
               </div>
             ) : null}
 

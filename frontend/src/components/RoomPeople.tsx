@@ -116,7 +116,7 @@ function RoomPeople() {
       }
 
       dispatch({ type: "close-person-modal" });
-      selectRoom(activeRoom.id);
+      void selectRoom(activeRoom.id);
     } catch (error) {
       console.error(
         state.activePerson ? "Failed to edit person:" : "Failed to add person:",
@@ -125,12 +125,16 @@ function RoomPeople() {
     }
   };
 
+  const submitPerson = (values: Record<string, string>) => {
+    void handlePersonSubmit(values);
+  };
+
   const handleRemoveContract = async () => {
     if (activeRoom?.id === undefined || !state.contractToRemove) return;
 
     try {
       await removeContract(state.contractToRemove.id);
-      selectRoom(activeRoom.id);
+      void selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to remove contract:", error);
     } finally {
@@ -232,7 +236,7 @@ function RoomPeople() {
           onClose={() => {
             dispatch({ type: "close-person-modal" });
           }}
-          onSubmit={handlePersonSubmit}
+          onSubmit={submitPerson}
           initial={
             state.activePerson
               ? {
@@ -267,7 +271,7 @@ function RoomPeople() {
         title={`Poista ${state.contractToRemove?.person.firstName} ${state.contractToRemove?.person.lastName}?`}
         confirmText="Poista"
         cancelText="Peruuta"
-        onConfirm={handleRemoveContract}
+        onConfirm={() => void handleRemoveContract()}
         onCancel={() => dispatch({ type: "cancel-remove-contract" })}
       />
     </section>

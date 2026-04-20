@@ -50,9 +50,6 @@ vi.mock("../../src/services/referenceDataService", () => ({
     { id: 1, name: "Algoritmit ja optimointi" },
     { id: 2, name: "Tietokannat" },
   ]),
-  findAllRoomTypes: vi
-    .fn()
-    .mockResolvedValue([{ id: 1, name: "Konferenssihuone" }]),
 }));
 
 const mockFindRoomById = vi
@@ -150,7 +147,9 @@ describe("RoomInfo", () => {
 
     expect(screen.getByText("Muokkaa huonetta")).toBeInTheDocument();
     expect(screen.getByDisplayValue("15")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("konferenssihuone")).toBeInTheDocument();
+    expect(
+      screen.getByRole("combobox", { name: "Huonetyyppi:" }),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Tallenna" }));
 
@@ -334,7 +333,7 @@ describe("RoomPeople", () => {
     customRender(<TestDisplay />);
 
     await user.click(screen.getByTestId("open-empty-room"));
-    await screen.findByRole("heading", { name: /Huone A211/ });
+    await screen.findByRole("heading", { name: /huone a211/i });
 
     expect(screen.getByText("Ei henkilöitä.")).toBeInTheDocument();
   });

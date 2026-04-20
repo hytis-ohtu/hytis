@@ -22,7 +22,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    checkSession();
+    void checkSession();
   }, []);
 
   const login = () => {

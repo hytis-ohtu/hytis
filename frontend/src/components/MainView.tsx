@@ -28,13 +28,13 @@ function MainView() {
     });
   }, [activeRoomId]);
 
-  async function handleClick(event: React.MouseEvent<SVGSVGElement>) {
+  function handleClick(event: React.MouseEvent<SVGSVGElement>) {
     if (hasMoved.current) return;
 
     if (event.target instanceof SVGElement) {
       const target = event.target.closest("path[data-room]");
       if (target?.id && (+target?.id !== activeRoom?.id || !activeRoomId)) {
-        await selectRoom(+target.id, null, false);
+        void selectRoom(+target.id, null, false);
       }
     }
   }

@@ -1,7 +1,7 @@
 import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { CSSProperties } from "react";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useReducer } from "react";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import type { RoomContract } from "../types";
 import {
@@ -14,6 +14,19 @@ import { renderValue } from "../utils/renderValue";
 
 let seenExpandReqId: number | null = null;
 
+type DetailsAction = "toggle" | "expand";
+
+function detailsReducer(state: boolean, action: DetailsAction): boolean {
+  switch (action) {
+    case "toggle":
+      return !state;
+    case "expand":
+      return false;
+    default:
+      return state;
+  }
+}
+
 interface RoomPersonCardProps {
   contract: RoomContract;
   onEdit: () => void;
@@ -25,7 +38,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   const headingId = `room-person-heading-${contract.person.id}-${reactId}`;
 
   const { expandReq } = useRoomSelection();
-  const [detailsCollapsed, setDetailsCollapsed] = useState(true);
+  const [detailsCollapsed, dispatchDetails] = useReducer(detailsReducer, true);
   const contractDateMeta = getContractDateMeta(
     contract.startDate,
     contract.endDate,
@@ -34,7 +47,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
   const timelineProgress = contractDateMeta.progress;
   const contractStatus = formatContractStatus(contractDateMeta);
 
-  const toggleDetails = () => setDetailsCollapsed((previous) => !previous);
+  const toggleDetails = () => dispatchDetails("toggle");
 
   useEffect(() => {
     if (expandReq === null) {
@@ -49,7 +62,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
       return;
     }
 
-    setDetailsCollapsed(false);
+    dispatchDetails("expand");
     seenExpandReqId = expandReq.reqId;
   }, [contract.person.id, expandReq]);
 
