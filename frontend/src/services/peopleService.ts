@@ -20,9 +20,13 @@ export async function searchPeople(
   type: SearchType = "name",
 ): Promise<Person[]> {
   const param = SEARCH_PARAM[type];
-  const response = await axios.get<Person[]>(
-    `${BASE_URL}/api/people?q=${encodeURIComponent(query)}&type=${param}`,
-  );
+
+  const response = await axios.get<Person[]>(`${BASE_URL}/api/people`, {
+    params: {
+      q: query,
+      type: param,
+    },
+  });
 
   return response.data;
 }
