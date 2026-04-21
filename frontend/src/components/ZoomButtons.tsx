@@ -13,14 +13,14 @@ function ZoomButtons({ handleZoom }: ZoomButtonsProps) {
         aria-label="Suurenna"
         onClick={(e) => handleZoom(e, -1)}
       >
-        <Plus />
+        <Plus size={20} />
       </button>
       <button
         className="button-icon"
         aria-label="Loitonna"
         onClick={(e) => handleZoom(e, 1)}
       >
-        <Minus />
+        <Minus size={20} />
       </button>
     </div>
   );
