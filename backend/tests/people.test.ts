@@ -307,7 +307,7 @@ describe("/api/people", () => {
         .expect(500)
         .expect("Content-Type", /application\/json/);
 
-      expect(response.body.error).toBe("Failed to search people");
+      expect(response.body.error).toBe("Failed to fetch people");
       findAllSpy.mockRestore();
     });
   });
@@ -490,7 +490,7 @@ describe("/api/people", () => {
     await disconnectDatabase();
   });
 
-  test("can search by supervisor name", async () => {
+  it("can search by supervisor name", async () => {
     const response = await api
       .get("/api/people?q=Matti&type=supervisorName")
       .expect(200)
@@ -506,7 +506,7 @@ describe("/api/people", () => {
     });
   });
 
-  test("supervisor name search is case-insensitive", async () => {
+  it("supervisor name search is case-insensitive", async () => {
     const lowercaseResponse = await api
       .get("/api/people?q=matti&type=supervisorName")
       .expect(200);
@@ -520,7 +520,7 @@ describe("/api/people", () => {
     expect(lowercaseResponse.body.length).toBe(uppercaseResponse.body.length);
   });
 
-  test("supervisor name search returns empty array when no matches found", async () => {
+  it("supervisor name search returns empty array when no matches found", async () => {
     const response = await api
       .get("/api/people?q=NonexistentSupervisor&type=supervisorName")
       .expect(200);
@@ -528,7 +528,7 @@ describe("/api/people", () => {
     expect(response.body).toHaveLength(0);
   });
 
-  test("supervisor name search returns subordinates when exactly one supervisor matches", async () => {
+  it("supervisor name search returns subordinates when exactly one supervisor matches", async () => {
     const response = await api
       .get("/api/people?q=Matti&type=supervisorName")
       .expect(200);
@@ -543,7 +543,7 @@ describe("/api/people", () => {
     });
   });
 
-  test("supervisor name search returns supervisors when multiple supervisors match", async () => {
+  it("supervisor name search returns supervisors when multiple supervisors match", async () => {
     const response = await api
       .get("/api/people?q=a&type=supervisorName")
       .expect(200);
@@ -563,7 +563,7 @@ describe("/api/people", () => {
     expect(firstNames).toContain("Matti");
   });
 
-  test("can search by contract end date", async () => {
+  it("can search by contract end date", async () => {
     const response = await api
       .get("/api/people?q=2025-12-31&type=contractEndDate")
       .expect(200)
@@ -583,7 +583,7 @@ describe("/api/people", () => {
     });
   });
 
-  test("contract end date search returns empty array when no matches found", async () => {
+  it("contract end date search returns empty array when no matches found", async () => {
     const response = await api
       .get("/api/people?q=2020-01-01&type=contractEndDate")
       .expect(200);

@@ -16,9 +16,9 @@ import {
 import {
   AvailabilityColors,
   getDepartmentColor,
-} from "../src/hooks/useRoomProperties";
-import { findAllRooms, findRoomById } from "../src/services/roomsService";
-import { rooms } from "./testData.ts";
+} from "../../src/hooks/useRoomProperties";
+import { findAllRooms, findRoomById } from "../../src/services/roomsService";
+import { rooms } from "../testData.ts";
 
 vi.mock("../../src/contexts/AuthContext", () => ({
   useAuth: () => ({
