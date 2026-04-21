@@ -1,5 +1,4 @@
 import "./ColorToggle.css";
-import Legend from "./Legend";
 
 interface ColorToggleProps {
   useAvailability: boolean;
@@ -11,16 +10,12 @@ function ColorToggle({
   setUseAvailability,
 }: ColorToggleProps) {
   return (
-    <div>
-      <button
-        data-testid="switch-color-mode"
-        onClick={() => setUseAvailability(!useAvailability)}
-        className="color-button"
-      >
-        {useAvailability ? "Näytä Vastuualueet" : "Näytä Tila"}
-      </button>
-      <Legend mode={useAvailability ? "availability" : "department"} />
-    </div>
+    <button
+      className="button color-toggle"
+      onClick={() => setUseAvailability(!useAvailability)}
+    >
+      {useAvailability ? "Vastuualueet" : "Varaustila"}
+    </button>
   );
 }
 
