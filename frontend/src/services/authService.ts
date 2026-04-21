@@ -6,10 +6,6 @@ export async function getCurrentUser(): Promise<UserData> {
   const response = await axios.get<UserData>(`${BASE_URL}/api/user`, {
     withCredentials: true,
   });
-
-  if (response.status !== 200) {
-    throw new Error("Not authenticated");
-  }
   return response.data;
 }
 
