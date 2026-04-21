@@ -10,7 +10,7 @@ import { findRoomById } from "./services/roomsService";
 function App() {
   return (
     <AuthProvider>
-      <RoomSelectionProvider fetchRoomById={findRoomById}>
+      <RoomSelectionProvider findRoomById={findRoomById}>
         <AppContent />
       </RoomSelectionProvider>
     </AuthProvider>

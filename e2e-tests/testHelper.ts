@@ -17,5 +17,4 @@ export const test = base.extend<{ forEachTest: void }>({
 
 export async function openSidePanel(page: Page) {
   await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
 }

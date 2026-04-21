@@ -5,7 +5,7 @@
   right: 0;
   width: 100%;
   height: var(--topbar-height);
-  background: var(--color-topbar);
+  background: var(--color-text-black);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
@@ -45,17 +45,10 @@
   align-items: center;
   justify-content: center;
   transition:
-    background var(--transition-fast),
-    transform 0.08s;
+    background-color var(--transition-fast),
 }
 
 .topbar-button:hover {
-  background: var(--color-secondary);
-  color: var(--color-text-black);
-}
-
-.topbar-button:active {
-  transform: scale(0.98);
-  background: var(--color-muted);
+  background: var(--color-primary-light);
   color: var(--color-text-black);
 }

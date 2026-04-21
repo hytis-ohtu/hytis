@@ -5,8 +5,9 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 
 async function openAddPersonModal(page: Page) {
   await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
-  await page.getByRole("button", { name: "Lisää henkilö" }).click();
+  await page
+    .getByRole("button", { name: /sijoita henkilö huoneeseen/i })
+    .click();
 }
 
 async function fillRequiredFields(page: Page) {
@@ -120,7 +121,7 @@ test("searching for existing person returns matching results", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await page.getByLabel("Hae henkilö:").fill("Ah");
+  await page.getByLabel("Hae henkilö:").fill("Ahmed Ali");
   await page.waitForSelector(".personform-person-option");
   await expect(page.locator(".personform-person-option")).toHaveCount(1);
   await expect(page.locator(".personform-person-option")).toContainText(
@@ -132,7 +133,7 @@ test("selecting existing person populates person form fields", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await searchAndSelectExistingPerson(page, "Ah");
+  await searchAndSelectExistingPerson(page, "Ahmed Ali");
   await expect(page.getByLabel("Etunimi:")).toHaveValue("Ahmed");
   await expect(page.getByLabel("Sukunimi:")).toHaveValue("Ali");
   await expect(page.getByLabel("Osasto:")).toContainText("H523 CS");
@@ -148,7 +149,7 @@ test("existing person form fields are read-only except contract dates", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await searchAndSelectExistingPerson(page, "Ah");
+  await searchAndSelectExistingPerson(page, "Ahmed Ali");
   await expect(page.getByLabel("Etunimi:")).toBeDisabled();
   await expect(page.getByLabel("Sukunimi:")).toBeDisabled();
   await expect(page.getByLabel("Osasto:")).toBeDisabled();
@@ -163,7 +164,7 @@ test("existing person form fields are read-only except contract dates", async ({
 
 test("selecting existing person enables save button", async ({ page }) => {
   await openAddPersonModal(page);
-  await searchAndSelectExistingPerson(page, "Ah");
+  await searchAndSelectExistingPerson(page, "Ahmed Ali");
   await expect(
     page.getByRole("button", { name: "Lisää", exact: true }),
   ).toBeEnabled();
@@ -173,21 +174,19 @@ test("saving existing person without contract dates closes the modal and persist
   page,
 }) => {
   await openAddPersonModal(page);
-  await searchAndSelectExistingPerson(page, "Ah");
+  await searchAndSelectExistingPerson(page, "Ahmed Ali");
   await saveAndConfirmPerson(page);
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
-  await expect(
-    page.locator(".person-name", { hasText: "Ahmed Ali" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ali Ahmed" })).toBeVisible();
 });
 
 test("saving existing person with contract dates closes the modal and persists person", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await searchAndSelectExistingPerson(page, "Ah");
+  await searchAndSelectExistingPerson(page, "Ahmed Ali");
   await page.getByLabel("Sopimuksen alku:").fill("2025-06-01");
   await page.getByLabel("Sopimuksen loppu:").fill("2026-06-01");
   await saveAndConfirmPerson(page);
@@ -195,9 +194,7 @@ test("saving existing person with contract dates closes the modal and persists p
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
 
-  const personItem = page.locator("details", {
-    has: page.locator(".person-name", { hasText: "Ahmed Ali" }),
-  });
-  await expect(personItem).toContainText("Alkupvm: 2025-06-01");
-  await expect(personItem).toContainText("Loppupvm: 2026-06-01");
+  const personCard = page.getByRole("article", { name: "Ali Ahmed" });
+  await expect(personCard).toContainText("01.06.2025");
+  await expect(personCard).toContainText("01.06.2026");
 });

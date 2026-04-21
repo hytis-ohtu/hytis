@@ -74,14 +74,18 @@ function PersonForm({ initial = {}, onChange }: PersonFormProps) {
       findAllTitles(),
       findAllResearchGroups(),
       findAllPeople(),
-    ]).then(([departments, titles, researchGroups, allPeople]) => {
-      setOptions({
-        department: departments,
-        jobtitle: titles,
-        researchgroup: researchGroups,
+    ])
+      .then(([departments, titles, researchGroups, allPeople]) => {
+        setOptions({
+          department: departments,
+          jobtitle: titles,
+          researchgroup: researchGroups,
+        });
+        setPeople(allPeople);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch reference data:", error);
       });
-      setPeople(allPeople);
-    });
   }, []);
 
   useEffect(() => {

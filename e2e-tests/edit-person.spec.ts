@@ -19,31 +19,51 @@ test("edit person modal opens when edit button is clicked", async ({
   page,
 }) => {
   await openSidePanel(page);
-  await page.locator(".edit-person-button").first().click();
-  await expect(page.locator(".personmodal-overlay")).toBeVisible();
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 });
 
 test("clicking outside edit person modal triggers cancel confirmation dialog", async ({
   page,
 }) => {
   await openSidePanel(page);
-  await page.locator(".edit-person-button").first().click();
-
-  // Click on overlay background outside the topbar and modal (top-left corner)
   await page
-    .locator(".personmodal-overlay")
-    .click({ position: { x: 200, y: 200 } });
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
 
-  await expect(page.locator(".confirmation-title")).toBeVisible();
+  // TODO: add semantic clicking target
+  const modalBox = await page.locator(".personmodal-content").boundingBox();
+  expect(modalBox).not.toBeNull();
+  if (!modalBox) {
+    throw new Error("Person modal content bounding box not found");
+  }
+
+  const clickX = Math.max(5, modalBox.x - 20);
+  const clickY = modalBox.y + modalBox.height / 2;
+  await page.mouse.click(clickX, clickY);
+
+  await expect(
+    page.getByRole("heading", { name: "Sulje ilman tallennusta?" }),
+  ).toBeVisible();
 });
 
 test("edit person save button is disabled when required fields are empty", async ({
   page,
 }) => {
   await openSidePanel(page);
-  await page.locator(".edit-person-button").first().click();
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 
   const firstNameInput = page.locator('input[name="firstName"]');
   await firstNameInput.clear();
@@ -56,11 +76,16 @@ test("cancelling edit person without saving closes the modal", async ({
   page,
 }) => {
   await openSidePanel(page);
-  await page.locator(".edit-person-button").first().click();
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 
-  await page.locator(".personmodal-close-button").click();
-  await page.locator(".confirmation-button", { hasText: "Kyllä" }).click();
+  await page.getByRole("button", { name: /^sulje$/i }).click();
+  await page.getByRole("button", { name: "Kyllä" }).click();
 
   await expect(page.locator(".personmodal-content")).not.toBeVisible();
   await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
@@ -70,17 +95,24 @@ test("cancelling from confirmation modal keeps the edit person modal open", asyn
   page,
 }) => {
   await openSidePanel(page);
-  await page.locator(".edit-person-button").first().click();
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 
   const firstNameInput = page.locator('input[name="firstName"]');
   await firstNameInput.clear();
   await firstNameInput.fill("Uusi nimi");
 
   await page.locator(".personmodal-save-button").click();
-  await page.locator(".confirmation-button", { hasText: "Peruuta" }).click();
+  await page.getByRole("button", { name: "Peruuta" }).click();
 
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 });
 
 test("editing and saving person details displays updated info in the room list", async ({
@@ -88,8 +120,13 @@ test("editing and saving person details displays updated info in the room list",
 }) => {
   await openSidePanel(page);
 
-  await page.locator(".edit-person-button").first().click();
-  await expect(page.locator(".personmodal-content")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Muokkaa henkilön tietoja" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).toBeVisible();
 
   const firstNameInput = page.locator('input[name="firstName"]');
   const lastNameInput = page.locator('input[name="lastName"]');
@@ -100,13 +137,15 @@ test("editing and saving person details displays updated info in the room list",
   await lastNameInput.clear();
   await lastNameInput.fill("Uusi sukunimi");
 
-  await page.locator(".personmodal-save-button").click();
-  await page.locator(".confirmation-button", { hasText: "Tallenna" }).click();
+  await page.getByRole("button", { name: "Tallenna" }).click();
+  const dialog = page.getByRole("alertdialog");
+  await dialog.getByRole("button", { name: "Tallenna" }).click();
 
-  await expect(page.locator(".personmodal-content")).not.toBeVisible();
-  await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Muokkaa henkilöä" }),
+  ).not.toBeVisible();
 
-  await expect(page.locator("details .person-name").first()).toContainText(
-    "Uusi nimi Uusi sukunimi",
-  );
+  await expect(
+    page.getByRole("heading", { name: "Uusi sukunimi Uusi nimi" }),
+  ).toBeVisible();
 });

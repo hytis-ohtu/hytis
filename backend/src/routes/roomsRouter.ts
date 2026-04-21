@@ -161,7 +161,14 @@ router.put(
       });
 
       await room.reload({
-        attributes: ["id", "name", "area", "freeText", "capacity", "roomTypeId"],
+        attributes: [
+          "id",
+          "name",
+          "area",
+          "freeText",
+          "capacity",
+          "roomTypeId",
+        ],
         include: [
           {
             model: Department,

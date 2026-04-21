@@ -5,23 +5,29 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 
 test("remove button is visible for each occupant", async ({ page }) => {
   await openSidePanel(page);
-  await expect(page.locator(".remove-person-button").first()).toBeVisible();
-});
-
-test("confirming remove removes the person from the list", async ({ page }) => {
-  await openSidePanel(page);
-  const name = await page.locator("details .person-name").first().innerText();
-  await page.locator(".remove-person-button").first().click();
-  await page.getByRole("button", { name: "Poista" }).click();
   await expect(
-    page.locator(".person-name", { hasText: name }),
-  ).not.toBeVisible();
+    page.getByRole("button", { name: /poista henkilö/i }),
+  ).toHaveCount(3);
 });
 
-test("cancelling remove keeps the person in the list", async ({ page }) => {
+test("removing a person removes them from the list", async ({ page }) => {
   await openSidePanel(page);
-  const name = await page.locator("details .person-name").first().innerText();
-  await page.locator(".remove-person-button").first().click();
+  const firstContract = page.getByRole("article").first();
+  const name = await firstContract
+    .getByRole("heading", { level: 3 })
+    .innerText();
+  await firstContract.getByRole("button", { name: /poista henkilö/i }).click();
+  await page.getByRole("button", { name: /^poista$/i }).click();
+  await expect(page.getByRole("article", { name })).not.toBeVisible();
+});
+
+test("cancelling deletion keeps the person in the list", async ({ page }) => {
+  await openSidePanel(page);
+  const firstContract = page.getByRole("article").first();
+  const name = await firstContract
+    .getByRole("heading", { level: 3 })
+    .innerText();
+  await firstContract.getByRole("button", { name: /poista henkilö/i }).click();
   await page.getByRole("button", { name: "Peruuta" }).click();
-  await expect(page.locator(".person-name", { hasText: name })).toBeVisible();
+  await expect(page.getByRole("article", { name })).toBeVisible();
 });

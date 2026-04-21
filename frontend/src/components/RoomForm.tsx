@@ -53,9 +53,13 @@ function RoomForm({ initial, onChange }: RoomFormProps) {
     Promise.all([
       findAllDepartments(),
       findAllRoomTypes(), // Add this
-    ]).then(([departments, roomTypes]) =>
-      setOptions({ department: departments, roomType: roomTypes }),
-    );
+    ])
+      .then(([departments, roomTypes]) =>
+        setOptions({ department: departments, roomType: roomTypes }),
+      )
+      .catch((error) => {
+        console.error("Failed to fetch reference data:", error);
+      });
   }, []);
 
   useEffect(() => {

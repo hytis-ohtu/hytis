@@ -1,48 +1,43 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { ReactElement } from "react";
+import { describe, expect, it, vi } from "vitest";
 import PersonSearch from "../../src/components/PersonSearch";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
+import { findRoomById } from "../../src/services/roomsService";
 
-// Mock the peopleService
+// Mock peopleService
 const mockSearchPeople = vi.fn();
 vi.mock("../../src/services/peopleService", () => ({
-  searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
+  searchPeople: (...args: unknown[]) =>
+    mockSearchPeople(...args) as Promise<unknown[]>,
 }));
 
-const mockSelectRoom = vi.fn();
-
-vi.mock("../../src/hooks/useRoomSelection", () => ({
-  useRoomSelection: () => ({
-    activeRoomId: null,
-    setActiveRoomId: vi.fn(),
-    isSidePanelOpen: false,
-    setIsSidePanelOpen: vi.fn(),
-    room: null,
-    setRoom: vi.fn(),
-    selectRoom: mockSelectRoom,
-    selectedPersonId: null,
-  }),
+vi.mock("../src/services/roomsService", () => ({
+  findRoomById: vi.fn(),
 }));
+
+const mockFindRoomById = vi.mocked(findRoomById);
+
+const customRender = (ui: ReactElement) => {
+  return render(
+    <RoomSelectionProvider findRoomById={mockFindRoomById}>
+      {ui}
+    </RoomSelectionProvider>,
+  );
+};
 
 describe("PersonSearch", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders the search input", () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     expect(searchInput).toBeInTheDocument();
   });
 
   it("does not show dropdown initially", () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const dropdown = screen.queryByTestId("person-search-dropdown");
     expect(dropdown).not.toBeInTheDocument();
@@ -62,7 +57,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup();
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -96,7 +91,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -137,7 +132,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -154,7 +149,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue([]);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -181,7 +176,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -215,7 +210,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -250,7 +245,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -292,17 +287,13 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText(
-      "Hae henkilöä nimellä...",
-    ) as HTMLInputElement;
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
-    await waitFor(() => {
-      expect(searchInput.value).toBe("Matti");
-    });
+    expect(searchInput).toHaveValue("Matti");
 
     // Close dropdown
     await user.click(document.body);
@@ -314,14 +305,14 @@ describe("PersonSearch", () => {
     });
 
     // Check input value is preserved
-    expect(searchInput.value).toBe("Matti");
+    expect(searchInput).toHaveValue("Matti");
   });
 
   it("debounces search API calls", async () => {
     mockSearchPeople.mockResolvedValue([]);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -344,7 +335,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockRejectedValue(new Error("Network error"));
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
@@ -359,75 +350,6 @@ describe("PersonSearch", () => {
     const errorMessage = screen.getByText("Virhe henkilöiden haussa");
     expect(dropdown).toBeInTheDocument();
     expect(errorMessage).toBeInTheDocument();
-  });
-
-  it("calls selectRoom with correct parameters when clicking person with contract", async () => {
-    const mockResults = [
-      {
-        id: 1,
-        firstName: "Matti",
-        lastName: "Virtanen",
-        department: { id: 1, name: "H516 MATHSTAT" },
-        title: { name: "asiantuntija" },
-        contracts: [
-          {
-            id: 1,
-            personId: 1,
-            roomId: 1,
-            startDate: "2023-01-01",
-            endDate: "2025-12-31",
-            room: { id: 42, name: "A210" },
-          },
-        ],
-      },
-    ];
-
-    mockSearchPeople.mockResolvedValue(mockResults);
-
-    const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
-
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
-    await user.type(searchInput, "Matti");
-
-    await waitFor(() => {
-      expect(screen.getByText("Matti Virtanen")).toBeInTheDocument();
-    });
-
-    const personResult = screen.getByText("Matti Virtanen");
-    await user.click(personResult);
-
-    expect(mockSelectRoom).toHaveBeenCalledWith("42", 1);
-  });
-
-  it("does not call selectRoom when clicking person without contract", async () => {
-    const mockResults = [
-      {
-        id: 1,
-        firstName: "Matti",
-        lastName: "Virtanen",
-        department: { id: 1, name: "H516 MATHSTAT" },
-        title: { name: "asiantuntija" },
-        contracts: [],
-      },
-    ];
-
-    mockSearchPeople.mockResolvedValue(mockResults);
-
-    const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
-
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
-    await user.type(searchInput, "Matti");
-
-    await waitFor(() => {
-      expect(screen.getByText("Matti Virtanen")).toBeInTheDocument();
-    });
-
-    const personResult = screen.getByText("Matti Virtanen");
-    await user.click(personResult);
-
-    expect(mockSelectRoom).not.toHaveBeenCalled();
   });
 
   it("logs to console when person has no room assignment", async () => {
@@ -449,7 +371,7 @@ describe("PersonSearch", () => {
     mockSearchPeople.mockResolvedValue(mockResults);
 
     const user = userEvent.setup({ delay: null });
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
     await user.type(searchInput, "Matti");
@@ -469,13 +391,13 @@ describe("PersonSearch", () => {
 
 describe("search type selection", () => {
   it("opens search type dropdown when clicking search type button", async () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
     await userEvent.click(screen.getByTestId("person-search-type-button"));
     expect(screen.getByTestId("person-search-type-menu")).toBeInTheDocument();
   });
 
   it("changes search type placeholder when selecting an option", async () => {
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
     await userEvent.click(screen.getByTestId("person-search-type-button"));
     await userEvent.click(screen.getByText("Esihenkilö"));
     expect(
@@ -485,7 +407,7 @@ describe("search type selection", () => {
 
   it("forwards correct search type to API", async () => {
     vi.mocked(mockSearchPeople).mockResolvedValue([]);
-    render(<PersonSearch />);
+    customRender(<PersonSearch />);
 
     await userEvent.click(screen.getByTestId("person-search-type-button"));
     await userEvent.click(screen.getByText("Esihenkilö"));

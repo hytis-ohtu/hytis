@@ -4,7 +4,6 @@
     // File Layout
     // "rootDir": "./src",
     "outDir": "./build",
-
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "node16",
@@ -12,23 +11,25 @@
     "esModuleInterop": true,
     "moduleResolution": "node16",
     "isolatedModules": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["jest", "node"],
-    //"types": [],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
-
     // Other Outputs
     // "sourceMap": true,
     // "declaration": true,
     // "declarationMap": true,
-
     // Stricter Typechecking Options
     // "noUncheckedIndexedAccess": true,
     // "exactOptionalPropertyTypes": true,
-
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
@@ -36,7 +37,6 @@
     // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
-
     // Recommended Options
     "strict": true,
     //"jsx": "react-jsx",
@@ -46,5 +46,8 @@
     // "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ]
 }

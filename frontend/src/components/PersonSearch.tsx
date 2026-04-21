@@ -71,7 +71,7 @@ function PersonSearch() {
 
     // Debounce search to avoid too many API calls
     const timeoutId = setTimeout(() => {
-      search();
+      void search();
     }, 300);
 
     return () => clearTimeout(timeoutId);
@@ -100,19 +100,12 @@ function PersonSearch() {
   };
 
   const handlePersonClick = (person: Person) => {
-    // Get the person's first contract (regardless of end date for demo purposes)
-    const contract =
-      person.contracts && person.contracts.length > 0
-        ? person.contracts[0]
-        : null;
+    const contract = person.contracts?.[0];
 
-    if (contract?.room) {
-      // Select the room and pass person ID to auto-expand their details
-      selectRoom(String(contract.room.id), person.id);
+    if (contract) {
+      void selectRoom(contract.room.id, person.id);
     } else {
-      // Person has no room - show notification
       console.log("Person has no room assignment");
-      // Could add a toast notification here
     }
   };
 
@@ -188,7 +181,7 @@ function PersonSearch() {
               </div>
             ) : results.length === 0 ? (
               <div className="person-search-no-results">
-                Ei tuloksia haulle "{query}"
+                Ei tuloksia haulle {`"${query}"`}
               </div>
             ) : null}
 
@@ -198,17 +191,15 @@ function PersonSearch() {
                 className="person-search-result"
                 onClick={() => handlePersonClick(person)}
               >
+                {person.contracts?.[0] && (
+                  <span className="person-search-result-room">
+                    {person.contracts[0].room.name}
+                  </span>
+                )}
                 <div className="person-search-result-name">
                   {person.firstName} {person.lastName}
                 </div>
                 <div className="person-search-result-details">
-                  {person.contracts &&
-                    person.contracts.length > 0 &&
-                    person.contracts[0].room && (
-                      <span className="person-search-result-room">
-                        {person.contracts[0].room.name}
-                      </span>
-                    )}
                   {person.title?.name && (
                     <span className="person-search-result-title">
                       {person.title.name}

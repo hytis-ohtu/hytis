@@ -19,7 +19,12 @@ export default function ConfirmDialog({
   if (!open) return null;
   return (
     <div className="confirmation-overlay" onClick={onCancel}>
-      <div className="confirmation-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="confirmation-modal"
+        role="alertdialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="confirmation-title">{title}</h2>
         <div className="confirmation-buttons">
           <button className="confirmation-button" onClick={onConfirm}>

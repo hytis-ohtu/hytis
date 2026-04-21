@@ -293,7 +293,7 @@ describe("peopleService", () => {
   });
 
   describe("searchPeople", () => {
-    it("calls the correct API endpoint with query parameter", async () => {
+    it("calls the correct API endpoint with axios params", async () => {
       const mockResponse = {
         data: [
           {
@@ -306,11 +306,11 @@ describe("peopleService", () => {
         ],
       };
 
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
+      mockedAxios.get = vi.fn().mockResolvedValue(mockResponse);
 
       const result = await searchPeople("Matti");
 
-      expect(axios.get).toHaveBeenCalledWith("/api/people", {
+      expect(mockedAxios.get).toHaveBeenCalledWith("/api/people", {
         params: {
           q: "Matti",
           type: "personName",
@@ -319,37 +319,9 @@ describe("peopleService", () => {
       expect(result).toEqual(mockResponse.data);
     });
 
-    it("encodes query parameters correctly", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("Matti Meikäläinen");
-
-      expect(axios.get).toHaveBeenCalledWith("/api/people", {
-        params: {
-          q: "Matti Meikäläinen",
-          type: "personName",
-        },
-      });
-    });
-
-    it("handles special characters in search query", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("Ölä Åå");
-
-      expect(axios.get).toHaveBeenCalledWith("/api/people", {
-        params: {
-          q: "Ölä Åå",
-          type: "personName",
-        },
-      });
-    });
-
     it("returns empty array when no results found", async () => {
       const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
+      mockedAxios.get = vi.fn().mockResolvedValue(mockResponse);
 
       const result = await searchPeople("Nonexistent");
 
@@ -358,23 +330,9 @@ describe("peopleService", () => {
 
     it("throws error when API call fails", async () => {
       const mockError = new Error("Network error");
-      vi.mocked(axios.get).mockRejectedValue(mockError);
+      mockedAxios.get = vi.fn().mockRejectedValue(mockError);
 
       await expect(searchPeople("Matti")).rejects.toThrow("Network error");
-    });
-
-    it("includes the base URL from constants", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("test");
-
-      expect(axios.get).toHaveBeenCalledWith("/api/people", {
-        params: {
-          q: "test",
-          type: "personName",
-        },
-      });
     });
   });
 });
