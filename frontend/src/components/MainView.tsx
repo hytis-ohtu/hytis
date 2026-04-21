@@ -10,13 +10,8 @@ import SidePanel from "./SidePanel";
 import ZoomButtons from "./ZoomButtons";
 
 function MainView() {
-  const {
-    mapContainer,
-    inputContainer,
-    hasMoved,
-    handleZoomFunc,
-    handleResetFunc,
-  } = useMapTransform();
+  const { mapContainer, inputContainer, hasMoved, handleZoom } =
+    useMapTransform();
 
   const { useAvailability, setUseAvailability } = useRoomProperties();
   const { activeRoom, selectRoom, activeRoomId } = useRoomSelection();
@@ -47,7 +42,7 @@ function MainView() {
         </div>
       </div>
 
-      <ZoomButtons handleZoom={handleZoomFunc} handleReset={handleResetFunc} />
+      <ZoomButtons onZoom={handleZoom} />
 
       <ColorToggle
         useAvailability={useAvailability}

@@ -40,23 +40,21 @@ export function useMapTransform() {
   });
   const scale = useRef<number>(DEFAULT_SCALE);
 
-  function handleButtonZoom(e: React.MouseEvent, dir: number) {
+  function handleButtonZoom(zoom: boolean) {
     if (!mapRef.current) return;
     const map = mapRef.current;
-
-    e.preventDefault();
-    e.stopPropagation();
 
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
 
     const speedEqualizer = Math.max(scale.current, 1);
-    const zoomAmount = -dir * speedEqualizer * BUTTON_SENSITIVITY;
+    const zoomAmount = zoom
+      ? speedEqualizer * BUTTON_SENSITIVITY
+      : -speedEqualizer * BUTTON_SENSITIVITY;
 
     let newScale = scale.current + zoomAmount;
 
-    if (newScale > MAX_ZOOM) newScale = MAX_ZOOM;
-    else if (newScale < MIN_ZOOM) newScale = MIN_ZOOM;
+    newScale = Math.min(Math.max(newScale, MIN_ZOOM), MAX_ZOOM);
 
     let xPos = Number(map.style.left.replace("px", ""));
     let yPos = Number(map.style.top.replace("px", ""));
@@ -88,24 +86,6 @@ export function useMapTransform() {
     map.style.left = `${xPos}px`;
     map.style.top = `${yPos}px`;
     map.style.scale = `${newScale}`;
-  }
-
-  function handleButtonReset(e: React.MouseEvent) {
-    if (!mapRef.current) return;
-    const map = mapRef.current;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    scale.current = 0.9;
-    coords.current.startX = 0;
-    coords.current.startY = 0;
-    coords.current.lastX = 0;
-    coords.current.lastY = 0;
-
-    map.style.left = `${0}px`;
-    map.style.top = `${0}px`;
-    map.style.scale = `${DEFAULT_SCALE}`;
   }
 
   function setHover(state: boolean) {
@@ -255,7 +235,6 @@ export function useMapTransform() {
     mapContainer: mapRef,
     inputContainer: inputContainerRef,
     hasMoved: isMapMoved,
-    handleZoomFunc: handleButtonZoom,
-    handleResetFunc: handleButtonReset,
+    handleZoom: handleButtonZoom,
   };
 }
