@@ -4,37 +4,37 @@ import {
 } from "../hooks/useRoomProperties";
 import "./Legend.css";
 
-type LegendMode = "availability" | "department";
+type Mode = "availability" | "department";
 
-interface LegendProps {
-  mode: LegendMode;
-}
+type Entry = { name: string; color: string };
 
-export default function Legend({ mode }: LegendProps) {
-  const availabilityEntries = [
+const ModeEntries: Record<Mode, Entry[]> = {
+  availability: [
     { name: "Tyhjä", color: AvailabilityColors.available },
     { name: "Tilaa", color: AvailabilityColors.limited },
     { name: "Täynnä", color: AvailabilityColors.full },
-  ];
+  ],
+  department: Array.from(DepartmentColors.entries()).map(([name, color]) => ({
+    name,
+    color,
+  })),
+};
 
-  const departmentEntries = Array.from(DepartmentColors.entries()).map(
-    ([name, color]) => ({ name, color }),
-  );
+interface LegendProps {
+  mode: Mode;
+}
 
-  const entries =
-    mode === "availability" ? availabilityEntries : departmentEntries;
+export default function Legend({ mode }: LegendProps) {
+  const entries = ModeEntries[mode];
 
   return (
-    <div className="legend" data-testid="legend">
+    <dl className="legend">
       {entries.map((entry) => (
-        <div key={entry.name} className="legend-item">
-          <span
-            className="legend-color-box"
-            style={{ backgroundColor: entry.color }}
-          />
-          <span className="legend-label">{entry.name}</span>
+        <div key={entry.color} className="legend-item">
+          <dt aria-label={entry.name} style={{ background: entry.color }} />
+          <dd>{entry.name}</dd>
         </div>
       ))}
-    </div>
+    </dl>
   );
 }

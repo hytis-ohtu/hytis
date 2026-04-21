@@ -15,8 +15,8 @@
   --color-secondary-skeleton-highlight: #efd1a9;
 
   /* Borders */
-  --border-radius-md: 4px;
-  --border-radius-sm: 2px;
+  --border-radius-md: 6px;
+  --border-radius-sm: 4px;
   --gap: 12px;
   --padding: 8px;
   --transition-fast: 0.15s;
