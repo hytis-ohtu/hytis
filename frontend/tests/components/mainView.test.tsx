@@ -16,8 +16,9 @@ import {
 import {
   AvailabilityColors,
   getDepartmentColor,
-} from "../../src/hooks/useRoomColors.ts";
-import { findAllRooms, findRoomById } from "../../src/services/roomsService.ts";
+  updateRooms,
+} from "../../src/hooks/useRoomProperties";
+import { findAllRooms, findRoomById } from "../../src/services/roomsService";
 import { rooms } from "../testData.ts";
 
 vi.mock("../../src/contexts/AuthContext", () => ({
@@ -64,33 +65,69 @@ describe("MainView", () => {
     render(<MainView />);
     expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
   });
-
-  it("maps rooms data correctly to SVG elements", async () => {
+  
+  it("room structure is correct", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+    
+    await waitFor(() => {
+      const room1 = document.querySelector('[data-room="A210"]');
+      expect(room1).toHaveAttribute("id", "1");
+      expect(room1).toHaveClass("room");
+      expect(room1?.parentElement).toHaveClass("room-group");
+      expect(room1?.nextSibling).toHaveClass("room-label");
+      
+      const room2 = document.querySelector('[data-room="A211"]');
+      expect(room2).toHaveAttribute("id", "2");
+      expect(room2).toHaveClass("room");
+      expect(room2?.parentElement).toHaveClass("room-group");
+      expect(room2?.nextSibling).toHaveClass("room-label");
+      
+      const room3 = document.querySelector('[data-room="A212"]');
+      expect(room3).toHaveAttribute("id", "3");
+      expect(room3).toHaveClass("room");
+      expect(room3?.parentElement).toHaveClass("room-group");
+      expect(room3?.nextSibling).toHaveClass("room-label");
+    });
+  });
+  
+  it("maps text to rooms correctly", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+    
+    await waitFor(() => {
+      const room1 = document.querySelector('[data-room="A210"]');
+      expect(room1?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[0].name);
+      expect(room1?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[0].area + "m²");
+      expect(room1?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[0].contracts.length + "/" + rooms[0].capacity);
+      
+      const room2 = document.querySelector('[data-room="A211"]');
+      expect(room2?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[1].name);
+      expect(room2?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[1].area + "m²");
+      expect(room2?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[1].contracts.length + "/" + rooms[1].capacity);
+      
+      const room3 = document.querySelector('[data-room="A212"]');
+      expect(room3?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[2].name);
+      expect(room3?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[2].area + "m²");
+      expect(room3?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[2].contracts.length + "/" + rooms[2].capacity);
+    });
+  });
+  
+  it("maps colors to rooms correctly", async () => {
     vi.mocked(findAllRooms).mockResolvedValue(rooms);
     render(<MainView />);
 
     await waitFor(() => {
-      const availableRoom = document.querySelector(
-        '[data-room="A210"]',
-      ) as SVGGraphicsElement;
-      expect(availableRoom).toHaveAttribute("id", "1");
-      expect(availableRoom).toHaveClass("room");
-      expect(availableRoom).toHaveStyle(
-        `fill: ${AvailabilityColors["available"]}`,
-      );
+      const availableRoom = document.querySelector('[data-room="A210"]');
+      expect(availableRoom).toHaveClass("available");
+      expect(availableRoom).toHaveStyle(`fill: ${AvailabilityColors["available"]}`);
 
-      const limitedRoom = document.querySelector(
-        '[data-room="A211"]',
-      ) as SVGGraphicsElement;
-      expect(limitedRoom).toHaveAttribute("id", "2");
-      expect(limitedRoom).toHaveClass("room");
+      const limitedRoom = document.querySelector('[data-room="A211"]');
+      expect(limitedRoom).toHaveClass("limited");
       expect(limitedRoom).toHaveStyle(`fill: ${AvailabilityColors["limited"]}`);
 
-      const fullRoom = document.querySelector(
-        '[data-room="A212"]',
-      ) as SVGGraphicsElement;
-      expect(fullRoom).toHaveAttribute("id", "3");
-      expect(fullRoom).toHaveClass("room");
+      const fullRoom = document.querySelector('[data-room="A212"]');
+      expect(fullRoom).toHaveClass("full");
       expect(fullRoom).toHaveStyle(`fill: ${AvailabilityColors["full"]}`);
     });
   });
@@ -109,6 +146,165 @@ describe("MainView", () => {
       expect(room).toHaveStyle(
         `fill: ${getDepartmentColor(rooms[0].department.name)}`,
       );
+    });
+  });
+  
+  it("room doesn't change from updating when nothing was changed", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    render(<MainView />);
+    
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A212"]');
+      
+      expect(room?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[2].name);
+      expect(room?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[2].area + "m²");
+      expect(room?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[2].contracts.length + "/" + rooms[2].capacity);
+      
+      expect(room).toHaveClass("full");
+      expect(room).toHaveStyle(`fill: ${AvailabilityColors["full"]}`);
+    });
+    
+    vi.mocked(findAllRooms).mockResolvedValue(rooms);
+    updateRooms(true);
+    
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A212"]');
+      
+      expect(room?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[2].name);
+      expect(room?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[2].area + "m²");
+      expect(room?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[2].contracts.length + "/" + rooms[2].capacity);
+      
+      expect(room).toHaveClass("full");
+      expect(room).toHaveStyle(`fill: ${AvailabilityColors["full"]}`);
+    });
+  });
+  
+  it("room updates correctly when contract is removed", async () => {
+    vi.mocked(findAllRooms).mockResolvedValue([
+      {
+        id: 3,
+        name: "A212",
+        area: "9.70",
+        capacity: 2,
+        freeText: "",
+        roomType: { id: 0, name: "" },
+        department: {
+          id: 1,
+          name: "H516 MATHSTAT",
+        },
+        contracts: [
+          {
+            id: 6,
+            startDate: "2024-01-15",
+            endDate: "2025-12-31",
+            person: {
+              id: 6,
+              firstName: "Päivi",
+              lastName: "Koskinen",
+              freeText: null,
+              department: {
+                id: 2,
+                name: "H523 CS",
+              },
+              title: {
+                id: 6,
+                name: "asiantuntija",
+              },
+              researchGroup: {
+                id: 2,
+                name: "Ohjelmistotekniikan tutkimusryhmä",
+              },
+            },
+          },
+          {
+            id: 7,
+            startDate: "2023-09-01",
+            endDate: "2025-08-31",
+            person: {
+              id: 7,
+              firstName: "Robert",
+              lastName: "Miller",
+              freeText: null,
+              department: {
+                id: 1,
+                name: "H516 MATHSTAT",
+              },
+              title: {
+                id: 7,
+                name: "harjoittelija",
+              },
+              researchGroup: {
+                id: 1,
+                name: "Algebrallisten rakenteiden tutkimusryhmä",
+              },
+            },
+          },
+        ],
+      }
+    ]);
+    render(<MainView />);
+    
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A212"]');
+      
+      expect(room?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[2].name);
+      expect(room?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[2].area + "m²");
+      expect(room?.nextSibling?.childNodes[2]).toHaveTextContent(rooms[2].contracts.length + "/" + rooms[2].capacity);
+      
+      expect(room).toHaveClass("full");
+      expect(room).toHaveStyle(`fill: ${AvailabilityColors["full"]}`);
+    });
+    
+    vi.mocked(findAllRooms).mockResolvedValue([
+      {
+        id: 3,
+        name: "A212",
+        area: "9.70",
+        capacity: 2,
+        freeText: "",
+        roomType: { id: 0, name: "" },
+        department: {
+          id: 1,
+          name: "H516 MATHSTAT",
+        },
+        contracts: [
+          {
+            id: 7,
+            startDate: "2023-09-01",
+            endDate: "2025-08-31",
+            person: {
+              id: 7,
+              firstName: "Robert",
+              lastName: "Miller",
+              freeText: null,
+              department: {
+                id: 1,
+                name: "H516 MATHSTAT",
+              },
+              title: {
+                id: 7,
+                name: "harjoittelija",
+              },
+              researchGroup: {
+                id: 1,
+                name: "Algebrallisten rakenteiden tutkimusryhmä",
+              },
+            },
+          },
+        ],
+      }
+    ]);
+    updateRooms(true);
+    
+    await waitFor(() => {
+      const room = document.querySelector('[data-room="A212"]');
+      
+      expect(room?.nextSibling?.childNodes[0]).toHaveTextContent(rooms[2].name);
+      expect(room?.nextSibling?.childNodes[1]).toHaveTextContent(rooms[2].area + "m²");
+      expect(room?.nextSibling?.childNodes[2]).toHaveTextContent(`${rooms[2].contracts.length - 1}` + "/" + rooms[2].capacity);
+      
+      expect(room).toHaveClass("limited");
+      expect(room).toHaveStyle(`fill: ${AvailabilityColors["limited"]}`);
     });
   });
 

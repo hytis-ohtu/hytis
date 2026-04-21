@@ -138,7 +138,7 @@ function PersonSearch() {
             onClick={() => setIsTypeMenuOpen((prev) => !prev)}
             data-testid="person-search-type-button"
           >
-            <SlidersHorizontal size={16} />
+            <SlidersHorizontal size={24} strokeWidth={1.7} />
           </button>
 
           {isTypeMenuOpen && (

@@ -29,7 +29,7 @@ const RoomSchema = z.object({
     .optional(),
   departmentId: z.number().nullable().optional(),
   freeText: z.string().nullable().optional(),
-  roomType: z.string().nullable().optional(),
+  roomTypeId: z.number().nullable().optional(),
 });
 
 export type RoomInput = z.infer<typeof RoomSchema>;

@@ -43,6 +43,11 @@ export interface Contract {
   room?: Room;
 }
 
+export interface RoomType {
+  id: number;
+  name: string;
+}
+
 export interface Room {
   id: number;
   name: string;
@@ -51,10 +56,25 @@ export interface Room {
   department: Department;
   contracts: Contract[];
   freeText: string;
-  roomType: string;
+  roomType: RoomType;
 }
 
 export interface FieldProps {
   label: string;
   value: string | null | undefined;
+}
+
+export interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  uid?: string;
+}
+
+export interface AuthContextType {
+  user: UserData | null;
+  isLoading: boolean;
+  needsLogin: boolean;
+  logout: () => Promise<void>;
+  login: () => void;
 }

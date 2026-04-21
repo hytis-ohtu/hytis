@@ -1,12 +1,8 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { createContract } from "../services/contractsService";
-import {
-  addPerson,
-  editPerson,
-  removeContract,
-} from "../services/peopleService";
+import { createContract, removeContract } from "../services/contractsService";
+import { addPerson, editPerson } from "../services/peopleService";
 import type { Contract, FieldProps, Person, Room } from "../types";
 import ConfirmationDialog from "./ConfirmationDialog";
 import PersonModal from "./PersonModal";

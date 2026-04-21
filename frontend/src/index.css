@@ -1,12 +1,13 @@
 :root {
   /* Colors */
   --color-primary: #e5bb83;
-  --color-topbar: rgb(72, 72, 72);
-  --color-secondary: #cec9e0;
+  --color-topbar: rgb(32, 32, 32);
+  --color-secondary: #ffefd9;
   --color-text-black: #0d0b15;
   --color-text-white: #fff;
   --color-background: #fff;
-  --color-muted: #ccc;
+  --color-background-gray: #edebeb;
+  --color-muted: #0d0b1594;
 
   /* Borders */
   --border-radius-md: 4px;
@@ -30,8 +31,8 @@
   --box-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --box-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
 
-  --topbar-height: 64px;
-  --button-size: 44px;
+  --topbar-height: 52px;
+  --button-size: 50px;
   --z-index-topbar: 1000;
 
   /* border */
@@ -46,4 +47,5 @@
 
 body {
   margin: 0;
+  overflow: hidden;
 }

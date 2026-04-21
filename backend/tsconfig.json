@@ -7,11 +7,13 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "commonjs",
+    "module": "node16",
     "target": "ES2020",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
+    "isolatedModules": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["jest", "node"],
     //"types": [],
     // For nodejs:
     // "lib": ["esnext"],
