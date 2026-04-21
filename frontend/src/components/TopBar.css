@@ -6,13 +6,10 @@
   width: 100%;
   height: var(--topbar-height);
   background: var(--color-topbar);
-  border-bottom: var(--border-md);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  padding: 0px;
-  padding-right: 0px;
-  column-gap: var(--gap);
+  box-shadow: var(--box-shadow-sm);
   z-index: var(--z-index-topbar);
 }
 
@@ -26,7 +23,6 @@
 
 .topbar-actions {
   display: flex;
-  gap: 0px;
   flex-shrink: 0;
   justify-self: end;
 }
@@ -34,14 +30,11 @@
 .topbar-search {
   width: 100%;
   height: 100%;
-  justify-self: center;
   display: flex;
-  justify-content: center;
-  border: 0px;
 }
 
 .topbar-button {
-  width: calc(var(--topbar-height));
+  width: var(--topbar-height);
   border: var(--border-sm);
   border-bottom: var(--border-md);
   aspect-ratio: 1;
@@ -65,13 +58,4 @@
   transform: scale(0.98);
   background: var(--color-muted);
   color: var(--color-text-black);
-}
-
-.topbar-profile {
-  background: var(--color-topbar);
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text-black);
-  letter-spacing: 0.02em;
 }
