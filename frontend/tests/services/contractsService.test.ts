@@ -1,6 +1,9 @@
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createContract } from "../../src/services/contractsService";
+import {
+  createContract,
+  removeContract,
+} from "../../src/services/contractsService";
 
 vi.mock("axios", () => ({
   default: {
@@ -65,5 +68,21 @@ describe("contractService", () => {
 
       expect(result).toBeUndefined();
     });
+  });
+});
+
+describe("removeContract", () => {
+  it("calls the correct endpoint", async () => {
+    mockedAxios.delete = vi.fn().mockResolvedValue({});
+
+    await removeContract(42);
+
+    expect(mockedAxios.delete).toHaveBeenCalledWith("/api/contracts/42");
+  });
+
+  it("propagates errors from the API", async () => {
+    mockedAxios.delete = vi.fn().mockRejectedValue(new Error("Network error"));
+
+    await expect(removeContract(42)).rejects.toThrow("Network error");
   });
 });

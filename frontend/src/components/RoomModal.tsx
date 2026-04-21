@@ -55,8 +55,8 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
     <div className="roommodal-overlay" onClick={requestClose}>
       <div className="roommodal-content" onClick={(e) => e.stopPropagation()}>
         <button
-          aria-label="close"
           className="roommodal-close-button"
+          aria-label="Sulje"
           onClick={requestClose}
         >
           <X size={16} />

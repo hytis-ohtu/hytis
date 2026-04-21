@@ -8,7 +8,7 @@ export interface Title {
   name: string;
 }
 
-export interface researchGroup {
+export interface RoomType {
   id: number;
   name: string;
 }
@@ -18,43 +18,59 @@ export interface ResearchGroup {
   name: string;
 }
 
-export interface PersonSupervisor {
-  supervisorId: number;
-  subordinateId: number;
+export interface Room {
+  id: number;
+  name: string;
+  area: string | null;
+  capacity: number | null;
+  freeText: string | null;
+  roomType: RoomType | null;
+  department: Department | null;
+  contracts: RoomContract[];
 }
 
 export interface Person {
   id: number;
   firstName: string;
   lastName: string;
-  department?: Department | null;
+  freeText?: string | null;
   researchGroup?: ResearchGroup | null;
+  department?: Department | null;
   title?: Title | null;
   supervisors?: Person[];
-  freeText?: string | null;
-  contracts?: Contract[];
+  contracts?: PersonContract[];
+}
+
+export interface PersonSupervisor {
+  supervisorId: number;
+  subordinateId: number;
 }
 
 export interface Contract {
   id: number;
-  startDate: string;
-  endDate: string;
-  person?: Person;
-  room?: Room;
+  startDate: string | null;
+  endDate: string | null;
 }
 
-export interface Room {
-  id: number;
+export interface RoomContract extends Contract {
+  person: Person;
+}
+
+export interface PersonContract extends Contract {
+  room: Room;
+}
+
+export interface UserData {
+  id: string;
   name: string;
-  area: string;
-  capacity: number;
-  department: Department;
-  contracts: Contract[];
-  freeText: string;
-  roomType: string;
+  email: string;
+  uid?: string;
 }
 
-export interface FieldProps {
-  label: string;
-  value: string | null | undefined;
+export interface AuthContextType {
+  user: UserData | null;
+  isLoading: boolean;
+  needsLogin: boolean;
+  logout: () => Promise<void>;
+  login: () => void;
 }

@@ -14,3 +14,7 @@ export async function createContract(
     endDate: endDate || null,
   });
 }
+
+export async function removeContract(contractId: number): Promise<void> {
+  await axios.delete(`${BASE_URL}/api/contracts/${contractId}`);
+}

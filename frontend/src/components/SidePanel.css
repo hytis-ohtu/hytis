@@ -1,131 +1,200 @@
-.room-details {
+/* SidePanel */
+
+.side-panel {
   position: fixed;
   inset: var(--topbar-height) 0 0 auto;
-  width: 100%;
   height: calc(100vh - var(--topbar-height));
-  overflow-y: scroll;
-  overflow-x: hidden;
-  max-width: 300px;
-  padding: var(--padding);
-  background-color: var(--color-background);
-  border-left: var(--border-md);
-  display: block;
+  width: clamp(250px, 28vw, 340px);
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--gap);
+  gap: 2px;
+  border: var(--border-md);
+  background: var(--color-text-black);
+  overflow-y: scroll;
 }
 
-.room-details-close-button {
-  position: absolute;
-  right: var(--padding);
-  cursor: pointer;
-  fill: var(--color-text-black);
-}
-
-.room-details-header {
-  width: 100%;
-  height: 2em;
-  position: relative;
+.side-panel > section {
   display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.side-panel > section > header {
+  display: grid;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--color-secondary);
 }
 
-.room-details-title {
-  font-family: var(--font-title);
-  color: var(--color-text-black);
-}
-
-.room-details-avatar {
-  width: 10em;
-  height: 10em;
-  margin: var(--gap) auto;
-  border-radius: var(--border-radius-circle);
-  background-color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.room-details-avatar-name {
-  font-size: 3rem;
+.side-panel > section > header > h2 {
   font-weight: 600;
-  font-family: var(--font-title);
-  color: var(--color-background);
 }
 
-.room-details-info {
-  font-family: var(--font-body);
-  width: 100%;
-  padding: var(--gap);
-  border: var(--border-md);
-  background: var(--color-background);
-  color: var(--color-text-black);
-  line-height: 1.5rem;
-}
-.room-details-info h2 {
-  padding: 8px;
-  margin: 0;
-}
-.room-details-info ul {
-  margin: 0;
+.side-panel > section > header .react-loading-skeleton {
+  --base-color: var(--color-secondary-skeleton-base);
+  --highlight-color: var(--color-secondary-skeleton-highlight);
 }
 
-.person-details-info {
-  width: 100%;
-  padding: var(--gap);
-  border: var(--border-md);
-  background: var(--color-background);
-  color: var(--color-text-black);
+.collapse-icon {
+  transition: transform 200ms ease;
 }
 
-.person-details-info details {
-  width: fit-content;
-  margin-top: var(--gap);
+.collapse-icon.collapsed {
+  transform: rotate(-90deg);
 }
 
-.person-details-info summary {
-  cursor: pointer;
-  font-family: var(--font-body);
-}
-.person-details-info h2 {
-  margin: 0;
-}
-.person-details-info ul {
-  margin: var(--gap);
-  line-height: 1.5rem;
-  padding-left: var(--gap);
+.entry-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.person-details-header {
-  display: flex;
+.entry-value {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* RoomDetails */
+
+.room-info > header {
+  grid-template-columns: auto 1fr auto auto auto;
+}
+
+.room-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.room-detail,
+.room-description {
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--color-background);
 }
 
-.room-details-button {
-  font-family: var(--font-body);
-  margin-top: 0; /* remove existing top margin */
-  padding: 4px 8px; /* smaller than current var(--gap) */
-  font-size: 0.8rem;
-  border: var(--border);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-primary);
-  color: var(--color-text-white);
-  cursor: pointer;
+.room-description {
+  grid-column: 1 / 3;
+  grid-template-columns: unset;
+  grid-template-rows: auto;
+  gap: 0.25rem;
 }
 
-.person-name {
-  cursor: pointer;
+.room-details dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  min-width: 0;
 }
 
-.cursor-gap {
-  cursor: default;
-  display: inline-block;
-  width: 8px;
-  height: 1em;
+.room-description dd {
+  word-break: break-word;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
 }
 
-.edit-person-button {
-  cursor: pointer;
+/* RoomPeople */
+
+.room-people > header {
+  grid-template-columns: auto 1fr auto auto;
+}
+
+.contracts {
+  display: grid;
+  gap: 2px;
+}
+
+.contracts-skeleton,
+.no-contracts {
+  padding: 1rem;
+  background: var(--color-background);
+}
+
+.contract {
+  display: grid;
+  gap: 2px;
+}
+
+.contract > header {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--color-background);
+}
+
+.contract-header-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.contract-timeline {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.contract-timeline-date {
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.contract-timeline-track {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+  border: var(--border-sm);
+  border-radius: var(--border-radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.contract-timeline-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  clip-path: inset(0 calc(100% - var(--timeline-progress, 0%)) 0 0);
+}
+
+.contract-timeline-status {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.625rem;
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+
+/* Contract Details */
+
+.person-details {
+  display: grid;
+  background: var(--color-background);
+}
+
+.person-detail {
+  display: grid;
+  padding: 0.25rem 0.5rem;
+  gap: 0.125rem;
+  border-top: 1.5px dotted var(--color-text-black);
+}
+
+.person-detail:first-of-type {
+  border-top: none;
 }

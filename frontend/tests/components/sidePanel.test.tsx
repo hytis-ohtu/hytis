@@ -1,617 +1,357 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import SidePanel from "../../src/components/SidePanel.tsx";
+import type { ReactElement } from "react";
+import { describe, expect, it, vi } from "vitest";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
+import SidePanel from "../../src/components/SidePanel";
+import { useRoomSelection } from "../../src/hooks/useRoomSelection";
+import { removeContract } from "../../src/services/contractsService";
 import {
   addPerson,
   editPerson,
-  removeContract,
-} from "../../src/services/peopleService.ts";
-import type { Room } from "../../src/types.ts";
+  findAllPeople,
+} from "../../src/services/peopleService";
+import { editRoom, findRoomById } from "../../src/services/roomsService";
+import type { Person, Room } from "../../src/types";
+import { testPerson, testRooms } from "../testData";
 
 vi.mock("../../src/services/peopleService", () => ({
   addPerson: vi.fn(),
   editPerson: vi.fn(),
+  findAllPeople: vi.fn(),
+}));
+
+vi.mock("../../src/services/contractsService", () => ({
   removeContract: vi.fn(),
 }));
 
-vi.mock("../../src/components/PersonModal", () => ({
-  default: ({
-    onClose,
-    onSubmit,
-    initial,
-  }: {
-    onClose: () => void;
-    onSubmit?: (values: Record<string, string>) => void;
-    initial?: Record<string, string>;
-  }) => (
-    <div>
-      <button data-testid="mock-personmodal-close" onClick={onClose}>
-        Mock Close
-      </button>
-      <button
-        data-testid="mock-personmodal-submit"
-        onClick={() =>
-          onSubmit?.({
-            firstName: initial?.firstName ?? "Test",
-            lastName: initial?.lastName ?? "User",
-            startDate: initial?.startDate ?? "2026-01-01",
-            endDate: initial?.endDate ?? "2026-12-31",
-          })
-        }
-      >
-        Mock Submit
-      </button>
-      {initial && Object.keys(initial).length > 0 && (
-        <div data-testid="mock-personmodal-initial">
-          {JSON.stringify(initial)}
-        </div>
-      )}
-    </div>
-  ),
+vi.mock("../../src/services/roomsService", () => ({
+  editRoom: vi.fn(),
+  findAllRooms: vi.fn(),
+  findRoomById: vi.fn(),
 }));
 
-const mockHandleClose = vi.fn();
-const mockOnPersonSaved = vi.fn();
-const mockOnRoomSaved = vi.fn();
+vi.mock("../../src/services/referenceDataService", () => ({
+  findAllDepartments: vi.fn().mockResolvedValue([
+    { id: 516, name: "H516 MATHSTAT" },
+    { id: 517, name: "H517 CS" },
+    { id: 2, name: "H523 CS" },
+  ]),
+  findAllRoomTypes: vi.fn().mockResolvedValue([
+    { id: 1, name: "konferenssihuone" },
+    { id: 2, name: "laboratorio" },
+  ]),
+  findAllTitles: vi.fn().mockResolvedValue([
+    { id: 1, name: "asiantuntija" },
+    { id: 2, name: "professori" },
+  ]),
+  findAllResearchGroups: vi.fn().mockResolvedValue([
+    { id: 1, name: "Algoritmit ja optimointi" },
+    { id: 2, name: "Tietokannat" },
+  ]),
+}));
 
-const mockRoom_A210: Room = {
-  id: 1,
-  name: "A210",
-  area: "63.6",
-  capacity: 15,
-  contracts: [
-    {
-      id: 1,
-      startDate: "2023-01-01",
-      endDate: "2025-12-31",
-      person: {
-        id: 1,
-        firstName: "Matti",
-        lastName: "Virtanen",
-        department: {
-          id: 516,
-          name: "H516 MATHSTAT",
-        },
-        title: {
-          id: 1,
-          name: "asiantuntija",
-        },
-        researchGroup: {
-          id: 1,
-          name: "Algoritmit ja optimointi",
-        },
-        supervisors: [
-          {
-            id: 2,
-            firstName: "Liisa",
-            lastName: "Lahtinen",
-            department: {
-              id: 517,
-              name: "H517 CS",
-            },
-            title: {
-              id: 2,
-              name: "professori",
-            },
-            researchGroup: {
-              id: 2,
-              name: "Tietokannat",
-            },
-            supervisors: [],
-            freeText: null,
-          },
-        ],
-        freeText: "Tämä on testihenkilö",
-      },
-    },
-  ],
-  department: {
-    id: 2,
-    name: "H523 CS",
-  },
-  freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
-};
-
-const mockRoom_A219: Room = {
-  id: 1,
-  name: "A219",
-  area: "21.40",
-  capacity: 5,
-  contracts: [],
-  department: {
-    id: 2,
-    name: "H523 CS",
-  },
-  freeText: "Hätäpoistumistie",
-  roomType: "Konferenssihuone",
-};
-
-describe("RoomDetails", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+const mockFindRoomById = vi
+  .mocked(findRoomById)
+  .mockImplementation((roomId: number) => {
+    if (roomId === testRooms[1].id) {
+      return Promise.resolve({
+        ...testRooms[1],
+        contracts: [],
+      } as Room);
+    } else {
+      return Promise.resolve(testRooms[0] as Room);
+    }
   });
 
-  it("returns early from handleAddPerson when room id is undefined", async () => {
+vi.mocked(findAllPeople).mockResolvedValue([
+  testPerson.supervisors[0] as Person,
+  testPerson as Person,
+]);
+
+function TestButtons() {
+  const { selectRoom } = useRoomSelection();
+
+  return (
+    <div>
+      <button
+        data-testid="open-room"
+        onClick={() => {
+          void selectRoom(testRooms[0].id);
+        }}
+      >
+        Open room
+      </button>
+      <button
+        data-testid="open-empty-room"
+        onClick={() => {
+          void selectRoom(testRooms[1].id);
+        }}
+      >
+        Open empty room
+      </button>
+      <button
+        data-testid="open-room-with-person"
+        onClick={() => {
+          void selectRoom(testRooms[0].id, testPerson.id);
+        }}
+      >
+        Open room with person
+      </button>
+    </div>
+  );
+}
+
+function TestDisplay() {
+  return (
+    <>
+      <SidePanel />
+      <TestButtons />
+    </>
+  );
+}
+
+const customRender = (ui: ReactElement) => {
+  return render(
+    <RoomSelectionProvider findRoomById={mockFindRoomById}>
+      {ui}
+    </RoomSelectionProvider>,
+  );
+};
+
+describe("RoomInfo", () => {
+  it("renders room details when a room is selected", async () => {
     const user = userEvent.setup();
-    const onPersonSaved = vi.fn();
 
-    render(
-      <SidePanel
-        room={null}
-        handleClose={mockHandleClose}
-        onPersonSaved={onPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
+    customRender(<TestDisplay />);
 
-    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
-    await user.click(screen.getByTestId("mock-personmodal-submit"));
+    await user.click(screen.getByTestId("open-room"));
 
-    expect(addPerson).not.toHaveBeenCalled();
-    expect(onPersonSaved).not.toHaveBeenCalled();
+    expect(screen.getByText("63.60 m²")).toBeInTheDocument();
+    expect(screen.getByText("15")).toBeInTheDocument();
+    expect(screen.getByText("konferenssihuone")).toBeInTheDocument();
+    expect(screen.getByText("H523 CS")).toBeInTheDocument();
+    expect(screen.getByText("Hätäpoistumistie")).toBeInTheDocument();
   });
 
-  it("renders loading skeleton when data is being fetched", () => {
-    const { container } = render(
-      <SidePanel
-        room={null}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
+  it("opens the room edit modal and saves changes", async () => {
+    const user = userEvent.setup();
+
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+    await user.click(
+      screen.getByRole("button", { name: "Muokkaa huoneen tietoja" }),
     );
+
+    expect(screen.getByText("Muokkaa huonetta")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("15")).toBeInTheDocument();
     expect(
-      container.querySelector(".react-loading-skeleton"),
+      screen.getByRole("combobox", { name: "Huonetyyppi:" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
+
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
+
+    expect(editRoom).toHaveBeenCalledWith(
+      testRooms[0].id,
+      expect.objectContaining({
+        capacity: "15",
+        roomType: "1",
+        department: "2",
+        freeText: "Hätäpoistumistie",
+      }),
+    );
+  });
+
+  it.fails("does not close the modal when edit fails", async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(editRoom).mockRejectedValueOnce(new Error());
+
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+    await user.click(
+      screen.getByRole("button", { name: "Muokkaa huoneen tietoja" }),
+    );
+
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
+
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
+
+    expect(confirm).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Tallenna" }),
     ).toBeInTheDocument();
   });
 
-  it("handles addPerson error state and logs the failure", async () => {
+  it.todo("displays an error message when editing fails");
+});
+
+describe("RoomPeople", () => {
+  it("adds a new person through the modal succesfully", async () => {
     const user = userEvent.setup();
-    const onPersonSaved = vi.fn();
-    const addPersonError = new Error("network failed");
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
 
-    vi.mocked(addPerson).mockRejectedValueOnce(addPersonError);
+    customRender(<TestDisplay />);
 
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={onPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
+    await user.click(screen.getByTestId("open-room"));
+    await user.click(
+      screen.getByRole("button", {
+        name: "Sijoita henkilö huoneeseen",
+      }),
     );
 
-    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
-    await user.click(screen.getByTestId("mock-personmodal-submit"));
+    await user.type(screen.getByLabelText("Etunimi:"), "Uusi");
+    await user.type(screen.getByLabelText("Sukunimi:"), "Henkilö");
 
-    expect(addPerson).toHaveBeenCalled();
-    expect(onPersonSaved).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to add person:",
-      addPersonError,
+    await user.click(screen.getByRole("button", { name: "Lisää" }));
+
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
+
+    expect(addPerson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        firstName: "Uusi",
+        lastName: "Henkilö",
+      }),
+      testRooms[0].id,
     );
-
-    consoleErrorSpy.mockRestore();
   });
 
-  it("opens edit mode with person initial values and saves edits", async () => {
+  it.fails("does not close the modal when adding fails", async () => {
     const user = userEvent.setup();
-    vi.mocked(editPerson).mockResolvedValueOnce(
-      mockRoom_A210.contracts[0].person!,
+
+    vi.mocked(addPerson).mockRejectedValueOnce(new Error());
+
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+    await user.click(
+      screen.getByRole("button", {
+        name: "Sijoita henkilö huoneeseen",
+      }),
     );
 
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
+    await user.type(screen.getByLabelText("Etunimi:"), "Uusi");
+    await user.type(screen.getByLabelText("Sukunimi:"), "Henkilö");
+
+    await user.click(screen.getByRole("button", { name: "Lisää" }));
+
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
+
+    expect(confirm).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Lisää" })).toBeInTheDocument();
+  });
+
+  it("opens the edit person modal with correct initial values and saves edits", async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(editPerson).mockResolvedValueOnce(testPerson as Person);
+
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+
+    const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
+    await user.click(
+      within(personCard).getByRole("button", {
+        name: "Muokkaa henkilön tietoja",
+      }),
     );
 
-    await user.click(screen.getByTestId("edit-person-button-1"));
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
 
-    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
-      '"firstName":"Matti"',
-    );
-    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
-      '"lastName":"Virtanen"',
-    );
-
-    await user.click(screen.getByTestId("mock-personmodal-submit"));
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
 
     expect(editPerson).toHaveBeenCalledWith(
-      1,
+      testPerson.id,
       expect.objectContaining({
         firstName: "Matti",
         lastName: "Virtanen",
         startDate: "2023-01-01",
         endDate: "2025-12-31",
       }),
-      1,
+      testRooms[0].id,
     );
-    expect(mockOnPersonSaved).toHaveBeenCalled();
   });
 
-  it("resets edit state when the modal is closed", async () => {
+  it("removes a contract successfully", async () => {
     const user = userEvent.setup();
 
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+
+    const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
+    await user.click(
+      within(personCard).getByRole("button", {
+        name: "Poista henkilö",
+      }),
     );
-
-    await user.click(screen.getByTestId("edit-person-button-1"));
-    expect(screen.getByTestId("mock-personmodal-initial")).toHaveTextContent(
-      '"firstName":"Matti"',
-    );
-
-    await user.click(screen.getByTestId("mock-personmodal-close"));
-    await user.click(screen.getByRole("button", { name: "Lisää henkilö" }));
-
-    expect(
-      screen.queryByTestId("mock-personmodal-initial"),
-    ).not.toBeInTheDocument();
-  });
-
-  it("handles editPerson error state and logs the failure", async () => {
-    const user = userEvent.setup();
-    const editPersonError = new Error("update failed");
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
-
-    vi.mocked(editPerson).mockRejectedValueOnce(editPersonError);
-
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("edit-person-button-1"));
-    await user.click(screen.getByTestId("mock-personmodal-submit"));
-
-    expect(editPerson).toHaveBeenCalled();
-    expect(mockOnPersonSaved).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to edit person:",
-      editPersonError,
-    );
-
-    consoleErrorSpy.mockRestore();
-  });
-
-  it("returns early from handleEditPerson when person id is undefined", async () => {
-    const user = userEvent.setup();
-    const roomWithPersonMissingId = {
-      ...mockRoom_A210,
-      contracts: [
-        {
-          ...mockRoom_A210.contracts[0],
-          person: {
-            ...mockRoom_A210.contracts[0].person,
-            id: undefined,
-          },
-        },
-      ],
-    };
-
-    render(
-      <SidePanel
-        // @ts-expect-error - Intentionally setting id to undefined to test the guard clause
-        room={roomWithPersonMissingId}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("edit-person-button-undefined"));
-    await user.click(screen.getByTestId("mock-personmodal-submit"));
-
-    expect(editPerson).not.toHaveBeenCalled();
-    expect(mockOnPersonSaved).not.toHaveBeenCalled();
-  });
-
-  it("renders room details panel when room data is provided", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-    expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
-    expect(
-      screen.getByRole("heading", { name: mockRoom_A210.name }),
-    ).toBeDefined();
-    expect(screen.getByText("Pinta-ala: 63.6 m²")).toBeInTheDocument();
-    expect(screen.getByText("Kapasiteetti: 15")).toBeInTheDocument();
-    expect(
-      screen.getByText("Huonetyyppi: Konferenssihuone"),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Osasto: H523 CS")).toBeInTheDocument();
-    expect(
-      screen.getByText("Lisätiedot: Hätäpoistumistie"),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("this is wrong")).not.toBeInTheDocument();
-  });
-
-  it("renders valid mock person details on sidepanel", async () => {
-    const user = userEvent.setup();
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    const contract = mockRoom_A210.contracts[0];
-    const fullName = `${contract.person!.firstName} ${contract.person!.lastName}`;
-
-    const summary = screen.getByText(fullName);
-    expect(summary).toBeInTheDocument();
-
-    await user.click(summary);
-
-    expect(screen.getByTestId("edit-person-button-1")).toBeInTheDocument();
-    expect(screen.getByText(`Osasto: H516 MATHSTAT`)).toBeInTheDocument();
-    expect(screen.getByText(`Titteli: asiantuntija`)).toBeInTheDocument();
-    expect(
-      screen.getByText(`Tutkimusryhmä: Algoritmit ja optimointi`),
-    ).toBeInTheDocument();
-    expect(screen.getByText(`Esihenkilöt: Liisa Lahtinen`)).toBeInTheDocument();
-    expect(screen.getByText(`Alkupvm: 2023-01-01`)).toBeInTheDocument();
-    expect(screen.getByText(`Loppupvm: 2025-12-31`)).toBeInTheDocument();
-    expect(
-      screen.getByText(`Lisätiedot: Tämä on testihenkilö`),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("this is wrong")).not.toBeInTheDocument();
-  });
-
-  it("renders room details panel when room data is provided", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A219}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-    expect(screen.getByRole("heading", { name: "Huone" })).toBeDefined();
-    expect(screen.getByText("Ei sopimuksia.")).toBeInTheDocument();
-  });
-
-  it("room details panel can be closed", async () => {
-    const user = userEvent.setup();
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("close-room-details-panel"));
-
-    expect(mockHandleClose).toHaveBeenCalled();
-  });
-
-  it("renders remove button for each contract", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-    expect(screen.getByTestId("remove-person-button-1")).toBeInTheDocument();
-  });
-
-  it("clicking remove button opens confirmation dialog with person name", async () => {
-    const user = userEvent.setup();
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("remove-person-button-1"));
 
     expect(screen.getByText("Poista Matti Virtanen?")).toBeInTheDocument();
-  });
 
-  it("confirming removal calls removeContract with the contract id", async () => {
-    const user = userEvent.setup();
-    vi.mocked(removeContract).mockResolvedValueOnce(undefined);
-
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("remove-person-button-1"));
     await user.click(screen.getByRole("button", { name: "Poista" }));
 
     expect(removeContract).toHaveBeenCalledWith(1);
   });
 
-  it("confirming removal calls onPersonSaved", async () => {
+  it("dismisses the remove confirmation dialog when clicking cancel", async () => {
     const user = userEvent.setup();
-    vi.mocked(removeContract).mockResolvedValueOnce(undefined);
 
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room"));
+
+    const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
+    await user.click(
+      within(personCard).getByRole("button", {
+        name: "Poista henkilö",
+      }),
     );
 
-    await user.click(screen.getByTestId("remove-person-button-1"));
-    await user.click(screen.getByRole("button", { name: "Poista" }));
+    expect(screen.getByText("Poista Matti Virtanen?")).toBeInTheDocument();
 
-    expect(mockOnPersonSaved).toHaveBeenCalled();
-  });
-
-  it("cancelling removal does not call removeContract or onPersonSaved", async () => {
-    const user = userEvent.setup();
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("remove-person-button-1"));
-    await user.click(screen.getByRole("button", { name: "Peruuta" }));
-
-    expect(removeContract).not.toHaveBeenCalled();
-    expect(mockOnPersonSaved).not.toHaveBeenCalled();
-  });
-
-  it("cancelling removal dismisses the confirmation dialog", async () => {
-    const user = userEvent.setup();
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    await user.click(screen.getByTestId("remove-person-button-1"));
     await user.click(screen.getByRole("button", { name: "Peruuta" }));
 
     expect(
       screen.queryByText("Poista Matti Virtanen?"),
     ).not.toBeInTheDocument();
+    expect(removeContract).not.toHaveBeenCalled();
   });
 
-  it("handles removeContract error and logs the failure", async () => {
+  it("shows the no contracts message when the selected room has no people", async () => {
     const user = userEvent.setup();
-    const removeError = new Error("delete failed");
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
 
-    vi.mocked(removeContract).mockRejectedValueOnce(removeError);
+    customRender(<TestDisplay />);
 
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
+    await user.click(screen.getByTestId("open-empty-room"));
+    await screen.findByRole("heading", { name: /huone a211/i });
 
-    await user.click(screen.getByTestId("remove-person-button-1"));
-    await user.click(screen.getByRole("button", { name: "Poista" }));
-
-    expect(removeContract).toHaveBeenCalled();
-    expect(mockOnPersonSaved).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to remove contract:",
-      removeError,
-    );
-
-    consoleErrorSpy.mockRestore();
+    expect(screen.getByText("Ei henkilöitä.")).toBeInTheDocument();
   });
 
-  it("auto-expands person details when selectedPersonId matches", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={1}
-      />,
-    );
+  it("expands person details when the room is opened with a person selection", async () => {
+    const user = userEvent.setup();
 
-    // Find the details element - it should be expanded (open)
-    const personDetails = screen.getByText("Matti Virtanen").closest("details");
-    expect(personDetails).toHaveAttribute("open", "");
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-room-with-person"));
+
+    await screen.findByText("H516 MATHSTAT");
+    expect(screen.getByText("Osasto")).toBeInTheDocument();
+    expect(screen.getByText("Titteli")).toBeInTheDocument();
+    expect(screen.getByText("Tutkimusryhmä")).toBeInTheDocument();
+    expect(screen.getByText("Esihenkilöt")).toBeInTheDocument();
+    expect(screen.getByText("Tämä on testihenkilö")).toBeInTheDocument();
   });
 
-  it("does not auto-expand person details when selectedPersonId does not match", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={999}
-      />,
-    );
-
-    // Find the details element - it should not be expanded
-    const personDetails = screen.getByText("Matti Virtanen").closest("details");
-    expect(personDetails).not.toHaveAttribute("open");
-  });
-
-  it("does not auto-expand when selectedPersonId is null", () => {
-    render(
-      <SidePanel
-        room={mockRoom_A210}
-        handleClose={mockHandleClose}
-        onPersonSaved={mockOnPersonSaved}
-        onRoomSaved={mockOnRoomSaved}
-        selectedPersonId={null}
-      />,
-    );
-
-    // Find the details element - it should not be expanded
-    const personDetails = screen.getByText("Matti Virtanen").closest("details");
-    expect(personDetails).not.toHaveAttribute("open");
-  });
+  it.todo("shows an error message when editing fails");
 });

@@ -1,10 +1,15 @@
-import { useRoomColors } from "../hooks/useRoomColors";
 import "./ColorToggle.css";
 import Legend from "./Legend";
 
-function ColorToggle() {
-  const { useAvailability, setUseAvailability } = useRoomColors();
+interface ColorToggleProps {
+  useAvailability: boolean;
+  setUseAvailability: (state: boolean) => void;
+}
 
+function ColorToggle({
+  useAvailability,
+  setUseAvailability,
+}: ColorToggleProps) {
   return (
     <div>
       <button

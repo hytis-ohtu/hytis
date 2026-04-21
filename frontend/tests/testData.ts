@@ -1,11 +1,51 @@
-export const rooms = [
+export const testPerson = {
+  id: 1,
+  firstName: "Matti",
+  lastName: "Virtanen",
+  freeText: "Tämä on testihenkilö",
+  department: {
+    id: 516,
+    name: "H516 MATHSTAT",
+  },
+  title: {
+    id: 1,
+    name: "asiantuntija",
+  },
+  researchGroup: {
+    id: 1,
+    name: "Algoritmit ja optimointi",
+  },
+  supervisors: [
+    {
+      id: 2,
+      firstName: "Liisa",
+      lastName: "Lahtinen",
+      freeText: null,
+      department: {
+        id: 517,
+        name: "H517 CS",
+      },
+      title: {
+        id: 2,
+        name: "professori",
+      },
+      researchGroup: {
+        id: 2,
+        name: "Tietokannat",
+      },
+      supervisors: [],
+    },
+  ],
+};
+
+export const testRooms = [
   {
     id: 1,
     name: "A210",
     area: "63.60",
     capacity: 15,
     freeText: "Hätäpoistumistie",
-    roomType: "Konferenssihuone",
+    roomType: { id: 1, name: "konferenssihuone" },
     department: {
       id: 2,
       name: "H523 CS",
@@ -15,24 +55,7 @@ export const rooms = [
         id: 1,
         startDate: "2023-01-01",
         endDate: "2025-12-31",
-        person: {
-          id: 1,
-          firstName: "Matti",
-          lastName: "Virtanen",
-          freeText: null,
-          department: {
-            id: 1,
-            name: "H516 MATHSTAT",
-          },
-          title: {
-            id: 1,
-            name: "asiantuntija",
-          },
-          researchGroup: {
-            id: 1,
-            name: "Algebrallisten rakenteiden tutkimusryhmä",
-          },
-        },
+        person: testPerson,
       },
       {
         id: 2,
@@ -88,7 +111,7 @@ export const rooms = [
     area: "14.60",
     capacity: 3,
     freeText: "",
-    roomType: "",
+    roomType: { id: 0, name: "" },
     department: {
       id: 1,
       name: "H516 MATHSTAT",
@@ -148,7 +171,7 @@ export const rooms = [
     area: "9.70",
     capacity: 2,
     freeText: "",
-    roomType: "",
+    roomType: { id: 0, name: "" },
     department: {
       id: 1,
       name: "H516 MATHSTAT",

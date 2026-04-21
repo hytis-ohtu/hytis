@@ -28,7 +28,7 @@ test("room has correct availability color based on occupancy", async ({
   await expect(fullRoom).toHaveClass(/full/);
 });
 
-test("room details panel is shown with room name when clicking room from the map", async ({
+test("sidepanel panel is shown when clicking room from the map", async ({
   page,
 }) => {
   const availableRoom = page.locator('[data-room="A210"]');
@@ -37,13 +37,13 @@ test("room details panel is shown with room name when clicking room from the map
   await expect(page.getByRole("heading", { name: "A210" })).toBeVisible();
 });
 
-test("room details panel is hidden when clicking the close button", async ({
+test("side panel is closed when clicking the close button", async ({
   page,
 }) => {
   const availableRoom = page.locator('[data-room="A210"]');
   await availableRoom.click();
 
-  const closeButton = page.getByTestId("close-room-details-panel");
+  const closeButton = page.getByRole("button", { name: /^sulje huone$/i });
   await closeButton.click();
 
   await expect(page.getByRole("heading", { name: "Huone" })).not.toBeVisible();

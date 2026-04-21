@@ -293,7 +293,7 @@ describe("peopleService", () => {
   });
 
   describe("searchPeople", () => {
-    it("calls the correct API endpoint with query parameter", async () => {
+    it("calls the correct API endpoint with axios params", async () => {
       const mockResponse = {
         data: [
           {
@@ -306,41 +306,22 @@ describe("peopleService", () => {
         ],
       };
 
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
+      mockedAxios.get = vi.fn().mockResolvedValue(mockResponse);
 
       const result = await searchPeople("Matti");
 
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("/api/people?q=Matti"),
-      );
+      expect(mockedAxios.get).toHaveBeenCalledWith("/api/people", {
+        params: {
+          q: "Matti",
+          type: "personName",
+        },
+      });
       expect(result).toEqual(mockResponse.data);
-    });
-
-    it("encodes query parameters correctly", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("Matti Meikäläinen");
-
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("q=Matti%20Meik%C3%A4l%C3%A4inen"),
-      );
-    });
-
-    it("handles special characters in search query", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("Ölä Åå");
-
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining("q=%C3%96l%C3%A4%20%C3%85%C3%A5"),
-      );
     });
 
     it("returns empty array when no results found", async () => {
       const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
+      mockedAxios.get = vi.fn().mockResolvedValue(mockResponse);
 
       const result = await searchPeople("Nonexistent");
 
@@ -349,20 +330,9 @@ describe("peopleService", () => {
 
     it("throws error when API call fails", async () => {
       const mockError = new Error("Network error");
-      vi.mocked(axios.get).mockRejectedValue(mockError);
+      mockedAxios.get = vi.fn().mockRejectedValue(mockError);
 
       await expect(searchPeople("Matti")).rejects.toThrow("Network error");
-    });
-
-    it("includes the base URL from constants", async () => {
-      const mockResponse = { data: [] };
-      vi.mocked(axios.get).mockResolvedValue(mockResponse);
-
-      await searchPeople("test");
-
-      const callArgs = vi.mocked(axios.get).mock.calls[0][0];
-      expect(callArgs).toContain("/api/people");
-      expect(callArgs).toContain("q=test");
     });
   });
 });

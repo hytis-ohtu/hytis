@@ -1,12 +1,18 @@
 :root {
   /* Colors */
-  --color-primary: #e5bb83;
-  --color-topbar: rgb(72, 72, 72);
-  --color-secondary: #cec9e0;
-  --color-text-black: #0d0b15;
+  --color-primary: #e1c0f6;
+  --color-primary-light: #f0e0ff;
+  --color-secondary: #e5bb83;
+  --color-secondary-light: #efd1a9;
+  --color-text-black: #222;
   --color-text-white: #fff;
   --color-background: #fff;
-  --color-muted: #ccc;
+  --color-background-gray: #edebeb;
+  --color-muted: #0d0b1594;
+
+  /* Skeleton Colors */
+  --color-secondary-skeleton-base: #cf9f60;
+  --color-secondary-skeleton-highlight: #efd1a9;
 
   /* Borders */
   --border-radius-md: 4px;
@@ -16,9 +22,9 @@
   --transition-fast: 0.15s;
 
   /* Font */
-  --font-body: "roboto", regular;
-  --font-title: "montserrat", semibold;
-  --font-size-sm: 0.85rem;
+  --font-body: 1rem "Roboto Variable", sans-serif;
+  --font-title: 1rem "Montserrat Variable", sans-serif;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-weight-bold: 600;
 
@@ -27,23 +33,40 @@
   --padding-md: 1rem;
 
   /* Shadows */
-  --box-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --box-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --box-shadow-sm: 0 4px rgba(0, 0, 0, 0.25);
+  --box-shadow-md: 0 8px rgba(0, 0, 0, 0.25);
 
-  --topbar-height: 64px;
-  --button-size: 44px;
+  --topbar-height: 52px;
+  --button-size: 50px;
   --z-index-topbar: 1000;
 
   /* border */
   --border-sm: 1px solid var(--color-text-black);
   --border-md: 2px solid var(--color-text-black);
-  --border-radius-circle: calc(infinity * 1px);
-}
-
-* {
-  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
+  font: var(--font-body);
+  color: var(--color-text-black);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font: unset;
+}
+
+.button-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.no-data {
+  opacity: 0.75;
+  font-style: italic;
 }

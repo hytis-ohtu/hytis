@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../../src/components/PersonForm.tsx";
 
@@ -28,7 +29,7 @@ vi.mock("../../src/services/referenceDataService", () => ({
 const REQUIRED_INITIAL = {
   firstName: "Terppa",
   lastName: "Testaaja",
-  department: "1",
+  departmentId: "1",
   jobtitle: "1",
   supervisors: "",
   startDate: "2025-01-01",
@@ -96,12 +97,19 @@ describe("PersonForm", () => {
     );
   });
 
-  it("updates state when a select changes", () => {
+  it("updates state when a select changes", async () => {
+    const user = userEvent.setup();
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    const select = screen.getByLabelText("Osasto:") as HTMLSelectElement;
-    select.value = "1";
-    fireEvent.change(select);
-    expect(defaultProps.onChange).toHaveBeenCalled();
+
+    const select = screen.getByLabelText("Osasto:");
+    const option = await screen.findByRole("option", { name: "HR" });
+    await user.selectOptions(select, option);
+
+    expect(select).toHaveValue("2");
+    expect(defaultProps.onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ department: "2" }),
+      true,
+    );
   });
 
   it("reports valid when all required fields are filled", () => {
@@ -363,9 +371,7 @@ describe("PersonForm", () => {
 
   it("clears search input after selecting a person", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText(
-      "Hae henkilö:",
-    ) as HTMLInputElement;
+    const searchInput = screen.getByLabelText("Hae henkilö:");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -373,7 +379,7 @@ describe("PersonForm", () => {
     });
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     await waitFor(() => {
-      expect(searchInput.value).toBe("");
+      expect(searchInput).toHaveValue("");
     });
   });
 });

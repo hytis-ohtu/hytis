@@ -5,13 +5,12 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 
 async function openEditRoomModal(page: Page) {
   await page.locator('[data-room="A210"]').click();
-  await page.waitForSelector(".room-details-button", { state: "visible" });
-  await page.locator('[data-testid="edit-room-button"]').click();
+  await page.getByRole("button", { name: "Muokkaa huoneen tietoja" }).click();
 }
 
 async function fillRoomFields(page: Page) {
   await page.getByLabel("Kapasiteetti:").fill("10");
-  await page.getByLabel("Huonetyyppi:").fill("Toimisto");
+  await page.getByLabel("Huonetyyppi:").selectOption({ index: 2 });
   await page.getByLabel("Osasto:").selectOption({ index: 1 });
   await page.getByLabel("Lisätiedot:").fill("Lisätietoja huoneesta");
 }
@@ -80,11 +79,11 @@ test("saved changes are reflected in room info after modal closes", async ({
   page,
 }) => {
   await openEditRoomModal(page);
-  await page.getByLabel("Huonetyyppi:").fill("Laboratorio");
+  await page.getByLabel("Huonetyyppi:").selectOption({ label: "Työhuone" });
   await page.locator(".roommodal-save-button").click();
   await page
     .locator(".confirmation-modal")
     .getByRole("button", { name: "Tallenna" })
     .click();
-  await expect(page.getByText("Laboratorio")).toBeVisible();
+  await expect(page.getByText("Työhuone")).toBeVisible();
 });

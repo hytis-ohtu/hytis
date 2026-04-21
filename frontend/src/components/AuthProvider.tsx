@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import * as authService from "../services/authService";
-import type { UserData } from "../types/auth";
+import type { UserData } from "../types";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
@@ -22,7 +22,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    checkSession();
+    void checkSession();
   }, []);
 
   const login = () => {

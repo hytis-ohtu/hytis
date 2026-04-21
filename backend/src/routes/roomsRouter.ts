@@ -6,6 +6,7 @@ import {
   Person,
   ResearchGroup,
   Room,
+  RoomType,
   Title,
 } from "../models";
 import type { RoomInput } from "../utils";
@@ -22,7 +23,7 @@ router.get(
   "/",
   async (_req: Request, res: Response<Room[]>): Promise<Response<Room[]>> => {
     const rooms = await Room.findAll({
-      attributes: ["id", "name", "area", "capacity"],
+      attributes: ["id", "name", "area", "capacity", "roomTypeId"],
       include: [
         {
           model: Department,
@@ -33,6 +34,11 @@ router.get(
           model: Contract,
           as: "contracts",
           attributes: ["id"],
+        },
+        {
+          model: RoomType,
+          as: "roomType",
+          attributes: ["id", "name"],
         },
       ],
     });
@@ -53,7 +59,7 @@ router.get(
     res: Response<Room | { error: string }>,
   ): Promise<Response<Room | { error: string }>> => {
     const room = await Room.findByPk(req.params.id, {
-      attributes: ["id", "name", "area", "freeText", "capacity", "roomType"],
+      attributes: ["id", "name", "area", "freeText", "capacity", "roomTypeId"],
       order: [[{ model: Contract, as: "contracts" }, "id", "ASC"]],
       include: [
         {
@@ -96,6 +102,11 @@ router.get(
           as: "department",
           attributes: ["id", "name"],
         },
+        {
+          model: RoomType,
+          as: "roomType",
+          attributes: ["id", "name"],
+        },
       ],
     });
 
@@ -133,7 +144,7 @@ router.put(
       return res.status(500).json({ error: "Failed to parse room input" });
     }
 
-    const { capacity, departmentId, freeText, roomType } = roomInput;
+    const { capacity, departmentId, freeText, roomTypeId } = roomInput;
 
     try {
       const room = await Room.findByPk(Number(roomId));
@@ -146,11 +157,18 @@ router.put(
         capacity,
         departmentId,
         freeText,
-        roomType,
+        roomTypeId,
       });
 
       await room.reload({
-        attributes: ["id", "name", "area", "freeText", "capacity", "roomType"],
+        attributes: [
+          "id",
+          "name",
+          "area",
+          "freeText",
+          "capacity",
+          "roomTypeId",
+        ],
         include: [
           {
             model: Department,
@@ -161,6 +179,11 @@ router.put(
             model: Contract,
             as: "contracts",
             attributes: ["id"],
+          },
+          {
+            model: RoomType,
+            as: "roomType",
+            attributes: ["id", "name"],
           },
         ],
       });
