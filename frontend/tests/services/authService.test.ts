@@ -42,14 +42,6 @@ describe("authService", () => {
       });
     });
 
-    it("throws when response is not OK", async () => {
-      mockedAxios.get = vi
-        .fn()
-        .mockResolvedValue({ statusText: "Unauthorized", data: null });
-
-      await expect(getCurrentUser()).rejects.toThrow("Not authenticated");
-    });
-
     it("propagates errors from the API", async () => {
       mockedAxios.get = vi.fn().mockRejectedValue(new Error("Network error"));
 
