@@ -76,65 +76,69 @@ export function getElementBBox(element: SVGElement): DOMRect {
   return new DOMRect(0, 0, 1, 1);
 }
 
+export async function updateRooms(useAvailability: boolean) {
+  try {
+    const result = await findAllRooms();
+
+    const roomsMap = new Map(result.map((room) => [room.name, room]));
+
+    const roomElements = document.querySelectorAll("path[data-room]");
+
+    for (const element of roomElements) {
+      const roomName = element.getAttribute("data-room");
+
+      if (!roomName || !roomsMap.has(roomName)) continue;
+
+      const room = roomsMap.get(roomName);
+
+      if (!room) continue;
+
+      element.classList.remove(...element.classList);
+      element.classList.add("room");
+
+      if (!(element instanceof SVGElement)) continue;
+
+      if (useAvailability) {
+        const availabilityState = getRoomAvailability(
+          room.capacity,
+          room.contracts.length,
+        );
+        element.style.fill = AvailabilityColors[availabilityState];
+        element.classList.add(availabilityState);
+      } else {
+        element.style.fill = getDepartmentColor(room.department.name);
+      }
+      
+      const oldText = element.parentElement?.getElementsByClassName("room-label")[0];
+      const centerX = Number(oldText?.getAttribute("x"));
+      const centerY = Number(oldText?.getAttribute("y"));
+
+      const lines = [
+        roomName,
+        `${room.area}m²`,
+        `${room.contracts.length}/${room.capacity}`,
+      ];
+
+      const label = createRoomInfoLabel(centerX, centerY, lines);
+
+      element.parentElement
+        ?.getElementsByClassName("room-label")[0]
+        .replaceWith(label);
+    }
+  } catch (error: unknown) {
+    let errorMessage = "❌ Failed to update rooms: ";
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.log(errorMessage);
+  }
+}
+
 export function useRoomProperties() {
   const [useAvailability, setUseAvailability] = useState(true);
 
   async function onUpdate() {
-    try {
-      const result = await findAllRooms();
-
-      const roomsMap = new Map(result.map((room) => [room.name, room]));
-
-      const roomElements = document.querySelectorAll("path[data-room]");
-
-      for (const element of roomElements) {
-        const roomName = element.getAttribute("data-room");
-
-        if (!roomName || !roomsMap.has(roomName)) continue;
-
-        const room = roomsMap.get(roomName);
-
-        if (!room) continue;
-
-        element.classList.remove(...element.classList);
-        element.classList.add("room");
-
-        if (!(element instanceof SVGElement)) continue;
-
-        if (useAvailability) {
-          const availabilityState = getRoomAvailability(
-            room.capacity,
-            room.contracts.length,
-          );
-          element.style.fill = AvailabilityColors[availabilityState];
-          element.classList.add(availabilityState);
-        } else {
-          element.style.fill = getDepartmentColor(room.department.name);
-        }
-        
-        const oldText = element.parentElement?.getElementsByClassName("room-label")[0];
-        const centerX = Number(oldText?.getAttribute("x"));
-        const centerY = Number(oldText?.getAttribute("y"));
-
-        const lines = [
-          roomName,
-          `${room.area}m²`,
-          `${room.contracts.length}/${room.capacity}`,
-        ];
-
-        const label = createRoomInfoLabel(centerX, centerY, lines);
-
-        element.parentElement
-          ?.getElementsByClassName("room-label")[0]
-          .replaceWith(label);
-      }
-    } catch (error: unknown) {
-      let errorMessage = "❌ Failed to update rooms: ";
-      if (error instanceof Error) {
-        errorMessage += error.message;
-      }
-      console.log(errorMessage);
-    }
+    updateRooms(useAvailability);
   }
 
   useEffect(() => {
