@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--padding-sm);
-  background-color: var(--color-background);
+  background-color: var(--color-background-gray);
   border: var(--border-sm);
   padding: var(--padding-md);
   border-radius: var(--border-radius-md);

@@ -30,22 +30,41 @@ describe("TopBar", () => {
     expect(screen.getByText("HYTiS")).toBeInTheDocument();
   });
 
+  it("opens and closes settings modal from the settings button", async () => {
+    const user = userEvent.setup();
+    render(<TopBar />);
+
+    expect(
+      screen.queryByTestId("settings-modal-title"),
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("topbar-settings-button"));
+    expect(screen.getByTestId("settings-modal-title")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "close" }));
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId("settings-modal-title"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   it("topbar menu can be opened", async () => {
     const user = userEvent.setup();
     render(<TopBar />);
     const menuButton = screen.getByTestId("topbar-profile-button");
 
     expect(
-      screen.queryByTestId("topbar-settings-button"),
+      screen.queryByTestId("profile-menu-close-button"),
     ).not.toBeInTheDocument();
 
     await user.click(menuButton);
-    expect(screen.getByTestId("topbar-settings-button")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-menu-close-button")).toBeInTheDocument();
 
     await user.click(document.body);
     await waitFor(() => {
       expect(
-        screen.queryByTestId("topbar-settings-button"),
+        screen.queryByTestId("profile-menu-close-button"),
       ).not.toBeInTheDocument();
     });
   });
