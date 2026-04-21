@@ -28,7 +28,7 @@ test("room has correct availability color based on occupancy", async ({
   await expect(fullRoom).toHaveClass(/full/);
 });
 
-test("room details panel is shown with room name when clicking room from the map", async ({
+test("sidepanel panel is shown when clicking room from the map", async ({
   page,
 }) => {
   const availableRoom = page.locator('[data-room="A210"]');
