@@ -1,8 +1,9 @@
 :root {
   /* Colors */
   --color-primary: #e1c0f6;
+  --color-primary-light: #f0e0ff;
   --color-secondary: #e5bb83;
-  --color-topbar: #484848;
+  --color-secondary-light: #efd1a9;
   --color-text-black: #222;
   --color-text-white: #fff;
   --color-background: #fff;

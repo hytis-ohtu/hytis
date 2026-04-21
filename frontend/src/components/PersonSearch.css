@@ -56,11 +56,11 @@
   color: var(--color-text-black);
   cursor: pointer;
   flex-shrink: 0;
-  transition: background var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .person-search-type-button:hover {
-  background: var(--color-secondary);
+  background: var(--color-primary-light);
 }
 
 .person-search-type-chevron {
@@ -97,7 +97,7 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-black);
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .person-search-type-option:last-child {
