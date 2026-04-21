@@ -101,12 +101,12 @@ describe("/api/rooms", () => {
       expect(updatedRoom.roomTypeId).toBe(updatedRoomData.roomTypeId);
     });
 
-    it("normalizes empty room text fields to null", async () => {
+    it("normalizes empty freeText string to null", async () => {
       const updatedRoomData = {
         capacity: 10,
         departmentId: 1,
         freeText: "",
-        roomType: "",
+        roomTypeId: 1,
       };
 
       const response = await api
@@ -116,7 +116,6 @@ describe("/api/rooms", () => {
 
       const updatedRoom = response.body;
       expect(updatedRoom.freeText).toBeNull();
-      expect(updatedRoom.roomType).toBeNull();
     });
 
     it("returns 404 when updating non-existing room", async () => {

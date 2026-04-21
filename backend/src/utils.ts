@@ -21,15 +21,24 @@ const toPersonInput = (object: unknown): PersonInput =>
 export default toPersonInput;
 
 const RoomSchema = z.object({
-  capacity: z
-    .number()
-    .int()
-    .nonnegative("Capacity must be non-negative")
-    .nullable()
-    .optional(),
-  departmentId: z.number().nullable().optional(),
-  freeText: z.string().nullable().optional(),
-  roomTypeId: z.number().nullable().optional(),
+  capacity: z.preprocess((val) => {
+    if (val === "" || val === null || val === undefined) return null;
+    if (typeof val === "string") return Number(val);
+    return val;
+  }, z.number().int().nonnegative("Capacity must be non-negative").nullable().optional()),
+  departmentId: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.number().nullable().optional(),
+  ),
+  freeText: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.string().nullable().optional(),
+  ),
+  roomTypeId: z.preprocess((val) => {
+    if (val === "" || val === null || val === undefined) return null;
+    if (typeof val === "string") return Number(val);
+    return val;
+  }, z.number().nullable().optional()),
 });
 
 export type RoomInput = z.infer<typeof RoomSchema>;
