@@ -6,11 +6,10 @@
   width: 100%;
   height: var(--topbar-height);
   background: var(--color-topbar);
-  border-bottom: var(--border-style);
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  justify-content: space-between;
-  padding: var(--gap);
+  box-shadow: 0 4px rgba(0, 0, 0, 0.25);
   z-index: var(--z-index-topbar);
 }
 
@@ -19,20 +18,27 @@
   font-size: 20px;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
+  padding-left: var(--padding-md);
 }
 
 .topbar-actions {
   display: flex;
-  gap: 8px;
   flex-shrink: 0;
+  justify-self: end;
+}
+
+.topbar-search {
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
 .topbar-button {
-  width: var(--button-size);
-  height: var(--button-size);
-  border: none;
-  border-radius: 50%;
-  background: transparent;
+  width: var(--topbar-height);
+  border: var(--border-sm);
+  border-bottom: var(--border-md);
+  aspect-ratio: 1;
+  background: var(--color-primary);
   color: var(--color-text-black);
   cursor: pointer;
   display: flex;
@@ -51,19 +57,5 @@
 .topbar-button:active {
   transform: scale(0.98);
   background: var(--color-muted);
-  color: var(--color-text-black);
-}
-
-.topbar-profile {
-  background: var(--color-topbar);
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text-black);
-  letter-spacing: 0.02em;
-}
-
-.topbar-profile:hover {
-  background: var(--color-secondary);
   color: var(--color-text-black);
 }

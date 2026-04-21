@@ -1,6 +1,7 @@
-import { User } from "lucide-react";
+import { Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import PersonSearch from "./PersonSearch";
+import SettingsModal from "./SettingsModal";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
 
@@ -18,6 +19,7 @@ interface TopBarProps {
 
 function TopBar({ title = "HYTiS" }: TopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [fontSize, setFontSize] = useState(
     Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
   );
@@ -32,25 +34,39 @@ function TopBar({ title = "HYTiS" }: TopBarProps) {
   return (
     <header className="topbar">
       <span className="topbar-title">{title}</span>
-      <PersonSearch />
+      <div className="topbar-search">
+        <PersonSearch />
+      </div>
       <div className="topbar-actions">
         <button
+          data-testid="topbar-settings-button"
+          className="topbar-button"
+          aria-label="Settings"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSettingsOpen(true);
+          }}
+        >
+          <Settings size={24} strokeWidth={1.7} />
+        </button>
+        <button
           data-testid="topbar-profile-button"
-          className="topbar-button topbar-profile"
+          className="topbar-button topbar-profile-button"
           onClick={(e) => {
             e.stopPropagation();
             setMenuOpen((v) => !v);
           }}
         >
-          <User className="size-6" />
+          <User size={24} strokeWidth={1.7} />
         </button>
-        {menuOpen && (
-          <TopBarMenu
-            onClose={() => setMenuOpen(false)}
+        {settingsOpen && (
+          <SettingsModal
+            onClose={() => setSettingsOpen(false)}
             fontSize={fontSize}
             setFontSize={setFontSize}
           />
         )}
+        {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
       </div>
     </header>
   );

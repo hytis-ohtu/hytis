@@ -16,7 +16,7 @@ const mockRoom: Room = {
     name: "H523 CS",
   },
   freeText: "Test room",
-  roomType: "Office",
+  roomType: { id: 1, name: "Office" },
 };
 
 const mockFetchRoomById = vi.fn();

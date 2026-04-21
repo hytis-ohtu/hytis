@@ -1,4 +1,7 @@
-import { AvailabilityColors, DepartmentColors } from "../hooks/useRoomColors";
+import {
+  AvailabilityColors,
+  DepartmentColors,
+} from "../hooks/useRoomProperties";
 import "./Legend.css";
 
 type LegendMode = "availability" | "department";

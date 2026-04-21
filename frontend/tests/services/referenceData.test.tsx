@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   findAllDepartments,
   findAllResearchGroups,
+  findAllRoomTypes,
   findAllTitles,
   type ReferenceItem,
 } from "../../src/services/referenceDataService";
@@ -158,6 +159,21 @@ describe("referenceDataService", () => {
       const result = await findAllResearchGroups();
 
       expect(result).toEqual([]);
+    });
+  });
+
+  describe("findAllRoomTypes", () => {
+    it("returns room types from the API", async () => {
+      mockedAxios.get = vi
+        .fn()
+        .mockResolvedValue({ data: [{ id: 1, name: "Konferenssihuone" }] });
+
+      const result = await findAllRoomTypes();
+
+      expect(result).toEqual([{ id: 1, name: "Konferenssihuone" }]);
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        "/api/reference-data/room-types",
+      );
     });
   });
 });

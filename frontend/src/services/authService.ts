@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
-import type { UserData } from "../types/auth";
+import type { UserData } from "../types";
 
 export async function getCurrentUser(): Promise<UserData> {
   const response = await axios.get<Promise<UserData>>(`${BASE_URL}/api/user`, {
