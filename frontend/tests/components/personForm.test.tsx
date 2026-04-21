@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PersonForm from "../../src/components/PersonForm.tsx";
 
@@ -96,11 +97,13 @@ describe("PersonForm", () => {
     );
   });
 
-  it("updates state when a select changes", () => {
+  it("updates state when a select changes", async () => {
+    const user = userEvent.setup();
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    const select = screen.getByLabelText("Osasto:") as HTMLSelectElement;
-    select.value = "1";
-    fireEvent.change(select);
+
+    const select = screen.getByLabelText("Osasto:");
+    await user.selectOptions(select, "1");
+
     expect(defaultProps.onChange).toHaveBeenCalled();
   });
 
@@ -363,9 +366,7 @@ describe("PersonForm", () => {
 
   it("clears search input after selecting a person", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText(
-      "Hae henkilö:",
-    ) as HTMLInputElement;
+    const searchInput = screen.getByLabelText("Hae henkilö:");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -373,7 +374,7 @@ describe("PersonForm", () => {
     });
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     await waitFor(() => {
-      expect(searchInput.value).toBe("");
+      expect(searchInput).toHaveValue("");
     });
   });
 });

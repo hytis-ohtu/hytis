@@ -7,10 +7,11 @@ import PersonSearch from "../../src/components/PersonSearch";
 import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
 import { findRoomById } from "../../src/services/roomsService";
 
-// Mock the peopleService
+// Mock peopleService
 const mockSearchPeople = vi.fn();
 vi.mock("../../src/services/peopleService", () => ({
-  searchPeople: (...args: unknown[]) => mockSearchPeople(...args),
+  searchPeople: (...args: unknown[]) =>
+    mockSearchPeople(...args) as Promise<unknown[]>,
 }));
 
 vi.mock("../src/services/roomsService", () => ({
@@ -288,15 +289,11 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText(
-      "Hae henkilöä nimellä...",
-    ) as HTMLInputElement;
+    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
-    await waitFor(() => {
-      expect(searchInput.value).toBe("Matti");
-    });
+    expect(searchInput).toHaveValue("Matti");
 
     // Close dropdown
     await user.click(document.body);
@@ -308,7 +305,7 @@ describe("PersonSearch", () => {
     });
 
     // Check input value is preserved
-    expect(searchInput.value).toBe("Matti");
+    expect(searchInput).toHaveValue("Matti");
   });
 
   it("debounces search API calls", async () => {

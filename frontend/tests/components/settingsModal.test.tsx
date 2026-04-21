@@ -42,7 +42,7 @@ describe("SettingsModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls setFontSize when the range input value changes", async () => {
+  it("calls setFontSize when the range input value changes", () => {
     render(
       <SettingsModal
         onClose={() => {}}
@@ -55,7 +55,11 @@ describe("SettingsModal", () => {
     expect(setFontSizeMock).toHaveBeenCalledWith(20);
   });
 
-  it("updates localStorage and CSS variable when font size changes", async () => {
+  it("updates localStorage and CSS variable when font size changes", () => {
+    const setItemSpy = vi
+      .spyOn(localStorage, "setItem")
+      .mockImplementation(() => undefined);
+
     render(
       <SettingsModal
         onClose={() => {}}
@@ -66,7 +70,8 @@ describe("SettingsModal", () => {
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "22" } });
 
-    expect(localStorage.setItem).toHaveBeenCalledWith("map-font-size", "22");
+    expect(setItemSpy).toHaveBeenCalledWith("map-font-size", "22");
+    setItemSpy.mockRestore();
     expect(
       document.documentElement.style.getPropertyValue("--map-font-size"),
     ).toBe("22px");

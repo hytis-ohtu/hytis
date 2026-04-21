@@ -54,14 +54,14 @@ vi.mock("../../src/services/referenceDataService", () => ({
 
 const mockFindRoomById = vi
   .mocked(findRoomById)
-  .mockImplementation(async (roomId: number) => {
+  .mockImplementation((roomId: number) => {
     if (roomId === testRooms[1].id) {
-      return {
+      return Promise.resolve({
         ...testRooms[1],
         contracts: [],
-      } as Room;
+      } as Room);
     } else {
-      return testRooms[0] as Room;
+      return Promise.resolve(testRooms[0] as Room);
     }
   });
 
