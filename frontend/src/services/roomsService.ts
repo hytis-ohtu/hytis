@@ -2,7 +2,10 @@ import axios from "axios";
 import { BASE_URL } from "../constants";
 import type { Room } from "../types";
 
-const ROOM_FETCH_DELAY_MS = import.meta.env.DEV ? 2000 : 0;
+const VITE_ROOM_FETCH_DELAY_MS = (() => {
+  const delay = Number(import.meta.env.VITE_ROOM_FETCH_DELAY_MS);
+  return Number.isFinite(delay) && delay > 0 ? delay : 0;
+})();
 let latestReqId = 0;
 let delayTimer: ReturnType<typeof setTimeout> | null = null;
 let cancelLatestReq: (() => void) | null = null;
@@ -48,7 +51,7 @@ export async function findRoomById(id: number): Promise<Room> {
         }
         reject(error instanceof Error ? error : new Error());
       }
-    }, ROOM_FETCH_DELAY_MS);
+    }, VITE_ROOM_FETCH_DELAY_MS);
   });
 }
 

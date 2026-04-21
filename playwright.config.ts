@@ -20,6 +20,7 @@ export default defineConfig({
       stderr: "pipe",
       env: {
         VITE_API_URL: "http://localhost:3000",
+        VITE_ROOM_FETCH_DELAY_MS: "0",
       },
     },
   ],

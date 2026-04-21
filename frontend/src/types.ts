@@ -18,11 +18,6 @@ export interface ResearchGroup {
   name: string;
 }
 
-export interface RoomType {
-  id: number;
-  name: string;
-}
-
 export interface Room {
   id: number;
   name: string;
