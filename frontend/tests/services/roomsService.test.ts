@@ -32,11 +32,14 @@ describe("roomsService", () => {
     mockedAxios.get = vi.fn().mockResolvedValueOnce({ data: latestRoom });
 
     const firstRequest = findRoomById(1);
+    const firstRequestRejection = expect(firstRequest).rejects.toMatchObject({
+      message: "",
+    });
     const secondRequest = findRoomById(2);
 
     await vi.runAllTimersAsync();
 
-    await expect(firstRequest).rejects.toMatchObject({ message: "" });
+    await firstRequestRejection;
     await expect(secondRequest).resolves.toEqual(latestRoom);
 
     expect(mockedAxios.get).toHaveBeenCalledTimes(1);

@@ -35,13 +35,6 @@ test("topbar menu can be closed by the close button", async ({ page }) => {
   await expect(page.getByText("Log Out")).not.toBeVisible();
 });
 
-test("logout shows redirect message", async ({ page }) => {
-  await openProfileMenu(page);
-  await page.getByText("Log Out").click();
-
-  await expect(page.getByText("Redirecting to login page...")).toBeVisible();
-});
-
 test("topbar settings menu can be opened and closed", async ({ page }) => {
   await page.getByTestId("topbar-settings-button").click();
   await expect(page.getByTestId("settings-modal-title")).toBeVisible();

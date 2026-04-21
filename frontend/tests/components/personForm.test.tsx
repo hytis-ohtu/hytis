@@ -29,7 +29,7 @@ vi.mock("../../src/services/referenceDataService", () => ({
 const REQUIRED_INITIAL = {
   firstName: "Terppa",
   lastName: "Testaaja",
-  department: "1",
+  departmentId: "1",
   jobtitle: "1",
   supervisors: "",
   startDate: "2025-01-01",
@@ -102,9 +102,14 @@ describe("PersonForm", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
 
     const select = screen.getByLabelText("Osasto:");
-    await user.selectOptions(select, "1");
+    const option = await screen.findByRole("option", { name: "HR" });
+    await user.selectOptions(select, option);
 
-    expect(defaultProps.onChange).toHaveBeenCalled();
+    expect(select).toHaveValue("2");
+    expect(defaultProps.onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ department: "2" }),
+      true,
+    );
   });
 
   it("reports valid when all required fields are filled", () => {
