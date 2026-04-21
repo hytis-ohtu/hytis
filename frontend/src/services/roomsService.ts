@@ -2,6 +2,11 @@ import axios from "axios";
 import { BASE_URL } from "../constants";
 import type { Room } from "../types";
 
+const ROOM_FETCH_DELAY_MS = import.meta.env.DEV ? 2000 : 0;
+let latestReqId = 0;
+let delayTimer: ReturnType<typeof setTimeout> | null = null;
+let cancelLatestReq: (() => void) | null = null;
+
 export async function findAllRooms(): Promise<Room[]> {
   const response = await axios.get<Room[]>(`${BASE_URL}/api/rooms`);
 
@@ -9,9 +14,42 @@ export async function findAllRooms(): Promise<Room[]> {
 }
 
 export async function findRoomById(id: number): Promise<Room> {
-  const response = await axios.get<Room>(`${BASE_URL}/api/rooms/${id}`);
+  const reqId = ++latestReqId;
 
-  return response.data;
+  if (delayTimer !== null) {
+    clearTimeout(delayTimer);
+    delayTimer = null;
+  }
+
+  if (cancelLatestReq !== null) {
+    cancelLatestReq();
+    cancelLatestReq = null;
+  }
+
+  return new Promise<Room>((resolve, reject) => {
+    cancelLatestReq = () => reject(new Error());
+
+    delayTimer = setTimeout(async () => {
+      delayTimer = null;
+
+      try {
+        const response = await axios.get<Room>(`${BASE_URL}/api/rooms/${id}`);
+
+        if (reqId !== latestReqId) {
+          reject(new Error());
+          return;
+        }
+
+        cancelLatestReq = null;
+        resolve(response.data);
+      } catch (error) {
+        if (reqId === latestReqId) {
+          cancelLatestReq = null;
+        }
+        reject(error instanceof Error ? error : new Error());
+      }
+    }, ROOM_FETCH_DELAY_MS);
+  });
 }
 
 export async function editRoom(

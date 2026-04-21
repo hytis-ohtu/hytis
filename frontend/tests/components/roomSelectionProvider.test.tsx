@@ -141,12 +141,10 @@ describe("RoomSelectionProvider", () => {
 
     await user.click(screen.getByTestId("open-room-1"));
 
-    await waitFor(() => {
-      expect(screen.getByTestId("active-room-id")).toHaveTextContent("1");
-      expect(screen.getByTestId("active-room-state")).toHaveTextContent(
-        "undefined",
-      );
-    });
+    expect(screen.getByTestId("active-room-id")).toHaveTextContent("1");
+    expect(screen.getByTestId("active-room-state")).toHaveTextContent(
+      "undefined",
+    );
 
     await act(async () => {
       roomRequest.resolve(testRooms[0] as Room);
@@ -154,6 +152,49 @@ describe("RoomSelectionProvider", () => {
     });
 
     expect(screen.getByTestId("active-room-state")).toHaveTextContent("1");
+  });
+
+  it("shows skeleton immediately when opening another room from closed panel", async () => {
+    const user = userEvent.setup();
+    const firstRequest = deferred<Room>();
+    const secondRequest = deferred<Room>();
+    const findRoomByIdMock = vi
+      .fn()
+      .mockImplementationOnce(() => firstRequest.promise)
+      .mockImplementationOnce(() => secondRequest.promise);
+
+    customRender(<TestComponent />, findRoomByIdMock);
+
+    await user.click(screen.getByTestId("open-room-1"));
+    await act(async () => {
+      firstRequest.resolve(testRooms[0] as Room);
+      await firstRequest.promise;
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("active-room-state")).toHaveTextContent("1");
+    });
+
+    await user.click(screen.getByTestId("close-room"));
+    await waitFor(() => {
+      expect(screen.getByTestId("active-room-id")).toHaveTextContent("null");
+    });
+
+    await user.click(screen.getByTestId("open-room-2"));
+
+    expect(screen.getByTestId("active-room-id")).toHaveTextContent("2");
+    expect(screen.getByTestId("active-room-state")).toHaveTextContent(
+      "undefined",
+    );
+
+    await act(async () => {
+      secondRequest.resolve(testRooms[1] as Room);
+      await secondRequest.promise;
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("active-room-state")).toHaveTextContent("2");
+    });
   });
 
   it("stores expand request when selecting room with person", async () => {
@@ -257,6 +298,22 @@ describe("RoomSelectionProvider", () => {
     });
 
     expect(findRoomByIdMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("re-fetches same room when no person id is provided", async () => {
+    const user = userEvent.setup();
+    const { findRoomByIdMock } = customRender(<TestComponent />);
+
+    await user.click(screen.getByTestId("open-room-1"));
+    await waitFor(() => {
+      expect(screen.getByTestId("active-room-state")).toHaveTextContent("1");
+    });
+
+    await user.click(screen.getByTestId("open-room-1"));
+
+    await waitFor(() => {
+      expect(findRoomByIdMock).toHaveBeenCalledTimes(2);
+    });
   });
 
   it("ignores stale requests and keeps latest room data", async () => {

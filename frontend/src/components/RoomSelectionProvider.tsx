@@ -49,15 +49,16 @@ export function RoomSelectionProvider({
     refresh: boolean = true,
   ): Promise<void> => {
     const roomReqId = ++reqRef.current.room;
+    const isSidePanelClosed = activeRoomId === null;
     const isSameRoom = activeRoom?.id === roomId;
 
-    // The clicked room is the last closed one
+    // The clicked room is the last loaded one
     if (!refresh && isSameRoom) {
       setActiveRoomId(roomId);
       return;
     }
 
-    // Side panel was closed
+    // Sidepanel was closed
     if (roomId === null) {
       closeSidePanel();
       return;
@@ -74,37 +75,41 @@ export function RoomSelectionProvider({
       setExpandReq(null);
     }
 
-    // The clicked room is a different one
-    if (!isSameRoom) {
-      setActiveRoom(undefined);
-    }
-
     // The room is open and a person is selected
-    if (personId != null && isSameRoom) {
+    if (personId != null && isSameRoom && !isSidePanelClosed) {
       clearSkeletonTimer();
       return;
     }
 
-    // Delay showing skeleton to prevent flashing on fast loads
+    // Show skeleton immediately when opening from a closed side panel.
+    // Delay skeleton only for open-to-open room switches to prevent flashing.
     clearSkeletonTimer();
-    skeletonDelayTimerRef.current = setTimeout(() => {
-      if (reqRef.current.room === roomReqId) {
-        setActiveRoom(undefined);
-      }
-    }, SKELETON_DELAY_MS);
+    if (isSidePanelClosed) {
+      setActiveRoom(undefined);
+    } else {
+      skeletonDelayTimerRef.current = setTimeout(() => {
+        if (reqRef.current.room === roomReqId) {
+          setActiveRoom(undefined);
+        }
+      }, SKELETON_DELAY_MS);
+    }
 
     try {
       const room = await findRoomById(roomId);
-      if (reqRef.current.room !== roomReqId) return;
+      if (reqRef.current.room !== roomReqId) {
+        return;
+      }
 
       clearSkeletonTimer();
       setActiveRoom(room);
     } catch (error) {
-      if (reqRef.current.room !== roomReqId) return;
+      if (reqRef.current.room !== roomReqId) {
+        return;
+      }
 
       clearSkeletonTimer();
-      console.error("Failed to fetch room details:", error);
       setActiveRoom(null);
+      console.error("Failed to fetch room details:", error);
     }
   };
 
