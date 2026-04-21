@@ -13,6 +13,7 @@
     "moduleResolution": "node16",
     "isolatedModules": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["jest", "node"],
     //"types": [],
     // For nodejs:
     // "lib": ["esnext"],
