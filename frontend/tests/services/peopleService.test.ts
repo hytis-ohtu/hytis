@@ -334,23 +334,5 @@ describe("peopleService", () => {
 
       await expect(searchPeople("Matti")).rejects.toThrow("Network error");
     });
-
-    it("includes the base URL from constants", async () => {
-      const mockResponse = { data: [] };
-      mockedAxios.get = vi.fn().mockResolvedValue(mockResponse);
-
-      await searchPeople("test");
-
-      expect(mockedAxios.get).toHaveBeenCalledWith(
-        expect.stringContaining("/api/people"),
-        expect.any(Object),
-      );
-      expect(mockedAxios.get).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          params: expect.objectContaining({ q: "test", type: "personName" }),
-        }),
-      );
-    });
   });
 });

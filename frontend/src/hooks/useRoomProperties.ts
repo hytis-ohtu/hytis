@@ -48,24 +48,31 @@ export const DepartmentColors = new Map([
   ["H523 CS", "#667eea"],
 ]);
 
-export function getDepartmentColor(departmentName: string): string {
-  const color = DepartmentColors.get(departmentName) || null;
-  if (color === null) return "#aaaaaa";
-  return color;
+export function getDepartmentColor(
+  departmentName: string | null | undefined,
+): string {
+  if (departmentName === null || departmentName === undefined) return "#aaaaaa";
+  return DepartmentColors.get(departmentName) || "#aaaaaa";
 }
 
 const LIMITED_CAPACITY_THRESHOLD = 2;
 
 function getRoomAvailability(
-  capacity: number,
-  occupants: number,
+  capacity: number | null,
+  occupants: number | null,
 ): "available" | "limited" | "full" {
+  if (capacity === null || occupants === null) {
+    return "full";
+  }
+
   if (occupants === 0 || occupants < capacity - LIMITED_CAPACITY_THRESHOLD) {
     return "available";
   }
+
   if (occupants < capacity) {
     return "limited";
   }
+
   return "full";
 }
 
@@ -110,10 +117,11 @@ export async function updateRooms(useAvailability: boolean) {
         element.style.fill = AvailabilityColors[availabilityState];
         element.classList.add(availabilityState);
       } else {
-        element.style.fill = getDepartmentColor(room.department.name);
+        element.style.fill = getDepartmentColor(room.department?.name);
       }
-      
-      const oldText = element.parentElement?.getElementsByClassName("room-label")[0];
+
+      const oldText =
+        element.parentElement?.getElementsByClassName("room-label")[0];
       const centerX = Number(oldText?.getAttribute("x"));
       const centerY = Number(oldText?.getAttribute("y"));
 
@@ -142,7 +150,7 @@ export function useRoomProperties() {
   const [useAvailability, setUseAvailability] = useState(true);
 
   async function onUpdate() {
-    updateRooms(useAvailability);
+    await updateRooms(useAvailability);
   }
 
   useEffect(() => {
@@ -178,7 +186,7 @@ export function useRoomProperties() {
             element.style.fill = AvailabilityColors[availabilityState];
             element.classList.add(availabilityState);
           } else {
-            element.style.fill = getDepartmentColor(room.department.name);
+            element.style.fill = getDepartmentColor(room.department?.name);
           }
         }
       } catch (error: unknown) {
@@ -189,7 +197,7 @@ export function useRoomProperties() {
         console.log(errorMessage);
       }
     }
-    addColorToRooms();
+    void addColorToRooms();
   }, [useAvailability]);
 
   useEffect(() => {
@@ -224,7 +232,7 @@ export function useRoomProperties() {
           parent.classList.add("room-group");
           element.parentElement?.appendChild(parent);
           parent.appendChild(element);
-          
+
           const bbox = getElementBBox(element);
           const centerX = bbox.x + bbox.width / 2;
           const centerY = bbox.y + bbox.height / 2;
@@ -246,7 +254,7 @@ export function useRoomProperties() {
         console.log(errorMessage);
       }
     }
-    addTextToRooms();
+    void addTextToRooms();
   }, []);
 
   return {
