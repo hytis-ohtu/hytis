@@ -30,7 +30,7 @@
   min-width: 0;
   padding: 0.5rem;
   background-color: var(--color-background);
-  border: 1px solid var(--color-secondary);
+  border: var(--border-sm);
   border-radius: 4px;
   font-size: 1rem;
 }
