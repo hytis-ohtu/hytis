@@ -93,8 +93,12 @@ export async function updateRooms(useAvailability: boolean) {
 
       if (!room) continue;
 
+      const hasActive = element.classList.contains("active");
       element.classList.remove(...element.classList);
       element.classList.add("room");
+      if (hasActive) {
+        element.classList.add("active");
+      }
 
       if (!(element instanceof SVGElement)) continue;
 
@@ -157,8 +161,12 @@ export function useRoomProperties() {
           const room = roomsMap.get(roomName);
           if (!room) continue;
 
+          const hasActive = element.classList.contains("active");
           element.classList.remove(...element.classList);
           element.classList.add("room");
+          if (hasActive) {
+            element.classList.add("active");
+          }
 
           if (!(element instanceof SVGElement)) continue;
 
