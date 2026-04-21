@@ -32,8 +32,8 @@
   --padding-md: 1rem;
 
   /* Shadows */
-  --box-shadow-sm: 0 4px var(--color-text-black);
-  --box-shadow-md: 0 8px var(--color-text-black);
+  --box-shadow-sm: 0 4px rgba(0, 0, 0, 0.25);
+  --box-shadow-md: 0 8px rgba(0, 0, 0, 0.25);
 
   --topbar-height: 52px;
   --button-size: 50px;
