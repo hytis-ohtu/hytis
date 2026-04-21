@@ -9,17 +9,18 @@ function ZoomButtons({ handleZoom }: ZoomButtonsProps) {
   return (
     <div className="zoom-buttons">
       <button
-        data-testid="zoom-increase-button"
+        className="button-icon"
+        aria-label="Suurenna"
         onClick={(e) => handleZoom(e, -1)}
       >
-        <Plus size={22} />
+        <Plus />
       </button>
-
       <button
-        data-testid="zoom-decrease-button"
+        className="button-icon"
+        aria-label="Loitonna"
         onClick={(e) => handleZoom(e, 1)}
       >
-        <Minus size={22} />
+        <Minus />
       </button>
     </div>
   );

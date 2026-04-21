@@ -1,34 +1,18 @@
 .zoom-buttons {
   position: absolute;
-  left: 15px;
-  bottom: 15px;
+  left: 1rem;
+  bottom: 1rem;
   display: flex;
-  align-items: center;
-  border: var(--border-sm);
+  border: var(--border-md);
   border-radius: var(--border-radius-md);
   background: var(--color-background);
+  box-shadow: var(--box-shadow-sm);
 }
 
-.zoom-in-button {
-  border: 0;
-  border-right: var(--border-sm);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-background);
-  cursor: pointer;
+.zoom-buttons button {
+  padding: 0.25rem 0.5rem;
 }
 
-.zoom-out-button {
-  border: 0;
-  border-left: var(--border-sm);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-background);
-  cursor: pointer;
-}
-
-.zoom-reset-button {
-  font-size: var(--font-size-md);
-  font-family: var(--font-body);
-  background-color: var(--color-background);
-  border: 0;
-  cursor: pointer;
+.zoom-buttons button:first-of-type {
+  border-right: 2px solid var(--color-text-black);
 }
