@@ -18,11 +18,11 @@ vi.mock("../src/services/roomsService", () => ({
   findRoomById: vi.fn(),
 }));
 
-const findRoomByIdMock = vi.mocked(findRoomById);
+const mockFindRoomById = vi.mocked(findRoomById);
 
 const customRender = (ui: ReactElement) => {
   return render(
-    <RoomSelectionProvider findRoomById={findRoomByIdMock}>
+    <RoomSelectionProvider findRoomById={mockFindRoomById}>
       {ui}
     </RoomSelectionProvider>,
   );

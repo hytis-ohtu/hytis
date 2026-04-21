@@ -27,17 +27,17 @@ function deferred<T>() {
 
 const customRender = (
   ui: ReactElement,
-  findRoomByIdMock = vi.mocked(findRoomById),
+  mockFindRoomById = vi.mocked(findRoomById),
 ) => {
   const view = render(
-    <RoomSelectionProvider findRoomById={findRoomByIdMock}>
+    <RoomSelectionProvider findRoomById={mockFindRoomById}>
       {ui}
     </RoomSelectionProvider>,
   );
 
   return {
     ...view,
-    findRoomByIdMock,
+    mockFindRoomById,
   };
 };
 
@@ -135,9 +135,9 @@ describe("RoomSelectionProvider", () => {
     const user = userEvent.setup();
 
     const roomRequest = deferred<Room>();
-    const findRoomByIdMock = vi.fn(() => roomRequest.promise);
+    const mockFindRoomById = vi.fn(() => roomRequest.promise);
 
-    customRender(<TestComponent />, findRoomByIdMock);
+    customRender(<TestComponent />, mockFindRoomById);
 
     await user.click(screen.getByTestId("open-room-1"));
 
@@ -158,12 +158,12 @@ describe("RoomSelectionProvider", () => {
     const user = userEvent.setup();
     const firstRequest = deferred<Room>();
     const secondRequest = deferred<Room>();
-    const findRoomByIdMock = vi
+    const mockFindRoomById = vi
       .fn()
       .mockImplementationOnce(() => firstRequest.promise)
       .mockImplementationOnce(() => secondRequest.promise);
 
-    customRender(<TestComponent />, findRoomByIdMock);
+    customRender(<TestComponent />, mockFindRoomById);
 
     await user.click(screen.getByTestId("open-room-1"));
     await act(async () => {
@@ -260,7 +260,7 @@ describe("RoomSelectionProvider", () => {
 
   it("reopens same room without refresh without triggering a fetch", async () => {
     const user = userEvent.setup();
-    const { findRoomByIdMock } = customRender(<TestComponent />);
+    const { mockFindRoomById } = customRender(<TestComponent />);
 
     await user.click(screen.getByTestId("open-room-1"));
     await waitFor(() => {
@@ -277,12 +277,12 @@ describe("RoomSelectionProvider", () => {
       expect(screen.getByTestId("active-room-id")).toHaveTextContent("1");
     });
 
-    expect(findRoomByIdMock).toHaveBeenCalledTimes(1);
+    expect(mockFindRoomById).toHaveBeenCalledTimes(1);
   });
 
   it("does not re-fetch when selecting same room with person id", async () => {
     const user = userEvent.setup();
-    const { findRoomByIdMock } = customRender(<TestComponent />);
+    const { mockFindRoomById } = customRender(<TestComponent />);
 
     await user.click(screen.getByTestId("open-room-1"));
     await waitFor(() => {
@@ -297,12 +297,12 @@ describe("RoomSelectionProvider", () => {
       );
     });
 
-    expect(findRoomByIdMock).toHaveBeenCalledTimes(1);
+    expect(mockFindRoomById).toHaveBeenCalledTimes(1);
   });
 
   it("re-fetches same room when no person id is provided", async () => {
     const user = userEvent.setup();
-    const { findRoomByIdMock } = customRender(<TestComponent />);
+    const { mockFindRoomById } = customRender(<TestComponent />);
 
     await user.click(screen.getByTestId("open-room-1"));
     await waitFor(() => {
@@ -312,7 +312,7 @@ describe("RoomSelectionProvider", () => {
     await user.click(screen.getByTestId("open-room-1"));
 
     await waitFor(() => {
-      expect(findRoomByIdMock).toHaveBeenCalledTimes(2);
+      expect(mockFindRoomById).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -320,12 +320,12 @@ describe("RoomSelectionProvider", () => {
     const user = userEvent.setup();
     const firstRequest = deferred<Room>();
     const secondRequest = deferred<Room>();
-    const findRoomByIdMock = vi
+    const mockFindRoomById = vi
       .fn()
       .mockImplementationOnce(() => firstRequest.promise)
       .mockImplementationOnce(() => secondRequest.promise);
 
-    customRender(<TestComponent />, findRoomByIdMock);
+    customRender(<TestComponent />, mockFindRoomById);
 
     await user.click(screen.getByTestId("open-room-1"));
     await user.click(screen.getByTestId("open-room-2"));
@@ -355,11 +355,11 @@ describe("RoomSelectionProvider", () => {
     const consoleErrorSpy = vi
       .spyOn(console, "error")
       .mockImplementation(() => undefined);
-    const findRoomByIdMock = vi
+    const mockFindRoomById = vi
       .mocked(findRoomById)
       .mockRejectedValue(new Error("Failed to fetch"));
 
-    customRender(<TestComponent />, findRoomByIdMock);
+    customRender(<TestComponent />, mockFindRoomById);
     await user.click(screen.getByTestId("open-room-1"));
 
     await waitFor(() => {

@@ -28,13 +28,13 @@ vi.mock("../../src/services/roomsService", () => ({
 }));
 
 vi.mocked(findAllRooms).mockResolvedValue(testRooms);
-const findRoomByIdMock = vi
+const mockFindRoomById = vi
   .mocked(findRoomById)
   .mockResolvedValue(testRooms[0]);
 
 const customRender = (ui: ReactElement) => {
   return render(
-    <RoomSelectionProvider findRoomById={findRoomByIdMock}>
+    <RoomSelectionProvider findRoomById={mockFindRoomById}>
       {ui}
     </RoomSelectionProvider>,
   );

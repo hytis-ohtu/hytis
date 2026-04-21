@@ -9,11 +9,11 @@ afterEach(() => {
   cleanup();
 });
 
-const localStorageMock = {
+const mockLocalStorage = {
   getItem: vi.fn(),
   setItem: vi.fn(),
   clear: vi.fn(),
   removeItem: vi.fn(),
 };
 
-vi.stubGlobal("localStorage", localStorageMock);
+vi.stubGlobal("localStorage", mockLocalStorage);

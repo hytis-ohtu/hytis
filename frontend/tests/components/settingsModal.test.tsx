@@ -5,12 +5,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsModal from "../../src/components/SettingsModal.tsx";
 
 describe("SettingsModal", () => {
-  const onCloseMock = vi.fn();
-  const setFontSizeMock = vi.fn();
+  const mockOnClose = vi.fn();
+  const mockSetFontSize = vi.fn();
 
   beforeEach(() => {
-    onCloseMock.mockClear();
-    setFontSizeMock.mockClear();
+    mockOnClose.mockClear();
+    mockSetFontSize.mockClear();
   });
 
   it("renders without crashing", () => {
@@ -23,14 +23,14 @@ describe("SettingsModal", () => {
   it("calls onClose when close button is clicked", async () => {
     render(
       <SettingsModal
-        onClose={onCloseMock}
+        onClose={mockOnClose}
         fontSize={24}
         setFontSize={() => {}}
       />,
     );
     await userEvent.click(screen.getByRole("button", { name: /close/i }));
 
-    expect(onCloseMock).toHaveBeenCalledTimes(1);
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it("displays the correct font size", () => {
@@ -47,12 +47,12 @@ describe("SettingsModal", () => {
       <SettingsModal
         onClose={() => {}}
         fontSize={16}
-        setFontSize={setFontSizeMock}
+        setFontSize={mockSetFontSize}
       />,
     );
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "20" } });
-    expect(setFontSizeMock).toHaveBeenCalledWith(20);
+    expect(mockSetFontSize).toHaveBeenCalledWith(20);
   });
 
   it("updates localStorage and CSS variable when font size changes", () => {
@@ -64,7 +64,7 @@ describe("SettingsModal", () => {
       <SettingsModal
         onClose={() => {}}
         fontSize={16}
-        setFontSize={setFontSizeMock}
+        setFontSize={mockSetFontSize}
       />,
     );
     const rangeInput = screen.getByRole("slider");
