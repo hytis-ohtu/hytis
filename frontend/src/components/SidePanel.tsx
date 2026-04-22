@@ -4,7 +4,11 @@ import RoomInfo from "./RoomInfo";
 import RoomPeople from "./RoomPeople";
 import "./SidePanel.css";
 
-function SidePanel() {
+type SidePanelProps = {
+  onRoomUpdate: () => Promise<void>;
+};
+
+function SidePanel({ onRoomUpdate }: SidePanelProps) {
   return (
     <motion.div
       initial={{ x: "100%" }}
@@ -13,8 +17,8 @@ function SidePanel() {
       transition={EXPAND_COLLAPSE_TRANSITION}
       className="side-panel"
     >
-      <RoomInfo />
-      <RoomPeople />
+      <RoomInfo onRoomUpdate={onRoomUpdate} />
+      <RoomPeople onRoomUpdate={onRoomUpdate} />
     </motion.div>
   );
 }

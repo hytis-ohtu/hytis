@@ -15,6 +15,10 @@ import "./SidePanel.css";
 
 let seenExpandReqId: number | null = null;
 
+type RoomPeopleProps = {
+  onRoomUpdate: () => Promise<void>;
+};
+
 type State = {
   activePerson: Person | null;
   addPersonOpen: boolean;
@@ -77,7 +81,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function RoomPeople() {
+function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
   const { activeRoom, selectRoom, expandReq } = useRoomSelection();
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -116,6 +120,7 @@ function RoomPeople() {
       }
 
       dispatch({ type: "close-person-modal" });
+      void onRoomUpdate();
       void selectRoom(activeRoom.id);
     } catch (error) {
       console.error(
@@ -134,6 +139,7 @@ function RoomPeople() {
 
     try {
       await removeContract(state.contractToRemove.id);
+      void onRoomUpdate();
       void selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to remove contract:", error);
