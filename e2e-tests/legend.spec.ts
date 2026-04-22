@@ -4,8 +4,12 @@ import { test } from "./testHelper";
 test("legend shows correct entries in availability mode", async ({ page }) => {
   const legend = page.getByTestId("legend");
 
-  const legendItems = legend.getByText(/tyhjä|tilaa|täynnä/i);
-  expect(legendItems).toHaveCount(3);
+  await expect(legend.getByText("Tyhjä")).toBeVisible();
+  await expect(legend.getByText("Tilaa")).toBeVisible();
+  await expect(legend.getByText("Täynnä")).toBeVisible();
+
+  const legendItems = legend.locator(".legend-item");
+  await expect(legendItems).toHaveCount(3);
 });
 
 test("legend shows correct entries in department mode", async ({ page }) => {
@@ -14,6 +18,9 @@ test("legend shows correct entries in department mode", async ({ page }) => {
 
   const legend = page.getByTestId("legend");
 
-  const legendItems = legend.getByText(/h516 mathstat|h523 cs/i);
-  expect(legendItems).toHaveCount(2);
+  await expect(legend.getByText("H516 MATHSTAT")).toBeVisible();
+  await expect(legend.getByText("H523 CS")).toBeVisible();
+
+  const legendItems = legend.locator(".legend-item");
+  await expect(legendItems).toHaveCount(2);
 });
