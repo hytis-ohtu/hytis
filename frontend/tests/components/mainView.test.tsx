@@ -156,9 +156,9 @@ describe("MainView", () => {
   describe("MapTransform", () => {
     describe("zooming with buttons", () => {
       it("zooms in and out correctly", async () => {
-        const user = userEvent.setup();
-
         customRender(<MainView />);
+
+        const user = userEvent.setup();
 
         const map = document.getElementsByClassName(
           "map-container",
@@ -177,9 +177,9 @@ describe("MainView", () => {
       });
 
       it("stops at maximum zoom level", async () => {
-        const user = userEvent.setup();
-
         customRender(<MainView />);
+
+        const user = userEvent.setup();
 
         const map = document.getElementsByClassName(
           "map-container",
@@ -195,9 +195,9 @@ describe("MainView", () => {
       });
 
       it("stops at minimum zoom level", async () => {
-        const user = userEvent.setup();
-
         customRender(<MainView />);
+
+        const user = userEvent.setup();
 
         const map = document.getElementsByClassName(
           "map-container",
@@ -215,9 +215,9 @@ describe("MainView", () => {
       });
 
       it("is bounded from top left", async () => {
-        const user = userEvent.setup();
-
         customRender(<MainView />);
+
+        const user = userEvent.setup();
 
         const inputDiv = document.getElementsByClassName(
           "click-container",
