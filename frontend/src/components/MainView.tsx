@@ -5,18 +5,14 @@ import { useMapTransform } from "../hooks/useMapTransform";
 import { useRoomProperties } from "../hooks/useRoomProperties";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import ColorToggle from "./ColorToggle";
+import Legend from "./Legend";
 import "./MainView.css";
 import SidePanel from "./SidePanel";
 import ZoomButtons from "./ZoomButtons";
 
 function MainView() {
-  const {
-    mapContainer,
-    inputContainer,
-    hasMoved,
-    handleZoomFunc,
-    handleResetFunc,
-  } = useMapTransform();
+  const { mapContainer, inputContainer, hasMoved, handleZoom } =
+    useMapTransform();
 
   const { useAvailability, setUseAvailability } = useRoomProperties();
   const { activeRoom, selectRoom, activeRoomId } = useRoomSelection();
@@ -47,8 +43,9 @@ function MainView() {
         </div>
       </div>
 
-      <ZoomButtons handleZoom={handleZoomFunc} handleReset={handleResetFunc} />
+      <ZoomButtons onZoom={handleZoom} />
 
+      <Legend mode={useAvailability ? "availability" : "department"} />
       <ColorToggle
         useAvailability={useAvailability}
         setUseAvailability={setUseAvailability}

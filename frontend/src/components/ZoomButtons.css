@@ -1,13 +1,18 @@
 .zoom-buttons {
-  position: fixed;
-  left: 2rem;
-  bottom: 2rem;
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
   display: flex;
-  gap: 0.5rem;
+  border: var(--border-md);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background);
+  box-shadow: var(--box-shadow-sm);
 }
 
 .zoom-buttons button {
-  background: none;
-  border: none;
-  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.zoom-buttons button:first-of-type {
+  border-right: 2px solid var(--color-text-black);
 }

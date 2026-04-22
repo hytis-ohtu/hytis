@@ -2,27 +2,25 @@ import { Minus, Plus } from "lucide-react";
 import "./ZoomButtons.css";
 
 interface ZoomButtonsProps {
-  handleZoom: (e: React.MouseEvent, dir: number) => void;
-  handleReset: (e: React.MouseEvent) => void;
+  onZoom: (zoom: boolean) => void;
 }
 
-function ZoomButtons({ handleZoom, handleReset }: ZoomButtonsProps) {
+function ZoomButtons({ onZoom }: ZoomButtonsProps) {
   return (
     <div className="zoom-buttons">
       <button
-        data-testid="zoom-increase-button"
-        onClick={(e) => handleZoom(e, -1)}
+        className="button-icon"
+        aria-label="Suurenna"
+        onClick={() => onZoom(true)}
       >
-        <Plus />
-      </button>
-      <button data-testid="reset-transform-button" onClick={handleReset}>
-        RESET
+        <Plus size={20} />
       </button>
       <button
-        data-testid="zoom-decrease-button"
-        onClick={(e) => handleZoom(e, 1)}
+        className="button-icon"
+        aria-label="Loitonna"
+        onClick={() => onZoom(false)}
       >
-        <Minus />
+        <Minus size={20} />
       </button>
     </div>
   );
