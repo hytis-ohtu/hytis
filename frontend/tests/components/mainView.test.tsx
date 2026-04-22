@@ -154,96 +154,88 @@ describe("MainView", () => {
   });
 
   describe("MapTransform", () => {
-    describe("button transformation", () => {
-      it("works with zoom buttons", async () => {
+    describe("zooming with buttons", () => {
+      it("zooms in and out correctly", async () => {
+        const user = userEvent.setup();
+
         customRender(<MainView />);
 
-        const user = userEvent.setup();
         const map = document.getElementsByClassName(
           "map-container",
-        )[0] as HTMLDivElement;
+        )[0] as SVGSVGElement;
 
         expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-        await user.click(screen.getByTestId("zoom-increase-button"));
+        await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
         expect(Number(map.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
 
-        await user.click(screen.getByTestId("reset-transform-button"));
-
-        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
-
-        await user.click(screen.getByTestId("zoom-decrease-button"));
+        await user.click(screen.getByRole("button", { name: /loitonna/i }));
+        await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
         expect(Number(map.style.scale)).toBeLessThan(DEFAULT_SCALE);
       });
 
-      it("stops at maximum zoom level with zoom buttons", async () => {
+      it("stops at maximum zoom level", async () => {
+        const user = userEvent.setup();
+
         customRender(<MainView />);
 
-        const user = userEvent.setup();
         const map = document.getElementsByClassName(
           "map-container",
-        )[0] as HTMLDivElement;
-
-        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+        )[0] as SVGSVGElement;
 
         while (Number(map.style.scale) !== MAX_ZOOM) {
-          await user.click(screen.getByTestId("zoom-increase-button"));
+          await user.click(screen.getByRole("button", { name: /suurenna/i }));
         }
 
-        await user.click(screen.getByTestId("zoom-increase-button"));
+        await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
         expect(Number(map.style.scale)).toBe(MAX_ZOOM);
       });
 
-      it("stops at minimum zoom level with zoom buttons", async () => {
+      it("stops at minimum zoom level", async () => {
+        const user = userEvent.setup();
+
         customRender(<MainView />);
 
-        const user = userEvent.setup();
         const map = document.getElementsByClassName(
           "map-container",
-        )[0] as HTMLDivElement;
+        )[0] as SVGSVGElement;
 
         expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
 
         while (Number(map.style.scale) !== MIN_ZOOM) {
-          await user.click(screen.getByTestId("zoom-decrease-button"));
+          await user.click(screen.getByRole("button", { name: /loitonna/i }));
         }
 
-        await user.click(screen.getByTestId("zoom-decrease-button"));
+        await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
         expect(Number(map.style.scale)).toBe(MIN_ZOOM);
       });
 
-      it("bounds the map when zooming with buttons from top left", async () => {
+      it("is bounded from top left", async () => {
+        const user = userEvent.setup();
+
         customRender(<MainView />);
 
-        const user = userEvent.setup();
         const inputDiv = document.getElementsByClassName(
           "click-container",
         )[0] as HTMLDivElement;
         const map = document.getElementsByClassName(
           "map-container",
-        )[0] as HTMLDivElement;
+        )[0] as SVGSVGElement;
 
-        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-          clientX: 10000,
-          clientY: 10000,
-        });
-        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-          clientX: 0,
-          clientY: 0,
-        });
-        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-          clientX: 10000,
-          clientY: 10000,
-        });
-
-        inputDiv.dispatchEvent(mouseDownEvent);
-        inputDiv.dispatchEvent(mouseMoveEvent);
-        inputDiv.dispatchEvent(mouseUpEvent);
-        await user.click(screen.getByTestId("zoom-decrease-button"));
+        await user.pointer([
+          { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+          { target: inputDiv, coords: { x: 10000, y: 10000 } },
+          {
+            target: inputDiv,
+            coords: { x: 10000, y: 10000 },
+            keys: "[/MouseLeft]",
+          },
+        ]);
+        await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
         expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
         expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
@@ -260,23 +252,16 @@ describe("MainView", () => {
           "map-container",
         )[0] as HTMLDivElement;
 
-        const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-          clientX: -10000,
-          clientY: -10000,
-        });
-        const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-          clientX: 0,
-          clientY: 0,
-        });
-        const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-          clientX: -10000,
-          clientY: -10000,
-        });
-
-        inputDiv.dispatchEvent(mouseDownEvent);
-        inputDiv.dispatchEvent(mouseMoveEvent);
-        inputDiv.dispatchEvent(mouseUpEvent);
-        await user.click(screen.getByTestId("zoom-decrease-button"));
+        await user.pointer([
+          { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+          { target: inputDiv, coords: { x: -10000, y: -10000 } },
+          {
+            target: inputDiv,
+            coords: { x: -10000, y: -10000 },
+            keys: "[/MouseLeft]",
+          },
+        ]);
+        await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
         const scale = Number(map.style.scale);
 
@@ -433,8 +418,10 @@ describe("MainView", () => {
           expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
         });
 
-        it("bounds the map when zooming from top left", () => {
+        it("bounds the map when zooming from top left", async () => {
           customRender(<MainView />);
+
+          const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
             "click-container",
@@ -443,35 +430,31 @@ describe("MainView", () => {
             "map-container",
           )[0] as HTMLDivElement;
 
-          const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: 10000,
-            clientY: 10000,
-          });
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: 10000,
-            clientY: 10000,
-          });
           const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
             clientX: 0,
             clientY: 0,
           });
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseMoveEvent);
-          inputDiv.dispatchEvent(mouseUpEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: 10000, y: 10000 } },
+            {
+              target: inputDiv,
+              coords: { x: 10000, y: 10000 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
           inputDiv.dispatchEvent(mouseZoomEvent);
 
           expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
           expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
         });
 
-        it("bounds the map when zooming from bottom right", () => {
+        it("bounds the map when zooming from bottom right", async () => {
           customRender(<MainView />);
+
+          const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
             "click-container",
@@ -480,27 +463,21 @@ describe("MainView", () => {
             "map-container",
           )[0] as HTMLDivElement;
 
-          const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: -10000,
-            clientY: -10000,
-          });
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: -10000,
-            clientY: -10000,
-          });
           const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
             clientX: window.innerWidth,
             clientY: window.innerHeight,
           });
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseMoveEvent);
-          inputDiv.dispatchEvent(mouseUpEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: -10000, y: -10000 } },
+            {
+              target: inputDiv,
+              coords: { x: -10000, y: -10000 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
           inputDiv.dispatchEvent(mouseZoomEvent);
 
           const scale = Number(map.style.scale);
@@ -515,8 +492,10 @@ describe("MainView", () => {
       });
 
       describe("moving by dragging", () => {
-        it("moves the map correctly", () => {
+        it("moves the map correctly", async () => {
           customRender(<MainView />);
+
+          const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
             "click-container",
@@ -525,39 +504,36 @@ describe("MainView", () => {
             "map-container",
           )[0] as HTMLDivElement;
 
-          const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: 100,
-            clientY: 100,
-          });
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: 100,
-            clientY: 100,
-          });
-
           expect(map.style.left).toBe("0px");
           expect(map.style.top).toBe("0px");
 
-          inputDiv.dispatchEvent(mouseMoveEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 100, y: 100 } },
+          ]);
 
           // map shouldn't move
           expect(map.style.left).toBe("0px");
           expect(map.style.top).toBe("0px");
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseMoveEvent);
-          inputDiv.dispatchEvent(mouseUpEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: 100, y: 100 } },
+            {
+              target: inputDiv,
+              coords: { x: 100, y: 100 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
 
           // map should move
           expect(Number(map.style.left.replace("px", ""))).toBeGreaterThan(0);
           expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
         });
 
-        it("is bounded from bottom right", () => {
+        it("is bounded from bottom right", async () => {
           customRender(<MainView />);
+
+          const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
             "click-container",
@@ -566,32 +542,27 @@ describe("MainView", () => {
             "map-container",
           )[0] as HTMLDivElement;
 
-          const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: 10000,
-            clientY: 10000,
-          });
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: 10000,
-            clientY: 10000,
-          });
-
           expect(map.style.left).toBe("0px");
           expect(map.style.top).toBe("0px");
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseMoveEvent);
-          inputDiv.dispatchEvent(mouseUpEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: 10000, y: 10000 } },
+            {
+              target: inputDiv,
+              coords: { x: 10000, y: 10000 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
 
           expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
           expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
         });
 
-        it("is bounded from top left", () => {
+        it("is bounded from top left", async () => {
           customRender(<MainView />);
+
+          const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
             "click-container",
@@ -600,25 +571,18 @@ describe("MainView", () => {
             "map-container",
           )[0] as HTMLDivElement;
 
-          const mouseMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: -10000,
-            clientY: -10000,
-          });
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: -10000,
-            clientY: -10000,
-          });
-
           expect(map.style.left).toBe("0px");
           expect(map.style.top).toBe("0px");
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseMoveEvent);
-          inputDiv.dispatchEvent(mouseUpEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: -10000, y: -10000 } },
+            {
+              target: inputDiv,
+              coords: { x: -10000, y: -10000 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
 
           const scale = Number(map.style.scale);
 
@@ -633,33 +597,16 @@ describe("MainView", () => {
         it("disabled room hovering", async () => {
           customRender(<MainView />);
 
+          const user = userEvent.setup();
+
           const inputDiv = document.getElementsByClassName(
             "click-container",
           )[0] as HTMLDivElement;
 
-          const mouseDownEvent: MouseEvent = new MouseEvent("mousedown", {
-            clientX: 0,
-            clientY: 0,
-          });
-          const mouseLargeMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: MOVE_THRESHOLD + 1,
-            clientY: 0,
-          });
-          const mouseLargeUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: MOVE_THRESHOLD + 1,
-            clientY: 0,
-          });
-          const mouseSmallMoveEvent: MouseEvent = new MouseEvent("mousemove", {
-            clientX: MOVE_THRESHOLD - 1,
-            clientY: 0,
-          });
-          const mouseSmallUpEvent: MouseEvent = new MouseEvent("mouseup", {
-            clientX: MOVE_THRESHOLD - 1,
-            clientY: 0,
-          });
-
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseLargeMoveEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: MOVE_THRESHOLD + 1, y: 0 } },
+          ]);
 
           await waitFor(() => {
             const room = document.querySelector(
@@ -668,7 +615,13 @@ describe("MainView", () => {
             expect(room).toHaveStyle("pointer-events: none");
           });
 
-          inputDiv.dispatchEvent(mouseLargeUpEvent);
+          await user.pointer([
+            {
+              target: inputDiv,
+              coords: { x: MOVE_THRESHOLD + 1, y: 0 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
 
           await waitFor(() => {
             const room = document.querySelector(
@@ -677,8 +630,10 @@ describe("MainView", () => {
             expect(room).toHaveStyle("pointer-events: all");
           });
 
-          inputDiv.dispatchEvent(mouseDownEvent);
-          inputDiv.dispatchEvent(mouseSmallMoveEvent);
+          await user.pointer([
+            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
+            { target: inputDiv, coords: { x: MOVE_THRESHOLD - 1, y: 0 } },
+          ]);
 
           await waitFor(() => {
             const room = document.querySelector(
@@ -687,7 +642,13 @@ describe("MainView", () => {
             expect(room).toHaveStyle("pointer-events: all");
           });
 
-          inputDiv.dispatchEvent(mouseSmallUpEvent);
+          await user.pointer([
+            {
+              target: inputDiv,
+              coords: { x: MOVE_THRESHOLD - 1, y: 0 },
+              keys: "[/MouseLeft]",
+            },
+          ]);
 
           await waitFor(() => {
             const room = document.querySelector(
