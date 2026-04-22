@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useReducer } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
-import { removeContract } from "../services/contractsService";
+import { createContract, removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
 import type { Person, RoomContract } from "../types";
 import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
@@ -111,6 +111,13 @@ function RoomPeople() {
     try {
       if (state.activePerson) {
         await editPerson(state.activePerson.id, values, activeRoom.id);
+      } else if (values.personId) {
+        await createContract(
+          Number(values.personId),
+          activeRoom.id,
+          values.startDate || null,
+          values.endDate || null,
+        );
       } else {
         await addPerson(values, activeRoom.id);
       }
