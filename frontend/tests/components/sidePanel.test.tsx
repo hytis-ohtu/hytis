@@ -6,7 +6,10 @@ import { describe, expect, it, vi } from "vitest";
 import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
 import SidePanel from "../../src/components/SidePanel";
 import { useRoomSelection } from "../../src/hooks/useRoomSelection";
-import { removeContract } from "../../src/services/contractsService";
+import {
+  createContract,
+  removeContract,
+} from "../../src/services/contractsService";
 import {
   addPerson,
   editPerson,
@@ -23,6 +26,7 @@ vi.mock("../../src/services/peopleService", () => ({
 }));
 
 vi.mock("../../src/services/contractsService", () => ({
+  createContract: vi.fn(),
   removeContract: vi.fn(),
 }));
 
@@ -221,6 +225,37 @@ describe("RoomPeople", () => {
       }),
       testRooms[0].id,
     );
+  });
+
+  it("creates contract when selecting existing person without creating new person", async () => {
+    const user = userEvent.setup();
+
+    customRender(<TestDisplay />);
+
+    await user.click(screen.getByTestId("open-empty-room"));
+    await user.click(
+      screen.getByRole("button", {
+        name: "Sijoita henkilö huoneeseen",
+      }),
+    );
+
+    const searchInput = screen.getByLabelText("Hae henkilö:");
+    await user.type(searchInput, "Matti");
+    await screen.findByText("Matti Virtanen");
+    await user.click(screen.getByText("Matti Virtanen"));
+
+    await user.click(screen.getByRole("button", { name: "Lisää" }));
+
+    const confirm = await screen.findByRole("alertdialog");
+    await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
+
+    expect(createContract).toHaveBeenCalledWith(
+      testPerson.id,
+      testRooms[1].id,
+      null,
+      null,
+    );
+    expect(addPerson).not.toHaveBeenCalled();
   });
 
   it.fails("does not close the modal when adding fails", async () => {
