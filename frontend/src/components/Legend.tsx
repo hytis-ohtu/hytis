@@ -28,7 +28,7 @@ export default function Legend({ mode }: LegendProps) {
   const entries = ModeEntries[mode];
 
   return (
-    <dl className="legend">
+    <dl className="legend" data-testid="legend">
       {entries.map((entry) => (
         <div key={entry.color} className="legend-item">
           <dt aria-label={entry.name} style={{ background: entry.color }} />

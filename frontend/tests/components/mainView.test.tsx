@@ -110,46 +110,39 @@ describe("MainView", () => {
   });
 
   describe("map coloring", () => {
+    it("is correct when showing availability", async () => {
+      customRender(<MainView />);
+
+      const room = document.querySelector(
+        '[data-room="A210"]',
+      ) as SVGGraphicsElement;
+
+      await waitFor(() => {
+        expect(room).toHaveStyle(`fill: ${AvailabilityColors["available"]}`);
+      });
+    });
+
     it("is correct when showing departments", async () => {
       customRender(<MainView />);
 
       const user = userEvent.setup();
-      await user.click(screen.getByTestId("switch-color-mode"));
+      await user.click(screen.getByRole("button", { name: /vastuualueet/i }));
 
-      await waitFor(() => {
-        const room = document.querySelector(
-          '[data-room="A210"]',
-        ) as SVGGraphicsElement;
-        expect(room).toHaveStyle(
-          `fill: ${getDepartmentColor(testRooms[0].department.name)}`,
-        );
-      });
+      const room = document.querySelector(
+        '[data-room="A210"]',
+      ) as SVGGraphicsElement;
+
+      expect(room).toHaveStyle(
+        `fill: ${getDepartmentColor(testRooms[0].department.name)}`,
+      );
     });
 
-    it("legend is displayed", async () => {
+    it("renders the legend", async () => {
       customRender(<MainView />);
 
-      const legend = screen.getByTestId("legend");
+      const legend = await screen.findByTestId("legend");
 
-      await waitFor(() => {
-        expect(legend).toBeInTheDocument();
-      });
-    });
-
-    it("legend is rendered after switching color modes", async () => {
-      customRender(<MainView />);
-
-      const user = userEvent.setup();
-
-      const legend = screen.getByTestId("legend");
-
-      await waitFor(() => {
-        expect(legend).toBeInTheDocument();
-      });
-
-      await user.click(screen.getByTestId("switch-color-mode"));
-
-      expect(screen.getByTestId("legend")).toBeInTheDocument();
+      expect(legend).toBeInTheDocument();
     });
   });
 
