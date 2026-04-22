@@ -106,7 +106,7 @@ function TestButtons() {
 function TestDisplay() {
   return (
     <>
-      <SidePanel />
+      <SidePanel onRoomUpdate={() => Promise.resolve()} />
       <TestButtons />
     </>
   );
