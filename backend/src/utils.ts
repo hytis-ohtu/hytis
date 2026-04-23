@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 const PersonSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  firstName: z.string().min(1, "First name is required").max(100),
+  lastName: z.string().min(1, "Last name is required").max(100),
   titleId: z.number().nullable().optional(),
   departmentId: z.number().nullable().optional(),
   researchGroupId: z.number().nullable().optional(),
-  freeText: z.string().nullable().optional(),
+  freeText: z.string().max(1000).nullable().optional(),
   supervisorIds: z.array(z.number()).optional(),
   startDate: z.coerce.date().nullable().optional(),
   endDate: z.coerce.date().nullable().optional(),
