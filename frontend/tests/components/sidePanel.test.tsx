@@ -74,6 +74,8 @@ vi.mocked(findAllPeople).mockResolvedValue([
   testPerson as Person,
 ]);
 
+const mockOnRoomUpdate = vi.fn();
+
 function TestButtons() {
   const { selectRoom } = useRoomSelection();
 
@@ -110,7 +112,7 @@ function TestButtons() {
 function TestDisplay() {
   return (
     <>
-      <SidePanel />
+      <SidePanel onRoomUpdate={mockOnRoomUpdate} />
       <TestButtons />
     </>
   );
@@ -169,6 +171,7 @@ describe("RoomInfo", () => {
         freeText: "Hätäpoistumistie",
       }),
     );
+    expect(mockOnRoomUpdate).toHaveBeenCalled();
   });
 
   it.fails("does not close the modal when edit fails", async () => {
@@ -225,6 +228,7 @@ describe("RoomPeople", () => {
       }),
       testRooms[0].id,
     );
+    expect(mockOnRoomUpdate).toHaveBeenCalled();
   });
 
   it("creates contract when selecting existing person without creating new person", async () => {
@@ -315,6 +319,7 @@ describe("RoomPeople", () => {
       }),
       testRooms[0].id,
     );
+    expect(mockOnRoomUpdate).toHaveBeenCalled();
   });
 
   it("removes a contract successfully", async () => {
@@ -336,6 +341,7 @@ describe("RoomPeople", () => {
     await user.click(screen.getByRole("button", { name: "Poista" }));
 
     expect(removeContract).toHaveBeenCalledWith(1);
+    expect(mockOnRoomUpdate).toHaveBeenCalled();
   });
 
   it("dismisses the remove confirmation dialog when clicking cancel", async () => {

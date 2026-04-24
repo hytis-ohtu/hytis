@@ -14,7 +14,8 @@ function MainView() {
   const { mapContainer, inputContainer, hasMoved, handleZoom } =
     useMapTransform();
 
-  const { useAvailability, setUseAvailability } = useRoomProperties();
+  const { useAvailability, setUseAvailability, onRoomUpdate } =
+    useRoomProperties();
   const { activeRoom, selectRoom, activeRoomId } = useRoomSelection();
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function MainView() {
       />
 
       <AnimatePresence>
-        {activeRoomId !== null && <SidePanel />}
+        {activeRoomId !== null && <SidePanel onRoomUpdate={onRoomUpdate} />}
       </AnimatePresence>
     </div>
   );
