@@ -1,5 +1,5 @@
 import type { Person } from "../../types";
-import "./PersonSelector.css";
+import "./style.css";
 
 interface PersonSelectorProps {
   inputId: string;

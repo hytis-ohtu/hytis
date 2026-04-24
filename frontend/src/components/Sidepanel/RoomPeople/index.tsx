@@ -13,8 +13,8 @@ import { EXPAND_COLLAPSE_TRANSITION } from "../../../utils/motionTransitions";
 import { renderValue } from "../../../utils/renderValue";
 import ConfirmationDialog from "../../ConfirmationDialog";
 import PersonModal from "../../PersonModal";
+import "../style.css";
 import RoomPersonCard from "./RoomPersonCard";
-import "./SidePanel.css";
 
 let seenExpandReqId: number | null = null;
 

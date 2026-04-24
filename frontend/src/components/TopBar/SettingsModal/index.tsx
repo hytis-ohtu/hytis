@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import "./SettingsModal.css";
+import "./style.css";
 
 const ROOM_LABEL_FONT_SIZE_MIN = 10;
 const ROOM_LABEL_FONT_SIZE_MAX = 32;

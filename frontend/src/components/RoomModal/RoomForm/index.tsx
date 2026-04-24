@@ -4,7 +4,7 @@ import {
   findAllRoomTypes,
   type ReferenceItem,
 } from "../../../services/referenceDataService";
-import "./RoomForm.css";
+import "./style.css";
 
 interface FieldDef {
   id: string;

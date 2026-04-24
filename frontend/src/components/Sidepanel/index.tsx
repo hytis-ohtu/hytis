@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { EXPAND_COLLAPSE_TRANSITION } from "../../utils/motionTransitions";
 import RoomInfo from "./RoomInfo";
 import RoomPeople from "./RoomPeople";
-import "./SidePanel.css";
+import "./style.css";
 
 type SidePanelProps = {
   onRoomUpdate: () => Promise<void>;

@@ -15,7 +15,7 @@ import { editRoom } from "../../../services/roomsService";
 import { EXPAND_COLLAPSE_TRANSITION } from "../../../utils/motionTransitions";
 import { renderValue } from "../../../utils/renderValue";
 import RoomModal from "../../RoomModal";
-import "./SidePanel.css";
+import "../style.css";
 
 type RoomInfoProps = {
   onRoomUpdate: () => Promise<void>;

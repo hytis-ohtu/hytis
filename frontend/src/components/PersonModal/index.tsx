@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import ConfirmationDialog from "../ConfirmationDialog";
 import PersonForm from "./PersonForm";
-import "./PersonModal.css";
+import "./style.css";
 
 interface PersonModalProps {
   onClose: () => void;

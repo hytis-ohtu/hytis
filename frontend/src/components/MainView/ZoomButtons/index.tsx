@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import "./ZoomButtons.css";
+import "./style.css";
 
 interface ZoomButtonsProps {
   onZoom: (zoom: boolean) => void;

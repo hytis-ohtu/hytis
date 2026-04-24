@@ -3,8 +3,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import MainView from "../../src/components/MainView/index.tsx";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/index.tsx";
+import MainView from "../../src/components/MainView";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
 import {
   DEFAULT_SCALE,
   getBottomBound,

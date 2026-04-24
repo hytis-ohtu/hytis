@@ -1,4 +1,4 @@
-import "./ColorToggle.css";
+import "./style.css";
 
 interface ColorToggleProps {
   useAvailability: boolean;

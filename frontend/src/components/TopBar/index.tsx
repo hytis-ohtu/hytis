@@ -2,7 +2,7 @@ import { Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import PersonSearch from "../PersonSearch";
 import SettingsModal from "./SettingsModal";
-import "./TopBar.css";
+import "./style.css";
 import TopBarMenu from "./TopBarMenu";
 
 const ROOM_LABEL_FONT_SIZE = 24;
