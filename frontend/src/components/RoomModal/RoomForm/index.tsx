@@ -3,7 +3,7 @@ import {
   findAllDepartments,
   findAllRoomTypes,
   type ReferenceItem,
-} from "../services/referenceDataService";
+} from "../../../services/referenceDataService";
 import "./RoomForm.css";
 
 interface FieldDef {
