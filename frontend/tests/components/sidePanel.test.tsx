@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
-import SidePanel from "../../src/components/SidePanel";
+import SidePanel from "../../src/components/Sidepanel";
 import { useRoomSelection } from "../../src/hooks/useRoomSelection";
 import {
   createContract,

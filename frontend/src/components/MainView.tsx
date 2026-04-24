@@ -7,7 +7,7 @@ import { useRoomSelection } from "../hooks/useRoomSelection";
 import ColorToggle from "./ColorToggle";
 import Legend from "./Legend";
 import "./MainView.css";
-import SidePanel from "./SidePanel";
+import SidePanel from "./Sidepanel";
 import ZoomButtons from "./ZoomButtons";
 
 function MainView() {
