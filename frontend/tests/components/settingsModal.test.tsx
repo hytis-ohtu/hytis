@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import SettingsModal from "../../src/components/SettingsModal.tsx";
+import SettingsModal from "../../src/components/TopBar/SettingsModal/index.tsx";
 
 describe("SettingsModal", () => {
   const mockOnClose = vi.fn();

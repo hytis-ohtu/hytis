@@ -1,13 +1,13 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect } from "react";
+import { useMapTransform } from "../../hooks/useMapTransform";
+import { useRoomProperties } from "../../hooks/useRoomProperties";
+import { useRoomSelection } from "../../hooks/useRoomSelection";
 import Exactum2 from "../assets/exactum-2.min.svg?react";
-import { useMapTransform } from "../hooks/useMapTransform";
-import { useRoomProperties } from "../hooks/useRoomProperties";
-import { useRoomSelection } from "../hooks/useRoomSelection";
-import ColorToggle from "./ColorToggle";
+import ColorToggle from "../ColorToggle";
+import SidePanel from "../Sidepanel";
 import Legend from "./Legend";
 import "./MainView.css";
-import SidePanel from "./Sidepanel";
 import ZoomButtons from "./ZoomButtons";
 
 function MainView() {

@@ -1,6 +1,6 @@
 import { Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import PersonSearch from "./PersonSearch";
+import PersonSearch from "../PersonSearch";
 import SettingsModal from "./SettingsModal";
 import "./TopBar.css";
 import TopBarMenu from "./TopBarMenu";
