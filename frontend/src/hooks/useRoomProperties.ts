@@ -149,7 +149,7 @@ export async function updateRooms(useAvailability: boolean) {
 export function useRoomProperties() {
   const [useAvailability, setUseAvailability] = useState(true);
 
-  async function onUpdate() {
+  async function onRoomUpdate() {
     await updateRooms(useAvailability);
   }
 
@@ -260,6 +260,6 @@ export function useRoomProperties() {
   return {
     useAvailability: useAvailability,
     setUseAvailability: setUseAvailability,
-    onUpdate: onUpdate,
+    onRoomUpdate: onRoomUpdate,
   };
 }
