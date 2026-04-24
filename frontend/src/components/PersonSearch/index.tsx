@@ -1,9 +1,9 @@
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useRoomSelection } from "../hooks/useRoomSelection";
-import type { SearchType } from "../services/peopleService";
-import { searchPeople } from "../services/peopleService";
-import type { Person } from "../types";
+import { useRoomSelection } from "../../hooks/useRoomSelection";
+import type { SearchType } from "../../services/peopleService";
+import { searchPeople } from "../../services/peopleService";
+import type { Person } from "../../types";
 import "./PersonSearch.css";
 
 const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
