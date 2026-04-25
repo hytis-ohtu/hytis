@@ -28,7 +28,9 @@ describe("SettingsModal", () => {
         setFontSize={() => {}}
       />,
     );
-    await userEvent.click(screen.getByRole("button", { name: /close/i }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Sulje asetukset" }),
+    );
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -73,7 +75,7 @@ describe("SettingsModal", () => {
     expect(setItemSpy).toHaveBeenCalledWith("map-font-size", "22");
     setItemSpy.mockRestore();
     expect(
-      document.documentElement.style.getPropertyValue("--map-font-size"),
+      document.documentElement.style.getPropertyValue("--font-size-map"),
     ).toBe("22px");
   });
 });

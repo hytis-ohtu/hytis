@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import MainView from "../../src/components/MainView.tsx";
+import MapView from "../../src/components/MapView.tsx";
 import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider.tsx";
 import {
   DEFAULT_SCALE,
@@ -18,8 +18,8 @@ import {
 import {
   AvailabilityColors,
   getDepartmentColor,
-} from "../../src/hooks/useRoomProperties";
-import { findAllRooms, findRoomById } from "../../src/services/roomsService";
+} from "../../src/hooks/useRoomProperties.ts";
+import { findAllRooms, findRoomById } from "../../src/services/roomsService.ts";
 import { testRooms } from "../testData.ts";
 
 vi.mock("../../src/services/roomsService", () => ({
@@ -56,16 +56,16 @@ vi.mock("../../src/assets/exactum-2.min.svg?react", () => ({
   ),
 }));
 
-describe("MainView", () => {
+describe("MapView", () => {
   describe("initial render", () => {
     it("contains the map svg", () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       expect(screen.getByTestId("mock-svg")).toBeInTheDocument();
     });
 
     it("maps room data correctly to SVG elements", async () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       const availableRoom = screen.getByTestId("A210");
       const limitedRoom = screen.getByTestId("A211");
@@ -93,7 +93,7 @@ describe("MainView", () => {
 
   describe("map svg", () => {
     it("shows sidepanel when a room is clicked", async () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       const room = screen.getByTestId("A210");
 
@@ -111,7 +111,7 @@ describe("MainView", () => {
 
   describe("map coloring", () => {
     it("is correct when showing availability", async () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       const room = document.querySelector(
         '[data-room="A210"]',
@@ -123,7 +123,7 @@ describe("MainView", () => {
     });
 
     it("is correct when showing departments", async () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       const user = userEvent.setup();
       await user.click(screen.getByRole("button", { name: /vastuualueet/i }));
@@ -138,7 +138,7 @@ describe("MainView", () => {
     });
 
     it("renders the legend", async () => {
-      customRender(<MainView />);
+      customRender(<MapView />);
 
       const legend = await screen.findByTestId("legend");
 
@@ -149,7 +149,7 @@ describe("MainView", () => {
   describe("MapTransform", () => {
     describe("zooming with buttons", () => {
       it("zooms in and out correctly", async () => {
-        customRender(<MainView />);
+        customRender(<MapView />);
 
         const user = userEvent.setup();
 
@@ -170,7 +170,7 @@ describe("MainView", () => {
       });
 
       it("stops at maximum zoom level", async () => {
-        customRender(<MainView />);
+        customRender(<MapView />);
 
         const user = userEvent.setup();
 
@@ -188,7 +188,7 @@ describe("MainView", () => {
       });
 
       it("stops at minimum zoom level", async () => {
-        customRender(<MainView />);
+        customRender(<MapView />);
 
         const user = userEvent.setup();
 
@@ -208,12 +208,12 @@ describe("MainView", () => {
       });
 
       it("is bounded from top left", async () => {
-        customRender(<MainView />);
+        customRender(<MapView />);
 
         const user = userEvent.setup();
 
         const inputDiv = document.getElementsByClassName(
-          "click-container",
+          "map-canvas",
         )[0] as HTMLDivElement;
         const map = document.getElementsByClassName(
           "map-container",
@@ -235,11 +235,11 @@ describe("MainView", () => {
       });
 
       it("bounds the map when zooming with buttons from bottom right", async () => {
-        customRender(<MainView />);
+        customRender(<MapView />);
 
         const user = userEvent.setup();
         const inputDiv = document.getElementsByClassName(
-          "click-container",
+          "map-canvas",
         )[0] as HTMLDivElement;
         const map = document.getElementsByClassName(
           "map-container",
@@ -270,10 +270,10 @@ describe("MainView", () => {
     describe("mouse transformation", () => {
       describe("zooming with scrollwheel", () => {
         it("zooms in", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -291,10 +291,10 @@ describe("MainView", () => {
         });
 
         it("zooms out", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -312,10 +312,10 @@ describe("MainView", () => {
         });
 
         it("stops at maximum", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -337,10 +337,10 @@ describe("MainView", () => {
         });
 
         it("stops at minimum", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -362,10 +362,10 @@ describe("MainView", () => {
         });
 
         it("moves the map outward when zooming in", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -387,10 +387,10 @@ describe("MainView", () => {
         });
 
         it("moves the map inward when zooming out", () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -412,12 +412,12 @@ describe("MainView", () => {
         });
 
         it("bounds the map when zooming from top left", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -445,12 +445,12 @@ describe("MainView", () => {
         });
 
         it("bounds the map when zooming from bottom right", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -486,12 +486,12 @@ describe("MainView", () => {
 
       describe("moving by dragging", () => {
         it("moves the map correctly", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -524,12 +524,12 @@ describe("MainView", () => {
         });
 
         it("is bounded from bottom right", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -553,12 +553,12 @@ describe("MainView", () => {
         });
 
         it("is bounded from top left", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
           const map = document.getElementsByClassName(
             "map-container",
@@ -588,12 +588,12 @@ describe("MainView", () => {
         });
 
         it("disabled room hovering", async () => {
-          customRender(<MainView />);
+          customRender(<MapView />);
 
           const user = userEvent.setup();
 
           const inputDiv = document.getElementsByClassName(
-            "click-container",
+            "map-canvas",
           )[0] as HTMLDivElement;
 
           await user.pointer([

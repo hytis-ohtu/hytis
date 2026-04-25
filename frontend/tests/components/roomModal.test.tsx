@@ -71,7 +71,7 @@ describe("RoomModal", () => {
 
   it("shows confirmation when clicking close button", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
@@ -100,14 +100,14 @@ describe("RoomModal", () => {
 
   it("calls onClose when confirming close", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
     fireEvent.click(screen.getByText("Kyllä"));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it("cancelling close confirmation does not close", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
     fireEvent.click(screen.getByText("Peruuta"));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     expect(
