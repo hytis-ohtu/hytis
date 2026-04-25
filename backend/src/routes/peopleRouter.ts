@@ -1,11 +1,10 @@
 import { Request, Response, Router } from "express";
 import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
-import { z } from "zod";
 import { sequelize } from "../db";
+import validatePersonInput from "../middleware/personValidation";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
 import type { PersonInput } from "../utils";
-import toPersonInput from "../utils";
 
 const router = Router();
 
@@ -15,20 +14,7 @@ const router = Router();
  * Optionally, titleId, departmentId, researchGroupId, freeText and supervisorIds can be provided
  */
 
-router.post("/", async (req: Request, res: Response) => {
-  let personInput: PersonInput;
-
-  try {
-    personInput = toPersonInput(req.body);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({
-        error: error.issues.map((issue) => issue.message).join(", "),
-      });
-    }
-    return res.status(500).json({ error: "Failed to parse person input" });
-  }
-
+router.post("/", validatePersonInput, async (req: Request, res: Response) => {
   const {
     firstName,
     lastName,
@@ -40,7 +26,7 @@ router.post("/", async (req: Request, res: Response) => {
     roomId,
     startDate,
     endDate,
-  } = personInput;
+  } = req.personInput!;
 
   try {
     const newPerson = await sequelize.transaction(async (t) => {
@@ -120,23 +106,12 @@ router.post("/", async (req: Request, res: Response) => {
  */
 router.put(
   "/:id",
+  validatePersonInput,
   async (
     req: Request<{ id: string }, Person | { error: string }, PersonInput>,
     res: Response<Person | { error: string }>,
   ): Promise<Response<Person | { error: string }>> => {
     const personId = req.params.id;
-    let personInput: PersonInput;
-
-    try {
-      personInput = toPersonInput(req.body);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({
-          error: error.issues.map((issue) => issue.message).join(", "),
-        });
-      }
-      return res.status(500).json({ error: "Failed to parse person input" });
-    }
 
     const {
       firstName,
@@ -149,7 +124,7 @@ router.put(
       startDate,
       endDate,
       roomId,
-    } = personInput;
+    } = req.personInput!;
 
     try {
       const person = await Person.findByPk(Number(personId));
