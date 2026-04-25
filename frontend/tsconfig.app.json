@@ -23,6 +23,16 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
+
+  "baseUrl": ".",
+  "paths": {
+    "@hooks/*": ["src/hooks/*"],
+    "@components/*": ["src/components/*"],
+    "@utils/*": ["src/utils/*"],
+    "@types": ["src/types.ts"],
+    "@services/*": ["src/services/*"],
+    "@contexts/*": ["src/contexts/*"]
+  }
   },
   "include": ["src", "tests"]
 }

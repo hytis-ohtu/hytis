@@ -1,9 +1,9 @@
-import { useEffect, useState, type ChangeEvent } from "react";
 import {
   findAllDepartments,
   findAllRoomTypes,
   type ReferenceItem,
-} from "../../../services/referenceDataService";
+} from "@services/referenceDataService";
+import { useEffect, useState, type ChangeEvent } from "react";
 import "./RoomForm.css";
 
 interface FieldDef {

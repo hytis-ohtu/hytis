@@ -1,6 +1,6 @@
+import { useAuth } from "@hooks/useAuth";
 import { LogOut, X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { useAuth } from "../../../hooks/useAuth";
 import "./TopBarMenu.css";
 
 interface TopBarMenuProps {

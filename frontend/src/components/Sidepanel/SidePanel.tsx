@@ -1,5 +1,5 @@
+import { EXPAND_COLLAPSE_TRANSITION } from "@utils/motionTransitions";
 import { motion } from "motion/react";
-import { EXPAND_COLLAPSE_TRANSITION } from "../../utils/motionTransitions";
 import RoomInfo from "./RoomInfo/RoomInfo";
 import RoomPeople from "./RoomPeople/RoomPeople";
 import "./SidePanel.css";

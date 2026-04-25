@@ -1,3 +1,8 @@
+import RoomModal from "@components/RoomModal/RoomModal";
+import { useRoomSelection } from "@hooks/useRoomSelection";
+import { editRoom } from "@services/roomsService";
+import { EXPAND_COLLAPSE_TRANSITION } from "@utils/motionTransitions";
+import { renderValue } from "@utils/renderValue";
 import {
   ChevronDown,
   DoorOpen,
@@ -10,11 +15,6 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { useRoomSelection } from "../../../hooks/useRoomSelection";
-import { editRoom } from "../../../services/roomsService";
-import { EXPAND_COLLAPSE_TRANSITION } from "../../../utils/motionTransitions";
-import { renderValue } from "../../../utils/renderValue";
-import RoomModal from "../../RoomModal/RoomModal";
 import "../SidePanel.css";
 
 type RoomInfoProps = {

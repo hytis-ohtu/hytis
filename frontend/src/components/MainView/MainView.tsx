@@ -1,10 +1,10 @@
+import Exactum2 from "@assets/exactum-2.min.svg?react";
+import SidePanel from "@components/Sidepanel/SidePanel";
+import { useMapTransform } from "@hooks/useMapTransform";
+import { useRoomProperties } from "@hooks/useRoomProperties";
+import { useRoomSelection } from "@hooks/useRoomSelection";
 import { AnimatePresence } from "motion/react";
 import { useEffect } from "react";
-import Exactum2 from "../../assets/exactum-2.min.svg?react";
-import { useMapTransform } from "../../hooks/useMapTransform";
-import { useRoomProperties } from "../../hooks/useRoomProperties";
-import { useRoomSelection } from "../../hooks/useRoomSelection";
-import SidePanel from "../Sidepanel/SidePanel";
 import ColorToggle from "./ColorToggle/ColorToggle";
 import Legend from "./Legend/Legend";
 import "./MainView.css";
