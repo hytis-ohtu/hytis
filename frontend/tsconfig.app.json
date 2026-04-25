@@ -32,7 +32,8 @@
       "@utils/*": ["src/utils/*"],
       "@types": ["src/types.ts"],
       "@services/*": ["src/services/*"],
-      "@contexts/*": ["src/contexts/*"]
+      "@contexts/*": ["src/contexts/*"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "include": ["src", "tests"]
