@@ -1,7 +1,7 @@
 import { LogOut, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../../../hooks/useAuth";
-import "./style.css";
+import "./TopBarMenu.css";
 
 interface TopBarMenuProps {
   onClose: () => void;

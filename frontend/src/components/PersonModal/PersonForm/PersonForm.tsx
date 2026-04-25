@@ -7,8 +7,8 @@ import {
   type ReferenceItem,
 } from "../../../services/referenceDataService";
 import type { Person } from "../../../types";
-import PersonSelector from "../../PersonSelector";
-import "./style.css";
+import PersonSelector from "../../PersonSelector/PersonSelector";
+import "./PersonForm.css";
 
 interface FieldDef {
   id: string;

@@ -4,7 +4,7 @@ import { useRoomSelection } from "../../hooks/useRoomSelection";
 import type { SearchType } from "../../services/peopleService";
 import { searchPeople } from "../../services/peopleService";
 import type { Person } from "../../types";
-import "./style.css";
+import "./PersonSearch.css";
 
 const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
   name: "Nimi",
