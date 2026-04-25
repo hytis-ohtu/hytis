@@ -3,8 +3,8 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
-import SidePanel from "../../src/components/Sidepanel";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/RoomSelectionProvider";
+import SidePanel from "../../src/components/Sidepanel/SidePanel";
 import { useRoomSelection } from "../../src/hooks/useRoomSelection";
 import {
   createContract,

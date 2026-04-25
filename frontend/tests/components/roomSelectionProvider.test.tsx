@@ -3,7 +3,7 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/RoomSelectionProvider";
 import { useRoomSelection } from "../../src/hooks/useRoomSelection";
 import { findRoomById } from "../../src/services/roomsService";
 import type { Room } from "../../src/types";

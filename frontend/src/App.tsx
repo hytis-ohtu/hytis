@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import "./App.css";
-import AuthProvider from "./components/AuthProvider";
-import MainView from "./components/MainView";
-import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
-import TopBar from "./components/TopBar";
+import AuthProvider from "./components/AuthProvider/AuthProvider";
+import MainView from "./components/MainView/MainView";
+import { RoomSelectionProvider } from "./components/RoomSelectionProvider/RoomSelectionProvider";
+import TopBar from "./components/TopBar/TopBar";
 import { useAuth } from "./hooks/useAuth";
 import { findRoomById } from "./services/roomsService";
 

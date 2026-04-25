@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import ConfirmationDialog from "../ConfirmationDialog";
-import PersonForm from "./PersonForm";
+import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import PersonForm from "./PersonForm/PersonForm";
 import "./style.css";
 
 interface PersonModalProps {

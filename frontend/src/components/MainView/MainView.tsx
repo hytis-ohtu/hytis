@@ -4,11 +4,11 @@ import Exactum2 from "../../assets/exactum-2.min.svg?react";
 import { useMapTransform } from "../../hooks/useMapTransform";
 import { useRoomProperties } from "../../hooks/useRoomProperties";
 import { useRoomSelection } from "../../hooks/useRoomSelection";
-import SidePanel from "../Sidepanel";
-import ColorToggle from "./ColorToggle";
-import Legend from "./Legend";
+import SidePanel from "../Sidepanel/SidePanel";
+import ColorToggle from "./ColorToggle/ColorToggle";
+import Legend from "./Legend/Legend";
 import "./style.css";
-import ZoomButtons from "./ZoomButtons";
+import ZoomButtons from "./ZoomButtons/ZoomButtons";
 
 function MainView() {
   const { mapContainer, inputContainer, hasMoved, handleZoom } =

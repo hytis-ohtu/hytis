@@ -11,8 +11,8 @@ import { addPerson, editPerson } from "../../../services/peopleService";
 import type { Person, RoomContract } from "../../../types";
 import { EXPAND_COLLAPSE_TRANSITION } from "../../../utils/motionTransitions";
 import { renderValue } from "../../../utils/renderValue";
-import ConfirmationDialog from "../../ConfirmationDialog";
-import PersonModal from "../../PersonModal";
+import ConfirmationDialog from "../../ConfirmationDialog/ConfirmationDialog";
+import PersonModal from "../../PersonModal/PersonModal";
 import "../style.css";
 import RoomPersonCard from "./RoomPersonCard";
 

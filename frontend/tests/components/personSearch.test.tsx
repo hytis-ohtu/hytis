@@ -3,8 +3,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import PersonSearch from "../../src/components/PersonSearch";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
+import PersonSearch from "../../src/components/PersonSearch/PersonSearch";
+import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/RoomSelectionProvider";
 import { findRoomById } from "../../src/services/roomsService";
 
 // Mock peopleService
