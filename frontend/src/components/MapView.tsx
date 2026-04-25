@@ -6,11 +6,11 @@ import { useRoomProperties } from "../hooks/useRoomProperties";
 import { useRoomSelection } from "../hooks/useRoomSelection";
 import ColorToggle from "./ColorToggle";
 import Legend from "./Legend";
-import "./MainView.css";
+import "./MapView.css";
 import SidePanel from "./SidePanel";
 import ZoomButtons from "./ZoomButtons";
 
-function MainView() {
+function MapView() {
   const { mapContainer, inputContainer, hasMoved, handleZoom } =
     useMapTransform();
 
@@ -37,26 +37,30 @@ function MainView() {
   }
 
   return (
-    <div className="wrapper">
-      <div ref={inputContainer} className="click-container">
+    <main className="map-view">
+      <div ref={inputContainer} className="map-input">
         <div ref={mapContainer} className="map-container">
-          <Exactum2 className="map" onClick={handleClick} />
+          <Exactum2 onClick={handleClick} />
         </div>
       </div>
 
-      <ZoomButtons onZoom={handleZoom} />
+      <div className="map-overlay map-overlay-top-left">
+        <ColorToggle
+          useAvailability={useAvailability}
+          setUseAvailability={setUseAvailability}
+        />
+        <Legend mode={useAvailability ? "availability" : "department"} />
+      </div>
 
-      <Legend mode={useAvailability ? "availability" : "department"} />
-      <ColorToggle
-        useAvailability={useAvailability}
-        setUseAvailability={setUseAvailability}
-      />
+      <div className="map-overlay map-overlay-bottom-left">
+        <ZoomButtons onZoom={handleZoom} />
+      </div>
 
       <AnimatePresence>
         {activeRoomId !== null && <SidePanel onRoomUpdate={onRoomUpdate} />}
       </AnimatePresence>
-    </div>
+    </main>
   );
 }
 
-export default MainView;
+export default MapView;

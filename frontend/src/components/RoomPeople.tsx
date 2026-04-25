@@ -82,7 +82,8 @@ function reducer(state: State, action: Action): State {
 }
 
 function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
-  const { activeRoom, selectRoom, expandReq } = useRoomSelection();
+  const { activeRoom, selectRoom, activeRoomId, expandReq } =
+    useRoomSelection();
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -109,26 +110,28 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
     seenExpandReqId = expandReq.reqId;
   }, [activeRoom?.contracts, expandReq, state.contractsCollapsed]);
 
-  const handlePersonSubmit = async (values: Record<string, string>) => {
-    if (activeRoom?.id === undefined) return;
+  const submitPerson = async (values: Record<string, string>) => {
+    if (!activeRoomId) {
+      return new Error("No active room selected");
+    }
 
     try {
       if (state.activePerson) {
-        await editPerson(state.activePerson.id, values, activeRoom.id);
+        await editPerson(state.activePerson.id, values, activeRoomId);
       } else if (values.personId) {
         await createContract(
           Number(values.personId),
-          activeRoom.id,
+          activeRoomId,
           values.startDate || null,
           values.endDate || null,
         );
       } else {
-        await addPerson(values, activeRoom.id);
+        await addPerson(values, activeRoomId);
       }
 
       dispatch({ type: "close-person-modal" });
       void onRoomUpdate();
-      void selectRoom(activeRoom.id);
+      void selectRoom(activeRoomId);
     } catch (error) {
       console.error(
         state.activePerson ? "Failed to edit person:" : "Failed to add person:",
@@ -137,8 +140,8 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
     }
   };
 
-  const submitPerson = (values: Record<string, string>) => {
-    void handlePersonSubmit(values);
+  const handlePersonSubmit = (values: Record<string, string>) => {
+    void submitPerson(values);
   };
 
   const handleRemoveContract = async () => {
@@ -249,7 +252,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
           onClose={() => {
             dispatch({ type: "close-person-modal" });
           }}
-          onSubmit={submitPerson}
+          onSubmit={handlePersonSubmit}
           initial={
             state.activePerson
               ? {

@@ -1,21 +1,10 @@
 import { useEffect } from "react";
-import "./App.css";
 import AuthProvider from "./components/AuthProvider";
-import MainView from "./components/MainView";
+import MapView from "./components/MapView";
 import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
 import { findRoomById } from "./services/roomsService";
-
-function App() {
-  return (
-    <AuthProvider>
-      <RoomSelectionProvider findRoomById={findRoomById}>
-        <AppContent />
-      </RoomSelectionProvider>
-    </AuthProvider>
-  );
-}
 
 function AppContent() {
   const { isLoading, needsLogin, login } = useAuth();
@@ -24,26 +13,34 @@ function AppContent() {
     if (needsLogin) {
       const timer = setTimeout(() => {
         login();
-      }, 2000);
+      }, 100);
       return () => clearTimeout(timer);
     }
   }, [needsLogin, login]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
   if (needsLogin) {
-    return <div className="wrapper">Redirecting to login page...</div>;
+    return <p>Redirecting to login page...</p>;
   }
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
-      <TopBar title="HYTiS" />
-      <MainView />
-    </div>
+    <>
+      <TopBar />
+      <MapView />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <RoomSelectionProvider findRoomById={findRoomById}>
+        <AppContent />
+      </RoomSelectionProvider>
+    </AuthProvider>
   );
 }
 

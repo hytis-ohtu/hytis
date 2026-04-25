@@ -20,23 +20,25 @@ const SEARCH_TYPE_PLACEHOLDERS: Record<SearchType, string> = {
 
 function PersonSearch() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Person[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState(false);
+  const [results, setResults] = useState<Person[] | null>([]);
   const [searchType, setSearchType] = useState<SearchType>("name");
   const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false);
+  const [isResultsVisible, setIsResultsVisible] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { selectRoom } = useRoomSelection();
 
-  // Close dropdown when clicking outside
+  const hasQuery = query.trim().length >= 2;
+  const isResultsOpen = hasQuery && isResultsVisible && !isTypeMenuOpen;
+  const hasError = results === null;
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         searchRef.current &&
         !searchRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
         setIsTypeMenuOpen(false);
+        setIsResultsVisible(false);
       }
     }
 
@@ -46,30 +48,25 @@ function PersonSearch() {
     };
   }, []);
 
-  // Search function
   useEffect(() => {
     const search = async () => {
-      if (query.trim().length < 3) {
+      if (query.trim().length < 2) {
         setResults([]);
-        setIsOpen(false);
-        setError(false);
+        setIsResultsVisible(false);
         return;
       }
 
       try {
         const people = await searchPeople(query, searchType);
         setResults(people);
-        setIsOpen(true);
-        setError(false);
+        setIsResultsVisible(true);
       } catch (error) {
         console.error("Error searching people:", error);
-        setResults([]);
-        setError(true);
-        setIsOpen(true);
+        setResults(null);
+        setIsResultsVisible(true);
       }
     };
 
-    // Debounce search to avoid too many API calls
     const timeoutId = setTimeout(() => {
       void search();
     }, 300);
@@ -82,13 +79,8 @@ function PersonSearch() {
   };
 
   const handleFocus = () => {
-    if (query.trim().length >= 3 && results.length > 0) {
-      setIsOpen(true);
-    }
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
+    setIsTypeMenuOpen(false);
+    if (hasQuery) setIsResultsVisible(true);
   };
 
   const handleTypeSelect = (type: SearchType) => {
@@ -96,127 +88,147 @@ function PersonSearch() {
     setIsTypeMenuOpen(false);
     setQuery("");
     setResults([]);
-    setIsOpen(false);
   };
 
   const handlePersonClick = (person: Person) => {
+    // TODO: determine which contract to use
     const contract = person.contracts?.[0];
 
     if (contract) {
       void selectRoom(contract.room.id, person.id);
+      setIsResultsVisible(false);
     } else {
       console.log("Person has no room assignment");
     }
   };
 
   return (
-    <div className="person-search" ref={searchRef}>
-      <div className="person-search-row">
-        <div className="person-search-input-wrapper">
+    <search className="person-search" ref={searchRef}>
+      <form
+        className="person-search-box"
+        role="search"
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <label htmlFor="person-search-input">
           <Search className="person-search-icon" />
           <input
-            type="text"
-            className="person-search-input"
+            id="person-search-input"
+            type="search"
             placeholder={SEARCH_TYPE_PLACEHOLDERS[searchType]}
+            aria-label={SEARCH_TYPE_PLACEHOLDERS[searchType]}
             value={query}
             onChange={handleInputChange}
             onFocus={handleFocus}
-            data-testid="person-search-input"
           />
-        </div>
+        </label>
 
-        <div className="person-search-type-wrapper">
+        <div className="person-search-type">
           <button
-            className="person-search-type-button"
+            type="button"
+            aria-label="Hakutyyppi"
+            aria-haspopup="menu"
+            aria-expanded={isTypeMenuOpen}
+            aria-owns="person-search-type-menu"
+            aria-controls="person-search-type-menu"
             onClick={() => setIsTypeMenuOpen((prev) => !prev)}
-            data-testid="person-search-type-button"
           >
-            <SlidersHorizontal size={24} strokeWidth={1.7} />
+            <SlidersHorizontal strokeWidth={1.7} />
           </button>
-
-          {isTypeMenuOpen && (
-            <div
-              className="person-search-type-menu"
-              data-testid="person-search-type-menu"
-            >
-              {(Object.keys(SEARCH_TYPE_LABELS) as SearchType[]).map((type) => (
-                <button
-                  key={type}
-                  className={`person-search-type-option${searchType === type ? " active" : ""}`}
-                  onClick={() => handleTypeSelect(type)}
-                >
-                  {SEARCH_TYPE_LABELS[type]}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
-      </div>
+      </form>
 
-      {isOpen && (
+      {isTypeMenuOpen && (
         <div
+          id="person-search-type-menu"
+          className="person-search-type-menu"
+          aria-label="Hakutyyppi"
+          role="menu"
+        >
+          {(Object.keys(SEARCH_TYPE_LABELS) as SearchType[]).map((type) => (
+            <button
+              key={type}
+              className={searchType === type ? "active" : ""}
+              onClick={() => handleTypeSelect(type)}
+              role="menuitemradio"
+              aria-checked={searchType === type}
+            >
+              {SEARCH_TYPE_LABELS[type]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {isResultsOpen && (
+        <section
           className="person-search-dropdown"
           data-testid="person-search-dropdown"
+          aria-label="Hakutulokset"
+          aria-live="polite"
         >
-          <div className="person-search-header">
-            <span
-              className="person-search-results-count"
-              data-testid="person-search-results-count"
-            >
-              {results.length} {results.length === 1 ? "tulos" : "tulosta"}
-            </span>
+          <header>
+            <p data-testid="person-search-results-count">
+              {`${results?.length ?? 0} ${
+                (results?.length ?? 0) === 1 ? "tulos" : "tulosta"
+              }`}
+            </p>
             <button
-              className="person-search-close"
-              onClick={handleClose}
-              aria-label="Sulje"
+              className="button-icon person-search-close"
+              aria-label="Sulje hakutulokset"
+              onClick={() => setIsResultsVisible(false)}
             >
               <X size={16} />
             </button>
-          </div>
+          </header>
 
-          <div className="person-search-results">
-            {error ? (
-              <div className="person-search-error">
+          <ul className="person-search-results">
+            {hasError ? (
+              <li
+                className="person-search-message person-search-error"
+                role="status"
+              >
                 Virhe henkilöiden haussa
-              </div>
-            ) : results.length === 0 ? (
-              <div className="person-search-no-results">
+              </li>
+            ) : (results?.length ?? 0) === 0 ? (
+              <li
+                className="person-search-message person-search-no-results"
+                role="status"
+              >
                 Ei tuloksia haulle {`"${query}"`}
-              </div>
+              </li>
             ) : null}
 
-            {results.map((person) => (
-              <div
-                key={person.id}
-                className="person-search-result"
-                onClick={() => handlePersonClick(person)}
-              >
-                {person.contracts?.[0] && (
-                  <span className="person-search-result-room">
-                    {person.contracts[0].room.name}
-                  </span>
-                )}
-                <div className="person-search-result-name">
-                  {person.firstName} {person.lastName}
-                </div>
-                <div className="person-search-result-details">
-                  {person.title?.name && (
-                    <span className="person-search-result-title">
-                      {person.title.name}
-                    </span>
-                  )}
-                  {person.department?.name && (
-                    <span className="person-search-result-department">
-                      {person.department.name}
-                    </span>
-                  )}
-                </div>
-              </div>
+            {(results ?? []).map((person) => (
+              <li key={person.id} className="person-search-result">
+                <button onClick={() => handlePersonClick(person)}>
+                  <div>
+                    <p className="person-search-result-name">
+                      {person.firstName} {person.lastName}
+                    </p>
+                    {person.contracts?.[0] && (
+                      <p className="person-search-result-room">
+                        {person.contracts[0].room.name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="person-search-result-details">
+                    {person.title?.name && (
+                      <span className="person-search-result-title">
+                        {person.title.name}
+                      </span>
+                    )}
+                    {person.department?.name && (
+                      <span className="person-search-result-department">
+                        {person.department.name}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </section>
       )}
-    </div>
+    </search>
   );
 }
 
