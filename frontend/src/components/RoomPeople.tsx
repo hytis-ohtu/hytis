@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useReducer } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useRoomSelection } from "../hooks/useRoomSelection";
-import { removeContract } from "../services/contractsService";
+import { createContract, removeContract } from "../services/contractsService";
 import { addPerson, editPerson } from "../services/peopleService";
 import type { Person, RoomContract } from "../types";
 import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
@@ -14,6 +14,10 @@ import RoomPersonCard from "./RoomPersonCard";
 import "./SidePanel.css";
 
 let seenExpandReqId: number | null = null;
+
+type RoomPeopleProps = {
+  onRoomUpdate: () => Promise<void>;
+};
 
 type State = {
   activePerson: Person | null;
@@ -77,7 +81,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function RoomPeople() {
+function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
   const { activeRoom, selectRoom, expandReq } = useRoomSelection();
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -111,11 +115,19 @@ function RoomPeople() {
     try {
       if (state.activePerson) {
         await editPerson(state.activePerson.id, values, activeRoom.id);
+      } else if (values.personId) {
+        await createContract(
+          Number(values.personId),
+          activeRoom.id,
+          values.startDate || null,
+          values.endDate || null,
+        );
       } else {
         await addPerson(values, activeRoom.id);
       }
 
       dispatch({ type: "close-person-modal" });
+      void onRoomUpdate();
       void selectRoom(activeRoom.id);
     } catch (error) {
       console.error(
@@ -134,6 +146,7 @@ function RoomPeople() {
 
     try {
       await removeContract(state.contractToRemove.id);
+      void onRoomUpdate();
       void selectRoom(activeRoom.id);
     } catch (error) {
       console.error("Failed to remove contract:", error);

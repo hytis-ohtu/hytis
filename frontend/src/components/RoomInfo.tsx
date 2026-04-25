@@ -17,7 +17,11 @@ import { renderValue } from "../utils/renderValue";
 import RoomModal from "./RoomModal";
 import "./SidePanel.css";
 
-function RoomInfo() {
+type RoomInfoProps = {
+  onRoomUpdate: () => Promise<void>;
+};
+
+function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
   const { activeRoom, selectRoom } = useRoomSelection();
   const [editRoomOpen, setEditRoomOpen] = useState(false);
   const [detailsCollapsed, setDetailsCollapsed] = useState(false);
@@ -30,7 +34,8 @@ function RoomInfo() {
     if (roomId == null) return;
     try {
       await editRoom(roomId, values);
-      await selectRoom(roomId);
+      void onRoomUpdate();
+      void selectRoom(roomId);
     } catch (error) {
       console.error("Failed to edit room:", error);
     }
