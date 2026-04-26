@@ -1,11 +1,10 @@
 import { Request, Response, Router } from "express";
 import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
-import { z } from "zod";
 import { sequelize } from "../db";
+import validatePersonInput from "../middleware/validatePersonInput";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
 import type { PersonInput } from "../utils";
-import toPersonInput from "../utils";
 
 const router = Router();
 
@@ -15,7 +14,7 @@ const router = Router();
  * Optionally, titleId, departmentId, researchGroupId, freeText and supervisorIds can be provided
  */
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", validatePersonInput, async (req: Request, res: Response) => {
   const {
     firstName,
     lastName,
@@ -27,55 +26,54 @@ router.post("/", async (req: Request, res: Response) => {
     roomId,
     startDate,
     endDate,
-  } = req.body;
-
-  if (!firstName || !lastName) {
-    return res
-      .status(400)
-      .json({ error: "First name and last name are required" });
-  }
+  } = req.personInput!;
 
   try {
-    const newPerson = await Person.create({
-      firstName,
-      lastName,
-      titleId,
-      departmentId,
-      researchGroupId,
-      freeText,
-    });
-
-    if (roomId) {
-      await Contract.create({
-        personId: newPerson.id,
-        roomId,
-        startDate,
-        endDate,
-      });
-    }
-
-    if (supervisorIds && supervisorIds.length > 0) {
-      // Validate that all supervisor IDs exist
-      const supervisors = await Person.findAll({
-        where: { id: supervisorIds },
-        attributes: ["id"],
+    const newPerson = await sequelize.transaction(async (t) => {
+      const person = await Person.create({
+        firstName,
+        lastName,
+        titleId,
+        departmentId,
+        researchGroupId,
+        freeText,
       });
 
-      if (supervisors.length !== supervisorIds.length) {
-        // Rollback: delete the created person since validation failed
-        await newPerson.destroy();
-        return res
-          .status(400)
-          .json({ error: "One or more supervisor IDs are invalid" });
+      if (roomId) {
+        await Contract.create(
+          {
+            personId: person.id,
+            roomId,
+            startDate,
+            endDate,
+          },
+          { transaction: t },
+        );
       }
 
-      await PersonSupervisor.bulkCreate(
-        supervisorIds.map((supervisorId: number) => ({
-          supervisorId,
-          subordinateId: newPerson.id,
-        })),
-      );
-    }
+      if (supervisorIds && supervisorIds.length > 0) {
+        // Validate that all supervisor IDs exist
+        const supervisors = await Person.findAll({
+          where: { id: supervisorIds },
+          attributes: ["id"],
+          transaction: t,
+        });
+
+        if (supervisors.length !== supervisorIds.length) {
+          throw new Error("One or more supervisor IDs are invalid");
+        }
+
+        await PersonSupervisor.bulkCreate(
+          supervisorIds.map((supervisorId: number) => ({
+            supervisorId,
+            subordinateId: person.id,
+          })),
+          { transaction: t },
+        );
+      }
+
+      return person;
+    });
 
     const createdPerson = await Person.findByPk(newPerson.id, {
       include: [
@@ -89,6 +87,13 @@ router.post("/", async (req: Request, res: Response) => {
     });
     res.status(201).json(createdPerson);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "One or more supervisor IDs are invalid"
+    ) {
+      return res.status(400).json({ error: error.message });
+    }
+
     console.error("Error creating person:", error);
     res.status(500).json({ error: "Failed to create person" });
   }
@@ -101,23 +106,12 @@ router.post("/", async (req: Request, res: Response) => {
  */
 router.put(
   "/:id",
+  validatePersonInput,
   async (
     req: Request<{ id: string }, Person | { error: string }, PersonInput>,
     res: Response<Person | { error: string }>,
   ): Promise<Response<Person | { error: string }>> => {
     const personId = req.params.id;
-    let personInput: PersonInput;
-
-    try {
-      personInput = toPersonInput(req.body);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({
-          error: error.issues.map((issue) => issue.message).join(", "),
-        });
-      }
-      return res.status(500).json({ error: "Failed to parse person input" });
-    }
 
     const {
       firstName,
@@ -130,7 +124,7 @@ router.put(
       startDate,
       endDate,
       roomId,
-    } = personInput;
+    } = req.personInput!;
 
     try {
       const person = await Person.findByPk(Number(personId));
