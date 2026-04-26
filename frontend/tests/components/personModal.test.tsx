@@ -7,7 +7,7 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import PersonModal from "../../src/components/PersonModal/PersonModal.tsx";
+import PersonModal from "../../src/components/PersonModal/PersonModal";
 import { findAllDepartments } from "../../src/services/referenceDataService.ts";
 
 vi.mock("../../src/services/referenceDataService", () => ({

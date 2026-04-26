@@ -2,7 +2,7 @@ import "@fontsource-variable/montserrat/wght.css";
 import "@fontsource-variable/roboto/wght.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App";
 import "./index.css";
 import "./reset.css";
 
