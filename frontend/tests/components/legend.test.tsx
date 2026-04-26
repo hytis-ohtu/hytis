@@ -1,7 +1,7 @@
+import Legend from "@components/MainView/Legend/Legend";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Legend from "../../src/components/MainView/Legend/Legend";
 
 describe("Legend", () => {
   it("renders without crashing", () => {

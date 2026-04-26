@@ -1,10 +1,5 @@
-import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import type { ReactElement } from "react";
-import { describe, expect, it, vi } from "vitest";
-import MainView from "../../src/components/MainView/MainView";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/RoomSelectionProvider";
+import MainView from "@components/MainView/MainView";
+import { RoomSelectionProvider } from "@components/RoomSelectionProvider/RoomSelectionProvider";
 import {
   DEFAULT_SCALE,
   getBottomBound,
@@ -14,15 +9,20 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
   MOVE_THRESHOLD,
-} from "../../src/hooks/useMapTransform.ts";
+} from "@hooks/useMapTransform.ts";
 import {
   AvailabilityColors,
   getDepartmentColor,
-} from "../../src/hooks/useRoomProperties";
-import { findAllRooms, findRoomById } from "../../src/services/roomsService";
+} from "@hooks/useRoomProperties";
+import { findAllRooms, findRoomById } from "@services/roomsService";
+import "@testing-library/jest-dom";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import type { ReactElement } from "react";
+import { describe, expect, it, vi } from "vitest";
 import { testRooms } from "../testData.ts";
 
-vi.mock("../../src/services/roomsService", () => ({
+vi.mock("@services/roomsService", () => ({
   findAllRooms: vi.fn(),
   findRoomById: vi.fn(),
 }));
@@ -39,14 +39,14 @@ const customRender = (ui: ReactElement) => {
     </RoomSelectionProvider>,
   );
 };
-vi.mock("../../src/contexts/AuthContext", () => ({
+vi.mock("@contexts/AuthContext", () => ({
   useAuth: () => ({
     user: { name: "Test User" },
     logout: vi.fn(),
   }),
 }));
 
-vi.mock("../../src/assets/exactum-2.min.svg?react", () => ({
+vi.mock("@assets/exactum-2.min.svg?react", () => ({
   default: (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} data-testid="mock-svg">
       <path data-room="A210" data-testid="A210" />

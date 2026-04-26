@@ -1,9 +1,6 @@
+import { createContract, removeContract } from "@services/contractsService";
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  createContract,
-  removeContract,
-} from "../../src/services/contractsService";
 
 vi.mock("axios", () => ({
   default: {
@@ -18,7 +15,7 @@ vi.mock("axios", () => ({
   },
 }));
 
-vi.mock("../src/constants", () => ({ BASE_URL: "" }));
+vi.mock("@constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 

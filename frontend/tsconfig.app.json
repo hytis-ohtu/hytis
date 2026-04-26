@@ -31,7 +31,8 @@
       "@types": ["./src/types.ts"],
       "@services/*": ["./src/services/*"],
       "@contexts/*": ["./src/contexts/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@constants": ["./src/constants.ts"]
     }
   },
   "include": ["src", "tests"]

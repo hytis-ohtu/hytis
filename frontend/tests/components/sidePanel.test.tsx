@@ -1,42 +1,35 @@
+import { RoomSelectionProvider } from "@components/RoomSelectionProvider/RoomSelectionProvider";
+import SidePanel from "@components/Sidepanel/SidePanel";
+import { useRoomSelection } from "@hooks/useRoomSelection";
+import { createContract, removeContract } from "@services/contractsService";
+import { addPerson, editPerson, findAllPeople } from "@services/peopleService";
+import { editRoom, findRoomById } from "@services/roomsService";
 import "@testing-library/jest-dom";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { Person, Room } from "@types";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider/RoomSelectionProvider";
-import SidePanel from "../../src/components/Sidepanel/SidePanel";
-import { useRoomSelection } from "../../src/hooks/useRoomSelection";
-import {
-  createContract,
-  removeContract,
-} from "../../src/services/contractsService";
-import {
-  addPerson,
-  editPerson,
-  findAllPeople,
-} from "../../src/services/peopleService";
-import { editRoom, findRoomById } from "../../src/services/roomsService";
-import type { Person, Room } from "../../src/types";
 import { testPerson, testRooms } from "../testData";
 
-vi.mock("../../src/services/peopleService", () => ({
+vi.mock("@services/peopleService", () => ({
   addPerson: vi.fn(),
   editPerson: vi.fn(),
   findAllPeople: vi.fn(),
 }));
 
-vi.mock("../../src/services/contractsService", () => ({
+vi.mock("@services/contractsService", () => ({
   createContract: vi.fn(),
   removeContract: vi.fn(),
 }));
 
-vi.mock("../../src/services/roomsService", () => ({
+vi.mock("@services/roomsService", () => ({
   editRoom: vi.fn(),
   findAllRooms: vi.fn(),
   findRoomById: vi.fn(),
 }));
 
-vi.mock("../../src/services/referenceDataService", () => ({
+vi.mock("@services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 516, name: "H516 MATHSTAT" },
     { id: 517, name: "H517 CS" },

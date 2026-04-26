@@ -1,17 +1,17 @@
+import TopBar from "@components/TopBar/TopBar";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import TopBar from "../../src/components/TopBar/TopBar";
 
-vi.mock("../../src/hooks/useAuth", () => ({
+vi.mock("@hooks/useAuth", () => ({
   useAuth: () => ({
     user: { name: "Test User" },
     logout: vi.fn(),
   }),
 }));
 
-vi.mock("../../src/hooks/useRoomSelection", () => ({
+vi.mock("@hooks/useRoomSelection", () => ({
   useRoomSelection: () => ({
     activeRoomId: null,
     setActiveRoomId: vi.fn(),

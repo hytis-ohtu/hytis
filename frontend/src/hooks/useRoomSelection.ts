@@ -1,6 +1,6 @@
+import type { RoomSelectionContextType } from "@contexts/RoomSelectionContext";
+import { RoomSelectionContext } from "@contexts/RoomSelectionContext";
 import { useContext } from "react";
-import type { RoomSelectionContextType } from "../contexts/RoomSelectionContext";
-import { RoomSelectionContext } from "../contexts/RoomSelectionContext";
 
 export function useRoomSelection(): RoomSelectionContextType {
   const context = useContext(RoomSelectionContext);

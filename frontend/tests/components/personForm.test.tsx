@@ -1,17 +1,17 @@
+import PersonForm from "@components/PersonModal/PersonForm/PersonForm";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import PersonForm from "../../src/components/PersonModal/PersonForm/PersonForm";
 
-vi.mock("../../src/services/peopleService", () => ({
+vi.mock("@services/peopleService", () => ({
   findAllPeople: vi.fn().mockResolvedValue([
     { id: 1, firstName: "Joku", lastName: "Esihenkilö" },
     { id: 2, firstName: "Muu", lastName: "Esihenkilö" },
   ]),
 }));
 
-vi.mock("../../src/services/referenceDataService", () => ({
+vi.mock("@services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },

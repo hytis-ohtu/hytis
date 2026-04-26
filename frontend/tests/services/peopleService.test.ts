@@ -1,17 +1,17 @@
-import "@testing-library/jest-dom";
-import axios from "axios";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   addPerson,
   editPerson,
   findAllPeople,
   searchPeople,
-} from "../../src/services/peopleService";
-import type { Person } from "../../src/types";
+} from "@services/peopleService";
+import "@testing-library/jest-dom";
+import type { Person } from "@types";
+import axios from "axios";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("axios");
 
-vi.mock("../src/constants", () => ({ BASE_URL: "" }));
+vi.mock("@constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 

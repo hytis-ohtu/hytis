@@ -1,3 +1,5 @@
+import PersonModal from "@components/PersonModal/PersonModal";
+import { findAllDepartments } from "@services/referenceDataService.ts";
 import "@testing-library/jest-dom";
 import {
   fireEvent,
@@ -7,10 +9,8 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import PersonModal from "../../src/components/PersonModal/PersonModal";
-import { findAllDepartments } from "../../src/services/referenceDataService.ts";
 
-vi.mock("../../src/services/referenceDataService", () => ({
+vi.mock("@services/referenceDataService", () => ({
   findAllDepartments: vi.fn().mockResolvedValue([
     { id: 1, name: "IT" },
     { id: 2, name: "HR" },
@@ -25,7 +25,7 @@ vi.mock("../../src/services/referenceDataService", () => ({
   ]),
 }));
 
-vi.mock("../../src/services/peopleService", () => ({
+vi.mock("@services/peopleService", () => ({
   findAllPeople: vi
     .fn()
     .mockResolvedValue([{ id: 1, firstName: "Supervisor", lastName: "One" }]),

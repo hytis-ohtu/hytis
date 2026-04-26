@@ -1,6 +1,6 @@
+import { getCurrentUser, login, logout } from "@services/authService";
 import axios from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getCurrentUser, login, logout } from "../../src/services/authService";
 
 vi.mock("axios", () => ({
   default: {
@@ -14,7 +14,7 @@ vi.mock("axios", () => ({
   },
 }));
 
-vi.mock("../constants", () => ({ BASE_URL: "" }));
+vi.mock("@constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 
