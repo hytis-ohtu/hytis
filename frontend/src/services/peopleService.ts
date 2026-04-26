@@ -42,14 +42,16 @@ export async function addPerson(
   const response = await axios.post<Person>(`${BASE_URL}/api/people`, {
     firstName: values.firstName,
     lastName: values.lastName,
-    departmentId: values.department || undefined,
-    titleId: values.jobtitle || undefined,
-    supervisorIds: supervisorIds?.length ? supervisorIds : undefined,
-    researchGroupId: values.researchgroup || undefined,
+    departmentId: values.department ? Number(values.department) : undefined,
+    titleId: values.jobtitle ? Number(values.jobtitle) : undefined,
+    supervisorIds: supervisorIds,
+    researchGroupId: values.researchgroup
+      ? Number(values.researchgroup)
+      : undefined,
     freeText: values.misc || undefined,
     startDate: values.startDate || undefined,
     endDate: values.endDate || undefined,
-    roomId,
+    roomId: Number(roomId),
   });
 
   return response.data;
