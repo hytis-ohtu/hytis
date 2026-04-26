@@ -8,16 +8,23 @@ export const DEFAULT_SCALE = 0.9;
 export const MOVE_THRESHOLD = 20;
 
 export function getLeftBound(): number {
-  return window.innerWidth / 8;
+  return window.innerWidth;
 }
 export function getRightBound(): number {
-  return (window.innerWidth / 4) * 3;
+  return -window.innerWidth / 2;
 }
 export function getTopBound(): number {
-  return window.innerHeight / 2;
+  return window.innerHeight;
 }
 export function getBottomBound(): number {
-  return window.innerHeight / 2;
+  return -window.innerHeight / 2;
+}
+
+function getScaledMapSize(map: HTMLDivElement, currentScale: number) {
+  return {
+    width: map.clientWidth * currentScale,
+    height: map.clientHeight * currentScale,
+  };
 }
 
 export function useMapTransform() {
@@ -65,8 +72,7 @@ export function useMapTransform() {
 
     scale.current = newScale;
 
-    const width = window.innerWidth * scale.current;
-    const height = window.innerHeight * scale.current;
+    const { width, height } = getScaledMapSize(map, scale.current);
 
     if (xPos > getLeftBound()) {
       xPos = getLeftBound();
@@ -147,8 +153,7 @@ export function useMapTransform() {
       let nextX = offsetX + coords.current.lastX;
       let nextY = offsetY + coords.current.lastY;
 
-      const width = window.innerWidth * scale.current;
-      const height = window.innerHeight * scale.current;
+      const { width, height } = getScaledMapSize(map, scale.current);
 
       if (nextX > getLeftBound()) {
         coords.current.lastX -= nextX - getLeftBound();
@@ -192,8 +197,7 @@ export function useMapTransform() {
 
       scale.current = newScale;
 
-      const width = window.innerWidth * scale.current;
-      const height = window.innerHeight * scale.current;
+      const { width, height } = getScaledMapSize(map, scale.current);
 
       if (xPos > getLeftBound()) {
         xPos = getLeftBound();
