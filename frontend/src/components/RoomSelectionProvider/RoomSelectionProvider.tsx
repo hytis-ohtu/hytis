@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
 import type {
   ExpandReq,
   RoomSelectionContextType,
-} from "../contexts/RoomSelectionContext";
-import { RoomSelectionContext } from "../contexts/RoomSelectionContext";
-import type { Room } from "../types";
+} from "@contexts/RoomSelectionContext";
+import { RoomSelectionContext } from "@contexts/RoomSelectionContext";
+import type { Room } from "@types";
+import { useEffect, useRef, useState } from "react";
 
 const SKELETON_DELAY_MS = 250;
 

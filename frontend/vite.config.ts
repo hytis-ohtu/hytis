@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import path from "path";
 import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
@@ -10,6 +11,20 @@ export default defineConfig({
       "hytis-ohtuprojekti-staging.ext.ocp-test-0.k8s.it.helsinki.fi",
     ],
   },
+
+  resolve: {
+    alias: {
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@types": path.resolve(__dirname, "./src/types.ts"),
+      "@services": path.resolve(__dirname, "./src/services"),
+      "@contexts": path.resolve(__dirname, "./src/contexts"),
+      "@assets": path.resolve(__dirname, "./src/assets"),
+      "@constants": path.resolve(__dirname, "./src/constants.ts"),
+    },
+  },
+
   test: {
     environment: "jsdom",
     globals: true,

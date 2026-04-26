@@ -1,16 +1,16 @@
-import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import type { CSSProperties } from "react";
-import { useEffect, useId, useReducer } from "react";
-import { useRoomSelection } from "../hooks/useRoomSelection";
-import type { RoomContract } from "../types";
+import { useRoomSelection } from "@hooks/useRoomSelection";
+import type { RoomContract } from "@types";
 import {
   formatContractDate,
   formatContractStatus,
   getContractDateMeta,
-} from "../utils/contractDates";
-import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
-import { renderValue } from "../utils/renderValue";
+} from "@utils/contractDates";
+import { EXPAND_COLLAPSE_TRANSITION } from "@utils/motionTransitions";
+import { renderValue } from "@utils/renderValue";
+import { ChevronDown, Pencil, Trash2, User } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import type { CSSProperties } from "react";
+import { useEffect, useId, useReducer } from "react";
 
 let seenExpandReqId: number | null = null;
 

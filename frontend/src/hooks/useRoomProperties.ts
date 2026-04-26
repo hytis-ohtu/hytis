@@ -1,5 +1,5 @@
+import { findAllRooms } from "@services/roomsService";
 import { useEffect, useState } from "react";
-import { findAllRooms } from "../services/roomsService";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
