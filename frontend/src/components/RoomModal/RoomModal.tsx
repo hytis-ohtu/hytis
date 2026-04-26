@@ -1,7 +1,7 @@
+import ConfirmationDialog from "@components/ConfirmationDialog/ConfirmationDialog";
 import { X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import ConfirmationDialog from "./ConfirmationDialog";
-import RoomForm from "./RoomForm";
+import RoomForm from "./RoomForm/RoomForm";
 import "./RoomModal.css";
 
 interface RoomModalProps {

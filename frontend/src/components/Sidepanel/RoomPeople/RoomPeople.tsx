@@ -1,17 +1,17 @@
+import ConfirmationDialog from "@components/ConfirmationDialog/ConfirmationDialog";
+import PersonModal from "@components/PersonModal/PersonModal";
+import { useRoomSelection } from "@hooks/useRoomSelection";
+import { createContract, removeContract } from "@services/contractsService";
+import { addPerson, editPerson } from "@services/peopleService";
+import type { Person, RoomContract } from "@types";
+import { EXPAND_COLLAPSE_TRANSITION } from "@utils/motionTransitions";
+import { renderValue } from "@utils/renderValue";
 import { ChevronDown, Plus, Users } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useReducer } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useRoomSelection } from "../hooks/useRoomSelection";
-import { createContract, removeContract } from "../services/contractsService";
-import { addPerson, editPerson } from "../services/peopleService";
-import type { Person, RoomContract } from "../types";
-import { EXPAND_COLLAPSE_TRANSITION } from "../utils/motionTransitions";
-import { renderValue } from "../utils/renderValue";
-import ConfirmationDialog from "./ConfirmationDialog";
-import PersonModal from "./PersonModal";
-import RoomPersonCard from "./RoomPersonCard";
-import "./SidePanel.css";
+import "../SidePanel.css";
+import RoomPersonCard from "./RoomPersonCard/RoomPersonCard";
 
 let seenExpandReqId: number | null = null;
 

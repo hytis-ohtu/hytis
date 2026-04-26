@@ -1,11 +1,7 @@
+import { BASE_URL } from "@constants";
+import { editRoom, findAllRooms, findRoomById } from "@services/roomsService";
 import axios from "axios";
 import { describe, expect, it, vi } from "vitest";
-import { BASE_URL } from "../../src/constants";
-import {
-  editRoom,
-  findAllRooms,
-  findRoomById,
-} from "../../src/services/roomsService";
 
 vi.mock("axios");
 

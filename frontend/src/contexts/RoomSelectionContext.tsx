@@ -1,5 +1,5 @@
+import type { Room } from "@types";
 import { createContext } from "react";
-import type { Room } from "../types";
 
 export interface ExpandReq {
   reqId: number;

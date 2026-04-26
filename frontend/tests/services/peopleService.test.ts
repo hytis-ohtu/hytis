@@ -1,17 +1,17 @@
-import "@testing-library/jest-dom";
-import axios from "axios";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   addPerson,
   editPerson,
   findAllPeople,
   searchPeople,
-} from "../../src/services/peopleService";
-import type { Person } from "../../src/types";
+} from "@services/peopleService";
+import "@testing-library/jest-dom";
+import type { Person } from "@types";
+import axios from "axios";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("axios");
 
-vi.mock("../src/constants", () => ({ BASE_URL: "" }));
+vi.mock("@constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 
@@ -74,10 +74,10 @@ describe("peopleService", () => {
       expect(mockedAxios.post).toHaveBeenCalledWith("/api/people", {
         firstName: "Jane",
         lastName: "Doe",
-        departmentId: "2",
-        titleId: "3",
+        departmentId: 2,
+        titleId: 3,
         supervisorIds: [5, 6],
-        researchGroupId: "1",
+        researchGroupId: 1,
         freeText: "Some notes",
         startDate: "2024-01-01",
         endDate: "2025-01-01",
@@ -96,7 +96,7 @@ describe("peopleService", () => {
         endDate: undefined,
       };
 
-      await addPerson(values, "room-42");
+      await addPerson(values, 10);
 
       expect(mockedAxios.post).toHaveBeenCalledWith("/api/people", {
         firstName: "Jane",
@@ -108,27 +108,8 @@ describe("peopleService", () => {
         freeText: undefined,
         startDate: "2024-01-01",
         endDate: undefined,
-        roomId: "room-42",
+        roomId: 10,
       });
-    });
-
-    it("accepts a string roomId", async () => {
-      mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
-
-      const values = {
-        firstName: "Jane",
-        lastName: "Doe",
-        misc: "",
-        startDate: undefined,
-        endDate: undefined,
-      };
-
-      await addPerson(values, "room-99");
-
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({ roomId: "room-99" }),
-      );
     });
 
     it("accepts a numeric roomId", async () => {

@@ -1,15 +1,15 @@
+import { RoomSelectionProvider } from "@components/RoomSelectionProvider/RoomSelectionProvider";
+import { useRoomSelection } from "@hooks/useRoomSelection";
+import { findRoomById } from "@services/roomsService";
 import "@testing-library/jest-dom";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { Room } from "@types";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
-import { useRoomSelection } from "../../src/hooks/useRoomSelection";
-import { findRoomById } from "../../src/services/roomsService";
-import type { Room } from "../../src/types";
 import { testRooms } from "../testData";
 
-vi.mock("../../src/services/roomsService", () => ({
+vi.mock("@services/roomsService", () => ({
   findRoomById: vi.fn(),
 }));
 
