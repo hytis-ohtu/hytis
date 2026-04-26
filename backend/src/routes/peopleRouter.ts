@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import type { FindOptions, InferAttributes } from "sequelize";
 import { Op } from "sequelize";
 import { sequelize } from "../db";
-import validatePersonInput from "../middleware/personValidation";
+import validatePersonInput from "../middleware/validatePersonInput";
 import { Contract, Person, PersonSupervisor, Room } from "../models";
 import type { PersonInput } from "../utils";
 
