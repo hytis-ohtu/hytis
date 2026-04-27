@@ -213,7 +213,7 @@ describe("peopleService", () => {
         endDate: "2025-01-01",
       };
 
-      const result = await editPerson(42, values, "10");
+      const result = await editPerson(42, values, 10);
 
       expect(result).toEqual(mockPerson);
       expect(mockedAxios.put).toHaveBeenCalledWith("/api/people/42", {
