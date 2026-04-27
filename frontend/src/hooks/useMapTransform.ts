@@ -6,18 +6,19 @@ export const MAX_ZOOM = 4;
 export const MIN_ZOOM = 0.75;
 export const DEFAULT_SCALE = 0.9;
 export const MOVE_THRESHOLD = 20;
+export const MIN_VISIBLE_EDGE = 50;
 
-export function getLeftBound(): number {
-  return window.innerWidth;
+export function getLeftBound(containerWidth: number): number {
+  return containerWidth - MIN_VISIBLE_EDGE;
 }
 export function getRightBound(): number {
-  return -window.innerWidth / 2;
+  return MIN_VISIBLE_EDGE;
 }
-export function getTopBound(): number {
-  return window.innerHeight;
+export function getTopBound(containerHeight: number): number {
+  return containerHeight - MIN_VISIBLE_EDGE;
 }
 export function getBottomBound(): number {
-  return -window.innerHeight / 2;
+  return MIN_VISIBLE_EDGE;
 }
 
 function getScaledMapSize(map: HTMLDivElement, currentScale: number) {
@@ -48,11 +49,12 @@ export function useMapTransform() {
   const scale = useRef<number>(DEFAULT_SCALE);
 
   function handleButtonZoom(zoom: boolean) {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !inputContainerRef.current) return;
     const map = mapRef.current;
+    const container = inputContainerRef.current;
 
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    const centerX = container.clientWidth / 2;
+    const centerY = container.clientHeight / 2;
 
     const speedEqualizer = Math.max(scale.current, 1);
     const zoomAmount = zoom
@@ -74,14 +76,14 @@ export function useMapTransform() {
 
     const { width, height } = getScaledMapSize(map, scale.current);
 
-    if (xPos > getLeftBound()) {
-      xPos = getLeftBound();
+    if (xPos > getLeftBound(container.clientWidth)) {
+      xPos = getLeftBound(container.clientWidth);
     } else if (xPos + width < getRightBound()) {
       xPos = getRightBound() - width;
     }
 
-    if (yPos > getTopBound()) {
-      yPos = getTopBound();
+    if (yPos > getTopBound(container.clientHeight)) {
+      yPos = getTopBound(container.clientHeight);
     } else if (yPos + height < getBottomBound()) {
       yPos = getBottomBound() - height;
     }
@@ -155,17 +157,17 @@ export function useMapTransform() {
 
       const { width, height } = getScaledMapSize(map, scale.current);
 
-      if (nextX > getLeftBound()) {
-        coords.current.lastX -= nextX - getLeftBound();
-        nextX = getLeftBound();
+      if (nextX > getLeftBound(container.clientWidth)) {
+        coords.current.lastX -= nextX - getLeftBound(container.clientWidth);
+        nextX = getLeftBound(container.clientWidth);
       } else if (nextX + width < getRightBound()) {
         coords.current.lastX -= nextX + width - getRightBound();
         nextX = getRightBound() - width;
       }
 
-      if (nextY > getTopBound()) {
-        coords.current.lastY -= nextY - getTopBound();
-        nextY = getTopBound();
+      if (nextY > getTopBound(container.clientHeight)) {
+        coords.current.lastY -= nextY - getTopBound(container.clientHeight);
+        nextY = getTopBound(container.clientHeight);
       } else if (nextY + height < getBottomBound()) {
         coords.current.lastY -= nextY + height - getBottomBound();
         nextY = getBottomBound() - height;
@@ -179,6 +181,8 @@ export function useMapTransform() {
       e.preventDefault();
       e.stopPropagation();
 
+      const containerRect = container.getBoundingClientRect();
+
       const dir = Math.sign(e.deltaY);
       const speedEqualizer = Math.max(scale.current, 1);
 
@@ -190,23 +194,23 @@ export function useMapTransform() {
 
       let xPos = Number(map.style.left.replace("px", ""));
       let yPos = Number(map.style.top.replace("px", ""));
-      const x = (e.clientX - xPos) / scale.current;
-      const y = (e.clientY - yPos) / scale.current;
-      xPos = e.clientX - x * newScale;
-      yPos = e.clientY - y * newScale;
+      const x = (e.clientX - containerRect.left - xPos) / scale.current;
+      const y = (e.clientY - containerRect.top - yPos) / scale.current;
+      xPos = e.clientX - containerRect.left - x * newScale;
+      yPos = e.clientY - containerRect.top - y * newScale;
 
       scale.current = newScale;
 
       const { width, height } = getScaledMapSize(map, scale.current);
 
-      if (xPos > getLeftBound()) {
-        xPos = getLeftBound();
+      if (xPos > getLeftBound(container.clientWidth)) {
+        xPos = getLeftBound(container.clientWidth);
       } else if (xPos + width < getRightBound()) {
         xPos = getRightBound() - width;
       }
 
-      if (yPos > getTopBound()) {
-        yPos = getTopBound();
+      if (yPos > getTopBound(container.clientHeight)) {
+        yPos = getTopBound(container.clientHeight);
       } else if (yPos + height < getBottomBound()) {
         yPos = getBottomBound() - height;
       }

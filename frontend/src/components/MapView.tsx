@@ -38,8 +38,16 @@ function MapView() {
 
   return (
     <main className="map-view">
-      <div ref={inputContainer} className="map-input">
-        <div ref={mapContainer} className="map-container">
+      <div
+        ref={inputContainer}
+        className="input-container"
+        data-testid="input-container"
+      >
+        <div
+          ref={mapContainer}
+          className="map-container"
+          data-testid="map-container"
+        >
           <Exactum2 onClick={handleClick} />
         </div>
       </div>

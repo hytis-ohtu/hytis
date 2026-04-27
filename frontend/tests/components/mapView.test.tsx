@@ -39,6 +39,7 @@ const customRender = (ui: ReactElement) => {
     </RoomSelectionProvider>,
   );
 };
+
 vi.mock("../../src/contexts/AuthContext", () => ({
   useAuth: () => ({
     user: { name: "Test User" },
@@ -55,6 +56,30 @@ vi.mock("../../src/assets/exactum-2.min.svg?react", () => ({
     </svg>
   ),
 }));
+
+function mockElementGeometry(
+  element: HTMLElement,
+  width: number,
+  height: number,
+) {
+  Object.defineProperties(element, {
+    clientWidth: { value: width },
+    clientHeight: { value: height },
+    getBoundingClientRect: {
+      value: () => ({
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        right: width,
+        bottom: height,
+        width,
+        height,
+        toJSON: () => ({}),
+      }),
+    },
+  });
+}
 
 describe("MapView", () => {
   describe("initial render", () => {
@@ -146,123 +171,140 @@ describe("MapView", () => {
     });
   });
 
-  describe("MapTransform", () => {
+  describe("map transformation", () => {
     describe("zooming with buttons", () => {
       it("zooms in and out correctly", async () => {
         customRender(<MapView />);
 
+        const inputContainer = screen.getByTestId("input-container");
+        const mapContainer = screen.getByTestId("map-container");
+
+        mockElementGeometry(inputContainer, 1000, 1000);
+        mockElementGeometry(mapContainer, 1500, 1500);
+
         const user = userEvent.setup();
 
-        const map = document.getElementsByClassName(
-          "map-container",
-        )[0] as SVGSVGElement;
-
-        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+        expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
         await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
-        expect(Number(map.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
+        expect(Number(mapContainer.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
 
         await user.click(screen.getByRole("button", { name: /loitonna/i }));
         await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
-        expect(Number(map.style.scale)).toBeLessThan(DEFAULT_SCALE);
+        expect(Number(mapContainer.style.scale)).toBeLessThan(DEFAULT_SCALE);
       });
 
       it("stops at maximum zoom level", async () => {
         customRender(<MapView />);
 
+        const inputContainer = screen.getByTestId("input-container");
+        const mapContainer = screen.getByTestId("map-container");
+
+        mockElementGeometry(inputContainer, 1000, 1000);
+        mockElementGeometry(mapContainer, 1500, 1500);
+
         const user = userEvent.setup();
 
-        const map = document.getElementsByClassName(
-          "map-container",
-        )[0] as SVGSVGElement;
-
-        while (Number(map.style.scale) !== MAX_ZOOM) {
+        while (Number(mapContainer.style.scale) !== MAX_ZOOM) {
           await user.click(screen.getByRole("button", { name: /suurenna/i }));
         }
 
         await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
-        expect(Number(map.style.scale)).toBe(MAX_ZOOM);
+        expect(Number(mapContainer.style.scale)).toBe(MAX_ZOOM);
       });
 
       it("stops at minimum zoom level", async () => {
         customRender(<MapView />);
 
+        const inputContainer = screen.getByTestId("input-container");
+        const mapContainer = screen.getByTestId("map-container");
+
+        mockElementGeometry(inputContainer, 1000, 1000);
+        mockElementGeometry(mapContainer, 1500, 1500);
+
         const user = userEvent.setup();
 
-        const map = document.getElementsByClassName(
-          "map-container",
-        )[0] as SVGSVGElement;
+        expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-        expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
-
-        while (Number(map.style.scale) !== MIN_ZOOM) {
+        while (Number(mapContainer.style.scale) !== MIN_ZOOM) {
           await user.click(screen.getByRole("button", { name: /loitonna/i }));
         }
 
         await user.click(screen.getByRole("button", { name: /loitonna/i }));
 
-        expect(Number(map.style.scale)).toBe(MIN_ZOOM);
+        expect(Number(mapContainer.style.scale)).toBe(MIN_ZOOM);
       });
 
       it("is bounded from top left", async () => {
         customRender(<MapView />);
 
+        const inputContainer = screen.getByTestId("input-container");
+        const mapContainer = screen.getByTestId("map-container");
+
+        mockElementGeometry(inputContainer, 1000, 1000);
+        mockElementGeometry(mapContainer, 1500, 1500);
+
         const user = userEvent.setup();
 
-        const inputDiv = document.getElementsByClassName(
-          "map-canvas",
-        )[0] as HTMLDivElement;
-        const map = document.getElementsByClassName(
-          "map-container",
-        )[0] as SVGSVGElement;
-
         await user.pointer([
-          { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-          { target: inputDiv, coords: { x: 10000, y: 10000 } },
           {
-            target: inputDiv,
+            target: inputContainer,
+            coords: { x: 0, y: 0 },
+            keys: "[MouseLeft>]",
+          },
+          { target: inputContainer, coords: { x: 10000, y: 10000 } },
+          {
+            target: inputContainer,
             coords: { x: 10000, y: 10000 },
             keys: "[/MouseLeft]",
           },
         ]);
-        await user.click(screen.getByRole("button", { name: /loitonna/i }));
+        await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
-        expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
-        expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+        expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+          getLeftBound(inputContainer.clientWidth),
+        );
+        expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+          getTopBound(inputContainer.clientHeight),
+        );
       });
 
       it("bounds the map when zooming with buttons from bottom right", async () => {
         customRender(<MapView />);
 
+        const inputContainer = screen.getByTestId("input-container");
+        const mapContainer = screen.getByTestId("map-container");
+
+        mockElementGeometry(inputContainer, 1000, 1000);
+        mockElementGeometry(mapContainer, 1500, 1500);
+
         const user = userEvent.setup();
-        const inputDiv = document.getElementsByClassName(
-          "map-canvas",
-        )[0] as HTMLDivElement;
-        const map = document.getElementsByClassName(
-          "map-container",
-        )[0] as HTMLDivElement;
 
         await user.pointer([
-          { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-          { target: inputDiv, coords: { x: -10000, y: -10000 } },
           {
-            target: inputDiv,
+            target: inputContainer,
+            coords: { x: 0, y: 0 },
+            keys: "[MouseLeft>]",
+          },
+          { target: inputContainer, coords: { x: -10000, y: -10000 } },
+          {
+            target: inputContainer,
             coords: { x: -10000, y: -10000 },
             keys: "[/MouseLeft]",
           },
         ]);
-        await user.click(screen.getByRole("button", { name: /loitonna/i }));
+        await user.click(screen.getByRole("button", { name: /suurenna/i }));
 
-        const scale = Number(map.style.scale);
-
-        expect(Number(map.style.left.replace("px", ""))).toBe(
-          getRightBound() - window.innerWidth * scale,
+        expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+          getRightBound() -
+            mapContainer.clientWidth * Number(mapContainer.style.scale),
         );
-        expect(Number(map.style.top.replace("px", ""))).toBe(
-          getBottomBound() - window.innerHeight * scale,
+        expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+          getBottomBound() -
+            mapContainer.clientHeight * Number(mapContainer.style.scale),
         );
       });
     });
@@ -272,129 +314,128 @@ describe("MapView", () => {
         it("zooms in", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
 
           const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
           });
 
-          expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+          expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-          inputDiv.dispatchEvent(mouseZoomInEvent);
+          inputContainer.dispatchEvent(mouseZoomInEvent);
 
-          expect(Number(map.style.scale)).toBeGreaterThan(DEFAULT_SCALE);
+          expect(Number(mapContainer.style.scale)).toBeGreaterThan(
+            DEFAULT_SCALE,
+          );
         });
-
         it("zooms out", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
 
           const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: 10,
           });
 
-          expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+          expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-          inputDiv.dispatchEvent(mouseZoomOutEvent);
+          inputContainer.dispatchEvent(mouseZoomOutEvent);
 
-          expect(Number(map.style.scale)).toBeLessThan(DEFAULT_SCALE);
+          expect(Number(mapContainer.style.scale)).toBeLessThan(DEFAULT_SCALE);
         });
 
         it("stops at maximum", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
 
           const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
           });
 
-          expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+          expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-          while (Number(map.style.scale) !== MAX_ZOOM) {
-            inputDiv.dispatchEvent(mouseZoomInEvent);
+          while (Number(mapContainer.style.scale) !== MAX_ZOOM) {
+            inputContainer.dispatchEvent(mouseZoomInEvent);
           }
 
-          inputDiv.dispatchEvent(mouseZoomInEvent);
+          inputContainer.dispatchEvent(mouseZoomInEvent);
 
-          expect(Number(map.style.scale)).toBe(MAX_ZOOM);
+          expect(Number(mapContainer.style.scale)).toBe(MAX_ZOOM);
         });
 
         it("stops at minimum", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
 
           const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: 10,
           });
 
-          expect(map.style.scale).toBe(`${DEFAULT_SCALE}`);
+          expect(mapContainer.style.scale).toBe(`${DEFAULT_SCALE}`);
 
-          while (Number(map.style.scale) !== MIN_ZOOM) {
-            inputDiv.dispatchEvent(mouseZoomOutEvent);
+          while (Number(mapContainer.style.scale) !== MIN_ZOOM) {
+            inputContainer.dispatchEvent(mouseZoomOutEvent);
           }
 
-          inputDiv.dispatchEvent(mouseZoomOutEvent);
+          inputContainer.dispatchEvent(mouseZoomOutEvent);
 
-          expect(Number(map.style.scale)).toBe(MIN_ZOOM);
+          expect(Number(mapContainer.style.scale)).toBe(MIN_ZOOM);
         });
 
         it("moves the map outward when zooming in", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
 
-          const mouseZoomInEvent: WheelEvent = new WheelEvent("wheel", {
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
+
+          const zoomInEvent = new WheelEvent("wheel", {
             deltaY: -10,
-            clientX: window.innerWidth / 2,
-            clientY: window.innerHeight / 2,
+            clientX: inputContainer.clientWidth / 2,
+            clientY: inputContainer.clientHeight / 2,
           });
 
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          inputContainer.dispatchEvent(zoomInEvent);
 
-          inputDiv.dispatchEvent(mouseZoomInEvent);
-
-          expect(Number(map.style.left.replace("px", ""))).toBeLessThan(0);
-          expect(Number(map.style.top.replace("px", ""))).toBeLessThan(0);
+          expect(
+            Number(mapContainer.style.left.replace("px", "")),
+          ).toBeLessThan(0);
+          expect(Number(mapContainer.style.top.replace("px", ""))).toBeLessThan(
+            0,
+          );
         });
 
         it("moves the map inward when zooming out", () => {
           customRender(<MapView />);
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
 
           const mouseZoomOutEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: 10,
@@ -402,26 +443,29 @@ describe("MapView", () => {
             clientY: window.innerHeight / 2,
           });
 
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
 
-          inputDiv.dispatchEvent(mouseZoomOutEvent);
+          inputContainer.dispatchEvent(mouseZoomOutEvent);
 
-          expect(Number(map.style.left.replace("px", ""))).toBeGreaterThan(0);
-          expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
+          expect(
+            Number(mapContainer.style.left.replace("px", "")),
+          ).toBeGreaterThan(0);
+          expect(
+            Number(mapContainer.style.top.replace("px", "")),
+          ).toBeGreaterThan(0);
         });
 
         it("bounds the map when zooming from top left", async () => {
           customRender(<MapView />);
 
-          const user = userEvent.setup();
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
+          const user = userEvent.setup();
 
           const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
@@ -430,31 +474,38 @@ describe("MapView", () => {
           });
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: 10000, y: 10000 } },
             {
-              target: inputDiv,
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: 10000, y: 10000 } },
+            {
+              target: inputContainer,
               coords: { x: 10000, y: 10000 },
               keys: "[/MouseLeft]",
             },
           ]);
-          inputDiv.dispatchEvent(mouseZoomEvent);
+          inputContainer.dispatchEvent(mouseZoomEvent);
 
-          expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
-          expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+          expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+            getLeftBound(inputContainer.clientWidth),
+          );
+          expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+            getTopBound(inputContainer.clientHeight),
+          );
         });
 
         it("bounds the map when zooming from bottom right", async () => {
           customRender(<MapView />);
 
-          const user = userEvent.setup();
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
+          const user = userEvent.setup();
 
           const mouseZoomEvent: WheelEvent = new WheelEvent("wheel", {
             deltaY: -10,
@@ -463,23 +514,27 @@ describe("MapView", () => {
           });
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: -10000, y: -10000 } },
             {
-              target: inputDiv,
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: -10000, y: -10000 } },
+            {
+              target: inputContainer,
               coords: { x: -10000, y: -10000 },
               keys: "[/MouseLeft]",
             },
           ]);
-          inputDiv.dispatchEvent(mouseZoomEvent);
+          inputContainer.dispatchEvent(mouseZoomEvent);
 
-          const scale = Number(map.style.scale);
+          const scale = Number(mapContainer.style.scale);
 
-          expect(Number(map.style.left.replace("px", ""))).toBe(
-            getRightBound() - window.innerWidth * scale,
+          expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+            getRightBound() - mapContainer.clientWidth * scale,
           );
-          expect(Number(map.style.top.replace("px", ""))).toBe(
-            getBottomBound() - window.innerHeight * scale,
+          expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+            getBottomBound() - mapContainer.clientHeight * scale,
           );
         });
       });
@@ -488,117 +543,140 @@ describe("MapView", () => {
         it("moves the map correctly", async () => {
           customRender(<MapView />);
 
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
           const user = userEvent.setup();
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
-
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 100, y: 100 } },
+            { target: inputContainer, coords: { x: 100, y: 100 } },
           ]);
 
           // map shouldn't move
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: 100, y: 100 } },
             {
-              target: inputDiv,
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: 100, y: 100 } },
+            {
+              target: inputContainer,
               coords: { x: 100, y: 100 },
               keys: "[/MouseLeft]",
             },
           ]);
 
           // map should move
-          expect(Number(map.style.left.replace("px", ""))).toBeGreaterThan(0);
-          expect(Number(map.style.top.replace("px", ""))).toBeGreaterThan(0);
+          expect(
+            Number(mapContainer.style.left.replace("px", "")),
+          ).toBeGreaterThan(0);
+          expect(
+            Number(mapContainer.style.top.replace("px", "")),
+          ).toBeGreaterThan(0);
         });
 
         it("is bounded from bottom right", async () => {
           customRender(<MapView />);
 
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
           const user = userEvent.setup();
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
-
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: 10000, y: 10000 } },
             {
-              target: inputDiv,
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: 10000, y: 10000 } },
+            {
+              target: inputContainer,
               coords: { x: 10000, y: 10000 },
               keys: "[/MouseLeft]",
             },
           ]);
 
-          expect(Number(map.style.left.replace("px", ""))).toBe(getLeftBound());
-          expect(Number(map.style.top.replace("px", ""))).toBe(getTopBound());
+          expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+            getLeftBound(inputContainer.clientWidth),
+          );
+          expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+            getTopBound(inputContainer.clientHeight),
+          );
         });
 
         it("is bounded from top left", async () => {
           customRender(<MapView />);
 
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
           const user = userEvent.setup();
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-          const map = document.getElementsByClassName(
-            "map-container",
-          )[0] as HTMLDivElement;
-
-          expect(map.style.left).toBe("0px");
-          expect(map.style.top).toBe("0px");
+          expect(mapContainer.style.left).toBe("0px");
+          expect(mapContainer.style.top).toBe("0px");
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: -10000, y: -10000 } },
             {
-              target: inputDiv,
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: -10000, y: -10000 } },
+            {
+              target: inputContainer,
               coords: { x: -10000, y: -10000 },
               keys: "[/MouseLeft]",
             },
           ]);
 
-          const scale = Number(map.style.scale);
-
-          expect(Number(map.style.left.replace("px", ""))).toBe(
-            getRightBound() - window.innerWidth * scale,
+          expect(Number(mapContainer.style.left.replace("px", ""))).toBe(
+            getRightBound() -
+              mapContainer.clientWidth * Number(mapContainer.style.scale),
           );
-          expect(Number(map.style.top.replace("px", ""))).toBe(
-            getBottomBound() - window.innerHeight * scale,
+          expect(Number(mapContainer.style.top.replace("px", ""))).toBe(
+            getBottomBound() -
+              mapContainer.clientHeight * Number(mapContainer.style.scale),
           );
         });
 
         it("disabled room hovering", async () => {
           customRender(<MapView />);
 
+          const inputContainer = screen.getByTestId("input-container");
+          const mapContainer = screen.getByTestId("map-container");
+
+          mockElementGeometry(inputContainer, 1000, 1000);
+          mockElementGeometry(mapContainer, 1500, 1500);
+
           const user = userEvent.setup();
 
-          const inputDiv = document.getElementsByClassName(
-            "map-canvas",
-          )[0] as HTMLDivElement;
-
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: MOVE_THRESHOLD + 1, y: 0 } },
+            {
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: MOVE_THRESHOLD + 1, y: 0 } },
           ]);
 
           await waitFor(() => {
@@ -610,7 +688,7 @@ describe("MapView", () => {
 
           await user.pointer([
             {
-              target: inputDiv,
+              target: inputContainer,
               coords: { x: MOVE_THRESHOLD + 1, y: 0 },
               keys: "[/MouseLeft]",
             },
@@ -624,8 +702,12 @@ describe("MapView", () => {
           });
 
           await user.pointer([
-            { target: inputDiv, coords: { x: 0, y: 0 }, keys: "[MouseLeft>]" },
-            { target: inputDiv, coords: { x: MOVE_THRESHOLD - 1, y: 0 } },
+            {
+              target: inputContainer,
+              coords: { x: 0, y: 0 },
+              keys: "[MouseLeft>]",
+            },
+            { target: inputContainer, coords: { x: MOVE_THRESHOLD - 1, y: 0 } },
           ]);
 
           await waitFor(() => {
@@ -637,7 +719,7 @@ describe("MapView", () => {
 
           await user.pointer([
             {
-              target: inputDiv,
+              target: inputContainer,
               coords: { x: MOVE_THRESHOLD - 1, y: 0 },
               keys: "[/MouseLeft]",
             },
