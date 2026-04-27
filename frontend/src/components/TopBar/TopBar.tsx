@@ -15,6 +15,7 @@ function TopBar() {
       <PersonSearch />
       <div className="topbar-buttons">
         <button
+          className="button square-icon"
           aria-label="Asetukset"
           onClick={() => {
             setSettingsOpen((v) => !v);
@@ -23,6 +24,7 @@ function TopBar() {
           <Settings strokeWidth={1.7} />
         </button>
         <button
+          className="button square-icon"
           aria-label="Käyttäjä"
           onMouseDown={(event) => {
             event.stopPropagation();

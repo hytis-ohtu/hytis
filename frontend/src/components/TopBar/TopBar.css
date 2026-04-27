@@ -23,21 +23,3 @@
   display: flex;
   gap: var(--border-width-md);
 }
-
-.topbar-buttons > button {
-  aspect-ratio: 1;
-  display: grid;
-  place-content: center;
-  border: none;
-  padding: 0;
-  background: var(--color-primary);
-  color: var(--color-text-black);
-  cursor: pointer;
-  transition:
-    background-color var(--transition-fast);
-}
-
-.topbar-buttons > button:hover {
-  background: var(--color-primary-light);
-  color: var(--color-text-black);
-}

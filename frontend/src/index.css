@@ -95,6 +95,21 @@ h6 {
     border: none;
     padding: 0;
   }
+
+  &.square-icon {
+    aspect-ratio: 1;
+    display: grid;
+    place-content: center;
+    border: none;
+    padding: 0;
+    background: var(--color-primary);
+    color: var(--color-text-black);
+
+    &:hover {
+      background: var(--color-primary-light);
+      color: var(--color-text-black);
+    }
+  }
 }
 
 .no-data {
