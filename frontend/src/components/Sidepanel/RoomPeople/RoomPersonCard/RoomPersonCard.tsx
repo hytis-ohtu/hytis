@@ -76,7 +76,7 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             {contract.person.lastName} {contract.person.firstName}
           </h3>
           <button
-            className="button-icon"
+            className="button icon"
             onClick={toggleDetails}
             aria-label={
               detailsCollapsed
@@ -93,14 +93,14 @@ function RoomPersonCard({ contract, onEdit, onRemove }: RoomPersonCardProps) {
             />
           </button>
           <button
-            className="button-icon"
+            className="button icon"
             aria-label="Muokkaa henkilön tietoja"
             onClick={onEdit}
           >
             <Pencil size={18} />
           </button>
           <button
-            className="button-icon"
+            className="button icon"
             aria-label="Poista henkilö"
             onClick={onRemove}
           >

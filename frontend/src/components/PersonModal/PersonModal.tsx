@@ -85,7 +85,7 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
         </div>
 
         <ConfirmationDialog
-          open={confirmOpen}
+          isOpen={confirmOpen}
           title={
             confirmAction === "save"
               ? "Tallenna muutokset?"

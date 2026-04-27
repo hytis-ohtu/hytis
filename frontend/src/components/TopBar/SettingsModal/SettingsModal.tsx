@@ -70,7 +70,7 @@ function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         <h2 id={titleId}>Asetukset</h2>
         <button
           type="button"
-          className="button-icon settings-modal-close-button"
+          className="button icon settings-modal-close-button"
           aria-label="Sulje asetukset"
           onClick={onClose}
         >

@@ -60,7 +60,7 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
           })}
         </h2>
         <button
-          className="button-icon"
+          className="button icon"
           onClick={toggleDetails}
           aria-label={
             detailsCollapsed ? "Avaa huoneen tiedot" : "Sulje huoneen tiedot"
@@ -74,14 +74,14 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
           />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Muokkaa huoneen tietoja"
           onClick={() => setEditRoomOpen(true)}
         >
           <SquarePen />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Sulje huone"
           onClick={() => void selectRoom(null)}
         >

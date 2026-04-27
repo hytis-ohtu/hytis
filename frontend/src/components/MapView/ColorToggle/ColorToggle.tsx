@@ -11,7 +11,7 @@ function ColorToggle({
 }: ColorToggleProps) {
   return (
     <button
-      className="button color-toggle"
+      className="color-toggle"
       onClick={() => setUseAvailability(!useAvailability)}
     >
       {useAvailability ? "Vastuualueet" : "Varaustila"}

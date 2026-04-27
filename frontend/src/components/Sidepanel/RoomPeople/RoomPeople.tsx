@@ -178,7 +178,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
           )}
         </h2>
         <button
-          className="button-icon"
+          className="button icon"
           onClick={() => dispatch({ type: "toggle-contracts" })}
           aria-label={
             state.contractsCollapsed
@@ -196,7 +196,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
           />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Sijoita henkilö huoneeseen"
           onClick={() => dispatch({ type: "open-add-person" })}
         >
@@ -283,7 +283,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
 
       {/* Confirmation Button */}
       <ConfirmationDialog
-        open={state.contractToRemove !== null}
+        isOpen={state.contractToRemove !== null}
         title={`Poista ${state.contractToRemove?.person.firstName} ${state.contractToRemove?.person.lastName}?`}
         confirmText="Poista"
         cancelText="Peruuta"
