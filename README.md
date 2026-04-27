@@ -2,6 +2,13 @@
 
 [![codecov](https://codecov.io/gh/hytis-ohtu/hytis/graph/badge.svg?token=WLP90N7ZRE)](https://codecov.io/gh/hytis-ohtu/hytis)
 
+**[View the project wiki](https://github.com/hytis-ohtu/hytis/wiki)** for additional documentation.
+
+## Requirements
+
+- **Node.js** 18+ and **npm** 9+
+- **Docker** and **Docker Compose** (for the development setup with PostgreSQL and Redis)
+
 ## Development
 
 1. Clone the repository
@@ -34,7 +41,7 @@
 
    **Backend**
 
-   Create a `.env` file in the `backend` directory with the following contents:
+   Create a `.env` file in the `backend` directory with the following contents for development:
 
    ```bash
    DATABASE_URL=YOUR_DATABASE_URL_HERE
@@ -43,43 +50,36 @@
    SESSION_SECRET=change-this-to-a-long-random-string-in-production
    SESSION_MAX_AGE=86400000
    FRONTEND_URL=http://localhost:5173
+   USE_HY_LOGIN=false
    ```
 
-   These are the variables for development mode.
-   See the .env.example file from backend folder to see the production variables.
+   For production environment and OIDC authentication setup to log into the University of Helsinki system, see `backend/.env.example` for additional required environment variables.
 
-   **Option A: Using Docker PostgreSQL (recommended for development)**
+   **Option A: Using Docker PostgreSQL and Redis**
 
-   If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
+   If using the provided Docker containers (configured in `backend/database.yaml`), use the following URLs:
 
    ```bash
    DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
+   REDIS_URL=redis://localhost:6379
    ```
 
-   Start the database container in a new terminal (leave it running):
+   Start the PostgreSQL and Redis containers in a new terminal (keep it running):
 
    ```bash
    npm run start:db
    ```
 
-   **Option B: Using your own PostgreSQL database**
+   **Option B: Using your own PostgreSQL and Redis**
 
-   Configure `DATABASE_URL` to point to your existing PostgreSQL database.
+   Configure `DATABASE_URL` and `REDIS_URL` to point to your existing PostgreSQL database and Redis instance.
 
    **Frontend**
 
-   Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
-
-   `.env.development`:
+   Create a `.env.development` file in the `frontend` directory with the following content:
 
    ```bash
    VITE_API_URL=http://localhost:3000
-   ```
-
-   `.env.production`:
-
-   ```bash
-   VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
    ```
 
 5. Add seed data to the database
@@ -108,7 +108,7 @@
 
 ### Database
 
-- `npm run start:db` - Start PostgreSQL database in Docker container
+- `npm run start:db` - Start PostgreSQL database and Redis in Docker containers
 - `npm run seed:db` - Add seed data to the database
 
 ### Backend
