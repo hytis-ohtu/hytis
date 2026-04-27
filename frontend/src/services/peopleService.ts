@@ -46,7 +46,7 @@ const buildPersonPayload = (
   freeText: values.misc || null,
   startDate: values.startDate || null,
   endDate: values.endDate || null,
-  roomId: Number(roomId),
+  roomId: roomId,
 });
 
 export async function addPerson(
