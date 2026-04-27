@@ -51,7 +51,7 @@ const buildPersonPayload = (
 
 export async function addPerson(
   values: Record<string, string | undefined>,
-  roomId: string | number,
+  roomId: number,
 ): Promise<Person> {
   const response = await axios.post<Person>(
     `${BASE_URL}/api/people`,
@@ -63,7 +63,7 @@ export async function addPerson(
 export async function editPerson(
   id: number,
   values: Record<string, string>,
-  roomId: string | number,
+  roomId: number,
 ): Promise<Person> {
   const response = await axios.put<Person>(
     `${BASE_URL}/api/people/${id}`,
