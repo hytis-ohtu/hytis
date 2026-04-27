@@ -1,6 +1,6 @@
+import { BASE_URL } from "@constants";
+import type { Person } from "@types";
 import axios from "axios";
-import { BASE_URL } from "../constants";
-import type { Person } from "../types";
 
 export async function findAllPeople(): Promise<Person[]> {
   const response = await axios.get<Person[]>(`${BASE_URL}/api/people`);

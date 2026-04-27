@@ -1,20 +1,20 @@
+import PersonSearch from "@components/PersonSearch/PersonSearch";
+import { RoomSelectionProvider } from "@components/RoomSelectionProvider/RoomSelectionProvider";
+import { findRoomById } from "@services/roomsService";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import PersonSearch from "../../src/components/PersonSearch";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider";
-import { findRoomById } from "../../src/services/roomsService";
 
 // Mock peopleService
 const mockSearchPeople = vi.fn();
-vi.mock("../../src/services/peopleService", () => ({
+vi.mock("@services/peopleService", () => ({
   searchPeople: (...args: unknown[]) =>
     mockSearchPeople(...args) as Promise<unknown[]>,
 }));
 
-vi.mock("../src/services/roomsService", () => ({
+vi.mock("@services/roomsService", () => ({
   findRoomById: vi.fn(),
 }));
 

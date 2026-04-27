@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { findAllPeople } from "../services/peopleService";
+import PersonSelector from "@components/PersonSelector/PersonSelector";
+import { findAllPeople } from "@services/peopleService";
 import {
   findAllDepartments,
   findAllResearchGroups,
   findAllTitles,
   type ReferenceItem,
-} from "../services/referenceDataService";
-import type { Person } from "../types";
+} from "@services/referenceDataService";
+import type { Person } from "@types";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import "./PersonForm.css";
-import PersonSelector from "./PersonSelector";
 
 interface FieldDef {
   id: string;
