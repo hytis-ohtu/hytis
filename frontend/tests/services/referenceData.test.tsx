@@ -1,12 +1,12 @@
-import axios from "axios";
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   findAllDepartments,
   findAllResearchGroups,
   findAllRoomTypes,
   findAllTitles,
   type ReferenceItem,
-} from "../../src/services/referenceDataService";
+} from "@services/referenceDataService";
+import axios from "axios";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("axios", () => ({
   default: {
@@ -21,7 +21,7 @@ vi.mock("axios", () => ({
   },
 }));
 
-vi.mock("../constants", () => ({ BASE_URL: "" }));
+vi.mock("@constants", () => ({ BASE_URL: "" }));
 
 const mockedAxios = vi.mocked(axios);
 
