@@ -1,6 +1,6 @@
+import { BASE_URL } from "@constants";
+import type { Room } from "@types";
 import axios from "axios";
-import { BASE_URL } from "../constants";
-import type { Room } from "../types";
 
 const VITE_ROOM_FETCH_DELAY_MS = (() => {
   const delay = Number(import.meta.env.VITE_ROOM_FETCH_DELAY_MS);

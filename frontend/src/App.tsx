@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import AuthProvider from "./components/AuthProvider";
-import MapView from "./components/MapView";
-import { RoomSelectionProvider } from "./components/RoomSelectionProvider";
-import TopBar from "./components/TopBar";
+import AuthProvider from "./components/AuthProvider/AuthProvider";
+import MapView from "./components/MapView/MapView";
+import { RoomSelectionProvider } from "./components/RoomSelectionProvider/RoomSelectionProvider";
+import TopBar from "./components/TopBar/TopBar";
 import { useAuth } from "./hooks/useAuth";
 import { findRoomById } from "./services/roomsService";
 

@@ -1,10 +1,10 @@
+import MapView from "@components/MapView/MapView";
+import { RoomSelectionProvider } from "@components/RoomSelectionProvider/RoomSelectionProvider";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import MapView from "../../src/components/MapView.tsx";
-import { RoomSelectionProvider } from "../../src/components/RoomSelectionProvider.tsx";
 import {
   DEFAULT_SCALE,
   getBottomBound,

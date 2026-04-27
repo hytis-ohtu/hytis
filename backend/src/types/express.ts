@@ -1,4 +1,5 @@
 import "express-session";
+import type { PersonInput } from "../utils";
 
 declare global {
   /* eslint-disable @typescript-eslint/no-namespace */
@@ -12,6 +13,7 @@ declare global {
 
     interface Request {
       user?: User;
+      personInput?: PersonInput;
       isAuthenticated(): boolean;
       login(user: User, done: (err: Error | null) => void): void;
       logout(done: (err: Error | null) => void): void;
