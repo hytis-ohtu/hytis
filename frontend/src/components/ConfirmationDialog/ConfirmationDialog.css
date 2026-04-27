@@ -1,15 +1,15 @@
 .confirmation-dialog {
   min-width: 250px;
-  gap: 0.5rem;
   background: var(--color-background);
   border: var(--border-md);
   padding: 0.5rem;
   box-shadow: var(--box-shadow);
-}
 
-.confirmation-dialog[open] {
-  display: grid;
-  justify-items: center;
+  &[open] {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+  }
 }
 
 .confirmation-dialog > h2 {
@@ -20,10 +20,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-}
 
-.confirmation-button:disabled {
-  background-color: var(--color-muted);
-  cursor: not-allowed;
-  pointer-events: none;
+  & > .button:disabled {
+    background-color: var(--color-muted);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }

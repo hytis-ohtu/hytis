@@ -49,10 +49,10 @@ export default function ConfirmDialog({
         {title}
       </h2>
       <div className="confirmation-buttons">
-        <button className="button confirmation-button" onClick={onConfirm}>
+        <button className="button" onClick={onConfirm}>
           {confirmText}
         </button>
-        <button className="button confirmation-button" onClick={onCancel}>
+        <button className="button" onClick={onCancel}>
           {cancelText}
         </button>
       </div>
