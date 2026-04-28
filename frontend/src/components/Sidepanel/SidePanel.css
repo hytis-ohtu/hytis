@@ -1,9 +1,10 @@
 /* SidePanel */
 
 .side-panel {
-  position: fixed;
-  inset: var(--topbar-height) 0 0 auto;
-  height: calc(100vh - var(--topbar-height));
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
   width: clamp(250px, 28vw, 340px);
   display: flex;
   flex-direction: column;

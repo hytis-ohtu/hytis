@@ -16,14 +16,12 @@ function SettingsModal({ onClose, fontSize, setFontSize }: SettingsModalProps) {
       <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
         <button
           className="settings-modal-close-button"
+          aria-label="Sulje asetukset"
           onClick={onClose}
-          aria-label="close"
         >
           <X size={16} />
         </button>
-        <h2 data-testid="settings-modal-title" className="settings-modal-title">
-          Asetukset
-        </h2>
+        <h2 className="settings-modal-title">Asetukset</h2>
         <div className="settings-modal-row">
           <label>Kartan tekstin fonttikoko: {fontSize}px</label>
           <input
@@ -34,9 +32,9 @@ function SettingsModal({ onClose, fontSize, setFontSize }: SettingsModalProps) {
             onChange={(e) => {
               const size = Number(e.target.value);
               setFontSize(size);
-              localStorage.setItem("map-font-size", String(size));
+              localStorage.setItem("font-size-map", String(size));
               document.documentElement.style.setProperty(
-                "--map-font-size",
+                "--font-size-map",
                 `${size}px`,
               );
             }}

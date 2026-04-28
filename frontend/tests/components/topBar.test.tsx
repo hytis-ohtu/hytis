@@ -31,41 +31,44 @@ describe("TopBar", () => {
   });
 
   it("opens and closes settings modal from the settings button", async () => {
-    const user = userEvent.setup();
     render(<TopBar />);
 
+    const user = userEvent.setup();
+
     expect(
-      screen.queryByTestId("settings-modal-title"),
+      screen.queryByRole("heading", { name: "Asetukset" }),
     ).not.toBeInTheDocument();
 
-    await user.click(screen.getByTestId("topbar-settings-button"));
-    expect(screen.getByTestId("settings-modal-title")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Asetukset" }));
 
-    await user.click(screen.getByRole("button", { name: "close" }));
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId("settings-modal-title"),
-      ).not.toBeInTheDocument();
-    });
+    expect(
+      screen.queryByRole("heading", { name: "Asetukset" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Sulje asetukset" }));
+
+    expect(
+      screen.queryByRole("heading", { name: "Asetukset" }),
+    ).not.toBeInTheDocument();
   });
 
   it("topbar menu can be opened", async () => {
-    const user = userEvent.setup();
     render(<TopBar />);
-    const menuButton = screen.getByTestId("topbar-profile-button");
 
-    expect(
-      screen.queryByTestId("profile-menu-close-button"),
-    ).not.toBeInTheDocument();
+    const user = userEvent.setup();
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+    const menuButton = screen.getByRole("button", { name: "Käyttäjä" });
 
     await user.click(menuButton);
-    expect(screen.getByTestId("profile-menu-close-button")).toBeInTheDocument();
+
+    expect(screen.getByRole("menu")).toBeInTheDocument();
 
     await user.click(document.body);
+
     await waitFor(() => {
-      expect(
-        screen.queryByTestId("profile-menu-close-button"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     });
   });
 });
