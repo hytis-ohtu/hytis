@@ -32,7 +32,7 @@ function SettingsModal({ onClose, fontSize, setFontSize }: SettingsModalProps) {
             onChange={(e) => {
               const size = Number(e.target.value);
               setFontSize(size);
-              localStorage.setItem("map-font-size", String(size));
+              localStorage.setItem("font-size-map", String(size));
               document.documentElement.style.setProperty(
                 "--font-size-map",
                 `${size}px`,

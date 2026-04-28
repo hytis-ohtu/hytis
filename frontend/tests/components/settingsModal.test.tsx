@@ -72,7 +72,7 @@ describe("SettingsModal", () => {
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "22" } });
 
-    expect(setItemSpy).toHaveBeenCalledWith("map-font-size", "22");
+    expect(setItemSpy).toHaveBeenCalledWith("font-size-map", "22");
     setItemSpy.mockRestore();
     expect(
       document.documentElement.style.getPropertyValue("--font-size-map"),
