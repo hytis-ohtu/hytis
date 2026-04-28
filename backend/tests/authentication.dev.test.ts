@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import session from "express-session";
 import request from "supertest";
-import "../src/types/express";
+import "../src/types/express.d";
 import { FRONTEND_URL, MOCK_USER } from "./testHelpers";
 
 // Mock the environment config to disable HY login and provide a frontend URL
