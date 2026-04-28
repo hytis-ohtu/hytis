@@ -179,7 +179,7 @@ test("saving existing person without contract dates closes the modal and persist
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
-  await expect(page.getByRole("heading", { name: "Ali Ahmed" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Ali Ahmed/i })).toBeVisible();
 });
 
 test("saving existing person with contract dates closes the modal and persists person", async ({

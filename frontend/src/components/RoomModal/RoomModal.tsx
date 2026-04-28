@@ -56,7 +56,7 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
       <div className="roommodal-content" onClick={(e) => e.stopPropagation()}>
         <button
           className="roommodal-close-button"
-          aria-label="Sulje"
+          aria-label="Sulje huoneen tietojen muokkaus"
           onClick={requestClose}
         >
           <X size={16} />

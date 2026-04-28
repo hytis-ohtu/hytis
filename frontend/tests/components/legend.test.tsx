@@ -1,4 +1,4 @@
-import Legend from "@components/MainView/Legend/Legend";
+import Legend from "@components/MapView/Legend/Legend";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";

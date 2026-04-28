@@ -1,54 +1,43 @@
 .topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: var(--topbar-height);
-  background: var(--color-text-black);
+  height: 56px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: center;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.25);
-  z-index: var(--z-index-topbar);
+  grid-template-columns: auto 1fr auto;
+  place-items: center;
+  gap: var(--border-width-md);
+  padding: var(--border-width-md);
+  background: var(--color-text-black);
+  box-shadow: var(--box-shadow);
 }
 
-.topbar-title {
+.topbar > h1 {
+  margin: 0 1rem;
   color: var(--color-text-white);
   font-size: 20px;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
-  padding-left: var(--padding-md);
 }
 
-.topbar-actions {
+.topbar-buttons {
+  align-self: stretch;
+  position: relative;
   display: flex;
-  flex-shrink: 0;
-  justify-self: end;
+  gap: var(--border-width-md);
 }
 
-.topbar-search {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-
-.topbar-button {
-  width: var(--topbar-height);
-  border: var(--border-sm);
-  border-bottom: var(--border-md);
+.topbar-buttons > button {
   aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  border: none;
+  padding: 0;
   background: var(--color-primary);
   color: var(--color-text-black);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition:
-    background-color var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
-.topbar-button:hover {
+.topbar-buttons > button:hover {
   background: var(--color-primary-light);
   color: var(--color-text-black);
 }

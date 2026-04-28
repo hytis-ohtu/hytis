@@ -8,18 +8,11 @@
   --color-text-white: #fff;
   --color-background: #fff;
   --color-background-gray: #edebeb;
-  --color-muted: #0d0b1594;
+  --color-muted: #666;
 
   /* Skeleton Colors */
   --color-secondary-skeleton-base: #cf9f60;
   --color-secondary-skeleton-highlight: #efd1a9;
-
-  /* Borders */
-  --border-radius-md: 6px;
-  --border-radius-sm: 4px;
-  --gap: 12px;
-  --padding: 8px;
-  --transition-fast: 0.15s;
 
   /* Font */
   --font-body: 1rem "Roboto Variable", sans-serif;
@@ -29,25 +22,35 @@
   --font-weight-bold: 600;
 
   /* Spacing */
+  --gap: 12px;
+  --padding: 8px;
   --padding-sm: 0.5rem;
   --padding-md: 1rem;
 
   /* Shadows */
-  --box-shadow-sm: 0 4px rgba(0, 0, 0, 0.25);
-  --box-shadow-md: 0 8px rgba(0, 0, 0, 0.25);
+  --box-shadow: 0 4px rgba(0, 0, 0, 0.25);
 
-  --topbar-height: 52px;
-  --button-size: 50px;
-  --z-index-topbar: 1000;
+  /* Borders */
+  --border-width-sm: 1px;
+  --border-width-md: 2px;
+  --border-sm: var(--border-width-sm) solid var(--color-text-black);
+  --border-md: var(--border-width-md) solid var(--color-text-black);
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
 
-  /* border */
-  --border-sm: 1px solid var(--color-text-black);
-  --border-md: 2px solid var(--color-text-black);
+  /* Transitions */
+  --transition-fast: 0.15s;
 }
 
 body {
   font: var(--font-body);
   color: var(--color-text-black);
+}
+
+#root {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 h1,
@@ -60,6 +63,8 @@ h6 {
 }
 
 .button-icon {
+  display: grid;
+  place-items: center;
   background: transparent;
   border: none;
   padding: 0;

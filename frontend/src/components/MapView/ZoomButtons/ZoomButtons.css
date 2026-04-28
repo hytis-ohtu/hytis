@@ -1,12 +1,9 @@
 .zoom-buttons {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
   display: flex;
   border: var(--border-md);
   border-radius: var(--border-radius-md);
   background: var(--color-background);
-  box-shadow: var(--box-shadow-sm);
+  box-shadow: var(--box-shadow);
 }
 
 .zoom-buttons button {

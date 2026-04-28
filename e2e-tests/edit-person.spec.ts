@@ -84,7 +84,7 @@ test("cancelling edit person without saving closes the modal", async ({
     page.getByRole("heading", { name: "Muokkaa henkilöä" }),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: /^sulje$/i }).click();
+  await page.getByRole("button", { name: "Sulje henkilön muokkaus" }).click();
   await page.getByRole("button", { name: "Kyllä" }).click();
 
   await expect(page.locator(".personmodal-content")).not.toBeVisible();
