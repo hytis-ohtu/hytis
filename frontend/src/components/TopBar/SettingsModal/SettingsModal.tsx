@@ -8,7 +8,7 @@ const ROOM_LABEL_FONT_SIZE_MAX = 32;
 
 function getStoredFontSize() {
   try {
-    const storedValue = localStorage.getItem("map-font-size");
+    const storedValue = localStorage.getItem("font-size-map");
     if (!storedValue) {
       return ROOM_LABEL_FONT_SIZE_DEFAULT;
     }
@@ -52,7 +52,7 @@ function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   // Update font size
   useEffect(() => {
-    localStorage.setItem("map-font-size", String(fontSize));
+    localStorage.setItem("font-size-map", String(fontSize));
     document.documentElement.style.setProperty(
       "--font-size-map",
       `${fontSize}px`,
@@ -69,7 +69,6 @@ function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       <header>
         <h2 id={titleId}>Asetukset</h2>
         <button
-          type="button"
           className="button icon settings-modal-close-button"
           aria-label="Sulje asetukset"
           onClick={onClose}

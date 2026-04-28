@@ -38,7 +38,7 @@ test("clicking outside edit person modal triggers cancel confirmation dialog", a
     .click();
 
   // TODO: add semantic clicking target
-  const modalBox = await page.locator(".personmodal-content").boundingBox();
+  const modalBox = await page.locator(".person-modal-content").boundingBox();
   expect(modalBox).not.toBeNull();
   if (!modalBox) {
     throw new Error("Person modal content bounding box not found");
@@ -68,7 +68,7 @@ test("edit person save button is disabled when required fields are empty", async
   const firstNameInput = page.locator('input[name="firstName"]');
   await firstNameInput.clear();
 
-  const saveButton = page.locator(".personmodal-save-button");
+  const saveButton = page.locator(".person-modal-save-button");
   await expect(saveButton).toBeDisabled();
 });
 
@@ -87,8 +87,8 @@ test("cancelling edit person without saving closes the modal", async ({
   await page.getByRole("button", { name: "Sulje henkilön muokkaus" }).click();
   await page.getByRole("button", { name: "Kyllä" }).click();
 
-  await expect(page.locator(".personmodal-content")).not.toBeVisible();
-  await expect(page.locator(".personmodal-overlay")).not.toBeVisible();
+  await expect(page.locator(".person-modal-content")).not.toBeVisible();
+  await expect(page.locator(".person-modal-overlay")).not.toBeVisible();
 });
 
 test("cancelling from confirmation modal keeps the edit person modal open", async ({
@@ -107,7 +107,7 @@ test("cancelling from confirmation modal keeps the edit person modal open", asyn
   await firstNameInput.clear();
   await firstNameInput.fill("Uusi nimi");
 
-  await page.locator(".personmodal-save-button").click();
+  await page.locator(".person-modal-save-button").click();
   await page.getByRole("button", { name: "Peruuta" }).click();
 
   await expect(

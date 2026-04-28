@@ -1,41 +1,44 @@
-import { useEffect, useId, useRef } from "react";
+import { type KeyboardEvent, useEffect, useId, useRef } from "react";
 import "./ConfirmationDialog.css";
 
 interface ConfirmDialogProps {
-  isOpen: boolean;
   title?: string;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
-  onCancel: () => void;
+  onClose: () => void;
 }
 
 export default function ConfirmDialog({
-  isOpen,
   title = "Oletko varma?",
   confirmText = "Kyllä",
   cancelText = "Ei",
   onConfirm,
-  onCancel,
+  onClose,
 }: ConfirmDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
-  // Toggle dialog
   useEffect(() => {
-    const dialogElement = dialogRef.current;
-    if (!dialogElement) {
-      return;
-    }
+    dialogRef.current?.showModal();
+  }, []);
 
-    if (isOpen && !dialogElement.open) {
-      dialogElement.showModal();
-    }
+  const handleEscape = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleCancel();
+  };
 
-    if (!isOpen && dialogElement.open) {
-      dialogElement.close();
-    }
-  }, [isOpen]);
+  const handleCancel = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
+
+  const handleConfirm = () => {
+    dialogRef.current?.close();
+    onConfirm();
+  };
 
   return (
     <dialog
@@ -43,16 +46,16 @@ export default function ConfirmDialog({
       className="confirmation-dialog"
       role="alertdialog"
       aria-labelledby={titleId}
-      onClose={onCancel}
+      onKeyDown={handleEscape}
     >
       <h2 id={titleId} className="confirmation-title">
         {title}
       </h2>
       <div className="confirmation-buttons">
-        <button className="button" onClick={onConfirm}>
+        <button className="button" onClick={handleConfirm}>
           {confirmText}
         </button>
-        <button className="button" onClick={onCancel}>
+        <button className="button" onClick={handleCancel}>
           {cancelText}
         </button>
       </div>

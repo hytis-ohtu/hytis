@@ -45,8 +45,8 @@ const REQUIRED_INITIAL = {
 
 describe("PersonModal", () => {
   const defaultProps = {
+    onSave: vi.fn(),
     onClose: vi.fn(),
-    onSubmit: vi.fn(),
   };
 
   // Helper that renders and waits for async data fetching to complete
@@ -77,94 +77,101 @@ describe("PersonModal", () => {
 
   it("confirmation button if closing", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Sulje henkilön lisäys" }),
+    );
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
-  it("confirmation button if clicking outside", async () => {
+  it("confirmation button if pressing escape", async () => {
     await renderAndWait();
-    const overlay = screen
-      .getByText("Lisää henkilö")
-      .closest(".personmodal-content")!.parentElement!;
-
-    fireEvent.click(overlay);
+    const dialog = screen.getByRole("dialog", { name: "Lisää henkilö" });
+    fireEvent.keyDown(dialog, { key: "Escape" });
 
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
   it("confirmation button if saving", async () => {
     await renderAndWait({ initial: REQUIRED_INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
+    fireEvent.click(screen.getByRole("button", { name: "Tallenna" }));
     expect(screen.getByText("Tallenna muutokset?")).toBeInTheDocument();
   });
 
   it("disables save button if form is invalid", async () => {
     await renderAndWait();
-    const saveButton = screen.getByText("Lisää");
+    const saveButton = screen.getByRole("button", { name: "Lisää" });
     expect(saveButton).toBeDisabled();
   });
 
   it("enables save button if form is valid", async () => {
     await renderAndWait({ initial: REQUIRED_INITIAL });
-    const saveButton = screen.getByText("Tallenna");
+    const saveButton = screen.getByRole("button", { name: "Tallenna" });
     expect(saveButton).toBeEnabled();
   });
 
-  it("calls onSubmit with form data when saving", async () => {
+  it("calls onSave with form data when saving", async () => {
     await renderAndWait({ initial: REQUIRED_INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
-    const dialog = screen.getByText("Tallenna muutokset?").closest("div")!;
+    fireEvent.click(screen.getByRole("button", { name: "Tallenna" }));
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Tallenna muutokset?",
+    });
     fireEvent.click(within(dialog).getByRole("button", { name: "Tallenna" }));
-    expect(defaultProps.onSubmit).toHaveBeenCalledWith(REQUIRED_INITIAL);
+    expect(defaultProps.onSave).toHaveBeenCalledWith(REQUIRED_INITIAL);
   });
 
   it("calls onClose when confirming close", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
-    fireEvent.click(screen.getByText("Kyllä"));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Sulje henkilön lisäys" }),
+    );
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Sulje ilman tallennusta?",
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Kyllä" }));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it("closes confirmation without action on cancel", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
-    fireEvent.click(screen.getByText("Peruuta"));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Sulje henkilön lisäys" }),
+    );
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Sulje ilman tallennusta?",
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Peruuta" }));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
-    expect(
-      screen.queryByText("Sulje ilman tallennusta?"),
-    ).not.toBeInTheDocument();
+    expect(dialog).not.toHaveAttribute("open");
   });
 
   it("clicking inside the modal does not trigger close confirmation", async () => {
     await renderAndWait();
-    const content = screen
-      .getByText("Lisää henkilö")
-      .closest(".personmodal-content")!;
-    fireEvent.click(content);
-    expect(
-      screen.queryByText("Sulje ilman tallennusta?"),
-    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("heading", { name: "Lisää henkilö" }));
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
   });
 
   it("cancel save confirmation does not save or close", async () => {
     await renderAndWait({ initial: REQUIRED_INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
-    fireEvent.click(screen.getByText("Peruuta"));
-    expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Tallenna" }));
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Tallenna muutokset?",
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Peruuta" }));
+    expect(defaultProps.onSave).not.toHaveBeenCalled();
     expect(defaultProps.onClose).not.toHaveBeenCalled();
-    expect(screen.queryByText("Tallenna muutokset?")).not.toBeInTheDocument();
+    expect(dialog).not.toHaveAttribute("open");
   });
 
   it("enables save button after filling in required fields", async () => {
     await renderAndWait();
-    expect(screen.getByText("Lisää")).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Lisää" })).toBeDisabled();
 
-    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Etunimi:" }), {
       target: { value: "Terppa" },
     });
-    fireEvent.change(screen.getByLabelText("Sukunimi:"), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Sukunimi:" }), {
       target: { value: "Testaaja" },
     });
-    expect(screen.getByText("Lisää")).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Lisää" })).toBeEnabled();
   });
 });

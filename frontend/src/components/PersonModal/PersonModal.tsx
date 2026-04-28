@@ -1,17 +1,25 @@
 import ConfirmationDialog from "@components/ConfirmationDialog/ConfirmationDialog";
 import { X } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import PersonForm from "./PersonForm/PersonForm";
 import "./PersonModal.css";
 
 interface PersonModalProps {
+  onSave: (values: Record<string, string>) => Promise<void>;
   onClose: () => void;
-  onSubmit?: (values: Record<string, string>) => void;
   initial?: Record<string, string>;
 }
 
-function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
+function PersonModal({ onSave, onClose, initial = {} }: PersonModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [isFormValid, setIsFormValid] = useState(() => {
     const REQUIRED_FIELDS = ["firstName", "lastName"];
     return REQUIRED_FIELDS.every((f) => Boolean(initial[f]?.trim()));
@@ -20,8 +28,20 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
   const [confirmAction, setConfirmAction] = useState<"save" | "close" | null>(
     null,
   );
+  const titleId = useId();
 
   const isEdit = Object.keys(initial).length > 0;
+
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const handleEscape = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    requestClose();
+  };
 
   const handleFormChange = useCallback(
     (values: Record<string, string>, isValid: boolean) => {
@@ -31,9 +51,19 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
     [],
   );
 
-  const handleSave = () => {
-    onSubmit?.(formDataRef.current);
+  const handleSave = async () => {
+    await onSave(formDataRef.current);
+  };
+
+  const handleClose = () => {
+    dialogRef.current?.close();
     onClose();
+  };
+
+  const handleClick = (e: React.PointerEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) {
+      requestClose();
+    }
   };
 
   const requestSave = () => {
@@ -45,22 +75,35 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
     setConfirmOpen(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirmConfirm = async () => {
     setConfirmOpen(false);
-    if (confirmAction === "save") handleSave();
-    if (confirmAction === "close") onClose();
+    if (confirmAction === "save") {
+      try {
+        await handleSave();
+        handleClose();
+      } catch (error) {
+        console.error("Failed to save person:", error);
+      }
+    }
+    if (confirmAction === "close") handleClose();
     setConfirmAction(null);
   };
-  const handleCancel = () => {
+  const handleConfirmClose = () => {
     setConfirmOpen(false);
     setConfirmAction(null);
   };
 
   return (
-    <div className="personmodal-overlay" onClick={requestClose}>
-      <div className="personmodal-content" onClick={(e) => e.stopPropagation()}>
+    <dialog
+      ref={dialogRef}
+      className="person-modal"
+      aria-labelledby={titleId}
+      onKeyDown={handleEscape}
+      onClick={handleClick}
+    >
+      <div className="person-modal-content">
         <button
-          className="personmodal-close-button"
+          className="person-modal-close-button"
           aria-label={
             isEdit ? "Sulje henkilön muokkaus" : "Sulje henkilön lisäys"
           }
@@ -68,24 +111,25 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
         >
           <X size={16} />
         </button>
-        <h2 className="personmodal-title">
+        <h2 id={titleId} className="person-modal-title">
           {isEdit ? "Muokkaa henkilöä" : "Lisää henkilö"}
         </h2>
 
         <PersonForm onChange={handleFormChange} initial={initial} />
 
-        <div className="personmodal-actions">
+        <div className="person-modal-actions">
           <button
-            className="personmodal-save-button"
+            className="person-modal-save-button"
             onClick={requestSave}
             disabled={!isFormValid}
           >
             {isEdit ? "Tallenna" : "Lisää"}
           </button>
         </div>
+      </div>
 
+      {confirmOpen && (
         <ConfirmationDialog
-          isOpen={confirmOpen}
           title={
             confirmAction === "save"
               ? "Tallenna muutokset?"
@@ -93,11 +137,11 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
           }
           confirmText={confirmAction === "save" ? "Tallenna" : "Kyllä"}
           cancelText="Peruuta"
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          onConfirm={() => void handleConfirmConfirm()}
+          onClose={handleConfirmClose}
         />
-      </div>
-    </div>
+      )}
+    </dialog>
   );
 }
 

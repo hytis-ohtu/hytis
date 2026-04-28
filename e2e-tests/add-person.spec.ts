@@ -28,11 +28,11 @@ async function searchAndSelectExistingPerson(page: Page, name: string) {
 
 async function saveAndConfirmPerson(page: Page) {
   await page
-    .locator(".personmodal-actions")
-    .getByRole("button", { name: "Lisää", exact: true })
+    .getByRole("dialog", { name: "Lisää henkilö" })
+    .getByRole("button", { name: "Lisää" })
     .click();
   await page
-    .locator(".confirmation-modal")
+    .getByRole("alertdialog", { name: "Tallenna muutokset?" })
     .getByRole("button", { name: "Tallenna" })
     .click();
 }
@@ -46,7 +46,7 @@ test("person modal can be opened", async ({ page }) => {
 
 test("confirming close dismisses modal", async ({ page }) => {
   await openAddPersonModal(page);
-  await page.locator(".personmodal-close-button").click();
+  await page.locator(".person-modal-close-button").click();
   await page.getByText("Kyllä").click();
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
@@ -55,7 +55,7 @@ test("confirming close dismisses modal", async ({ page }) => {
 
 test("cancelling close keeps modal open", async ({ page }) => {
   await openAddPersonModal(page);
-  await page.locator(".personmodal-close-button").click();
+  await page.locator(".person-modal-close-button").click();
   await page.getByText("Peruuta").click();
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
@@ -83,7 +83,7 @@ test("saving opens confirmation dialog", async ({ page }) => {
   await openAddPersonModal(page);
   await fillRequiredFields(page);
   await page
-    .locator(".personmodal-actions")
+    .locator(".person-modal-actions")
     .getByRole("button", { name: "Lisää", exact: true })
     .click();
   await expect(page.getByText("Tallenna muutokset?")).toBeVisible();
@@ -91,15 +91,19 @@ test("saving opens confirmation dialog", async ({ page }) => {
 
 test("clicking outside modal opens confirmation dialog", async ({ page }) => {
   await openAddPersonModal(page);
-  await page.locator(".personmodal-overlay").dispatchEvent("click");
-  await expect(page.getByText("Sulje ilman tallennusta?")).toBeVisible();
+  await page
+    .getByRole("dialog", { name: "Lisää henkilö" })
+    .dispatchEvent("click");
+  await expect(
+    page.getByRole("alertdialog", { name: "Sulje ilman tallennusta?" }),
+  ).toBeVisible();
 });
 
 test("cancelling save confirmation keeps modal open", async ({ page }) => {
   await openAddPersonModal(page);
   await fillRequiredFields(page);
   await page
-    .locator(".personmodal-actions")
+    .locator(".person-modal-actions")
     .getByRole("button", { name: "Lisää", exact: true })
     .click();
   await page.getByText("Peruuta").click();
@@ -113,7 +117,7 @@ test("confirming save closes modal", async ({ page }) => {
   await fillRequiredFields(page);
   await saveAndConfirmPerson(page);
   await expect(
-    page.getByRole("heading", { name: "Lisää henkilö" }),
+    page.getByRole("dialog", { name: "Lisää henkilö" }),
   ).not.toBeVisible();
 });
 

@@ -124,7 +124,6 @@ function PersonSearch() {
 
         <div className="person-search-type">
           <button
-            type="button"
             aria-label="Hakutyyppi"
             aria-haspopup="menu"
             aria-expanded={isTypeMenuOpen}

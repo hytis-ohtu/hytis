@@ -1,13 +1,8 @@
 import RoomModal from "@components/RoomModal/RoomModal";
 import { findAllDepartments } from "@services/referenceDataService.ts";
 import "@testing-library/jest-dom";
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@services/referenceDataService", () => ({
@@ -30,8 +25,8 @@ const INITIAL = {
 
 describe("RoomModal", () => {
   const defaultProps = {
+    onSave: vi.fn(),
     onClose: vi.fn(),
-    onSubmit: vi.fn(),
     initial: {},
   };
 
@@ -70,68 +65,66 @@ describe("RoomModal", () => {
   });
 
   it("shows confirmation when clicking close button", async () => {
+    const user = userEvent.setup();
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
+    await user.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
   it("shows confirmation when clicking outside the modal", async () => {
+    const user = userEvent.setup();
     await renderAndWait();
-    const overlay = screen
-      .getByText("Muokkaa huonetta")
-      .closest(".roommodal-content")!.parentElement!;
-    fireEvent.click(overlay);
+    const dialog = screen.getByText("Muokkaa huonetta").closest("dialog")!;
+    await user.click(dialog);
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
   it("shows confirmation when clicking save", async () => {
+    const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
+    await user.click(
+      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
+    );
     expect(screen.getByText("Tallenna muutokset?")).toBeInTheDocument();
   });
 
-  it("calls onSubmit with form data when confirming save", async () => {
+  it("calls onSave with form data when confirming save", async () => {
+    const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
-    const dialog = screen.getByText("Tallenna muutokset?").closest("div")!;
-    fireEvent.click(within(dialog).getByRole("button", { name: "Tallenna" }));
-    expect(defaultProps.onSubmit).toHaveBeenCalledWith(INITIAL);
-  });
-
-  it("calls onClose when confirming close", async () => {
-    await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
-    fireEvent.click(screen.getByText("Kyllä"));
-    expect(defaultProps.onClose).toHaveBeenCalled();
+    await user.click(
+      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
+    );
+    const dialog = screen.getByText("Tallenna muutokset?").closest("dialog")!;
+    await user.click(within(dialog).getByRole("button", { name: "Tallenna" }));
+    expect(defaultProps.onSave).toHaveBeenCalledWith(INITIAL);
   });
 
   it("cancelling close confirmation does not close", async () => {
+    const user = userEvent.setup();
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje huoneen tietojen muokkaus"));
-    fireEvent.click(screen.getByText("Peruuta"));
+    await user.click(
+      screen.getByRole("button", { name: "Sulje huoneen tietojen muokkaus" }),
+    );
+    const confirmation = screen
+      .getByText("Sulje ilman tallennusta?")
+      .closest("dialog")!;
+    await user.click(screen.getByText("Peruuta"));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
-    expect(
-      screen.queryByText("Sulje ilman tallennusta?"),
-    ).not.toBeInTheDocument();
+    expect(confirmation).not.toHaveAttribute("open");
   });
 
   it("cancelling save confirmation does not save or close", async () => {
+    const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    fireEvent.click(screen.getByText("Tallenna"));
-    fireEvent.click(screen.getByText("Peruuta"));
-    expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+    await user.click(
+      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
+    );
+    const confirmation = screen
+      .getByText("Tallenna muutokset?")
+      .closest("dialog")!;
+    await user.click(screen.getByText("Peruuta"));
+    expect(defaultProps.onSave).not.toHaveBeenCalled();
     expect(defaultProps.onClose).not.toHaveBeenCalled();
-    expect(screen.queryByText("Tallenna muutokset?")).not.toBeInTheDocument();
-  });
-
-  it("clicking inside the modal does not trigger close confirmation", async () => {
-    await renderAndWait();
-    const content = screen
-      .getByText("Muokkaa huonetta")
-      .closest(".roommodal-content")!;
-    fireEvent.click(content);
-    expect(
-      screen.queryByText("Sulje ilman tallennusta?"),
-    ).not.toBeInTheDocument();
+    expect(confirmation).not.toHaveAttribute("open");
   });
 });

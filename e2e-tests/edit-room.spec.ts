@@ -24,7 +24,7 @@ test("edit room modal can be opened", async ({ page }) => {
 
 test("confirming close dismisses modal", async ({ page }) => {
   await openEditRoomModal(page);
-  await page.locator(".roommodal-close-button").click();
+  await page.locator(".room-modal-close-button").click();
   await page.getByText("Kyllä").click();
   await expect(
     page.getByRole("heading", { name: "Muokkaa huonetta" }),
@@ -33,7 +33,7 @@ test("confirming close dismisses modal", async ({ page }) => {
 
 test("cancelling close keeps modal open", async ({ page }) => {
   await openEditRoomModal(page);
-  await page.locator(".roommodal-close-button").click();
+  await page.locator(".room-modal-close-button").click();
   await page.getByText("Peruuta").click();
   await expect(
     page.getByRole("heading", { name: "Muokkaa huonetta" }),
@@ -49,13 +49,13 @@ test("form fields are pre-populated with existing room values", async ({
 
 test("save button triggers confirmation dialog", async ({ page }) => {
   await openEditRoomModal(page);
-  await page.locator(".roommodal-save-button").click();
+  await page.locator(".room-modal-save-button").click();
   await expect(page.getByText("Tallenna muutokset?")).toBeVisible();
 });
 
 test("cancelling save confirmation keeps modal open", async ({ page }) => {
   await openEditRoomModal(page);
-  await page.locator(".roommodal-save-button").click();
+  await page.locator(".room-modal-save-button").click();
   await page.getByText("Peruuta").click();
   await expect(
     page.getByRole("heading", { name: "Muokkaa huonetta" }),
@@ -65,9 +65,9 @@ test("cancelling save confirmation keeps modal open", async ({ page }) => {
 test("confirming save after editing fields closes modal", async ({ page }) => {
   await openEditRoomModal(page);
   await fillRoomFields(page);
-  await page.locator(".roommodal-save-button").click();
+  await page.locator(".room-modal-save-button").click();
   await page
-    .locator(".confirmation-modal")
+    .getByRole("alertdialog", { name: "Tallenna muutokset?" })
     .getByRole("button", { name: "Tallenna" })
     .click();
   await expect(
@@ -80,9 +80,9 @@ test("saved changes are reflected in room info after modal closes", async ({
 }) => {
   await openEditRoomModal(page);
   await page.getByLabel("Huonetyyppi:").selectOption({ label: "Työhuone" });
-  await page.locator(".roommodal-save-button").click();
+  await page.locator(".room-modal-save-button").click();
   await page
-    .locator(".confirmation-modal")
+    .getByRole("alertdialog", { name: "Tallenna muutokset?" })
     .getByRole("button", { name: "Tallenna" })
     .click();
   await expect(page.getByText("Työhuone")).toBeVisible();

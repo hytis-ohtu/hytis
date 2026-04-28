@@ -2,59 +2,55 @@ import SettingsModal from "@components/TopBar/SettingsModal/SettingsModal";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("SettingsModal", () => {
   const mockOnClose = vi.fn();
-  const mockSetFontSize = vi.fn();
 
   beforeEach(() => {
     mockOnClose.mockClear();
-    mockSetFontSize.mockClear();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem("font-size-map");
+    document.documentElement.style.removeProperty("--font-size-map");
   });
 
   it("renders without crashing", () => {
-    render(
-      <SettingsModal onClose={() => {}} fontSize={16} setFontSize={() => {}} />,
-    );
-    expect(screen.getByText("Asetukset")).toBeInTheDocument();
+    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    expect(
+      screen.getByRole("heading", { name: "Asetukset" }),
+    ).toBeInTheDocument();
   });
 
   it("calls onClose when close button is clicked", async () => {
-    render(
-      <SettingsModal
-        onClose={mockOnClose}
-        fontSize={24}
-        setFontSize={() => {}}
-      />,
-    );
-    await userEvent.click(
-      screen.getByRole("button", { name: "Sulje asetukset" }),
-    );
+    const user = userEvent.setup();
+    render(<SettingsModal isOpen={true} onClose={mockOnClose} />);
+    await user.click(screen.getByRole("button", { name: "Sulje asetukset" }));
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it("displays the correct font size", () => {
-    render(
-      <SettingsModal onClose={() => {}} fontSize={18} setFontSize={() => {}} />,
+    const getItemSpy = vi
+      .spyOn(localStorage, "getItem")
+      .mockImplementation((key) => (key === "font-size-map" ? "18" : null));
+    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    expect(screen.getByText(/Kartan tekstin fonttikoko:/i)).toHaveTextContent(
+      "18",
     );
-    expect(
-      screen.getByText("Kartan tekstin fonttikoko: 18px"),
-    ).toBeInTheDocument();
+    getItemSpy.mockRestore();
   });
 
-  it("calls setFontSize when the range input value changes", () => {
-    render(
-      <SettingsModal
-        onClose={() => {}}
-        fontSize={16}
-        setFontSize={mockSetFontSize}
-      />,
-    );
-    const rangeInput = screen.getByRole("slider");
+  it("updates the label when the range input value changes", () => {
+    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    const rangeInput = screen.getByRole("slider", {
+      name: /Kartan tekstin fonttikoko:/i,
+    });
     fireEvent.change(rangeInput, { target: { value: "20" } });
-    expect(mockSetFontSize).toHaveBeenCalledWith(20);
+    expect(screen.getByText(/Kartan tekstin fonttikoko:/i)).toHaveTextContent(
+      "20",
+    );
   });
 
   it("updates localStorage and CSS variable when font size changes", () => {
@@ -62,14 +58,10 @@ describe("SettingsModal", () => {
       .spyOn(localStorage, "setItem")
       .mockImplementation(() => undefined);
 
-    render(
-      <SettingsModal
-        onClose={() => {}}
-        fontSize={16}
-        setFontSize={mockSetFontSize}
-      />,
-    );
-    const rangeInput = screen.getByRole("slider");
+    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    const rangeInput = screen.getByRole("slider", {
+      name: /Kartan tekstin fonttikoko:/i,
+    });
     fireEvent.change(rangeInput, { target: { value: "22" } });
 
     expect(setItemSpy).toHaveBeenCalledWith("font-size-map", "22");

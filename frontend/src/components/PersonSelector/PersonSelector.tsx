@@ -45,7 +45,7 @@ export default function PersonSelector({
       />
 
       {(personOpen || personSearch) && (
-        <ul className="personform-person-list">
+        <ul className="personform-person-list" role="listbox">
           {filteredPeople.length === 0 ? (
             <li className="personform-person-empty">Ei tuloksia</li>
           ) : (
@@ -53,6 +53,8 @@ export default function PersonSelector({
               <li
                 key={person.id}
                 className={`personform-person-option${selectedPersonIds.includes(String(person.id)) ? " selected" : ""}`}
+                role="option"
+                aria-selected={selectedPersonIds.includes(String(person.id))}
                 onClick={() => onSelect(person)}
               >
                 {person.firstName} {person.lastName}

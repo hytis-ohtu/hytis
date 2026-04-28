@@ -1,23 +1,19 @@
-.roommodal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-  display: grid;
-  place-items: center;
-}
-
-.roommodal-content {
+.room-modal {
   position: relative;
   background: var(--color-secondary);
   border: 1px solid var(--color-secondary);
   border-radius: var(--border-radius-md);
-  padding: var(--gap);
+  padding: 0;
   min-width: 400px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.roommodal-title {
+.room-modal-content {
+  position: relative;
+  padding: var(--gap);
+}
+
+.room-modal-title {
   color: var(--color-text-black);
   font-size: 24px;
   margin-bottom: var(--gap);
@@ -25,12 +21,12 @@
   text-align: center;
 }
 
-.roommodal-actions {
+.room-modal-actions {
   display: flex;
   justify-content: center;
 }
 
-.roommodal-close-button {
+.room-modal-close-button {
   padding: 4px;
   position: absolute;
   top: 4px;
@@ -41,11 +37,11 @@
   cursor: pointer;
 }
 
-.roommodal-close-button:hover {
+.room-modal-close-button:hover {
   color: var(--color-text-white);
 }
 
-.roommodal-save-button {
+.room-modal-save-button {
   align-items: center;
   display: flex;
   gap: 8px;
@@ -64,12 +60,12 @@
     color var(--transition-fast);
 }
 
-.roommodal-save-button:hover {
+.room-modal-save-button:hover {
   background: var(--color-muted);
   color: var(--color-primary);
 }
 
-.roommodal-save-button:disabled {
+.room-modal-save-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;

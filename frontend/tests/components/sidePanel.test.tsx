@@ -125,12 +125,15 @@ describe("RoomInfo", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
 
     expect(screen.getByText("63.60 m²")).toBeInTheDocument();
     expect(screen.getByText("15")).toBeInTheDocument();
-    expect(screen.getByText("konferenssihuone")).toBeInTheDocument();
-    expect(screen.getByText("H523 CS")).toBeInTheDocument();
+    const roomDetails = document.querySelector<HTMLElement>(".room-details");
+    expect(roomDetails).not.toBeNull();
+    const details = within(roomDetails!);
+    expect(details.getByText("konferenssihuone")).toBeInTheDocument();
+    expect(details.getByText("H523 CS")).toBeInTheDocument();
     expect(screen.getByText("Hätäpoistumistie")).toBeInTheDocument();
   });
 
@@ -139,7 +142,7 @@ describe("RoomInfo", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
     await user.click(
       screen.getByRole("button", { name: "Muokkaa huoneen tietoja" }),
     );
@@ -150,7 +153,12 @@ describe("RoomInfo", () => {
       screen.getByRole("combobox", { name: "Huonetyyppi:" }),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Tallenna" }));
+    const roomModal = await screen.findByRole("dialog", {
+      name: "Muokkaa huonetta",
+    });
+    await user.click(
+      within(roomModal).getByRole("button", { name: "Tallenna" }),
+    );
 
     const confirm = await screen.findByRole("alertdialog");
     await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
@@ -167,26 +175,32 @@ describe("RoomInfo", () => {
     expect(mockOnRoomUpdate).toHaveBeenCalled();
   });
 
-  it.fails("does not close the modal when edit fails", async () => {
+  it("does not close the modal when edit fails", async () => {
     const user = userEvent.setup();
 
     vi.mocked(editRoom).mockRejectedValueOnce(new Error());
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
     await user.click(
       screen.getByRole("button", { name: "Muokkaa huoneen tietoja" }),
     );
 
-    await user.click(screen.getByRole("button", { name: "Tallenna" }));
+    const roomModal = await screen.findByRole("dialog", {
+      name: "Muokkaa huonetta",
+    });
+
+    await user.click(
+      within(roomModal).getByRole("button", { name: "Tallenna" }),
+    );
 
     const confirm = await screen.findByRole("alertdialog");
     await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
 
     expect(confirm).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Tallenna" }),
+      within(roomModal).getByRole("button", { name: "Tallenna" }),
     ).toBeInTheDocument();
   });
 
@@ -199,15 +213,18 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
     await user.click(
       screen.getByRole("button", {
         name: "Sijoita henkilö huoneeseen",
       }),
     );
 
-    await user.type(screen.getByLabelText("Etunimi:"), "Uusi");
-    await user.type(screen.getByLabelText("Sukunimi:"), "Henkilö");
+    await user.type(screen.getByRole("textbox", { name: "Etunimi:" }), "Uusi");
+    await user.type(
+      screen.getByRole("textbox", { name: "Sukunimi:" }),
+      "Henkilö",
+    );
 
     await user.click(screen.getByRole("button", { name: "Lisää" }));
 
@@ -229,17 +246,19 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-empty-room"));
+    await user.click(screen.getByRole("button", { name: "Open empty room" }));
     await user.click(
       screen.getByRole("button", {
         name: "Sijoita henkilö huoneeseen",
       }),
     );
 
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByRole("textbox", { name: "Hae henkilö:" });
     await user.type(searchInput, "Matti");
-    await screen.findByText("Matti Virtanen");
-    await user.click(screen.getByText("Matti Virtanen"));
+    const listbox = await screen.findByRole("listbox");
+    await user.click(
+      within(listbox).getByRole("option", { name: "Matti Virtanen" }),
+    );
 
     await user.click(screen.getByRole("button", { name: "Lisää" }));
 
@@ -255,30 +274,36 @@ describe("RoomPeople", () => {
     expect(addPerson).not.toHaveBeenCalled();
   });
 
-  it.fails("does not close the modal when adding fails", async () => {
+  it("does not close the modal when adding fails", async () => {
     const user = userEvent.setup();
 
     vi.mocked(addPerson).mockRejectedValueOnce(new Error());
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
     await user.click(
       screen.getByRole("button", {
         name: "Sijoita henkilö huoneeseen",
       }),
     );
 
-    await user.type(screen.getByLabelText("Etunimi:"), "Uusi");
-    await user.type(screen.getByLabelText("Sukunimi:"), "Henkilö");
+    await user.type(screen.getByRole("textbox", { name: "Etunimi:" }), "Uusi");
+    await user.type(
+      screen.getByRole("textbox", { name: "Sukunimi:" }),
+      "Henkilö",
+    );
 
     await user.click(screen.getByRole("button", { name: "Lisää" }));
 
     const confirm = await screen.findByRole("alertdialog");
     await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
 
-    expect(confirm).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Lisää" })).toBeInTheDocument();
+    expect(confirm).not.toHaveAttribute("open");
+    const personModal = screen.getByRole("dialog", { name: "Lisää henkilö" });
+    expect(
+      within(personModal).getByRole("button", { name: "Lisää" }),
+    ).toBeInTheDocument();
   });
 
   it("opens the edit person modal with correct initial values and saves edits", async () => {
@@ -288,7 +313,7 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
 
     const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
     await user.click(
@@ -297,7 +322,13 @@ describe("RoomPeople", () => {
       }),
     );
 
-    await user.click(screen.getByRole("button", { name: "Tallenna" }));
+    const personModal = screen.getByRole("dialog", {
+      name: "Muokkaa henkilöä",
+    });
+
+    await user.click(
+      within(personModal).getByRole("button", { name: "Tallenna" }),
+    );
 
     const confirm = await screen.findByRole("alertdialog");
     await user.click(within(confirm).getByRole("button", { name: "Tallenna" }));
@@ -320,7 +351,7 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
 
     const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
     await user.click(
@@ -331,7 +362,10 @@ describe("RoomPeople", () => {
 
     expect(screen.getByText("Poista Matti Virtanen?")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Poista" }));
+    const confirm = await screen.findByRole("alertdialog", {
+      name: "Poista Matti Virtanen?",
+    });
+    await user.click(within(confirm).getByRole("button", { name: "Poista" }));
 
     expect(removeContract).toHaveBeenCalledWith(1);
     expect(mockOnRoomUpdate).toHaveBeenCalled();
@@ -342,7 +376,7 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room"));
+    await user.click(screen.getByRole("button", { name: "Open room" }));
 
     const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
     await user.click(
@@ -352,12 +386,13 @@ describe("RoomPeople", () => {
     );
 
     expect(screen.getByText("Poista Matti Virtanen?")).toBeInTheDocument();
+    const confirm = await screen.findByRole("alertdialog", {
+      name: "Poista Matti Virtanen?",
+    });
 
-    await user.click(screen.getByRole("button", { name: "Peruuta" }));
+    await user.click(within(confirm).getByRole("button", { name: "Peruuta" }));
 
-    expect(
-      screen.queryByText("Poista Matti Virtanen?"),
-    ).not.toBeInTheDocument();
+    expect(confirm).not.toHaveAttribute("open");
     expect(removeContract).not.toHaveBeenCalled();
   });
 
@@ -366,7 +401,7 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-empty-room"));
+    await user.click(screen.getByRole("button", { name: "Open empty room" }));
     await screen.findByRole("heading", { name: /huone a211/i });
 
     expect(screen.getByText("Ei henkilöitä.")).toBeInTheDocument();
@@ -377,14 +412,19 @@ describe("RoomPeople", () => {
 
     customRender(<TestDisplay />);
 
-    await user.click(screen.getByTestId("open-room-with-person"));
+    await user.click(
+      screen.getByRole("button", { name: "Open room with person" }),
+    );
 
-    await screen.findByText("H516 MATHSTAT");
-    expect(screen.getByText("Osasto")).toBeInTheDocument();
-    expect(screen.getByText("Titteli")).toBeInTheDocument();
-    expect(screen.getByText("Tutkimusryhmä")).toBeInTheDocument();
-    expect(screen.getByText("Esihenkilöt")).toBeInTheDocument();
-    expect(screen.getByText("Tämä on testihenkilö")).toBeInTheDocument();
+    const personCard = screen.getByRole("article", { name: "Virtanen Matti" });
+    await within(personCard).findByText("H516 MATHSTAT");
+    expect(within(personCard).getByText("Osasto")).toBeInTheDocument();
+    expect(within(personCard).getByText("Titteli")).toBeInTheDocument();
+    expect(within(personCard).getByText("Tutkimusryhmä")).toBeInTheDocument();
+    expect(within(personCard).getByText("Esihenkilöt")).toBeInTheDocument();
+    expect(
+      within(personCard).getByText("Tämä on testihenkilö"),
+    ).toBeInTheDocument();
   });
 
   it.todo("shows an error message when editing fails");
