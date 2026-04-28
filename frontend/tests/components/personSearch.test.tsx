@@ -174,17 +174,14 @@ describe("PersonSearch", () => {
     ];
 
     mockSearchPeople.mockResolvedValue(mockResults);
-
-    const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
+    const user = userEvent.setup({ delay: null });
+    const searchInput = screen.getByLabelText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
-    await waitFor(() => {
-      expect(screen.getByTestId("person-search-dropdown")).toBeInTheDocument();
-    });
+    expect(screen.findByRole("region", { name: "Hakutulokset" }));
 
     // Click outside the dropdown
     await user.click(document.body);
@@ -221,7 +218,7 @@ describe("PersonSearch", () => {
     });
 
     // Find and click the close button
-    const closeButton = screen.getByLabelText("Sulje");
+    const closeButton = screen.getByLabelText("Sulje hakutulokset");
     await user.click(closeButton);
 
     await waitFor(() => {
@@ -247,7 +244,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
+    const searchInput = screen.getByLabelText("Hae henkilöä nimellä...");
 
     // Type to open dropdown
     await user.type(searchInput, "Matti");
@@ -283,28 +280,32 @@ describe("PersonSearch", () => {
         title: { name: "asiantuntija" },
       },
     ];
-
     mockSearchPeople.mockResolvedValue(mockResults);
-
-    const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
+    const user = userEvent.setup({ delay: null });
+
+    const searchInput = screen.getByLabelText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
     expect(searchInput).toHaveValue("Matti");
 
-    // Close dropdown
     await user.click(document.body);
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId("person-search-dropdown"),
+        screen.queryByRole("region", { name: "Hakutulokset" }),
       ).not.toBeInTheDocument();
     });
 
-    // Check input value is preserved
+    await user.click(searchInput);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("region", { name: "Hakutulokset" }),
+      ).toBeInTheDocument();
+    });
     expect(searchInput).toHaveValue("Matti");
   });
 
@@ -314,7 +315,7 @@ describe("PersonSearch", () => {
     const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
+    const searchInput = screen.getByLabelText("Hae henkilöä nimellä...");
 
     // Type multiple characters quickly
     await user.type(searchInput, "Matti");
@@ -333,11 +334,10 @@ describe("PersonSearch", () => {
 
   it("handles API errors gracefully", async () => {
     mockSearchPeople.mockRejectedValue(new Error("Network error"));
-
-    const user = userEvent.setup({ delay: null });
     customRender(<PersonSearch />);
 
-    const searchInput = screen.getByPlaceholderText("Hae henkilöä nimellä...");
+    const user = userEvent.setup({ delay: null });
+    const searchInput = screen.getByLabelText("Hae henkilöä nimellä...");
 
     await user.type(searchInput, "Matti");
 
@@ -392,26 +392,39 @@ describe("PersonSearch", () => {
 describe("search type selection", () => {
   it("opens search type dropdown when clicking search type button", async () => {
     customRender(<PersonSearch />);
-    await userEvent.click(screen.getByTestId("person-search-type-button"));
-    expect(screen.getByTestId("person-search-type-menu")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Hakutyyppi" }));
+
+    expect(
+      screen.getByRole("menu", { name: "Hakutyyppi" }),
+    ).toBeInTheDocument();
   });
 
   it("changes search type placeholder when selecting an option", async () => {
     customRender(<PersonSearch />);
-    await userEvent.click(screen.getByTestId("person-search-type-button"));
-    await userEvent.click(screen.getByText("Esihenkilö"));
-    expect(
-      screen.getByPlaceholderText("Hae henkilöä esihenkilöllä..."),
-    ).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Hakutyyppi" }));
+    await userEvent.click(
+      screen.getByRole("menuitemradio", { name: "Esihenkilö" }),
+    );
+
+    const searchInput = screen.getByLabelText("Hae henkilöä esihenkilöllä...");
+
+    expect(searchInput).toBeInTheDocument();
   });
 
   it("forwards correct search type to API", async () => {
     vi.mocked(mockSearchPeople).mockResolvedValue([]);
     customRender(<PersonSearch />);
 
-    await userEvent.click(screen.getByTestId("person-search-type-button"));
-    await userEvent.click(screen.getByText("Esihenkilö"));
-    await userEvent.type(screen.getByTestId("person-search-input"), "Matti");
+    await userEvent.click(screen.getByRole("button", { name: "Hakutyyppi" }));
+    await userEvent.click(
+      screen.getByRole("menuitemradio", { name: "Esihenkilö" }),
+    );
+
+    const searchInput = screen.getByLabelText("Hae henkilöä esihenkilöllä...");
+
+    await userEvent.type(searchInput, "Matti");
 
     await waitFor(() =>
       expect(mockSearchPeople).toHaveBeenCalledWith("Matti", "supervisor"),

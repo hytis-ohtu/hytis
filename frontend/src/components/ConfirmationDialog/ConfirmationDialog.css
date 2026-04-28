@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: var(--z-index-topbar);
+  z-index: 1;
   display: grid;
   place-items: center;
 }
@@ -14,7 +14,7 @@
   border-radius: var(--border-radius-md);
   padding: var(--gap);
   min-width: 280px;
-  box-shadow: var(--box-shadow-sm);
+  box-shadow: var(--box-shadow);
 }
 
 .confirmation-title {

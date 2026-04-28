@@ -1,14 +1,11 @@
 .legend {
-  position: absolute;
-  left: 1rem;
-  top: calc(var(--topbar-height) + 1rem);
   display: grid;
   gap: 0.25rem;
   padding: 0.75rem;
   border: var(--border-md);
   border-radius: var(--border-radius-md);
   background: var(--color-background);
-  box-shadow: var(--box-shadow-sm);
+  box-shadow: var(--box-shadow);
 }
 
 .legend-item {
