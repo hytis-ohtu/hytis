@@ -1,0 +1,31 @@
+.user-menu {
+  position: absolute;
+  top: calc(100% + 2 * var(--border-width-md));
+  right: 0;
+  min-width: max-content;
+  display: grid;
+  gap: 0.5rem;
+  background: var(--color-background);
+  border: var(--border-md);
+  padding: 0.5rem;
+  box-shadow: var(--box-shadow);
+  z-index: 1;
+}
+
+.user-menu > header {
+  display: flex;
+  justify-content: space-between;
+  place-items: center;
+  gap: 0.5rem;
+}
+
+.button-logout {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: var(--border-md);
+  background: var(--color-primary);
+  cursor: pointer;
+}

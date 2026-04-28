@@ -1,0 +1,70 @@
+.map-view {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+}
+
+.input-container {
+  position: absolute;
+  inset: 0;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: 0 0;
+  user-select: none;
+}
+
+.map-container > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.room {
+  cursor: pointer;
+}
+
+.room:hover {
+  filter: brightness(0.8);
+}
+
+.room.active {
+  filter: brightness(0.7);
+}
+
+.room-label {
+  fill: var(--color-text-black);
+  font-weight: 500;
+  font-size: var(--font-size-map, 24px);
+  pointer-events: none;
+}
+
+.room.active + .room-label {
+  fill: #f8fafc;
+}
+
+.map-overlay {
+  grid-area: 1 / 1;
+  display: flex;
+  padding: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.map-overlay > * {
+  pointer-events: auto;
+}
+
+.map-overlay-top-left {
+  align-self: start;
+  justify-self: start;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map-overlay-bottom-left {
+  align-self: end;
+  justify-self: start;
+}

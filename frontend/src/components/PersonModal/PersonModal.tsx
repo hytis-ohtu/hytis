@@ -61,7 +61,9 @@ function PersonModal({ onClose, onSubmit, initial = {} }: PersonModalProps) {
       <div className="personmodal-content" onClick={(e) => e.stopPropagation()}>
         <button
           className="personmodal-close-button"
-          aria-label="Sulje"
+          aria-label={
+            isEdit ? "Sulje henkilön muokkaus" : "Sulje henkilön lisäys"
+          }
           onClick={requestClose}
         >
           <X size={16} />

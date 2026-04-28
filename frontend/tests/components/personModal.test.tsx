@@ -77,7 +77,7 @@ describe("PersonModal", () => {
 
   it("confirmation button if closing", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
     expect(screen.getByText("Sulje ilman tallennusta?")).toBeInTheDocument();
   });
 
@@ -120,14 +120,14 @@ describe("PersonModal", () => {
 
   it("calls onClose when confirming close", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
     fireEvent.click(screen.getByText("Kyllä"));
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
   it("closes confirmation without action on cancel", async () => {
     await renderAndWait();
-    fireEvent.click(screen.getByLabelText("Sulje"));
+    fireEvent.click(screen.getByLabelText("Sulje henkilön lisäys"));
     fireEvent.click(screen.getByText("Peruuta"));
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     expect(

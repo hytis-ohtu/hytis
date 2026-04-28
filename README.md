@@ -2,9 +2,16 @@
 
 [![codecov](https://codecov.io/gh/hytis-ohtu/hytis/graph/badge.svg?token=WLP90N7ZRE)](https://codecov.io/gh/hytis-ohtu/hytis)
 
-## Development
+**[Projektin wikistä](https://github.com/hytis-ohtu/hytis/wiki)** löytyy lisää tietoa sovelluksesta.
 
-1. Clone the repository
+## Vaatimukset
+
+- **Node.js** ja **npm**
+- **Docker** ja **Docker Compose** (paikallista kehitysympäristöä varten, jos käytät PostgreSQL- ja Redis-kontteja)
+
+## Kehitys
+
+1. Kloonaa repositorio
 
    HTTPS:
 
@@ -18,23 +25,23 @@
    git clone git@github.com:hytis-ohtu/hytis.git
    ```
 
-2. Navigate to the project root directory
+2. Siirry projektin juurihakemistoon
 
    ```bash
    cd HYTiS
    ```
 
-3. Install all dependencies
+3. Asenna riippuvuudet
 
    ```bash
    npm run install:all
    ```
 
-4. Set up environment variables
+4. Määritä ympäristömuuttujat
 
    **Backend**
 
-   Create a `.env` file in the `backend` directory with the following contents:
+   Luo `backend`-hakemistoon `.env`-tiedosto seuraavilla muuttujilla:
 
    ```bash
    DATABASE_URL=YOUR_DATABASE_URL_HERE
@@ -43,102 +50,95 @@
    SESSION_SECRET=change-this-to-a-long-random-string-in-production
    SESSION_MAX_AGE=86400000
    FRONTEND_URL=http://localhost:5173
+   USE_HY_LOGIN=false
    ```
 
-   These are the variables for development mode.
-   See the .env.example file from backend folder to see the production variables.
+   Tuotantoympäristön ja Helsingin yliopiston OIDC-kirjautumiseen tarvittavat ympäristömuuttujat löydät tiedostosta `backend/.env.example`.
 
-   **Option A: Using Docker PostgreSQL (recommended for development)**
+   **Vaihtoehto A: PostgreSQL ja Redis Dockerilla**
 
-   If using the provided Docker PostgreSQL container, your `DATABASE_URL` should be:
+   Jos käytät valmiita Docker-kontteja, jotka on määritelty tiedostossa `backend/database.yaml`, käytä alla olevia arvoja:
 
    ```bash
    DATABASE_URL=postgres://postgres:example@localhost:5432/postgres
+   REDIS_URL=redis://localhost:6379
    ```
 
-   Start the database container in a new terminal (leave it running):
+   Käynnistä PostgreSQL- ja Redis-kontit uudessa komentorivi-ikkunassa ja pidä ne käynnissä:
 
    ```bash
    npm run start:db
    ```
 
-   **Option B: Using your own PostgreSQL database**
+   **Vaihtoehto B: Oma PostgreSQL ja Redis**
 
-   Configure `DATABASE_URL` to point to your existing PostgreSQL database.
+   Aseta `DATABASE_URL` ja `REDIS_URL` osoittamaan omaan PostgreSQL-tietokantaasi ja Redis-instanssiisi.
 
    **Frontend**
 
-   Create `.env.development` and `.env.production` files in the `frontend` directory with the following contents:
-
-   `.env.development`:
+   Luo `frontend`-hakemistoon `.env.development`-tiedosto, seuraavilla muuttujilla:
 
    ```bash
    VITE_API_URL=http://localhost:3000
    ```
 
-   `.env.production`:
-
-   ```bash
-   VITE_API_URL=YOUR_PRODUCTION_API_URL_HERE
-   ```
-
-5. Add seed data to the database
+5. Lisää alkudata tietokantaan
 
    ```bash
    npm run seed:db
    ```
 
-6. Start the backend development server (in a new terminal)
+6. Käynnistä backend uudessa komentorivi-ikkunassa
 
    ```bash
    npm run dev:backend
    ```
 
-7. Start the frontend development server (in a new terminal)
+7. Käynnistä frontend uudessa komentorivi-ikkunassa
 
    ```bash
    npm run dev:frontend
    ```
 
-## npm commands
+## npm-komennot
 
-### General
+### Yleistä
 
-- `npm run install:all` - Install dependencies for both backend and frontend
+- `npm run install:all` - Asenna kaikki sovelluksen tarvitsemat riippuvuudet
 
-### Database
+### Tietokanta
 
-- `npm run start:db` - Start PostgreSQL database in Docker container
-- `npm run seed:db` - Add seed data to the database
+- `npm run start:db` - Käynnistä PostgreSQL ja Redis tietokantojen Docker-kontit
+- `npm run seed:db` - Lisää alkudata tietokantaan
 
 ### Backend
 
-- `npm run dev:backend` - Start backend in development mode
-- `npm run start:backend` - Start backend in production mode
-- `npm run lint:backend` - Run linter for backend code
+- `npm run dev:backend` - Käynnistä backend kehitystilassa
+- `npm run start:backend` - Käynnistä backend tuotannossa
+- `npm run lint:backend` - Suorita backend-koodin linttaus
 
 ### Frontend
 
-- `npm run dev:frontend` - Start frontend development server
-- `npm run build:frontend` - Build frontend for production
-- `npm run preview:frontend` - Preview production build locally
-- `npm run lint:frontend` - Run linter for frontend code
+- `npm run dev:frontend` - Käynnistä frontend kehitystilassa
+- `npm run build:frontend` - Rakenna frontend tuotantoa varten
+- `npm run preview:frontend` - Käynnistä frontend tuotannossa
+- `npm run lint:frontend` - Suorita frontend-koodin linttaus
 
-### Testing
+### Testaus
 
-- `npm run test:all` - Run all tests and linting
+- `npm run test:all` - Suorita kaikki testit ja linttaus
 
-#### End-to-end
+#### E2E
 
-- `npm run test:e2e` - Run all end-to-end tests
-- `npm run test:e2e-report` - Get report of all end-to-end tests
+- `npm run test:e2e` - Suorita e2e-testit
+- `npm run test:e2e-report` - Avaa raportti e2e-testeistä
 
 #### Backend
 
-- `npm run test:backend` - Run all backend tests
-- `npm run coverage:backend` - Get backend coverage
+- `npm run test:backend` - Suorita kaikki backend-testit
+- `npm run coverage:backend` - Näytä backendin testikattavuus
 
 #### Frontend
 
-- `npm run test:frontend` - Run all frontend tests
-- `npm run coverage:frontend` - Get frontend coverage
+- `npm run test:frontend` - Suorita kaikki frontend-testit
+- `npm run coverage:frontend` - Näytä frontendin testikattavuus
