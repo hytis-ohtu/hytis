@@ -2,7 +2,6 @@ import "express-session";
 import type { PersonInput } from "../utils";
 
 declare global {
-  /* eslint-disable @typescript-eslint/no-namespace */
   namespace Express {
     interface User {
       id: string;
