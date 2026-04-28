@@ -3,16 +3,13 @@ kind: ConfigMap
 metadata:
   name: hytis-config-example
 data:
-  USE_HY_LOGIN: "true/false"
-  DB_URL: https://url-here.com
+  USE_HY_LOGIN: "true"
+  DATABASE_URL: postgresql-url-here
   OIDC_CLIENT_ID: id_1234567890
   OIDC_CLIENT_SECRET: secret_xxxxxxxxxxxxxxxx
   OIDC_REDIRECT_URI: https://your-ohtuprojekti-url-staging.ext.ocp-test-0.k8s.it.helsinki.fi/api/login/callback
   OIDC_ISSUER: https://login-test.it.helsinki.fi/.well-known/openid-configuration
   REDIS_URL: redis-url-here
-  REDIS_HOST: hytis-redis-svc
-  REDIS_PORT: "6379"
-  REDIS_PASSWORD: ""
-  SESSION_SECRET: randomsecretstringhere
-  NODE_ENV: "production" 
+  SESSION_SECRET: session-secret-here
+  NODE_ENV: production
   FRONTEND_URL: https://your-ohtuprojekti-url-staging.ext.ocp-test-0.k8s.it.helsinki.fi
