@@ -100,26 +100,27 @@ function RoomModal({ onSave, onClose, initial }: RoomModalProps) {
       onClick={handleClick}
     >
       <div className="room-modal-content">
-        <button
-          className="room-modal-close-button"
-          aria-label="Sulje huoneen tietojen muokkaus"
-          onClick={requestClose}
-        >
-          <X size={16} />
-        </button>
-        <h2 id={titleId} className="room-modal-title">
-          Muokkaa huonetta
-        </h2>
+        <header>
+          <h2 id={titleId} className="room-modal-title">
+            Muokkaa huonetta
+          </h2>
+          <button
+            className="button icon"
+            aria-label="Sulje huoneen tietojen muokkaus"
+            onClick={requestClose}
+          >
+            <X size={20} />
+          </button>
+        </header>
 
         <RoomForm onChange={handleFormChange} initial={initial} />
 
         <div className="room-modal-actions">
-          <button
-            className="room-modal-save-button"
-            onClick={requestSave}
-            disabled={!isValid}
-          >
+          <button className="button" onClick={requestSave} disabled={!isValid}>
             Tallenna
+          </button>
+          <button className="button" onClick={requestClose}>
+            Peruuta
           </button>
         </div>
       </div>
