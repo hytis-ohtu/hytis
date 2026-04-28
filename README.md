@@ -6,7 +6,7 @@
 
 ## Vaatimukset
 
-- **Node.js** 18+ ja **npm** 9+
+- **Node.js** ja **npm**
 - **Docker** ja **Docker Compose** (paikallista kehitysympäristöä varten, jos käytät PostgreSQL- ja Redis-kontteja)
 
 ## Kehitys
