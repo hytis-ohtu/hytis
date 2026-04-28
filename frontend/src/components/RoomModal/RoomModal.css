@@ -17,11 +17,11 @@
   align-items: center;
 }
 
-.room-modal-title {
+.room-modal-content > header > h2 {
   font-weight: 500;
 }
 
-.room-modal-content > header > button {
+.room-modal-content > header > .button.icon {
   height: 100%;
   aspect-ratio: 1;
 }

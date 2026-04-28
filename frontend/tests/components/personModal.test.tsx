@@ -166,10 +166,10 @@ describe("PersonModal", () => {
     await renderAndWait();
     expect(screen.getByRole("button", { name: "Lisää" })).toBeDisabled();
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Etunimi:" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Etunimi" }), {
       target: { value: "Terppa" },
     });
-    fireEvent.change(screen.getByRole("textbox", { name: "Sukunimi:" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Sukunimi" }), {
       target: { value: "Testaaja" },
     });
     expect(screen.getByRole("button", { name: "Lisää" })).toBeEnabled();

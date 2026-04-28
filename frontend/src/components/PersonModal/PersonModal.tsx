@@ -102,28 +102,31 @@ function PersonModal({ onSave, onClose, initial = {} }: PersonModalProps) {
       onClick={handleClick}
     >
       <div className="person-modal-content">
-        <button
-          className="person-modal-close-button"
-          aria-label={
-            isEdit ? "Sulje henkilön muokkaus" : "Sulje henkilön lisäys"
-          }
-          onClick={requestClose}
-        >
-          <X size={16} />
-        </button>
-        <h2 id={titleId} className="person-modal-title">
-          {isEdit ? "Muokkaa henkilöä" : "Lisää henkilö"}
-        </h2>
+        <header>
+          <h2 id={titleId}>{isEdit ? "Muokkaa henkilöä" : "Lisää henkilö"}</h2>
+          <button
+            className="button icon"
+            aria-label={
+              isEdit ? "Sulje henkilön muokkaus" : "Sulje henkilön lisäys"
+            }
+            onClick={requestClose}
+          >
+            <X size={20} />
+          </button>
+        </header>
 
         <PersonForm onChange={handleFormChange} initial={initial} />
 
         <div className="person-modal-actions">
           <button
-            className="person-modal-save-button"
+            className="button"
             onClick={requestSave}
             disabled={!isFormValid}
           >
             {isEdit ? "Tallenna" : "Lisää"}
+          </button>
+          <button className="button" onClick={requestClose}>
+            Peruuta
           </button>
         </div>
       </div>

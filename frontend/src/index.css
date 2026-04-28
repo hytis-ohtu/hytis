@@ -82,6 +82,12 @@ h6 {
     background: var(--color-primary-light);
   }
 
+  &:disabled {
+    background: var(--color-muted);
+    color: var(--color-text-white);
+    cursor: not-allowed;
+  }
+
   &.combined {
     display: inline-flex;
     align-items: center;

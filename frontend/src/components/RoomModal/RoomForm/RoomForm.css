@@ -1,7 +1,7 @@
 .room-form {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.75rem;
+  gap: 0.75rem 2rem;
 }
 
 .room-form-entry {
@@ -9,11 +9,10 @@
   display: grid;
   grid-template-columns: subgrid;
   align-items: center;
-  gap: 2rem;
 }
 
 .room-form-input {
   padding: 0.5rem;
-  background-color: var(--color-background);
+  background: var(--color-background);
   border: var(--border-md);
 }

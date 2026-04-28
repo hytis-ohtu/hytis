@@ -68,7 +68,7 @@ test("edit person save button is disabled when required fields are empty", async
   const firstNameInput = page.locator('input[name="firstName"]');
   await firstNameInput.clear();
 
-  const saveButton = page.locator(".person-modal-save-button");
+  const saveButton = page.getByRole("button", { name: "Tallenna" });
   await expect(saveButton).toBeDisabled();
 });
 
@@ -107,8 +107,11 @@ test("cancelling from confirmation modal keeps the edit person modal open", asyn
   await firstNameInput.clear();
   await firstNameInput.fill("Uusi nimi");
 
-  await page.locator(".person-modal-save-button").click();
-  await page.getByRole("button", { name: "Peruuta" }).click();
+  await page.getByRole("button", { name: "Sulje henkilön muokkaus" }).click();
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: "Peruuta" })
+    .click();
 
   await expect(
     page.getByRole("heading", { name: "Muokkaa henkilöä" }),

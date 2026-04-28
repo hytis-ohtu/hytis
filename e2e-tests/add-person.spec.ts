@@ -11,19 +11,18 @@ async function openAddPersonModal(page: Page) {
 }
 
 async function fillRequiredFields(page: Page) {
-  await page.getByLabel("Etunimi:").fill("Matti");
-  await page.getByLabel("Sukunimi:").fill("Meikäläinen");
-  await page.getByLabel("Osasto:").selectOption({ index: 1 });
-  await page.getByLabel("Työnimike:").selectOption({ index: 1 });
-  await page.getByLabel("Esihenkilö(t):").fill("Joku");
-  await page.getByLabel("Sopimuksen alku:").fill("2025-01-01");
-  await page.getByLabel("Sopimuksen loppu:").fill("2026-01-01");
+  await page.getByLabel("Etunimi").fill("Matti");
+  await page.getByLabel("Sukunimi").fill("Meikäläinen");
+  await page.getByLabel("Osasto").selectOption({ index: 1 });
+  await page.getByLabel("Työnimike").selectOption({ index: 1 });
+  await page.getByLabel("Esihenkilö(t)").fill("Joku");
+  await page.getByLabel("Sopimuksen alku").fill("2025-01-01");
+  await page.getByLabel("Sopimuksen loppu").fill("2026-01-01");
 }
 
 async function searchAndSelectExistingPerson(page: Page, name: string) {
-  await page.getByLabel("Hae henkilö:").fill(name);
-  await page.waitForSelector(".personform-person-option");
-  await page.locator(".personform-person-option").first().click();
+  await page.getByLabel(/^nimi$/i).fill(name);
+  await page.locator(".person-selector-option").first().click();
 }
 
 async function saveAndConfirmPerson(page: Page) {
@@ -46,7 +45,7 @@ test("person modal can be opened", async ({ page }) => {
 
 test("confirming close dismisses modal", async ({ page }) => {
   await openAddPersonModal(page);
-  await page.locator(".person-modal-close-button").click();
+  await page.getByRole("button", { name: "Sulje henkilön lisäys" }).click();
   await page.getByText("Kyllä").click();
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
@@ -55,8 +54,11 @@ test("confirming close dismisses modal", async ({ page }) => {
 
 test("cancelling close keeps modal open", async ({ page }) => {
   await openAddPersonModal(page);
-  await page.locator(".person-modal-close-button").click();
-  await page.getByText("Peruuta").click();
+  await page.getByRole("button", { name: "Sulje henkilön lisäys" }).click();
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: "Peruuta" })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).toBeVisible();
@@ -74,9 +76,7 @@ test("save button is enabled when required fields are filled", async ({
 }) => {
   await openAddPersonModal(page);
   await fillRequiredFields(page);
-  await expect(
-    page.getByRole("button", { name: "Lisää", exact: true }),
-  ).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Lisää" })).toBeEnabled();
 });
 
 test("saving opens confirmation dialog", async ({ page }) => {
@@ -106,7 +106,10 @@ test("cancelling save confirmation keeps modal open", async ({ page }) => {
     .locator(".person-modal-actions")
     .getByRole("button", { name: "Lisää", exact: true })
     .click();
-  await page.getByText("Peruuta").click();
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: "Peruuta" })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),
   ).toBeVisible();
@@ -125,10 +128,9 @@ test("searching for existing person returns matching results", async ({
   page,
 }) => {
   await openAddPersonModal(page);
-  await page.getByLabel("Hae henkilö:").fill("Ahmed Ali");
-  await page.waitForSelector(".personform-person-option");
-  await expect(page.locator(".personform-person-option")).toHaveCount(1);
-  await expect(page.locator(".personform-person-option")).toContainText(
+  await page.getByRole("textbox", { name: /^nimi$/i }).fill("Ahmed Ali");
+  await expect(page.locator(".person-selector-option")).toHaveCount(1);
+  await expect(page.locator(".person-selector-option")).toContainText(
     "Ahmed Ali",
   );
 });
@@ -138,12 +140,12 @@ test("selecting existing person populates person form fields", async ({
 }) => {
   await openAddPersonModal(page);
   await searchAndSelectExistingPerson(page, "Ahmed Ali");
-  await expect(page.getByLabel("Etunimi:")).toHaveValue("Ahmed");
-  await expect(page.getByLabel("Sukunimi:")).toHaveValue("Ali");
-  await expect(page.getByLabel("Osasto:")).toContainText("H523 CS");
-  await expect(page.getByLabel("Työnimike:")).toContainText("professori");
+  await expect(page.getByLabel("Etunimi")).toHaveValue("Ahmed");
+  await expect(page.getByLabel("Sukunimi")).toHaveValue("Ali");
+  await expect(page.getByLabel("Osasto")).toContainText("H523 CS");
+  await expect(page.getByLabel("Työnimike")).toContainText("professori");
 
-  const supervisorTag = page.locator(".personform-supervisor-tag");
+  const supervisorTag = page.locator(".person-form-supervisor");
 
   await expect(supervisorTag).toHaveCount(1);
   await expect(supervisorTag).toContainText("Päivi Koskinen");
@@ -154,16 +156,16 @@ test("existing person form fields are read-only except contract dates", async ({
 }) => {
   await openAddPersonModal(page);
   await searchAndSelectExistingPerson(page, "Ahmed Ali");
-  await expect(page.getByLabel("Etunimi:")).toBeDisabled();
-  await expect(page.getByLabel("Sukunimi:")).toBeDisabled();
-  await expect(page.getByLabel("Osasto:")).toBeDisabled();
-  await expect(page.getByLabel("Työnimike:")).toBeDisabled();
+  await expect(page.getByLabel("Etunimi")).toBeDisabled();
+  await expect(page.getByLabel("Sukunimi")).toBeDisabled();
+  await expect(page.getByLabel("Osasto")).toBeDisabled();
+  await expect(page.getByLabel("Työnimike")).toBeDisabled();
 
-  const supervisorTag = page.locator(".personform-supervisor-tag").first();
+  const supervisorTag = page.locator(".person-form-supervisor").first();
   await expect(supervisorTag.locator("button")).toBeDisabled();
 
-  await expect(page.getByLabel("Sopimuksen alku:")).toBeEnabled();
-  await expect(page.getByLabel("Sopimuksen loppu:")).toBeEnabled();
+  await expect(page.getByLabel("Sopimuksen alku")).toBeEnabled();
+  await expect(page.getByLabel("Sopimuksen loppu")).toBeEnabled();
 });
 
 test("selecting existing person enables save button", async ({ page }) => {
@@ -191,8 +193,8 @@ test("saving existing person with contract dates closes the modal and persists p
 }) => {
   await openAddPersonModal(page);
   await searchAndSelectExistingPerson(page, "Ahmed Ali");
-  await page.getByLabel("Sopimuksen alku:").fill("2025-06-01");
-  await page.getByLabel("Sopimuksen loppu:").fill("2026-06-01");
+  await page.getByLabel("Sopimuksen alku").fill("2025-06-01");
+  await page.getByLabel("Sopimuksen loppu").fill("2026-06-01");
   await saveAndConfirmPerson(page);
   await expect(
     page.getByRole("heading", { name: "Lisää henkilö" }),

@@ -47,27 +47,27 @@ describe("PersonForm", () => {
 
   it("renders without crashing", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Etunimi:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Etunimi")).toBeInTheDocument();
   });
 
   it("renders all fields", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Etunimi:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Sukunimi:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Osasto:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Työnimike:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Esihenkilö(t):")).toBeInTheDocument();
-    expect(screen.getByLabelText("Sopimuksen alku:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Sopimuksen loppu:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Tutkimusryhmä:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Muut tiedot:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Etunimi")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sukunimi")).toBeInTheDocument();
+    expect(screen.getByLabelText("Osasto")).toBeInTheDocument();
+    expect(screen.getByLabelText("Työnimike")).toBeInTheDocument();
+    expect(screen.getByLabelText("Esihenkilö(t)")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sopimuksen alku")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sopimuksen loppu")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tutkimusryhmä")).toBeInTheDocument();
+    expect(screen.getByLabelText("Muut tiedot")).toBeInTheDocument();
   });
 
   it("renders with empty fields by default", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Etunimi:")).toHaveValue("");
-    expect(screen.getByLabelText("Sukunimi:")).toHaveValue("");
-    expect(screen.getByLabelText("Osasto:")).toHaveValue("");
+    expect(screen.getByLabelText("Etunimi")).toHaveValue("");
+    expect(screen.getByLabelText("Sukunimi")).toHaveValue("");
+    expect(screen.getByLabelText("Osasto")).toHaveValue("");
   });
 
   it("renders with initial text values pre-filled", () => {
@@ -88,7 +88,7 @@ describe("PersonForm", () => {
 
   it("calls onChange with updated values when a text field changes", () => {
     render(<PersonForm {...defaultProps} />);
-    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi"), {
       target: { value: "Matti" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
@@ -101,7 +101,7 @@ describe("PersonForm", () => {
     const user = userEvent.setup();
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
 
-    const select = screen.getByLabelText("Osasto:");
+    const select = screen.getByLabelText("Osasto");
     const option = await screen.findByRole("option", { name: "HR" });
     await user.selectOptions(select, option);
 
@@ -114,10 +114,10 @@ describe("PersonForm", () => {
 
   it("reports valid when all required fields are filled", () => {
     render(<PersonForm {...defaultProps} />);
-    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi"), {
       target: { value: "Terppa" },
     });
-    fireEvent.change(screen.getByLabelText("Sukunimi:"), {
+    fireEvent.change(screen.getByLabelText("Sukunimi"), {
       target: { value: "Testaaja" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -128,7 +128,7 @@ describe("PersonForm", () => {
 
   it("reports invalid when a required field is cleared", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi"), {
       target: { value: "" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -139,7 +139,7 @@ describe("PersonForm", () => {
 
   it("reports invalid when a required field is only whitespace", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Etunimi:"), {
+    fireEvent.change(screen.getByLabelText("Etunimi"), {
       target: { value: "   " },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -150,7 +150,7 @@ describe("PersonForm", () => {
 
   it("optional fields do not affect validity", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Muut tiedot:"), {
+    fireEvent.change(screen.getByLabelText("Muut tiedot"), {
       target: { value: "" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -161,10 +161,10 @@ describe("PersonForm", () => {
 
   it("date fields accept date values", () => {
     render(<PersonForm {...defaultProps} initial={REQUIRED_INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Sopimuksen alku:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen alku"), {
       target: { value: "2025-01-01" },
     });
-    fireEvent.change(screen.getByLabelText("Sopimuksen loppu:"), {
+    fireEvent.change(screen.getByLabelText("Sopimuksen loppu"), {
       target: { value: "2026-01-01" },
     });
     expect(defaultProps.onChange).toHaveBeenLastCalledWith(
@@ -194,7 +194,7 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
   });
 
@@ -203,8 +203,8 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
-    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
+    fireEvent.change(screen.getByLabelText("Esihenkilö(t)"), {
       target: { value: "Joku" },
     });
     expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
@@ -216,7 +216,7 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.change(screen.getByLabelText("Esihenkilö(t):"), {
+    fireEvent.change(screen.getByLabelText("Esihenkilö(t)"), {
       target: { value: "zzznomatch" },
     });
     expect(screen.getByText("Ei tuloksia")).toBeInTheDocument();
@@ -227,7 +227,7 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     expect(screen.getByLabelText("Poista Joku Esihenkilö")).toBeInTheDocument();
   });
@@ -238,10 +238,10 @@ describe("PersonForm", () => {
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
     // Select
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     // Reopen and click the list item specifically to deselect
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     const listItem = screen
       .getAllByText("Joku Esihenkilö")
       .find((el) => el.tagName === "LI")!;
@@ -256,7 +256,7 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     fireEvent.click(screen.getByLabelText("Poista Joku Esihenkilö"));
     expect(
@@ -274,7 +274,7 @@ describe("PersonForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "IT" })).toBeInTheDocument(),
     );
-    fireEvent.focus(screen.getByLabelText("Esihenkilö(t):"));
+    fireEvent.focus(screen.getByLabelText("Esihenkilö(t)"));
     expect(screen.getByText("Joku Esihenkilö")).toBeInTheDocument();
     fireEvent.mouseDown(screen.getByRole("button", { name: "outside" }));
     expect(screen.queryByText("Joku Esihenkilö")).not.toBeInTheDocument();
@@ -296,12 +296,12 @@ describe("PersonForm", () => {
 
   it("shows existing person search input", () => {
     render(<PersonForm {...defaultProps} />);
-    expect(screen.getByLabelText("Hae henkilö:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Nimi")).toBeInTheDocument();
   });
 
   it("filters existing people by name when typing in search", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -312,7 +312,7 @@ describe("PersonForm", () => {
 
   it("shows 'Ei tuloksia' when search matches no people", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "zzznomatch" } });
     await waitFor(() => {
@@ -322,7 +322,7 @@ describe("PersonForm", () => {
 
   it("populates form fields when existing person is selected", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -337,7 +337,7 @@ describe("PersonForm", () => {
 
   it("disables person detail fields when existing person is selected", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -345,18 +345,18 @@ describe("PersonForm", () => {
     });
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     await waitFor(() => {
-      expect(screen.getByLabelText("Etunimi:")).toBeDisabled();
-      expect(screen.getByLabelText("Sukunimi:")).toBeDisabled();
-      expect(screen.getByLabelText("Osasto:")).toBeDisabled();
-      expect(screen.getByLabelText("Työnimike:")).toBeDisabled();
-      expect(screen.getByLabelText("Tutkimusryhmä:")).toBeDisabled();
-      expect(screen.getByLabelText("Muut tiedot:")).toBeDisabled();
+      expect(screen.getByLabelText("Etunimi")).toBeDisabled();
+      expect(screen.getByLabelText("Sukunimi")).toBeDisabled();
+      expect(screen.getByLabelText("Osasto")).toBeDisabled();
+      expect(screen.getByLabelText("Työnimike")).toBeDisabled();
+      expect(screen.getByLabelText("Tutkimusryhmä")).toBeDisabled();
+      expect(screen.getByLabelText("Muut tiedot")).toBeDisabled();
     });
   });
 
   it("keeps contract date fields editable when existing person is selected", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {
@@ -364,14 +364,14 @@ describe("PersonForm", () => {
     });
     fireEvent.click(screen.getByText("Joku Esihenkilö"));
     await waitFor(() => {
-      expect(screen.getByLabelText("Sopimuksen alku:")).not.toBeDisabled();
-      expect(screen.getByLabelText("Sopimuksen loppu:")).not.toBeDisabled();
+      expect(screen.getByLabelText("Sopimuksen alku")).not.toBeDisabled();
+      expect(screen.getByLabelText("Sopimuksen loppu")).not.toBeDisabled();
     });
   });
 
   it("clears search input after selecting a person", async () => {
     render(<PersonForm {...defaultProps} />);
-    const searchInput = screen.getByLabelText("Hae henkilö:");
+    const searchInput = screen.getByLabelText("Nimi");
     fireEvent.focus(searchInput);
     fireEvent.change(searchInput, { target: { value: "Joku" } });
     await waitFor(() => {

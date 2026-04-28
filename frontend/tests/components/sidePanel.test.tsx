@@ -150,7 +150,7 @@ describe("RoomInfo", () => {
     expect(screen.getByText("Muokkaa huonetta")).toBeInTheDocument();
     expect(screen.getByDisplayValue("15")).toBeInTheDocument();
     expect(
-      screen.getByRole("combobox", { name: "Huonetyyppi:" }),
+      screen.getByRole("combobox", { name: "Huonetyyppi" }),
     ).toBeInTheDocument();
 
     const roomModal = await screen.findByRole("dialog", {
@@ -220,9 +220,9 @@ describe("RoomPeople", () => {
       }),
     );
 
-    await user.type(screen.getByRole("textbox", { name: "Etunimi:" }), "Uusi");
+    await user.type(screen.getByRole("textbox", { name: "Etunimi" }), "Uusi");
     await user.type(
-      screen.getByRole("textbox", { name: "Sukunimi:" }),
+      screen.getByRole("textbox", { name: "Sukunimi" }),
       "Henkilö",
     );
 
@@ -253,7 +253,7 @@ describe("RoomPeople", () => {
       }),
     );
 
-    const searchInput = screen.getByRole("textbox", { name: "Hae henkilö:" });
+    const searchInput = screen.getByRole("textbox", { name: "Nimi" });
     await user.type(searchInput, "Matti");
     const listbox = await screen.findByRole("listbox");
     await user.click(
@@ -288,9 +288,9 @@ describe("RoomPeople", () => {
       }),
     );
 
-    await user.type(screen.getByRole("textbox", { name: "Etunimi:" }), "Uusi");
+    await user.type(screen.getByRole("textbox", { name: "Etunimi" }), "Uusi");
     await user.type(
-      screen.getByRole("textbox", { name: "Sukunimi:" }),
+      screen.getByRole("textbox", { name: "Sukunimi" }),
       "Henkilö",
     );
 

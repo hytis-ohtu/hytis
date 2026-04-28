@@ -82,18 +82,14 @@ describe("RoomModal", () => {
   it("shows confirmation when clicking save", async () => {
     const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    await user.click(
-      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
     expect(screen.getByText("Tallenna muutokset?")).toBeInTheDocument();
   });
 
   it("calls onSave with form data when confirming save", async () => {
     const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    await user.click(
-      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
     const dialog = screen.getByText("Tallenna muutokset?").closest("dialog")!;
     await user.click(within(dialog).getByRole("button", { name: "Tallenna" }));
     expect(defaultProps.onSave).toHaveBeenCalledWith(INITIAL);
@@ -108,7 +104,9 @@ describe("RoomModal", () => {
     const confirmation = screen
       .getByText("Sulje ilman tallennusta?")
       .closest("dialog")!;
-    await user.click(screen.getByText("Peruuta"));
+    await user.click(
+      within(confirmation).getByRole("button", { name: "Peruuta" }),
+    );
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     expect(confirmation).not.toHaveAttribute("open");
   });
@@ -116,13 +114,13 @@ describe("RoomModal", () => {
   it("cancelling save confirmation does not save or close", async () => {
     const user = userEvent.setup();
     await renderAndWait({ initial: INITIAL });
-    await user.click(
-      screen.getByText("Tallenna", { selector: ".room-modal-save-button" }),
-    );
+    await user.click(screen.getByRole("button", { name: "Tallenna" }));
     const confirmation = screen
       .getByText("Tallenna muutokset?")
       .closest("dialog")!;
-    await user.click(screen.getByText("Peruuta"));
+    await user.click(
+      within(confirmation).getByRole("button", { name: "Peruuta" }),
+    );
     expect(defaultProps.onSave).not.toHaveBeenCalled();
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     expect(confirmation).not.toHaveAttribute("open");

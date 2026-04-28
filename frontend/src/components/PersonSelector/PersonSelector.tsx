@@ -32,11 +32,11 @@ export default function PersonSelector({
   });
 
   return (
-    <div className="personform-person" ref={personRef}>
+    <div className="person-selector" ref={personRef}>
       <input
         id={inputId}
         type="text"
-        className="personform-input"
+        className="person-selector-input"
         placeholder="Hae..."
         value={personSearch}
         onFocus={onFocus}
@@ -45,14 +45,14 @@ export default function PersonSelector({
       />
 
       {(personOpen || personSearch) && (
-        <ul className="personform-person-list" role="listbox">
+        <ul className="person-selector-list" role="listbox">
           {filteredPeople.length === 0 ? (
-            <li className="personform-person-empty">Ei tuloksia</li>
+            <li className="person-selector-list-empty">Ei tuloksia</li>
           ) : (
             filteredPeople.map((person) => (
               <li
                 key={person.id}
-                className={`personform-person-option${selectedPersonIds.includes(String(person.id)) ? " selected" : ""}`}
+                className={`person-selector-option${selectedPersonIds.includes(String(person.id)) ? " selected" : ""}`}
                 role="option"
                 aria-selected={selectedPersonIds.includes(String(person.id))}
                 onClick={() => onSelect(person)}
