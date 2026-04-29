@@ -85,7 +85,7 @@ describe("peopleService", () => {
       });
     });
 
-    it("sends undefined for optional fields when they are missing", async () => {
+    it("sends null for optional fields when they are missing", async () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
@@ -93,7 +93,7 @@ describe("peopleService", () => {
         lastName: "Doe",
         misc: "",
         startDate: "2024-01-01",
-        endDate: undefined,
+        endDate: "",
       };
 
       await addPerson(values, 10);
@@ -101,13 +101,13 @@ describe("peopleService", () => {
       expect(mockedAxios.post).toHaveBeenCalledWith("/api/people", {
         firstName: "Jane",
         lastName: "Doe",
-        departmentId: undefined,
-        titleId: undefined,
-        supervisorIds: undefined,
-        researchGroupId: undefined,
-        freeText: undefined,
+        departmentId: null,
+        titleId: null,
+        supervisorIds: [],
+        researchGroupId: null,
+        freeText: null,
         startDate: "2024-01-01",
-        endDate: undefined,
+        endDate: null,
         roomId: 10,
       });
     });
@@ -165,7 +165,7 @@ describe("peopleService", () => {
       await expect(addPerson(values, 1)).rejects.toThrow("Bad request");
     });
 
-    it("maps empty optional strings to undefined", async () => {
+    it("maps empty optional strings to null", async () => {
       mockedAxios.post = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
@@ -185,13 +185,13 @@ describe("peopleService", () => {
       expect(mockedAxios.post).toHaveBeenCalledWith(expect.any(String), {
         firstName: "Jane",
         lastName: "Doe",
-        departmentId: undefined,
-        titleId: undefined,
-        supervisorIds: undefined,
-        researchGroupId: undefined,
-        freeText: undefined,
+        departmentId: null,
+        titleId: null,
+        supervisorIds: [],
+        researchGroupId: null,
+        freeText: null,
         startDate: "2024-01-01",
-        endDate: undefined,
+        endDate: null,
         roomId: 1,
       });
     });
@@ -213,7 +213,7 @@ describe("peopleService", () => {
         endDate: "2025-01-01",
       };
 
-      const result = await editPerson(42, values, "10");
+      const result = await editPerson(42, values, 10);
 
       expect(result).toEqual(mockPerson);
       expect(mockedAxios.put).toHaveBeenCalledWith("/api/people/42", {
@@ -230,7 +230,7 @@ describe("peopleService", () => {
       });
     });
 
-    it("maps empty edit fields to null or undefined as expected", async () => {
+    it("maps empty edit fields to null as expected", async () => {
       mockedAxios.put = vi.fn().mockResolvedValue({ data: mockPerson });
 
       const values = {
@@ -246,11 +246,11 @@ describe("peopleService", () => {
       expect(mockedAxios.put).toHaveBeenCalledWith("/api/people/7", {
         firstName: "Jane",
         lastName: "Doe",
-        departmentId: undefined,
-        titleId: undefined,
+        departmentId: null,
+        titleId: null,
         supervisorIds: [],
-        researchGroupId: undefined,
-        freeText: undefined,
+        researchGroupId: null,
+        freeText: null,
         startDate: null,
         endDate: null,
         roomId: 3,
