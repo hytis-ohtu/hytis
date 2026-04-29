@@ -3,71 +3,57 @@ import { Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import SettingsModal from "./SettingsModal/SettingsModal";
 import "./TopBar.css";
-import TopBarMenu from "./TopBarMenu/TopBarMenu";
+import UserMenu from "./UserMenu/UserMenu";
 
 const ROOM_LABEL_FONT_SIZE = 24;
 
-export interface TopBarAction {
-  id: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-}
-
-interface TopBarProps {
-  title?: string;
-}
-
-function TopBar({ title = "HYTiS" }: TopBarProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function TopBar() {
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [fontSize, setFontSize] = useState(
-    Number(localStorage.getItem("map-font-size")) || ROOM_LABEL_FONT_SIZE,
+    Number(localStorage.getItem("font-size-map")) || ROOM_LABEL_FONT_SIZE,
   );
 
   useEffect(() => {
     document.documentElement.style.setProperty(
-      "--map-font-size",
+      "--font-size-map",
       `${fontSize}px`,
     );
   }, [fontSize]);
 
   return (
     <header className="topbar">
-      <span className="topbar-title">{title}</span>
-      <div className="topbar-search">
-        <PersonSearch />
-      </div>
-      <div className="topbar-actions">
+      <h1>HYTiS</h1>
+      <PersonSearch />
+      <div className="topbar-buttons">
         <button
-          data-testid="topbar-settings-button"
-          className="topbar-button"
-          aria-label="Settings"
-          onClick={(e) => {
-            e.stopPropagation();
-            setSettingsOpen(true);
+          aria-label="Asetukset"
+          onClick={() => {
+            setSettingsOpen((v) => !v);
           }}
         >
-          <Settings size={24} strokeWidth={1.7} />
+          <Settings strokeWidth={1.7} />
         </button>
         <button
-          data-testid="topbar-profile-button"
-          className="topbar-button topbar-profile-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenuOpen((v) => !v);
+          aria-label="Käyttäjä"
+          onMouseDown={(event) => {
+            event.stopPropagation();
+          }}
+          onClick={() => {
+            setUserMenuOpen((v) => !v);
           }}
         >
-          <User size={24} strokeWidth={1.7} />
+          <User strokeWidth={1.7} />
         </button>
-        {settingsOpen && (
-          <SettingsModal
-            onClose={() => setSettingsOpen(false)}
-            fontSize={fontSize}
-            setFontSize={setFontSize}
-          />
-        )}
-        {menuOpen && <TopBarMenu onClose={() => setMenuOpen(false)} />}
+        {userMenuOpen && <UserMenu onClose={() => setUserMenuOpen(false)} />}
       </div>
+      {settingsOpen && (
+        <SettingsModal
+          onClose={() => setSettingsOpen(false)}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+        />
+      )}
     </header>
   );
 }
