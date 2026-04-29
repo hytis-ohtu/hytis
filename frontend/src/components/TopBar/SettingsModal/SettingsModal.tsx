@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
+import { type KeyboardEvent, useEffect, useId, useRef, useState } from "react";
 import "./SettingsModal.css";
 
 const ROOM_LABEL_FONT_SIZE_DEFAULT = 24;
@@ -25,32 +25,30 @@ function getStoredFontSize() {
 }
 
 interface SettingsModalProps {
-  isOpen: boolean;
   onClose: () => void;
 }
 
-function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+function SettingsModal({ onClose }: SettingsModalProps) {
   const [fontSize, setFontSize] = useState(getStoredFontSize);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
-  // Toggle dialog
   useEffect(() => {
-    const dialogElement = dialogRef.current;
-    if (!dialogElement) {
-      return;
-    }
+    dialogRef.current?.showModal();
+  }, []);
 
-    if (isOpen && !dialogElement.open) {
-      dialogElement.showModal();
-    }
+  const handleEscape = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleClose();
+  };
 
-    if (!isOpen && dialogElement.open) {
-      dialogElement.close();
-    }
-  }, [isOpen]);
+  const handleClose = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
 
-  // Update font size
   useEffect(() => {
     localStorage.setItem("font-size-map", String(fontSize));
     document.documentElement.style.setProperty(
@@ -63,15 +61,15 @@ function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     <dialog
       ref={dialogRef}
       className="settings-modal"
-      onClose={onClose}
       aria-labelledby={titleId}
+      onKeyDown={handleEscape}
     >
       <header>
         <h2 id={titleId}>Asetukset</h2>
         <button
           className="button icon settings-modal-close-button"
           aria-label="Sulje asetukset"
-          onClick={onClose}
+          onClick={handleClose}
         >
           <X size={16} />
         </button>

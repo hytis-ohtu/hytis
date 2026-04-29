@@ -37,10 +37,7 @@ function TopBar() {
         </button>
         {userMenuOpen && <UserMenu onClose={() => setUserMenuOpen(false)} />}
       </div>
-      <SettingsModal
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-      />
+      {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </header>
   );
 }
