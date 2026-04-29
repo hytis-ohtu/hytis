@@ -17,7 +17,7 @@ describe("SettingsModal", () => {
   });
 
   it("renders without crashing", () => {
-    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    render(<SettingsModal onClose={() => {}} />);
     expect(
       screen.getByRole("heading", { name: "Asetukset" }),
     ).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("SettingsModal", () => {
 
   it("calls onClose when close button is clicked", async () => {
     const user = userEvent.setup();
-    render(<SettingsModal isOpen={true} onClose={mockOnClose} />);
+    render(<SettingsModal onClose={mockOnClose} />);
     await user.click(screen.getByRole("button", { name: "Sulje asetukset" }));
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -35,7 +35,7 @@ describe("SettingsModal", () => {
     const getItemSpy = vi
       .spyOn(localStorage, "getItem")
       .mockImplementation((key) => (key === "font-size-map" ? "18" : null));
-    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    render(<SettingsModal onClose={() => {}} />);
     expect(screen.getByText(/Kartan tekstin fonttikoko:/i)).toHaveTextContent(
       "18",
     );
@@ -43,7 +43,7 @@ describe("SettingsModal", () => {
   });
 
   it("updates the label when the range input value changes", () => {
-    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    render(<SettingsModal onClose={() => {}} />);
     const rangeInput = screen.getByRole("slider", {
       name: /Kartan tekstin fonttikoko:/i,
     });
@@ -58,7 +58,7 @@ describe("SettingsModal", () => {
       .spyOn(localStorage, "setItem")
       .mockImplementation(() => undefined);
 
-    render(<SettingsModal isOpen={true} onClose={() => {}} />);
+    render(<SettingsModal onClose={() => {}} />);
     const rangeInput = screen.getByRole("slider", {
       name: /Kartan tekstin fonttikoko:/i,
     });
