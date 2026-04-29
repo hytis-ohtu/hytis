@@ -50,16 +50,25 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: ["**/demo.spec.ts"],
     },
 
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
+      testIgnore: ["**/demo.spec.ts"],
     },
 
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
+      testIgnore: ["**/demo.spec.ts"],
+    },
+
+    {
+      name: "demo",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: ["**/demo.spec.ts"],
     },
 
     /* Test against mobile viewports. */

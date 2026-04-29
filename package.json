@@ -16,6 +16,7 @@
     "preview:frontend": "npm run preview --prefix frontend",
     "test:e2e": "playwright test",
     "test:e2e-report": "playwright show-report",
+    "test:e2e:demo": "playwright test --project=demo",
     "test:backend": "npm run test --prefix backend",
     "coverage:backend": "npm run coverage --prefix backend",
     "test:frontend": "npm run test --prefix frontend",
