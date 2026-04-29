@@ -1,35 +1,21 @@
+import {
+  applyMapFontSize,
+  getMapFontSize,
+  setMapFontSize,
+} from "@utils/mapFontSize";
 import { X } from "lucide-react";
 import { type KeyboardEvent, useEffect, useId, useRef, useState } from "react";
 import "./SettingsModal.css";
 
-const ROOM_LABEL_FONT_SIZE_DEFAULT = 24;
 const ROOM_LABEL_FONT_SIZE_MIN = 10;
 const ROOM_LABEL_FONT_SIZE_MAX = 32;
-
-function getStoredFontSize() {
-  try {
-    const storedValue = localStorage.getItem("font-size-map");
-    if (!storedValue) {
-      return ROOM_LABEL_FONT_SIZE_DEFAULT;
-    }
-
-    const parsedValue = Number(storedValue);
-    if (Number.isNaN(parsedValue)) {
-      return ROOM_LABEL_FONT_SIZE_DEFAULT;
-    }
-
-    return parsedValue;
-  } catch {
-    return ROOM_LABEL_FONT_SIZE_DEFAULT;
-  }
-}
 
 interface SettingsModalProps {
   onClose: () => void;
 }
 
 function SettingsModal({ onClose }: SettingsModalProps) {
-  const [fontSize, setFontSize] = useState(getStoredFontSize);
+  const [fontSize, setFontSize] = useState(getMapFontSize);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -50,11 +36,8 @@ function SettingsModal({ onClose }: SettingsModalProps) {
   };
 
   useEffect(() => {
-    localStorage.setItem("font-size-map", String(fontSize));
-    document.documentElement.style.setProperty(
-      "--font-size-map",
-      `${fontSize}px`,
-    );
+    setMapFontSize(fontSize);
+    applyMapFontSize(fontSize);
   }, [fontSize]);
 
   return (
