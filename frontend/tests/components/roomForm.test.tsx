@@ -33,22 +33,22 @@ describe("RoomForm", () => {
 
   it("renders without crashing", () => {
     render(<RoomForm {...defaultProps} />);
-    expect(screen.getByLabelText("Kapasiteetti:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Kapasiteetti")).toBeInTheDocument();
   });
 
   it("renders all fields", () => {
     render(<RoomForm {...defaultProps} />);
-    expect(screen.getByLabelText("Kapasiteetti:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Huonetyyppi:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Osasto:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Lisätiedot:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Kapasiteetti")).toBeInTheDocument();
+    expect(screen.getByLabelText("Huonetyyppi")).toBeInTheDocument();
+    expect(screen.getByLabelText("Osasto")).toBeInTheDocument();
+    expect(screen.getByLabelText("Lisätiedot")).toBeInTheDocument();
   });
 
   it("renders with empty fields by default", () => {
     render(<RoomForm {...defaultProps} />);
-    expect(screen.getByLabelText("Kapasiteetti:")).toHaveValue(null);
-    expect(screen.getByLabelText("Huonetyyppi:")).toHaveValue("");
-    expect(screen.getByLabelText("Osasto:")).toHaveValue("");
+    expect(screen.getByLabelText("Kapasiteetti")).toHaveValue(null);
+    expect(screen.getByLabelText("Huonetyyppi")).toHaveValue("");
+    expect(screen.getByLabelText("Osasto")).toHaveValue("");
   });
 
   it("renders with initial values pre-filled", async () => {
@@ -77,7 +77,7 @@ describe("RoomForm", () => {
 
   it("calls onChange with updated value when capacity changes", () => {
     render(<RoomForm {...defaultProps} initial={INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Kapasiteetti:"), {
+    fireEvent.change(screen.getByLabelText("Kapasiteetti"), {
       target: { value: "20" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
@@ -93,7 +93,7 @@ describe("RoomForm", () => {
         screen.getByRole("option", { name: "Konferenssihuone" }),
       ).toBeInTheDocument(),
     );
-    fireEvent.change(screen.getByLabelText("Huonetyyppi:"), {
+    fireEvent.change(screen.getByLabelText("Huonetyyppi"), {
       target: { value: "2" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
@@ -104,7 +104,7 @@ describe("RoomForm", () => {
 
   it("calls onChange with updated value when freeText changes", () => {
     render(<RoomForm {...defaultProps} initial={INITIAL} />);
-    fireEvent.change(screen.getByLabelText("Lisätiedot:"), {
+    fireEvent.change(screen.getByLabelText("Lisätiedot"), {
       target: { value: "Uusi teksti" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(
@@ -126,7 +126,7 @@ describe("RoomForm", () => {
     await waitFor(() =>
       expect(screen.getByRole("option", { name: "HR" })).toBeInTheDocument(),
     );
-    fireEvent.change(screen.getByLabelText("Osasto:"), {
+    fireEvent.change(screen.getByLabelText("Osasto"), {
       target: { value: "2" },
     });
     expect(defaultProps.onChange).toHaveBeenCalledWith(

@@ -1,22 +1,43 @@
 import ConfirmationDialog from "@components/ConfirmationDialog/ConfirmationDialog";
 import { X } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import RoomForm from "./RoomForm/RoomForm";
 import "./RoomModal.css";
 
 interface RoomModalProps {
+  onSave: (values: Record<string, string>) => Promise<void>;
   onClose: () => void;
-  onSubmit?: (values: Record<string, string>) => void;
   initial: Record<string, string>;
 }
 
-function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
+function RoomModal({ onSave, onClose, initial }: RoomModalProps) {
   const formDataRef = useRef<Record<string, string>>({ ...initial });
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
   const [isValid, setIsValid] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<"save" | "close" | null>(
     null,
   );
+
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const handleEscape = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Escape") return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    requestClose();
+  };
 
   const handleFormChange = useCallback(
     (values: Record<string, string>, valid: boolean) => {
@@ -26,11 +47,22 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
     [],
   );
 
-  const handleSave = () => {
-    onSubmit?.(formDataRef.current);
+  const handleSave = async () => {
+    await onSave(formDataRef.current);
+  };
+
+  const handleClose = () => {
+    dialogRef.current?.close();
     onClose();
   };
 
+  const handleClick = (e: React.PointerEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) {
+      requestClose();
+    }
+  };
+
+  // Open confirm dialog
   const requestSave = () => {
     setConfirmAction("save");
     setConfirmOpen(true);
@@ -40,43 +72,61 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
     setConfirmOpen(true);
   };
 
-  const handleConfirm = () => {
+  // Handle confirm dialog
+  const handleConfirmConfirm = async () => {
     setConfirmOpen(false);
-    if (confirmAction === "save") handleSave();
-    if (confirmAction === "close") onClose();
+    if (confirmAction === "save") {
+      try {
+        await handleSave();
+        handleClose();
+      } catch (error) {
+        console.error("Failed to save room:", error);
+      }
+    }
+    if (confirmAction === "close") handleClose();
     setConfirmAction(null);
   };
-  const handleCancel = () => {
+  const handleConfirmClose = () => {
     setConfirmOpen(false);
     setConfirmAction(null);
   };
 
   return (
-    <div className="roommodal-overlay" onClick={requestClose}>
-      <div className="roommodal-content" onClick={(e) => e.stopPropagation()}>
-        <button
-          className="roommodal-close-button"
-          aria-label="Sulje huoneen tietojen muokkaus"
-          onClick={requestClose}
-        >
-          <X size={16} />
-        </button>
-        <h2 className="roommodal-title">Muokkaa huonetta</h2>
+    <dialog
+      ref={dialogRef}
+      className="room-modal"
+      aria-labelledby={titleId}
+      onKeyDown={handleEscape}
+      onClick={handleClick}
+    >
+      <div className="room-modal-content">
+        <header>
+          <h2 id={titleId} className="room-modal-title">
+            Muokkaa huonetta
+          </h2>
+          <button
+            className="button icon"
+            aria-label="Sulje huoneen tietojen muokkaus"
+            onClick={requestClose}
+          >
+            <X size={20} />
+          </button>
+        </header>
 
         <RoomForm onChange={handleFormChange} initial={initial} />
 
-        <div className="roommodal-actions">
-          <button
-            className="roommodal-save-button"
-            onClick={requestSave}
-            disabled={!isValid}
-          >
+        <div className="room-modal-actions">
+          <button className="button" onClick={requestSave} disabled={!isValid}>
             Tallenna
           </button>
+          <button className="button" onClick={requestClose}>
+            Peruuta
+          </button>
         </div>
+      </div>
 
+      {confirmOpen && (
         <ConfirmationDialog
-          open={confirmOpen}
           title={
             confirmAction === "save"
               ? "Tallenna muutokset?"
@@ -84,11 +134,11 @@ function RoomModal({ onClose, onSubmit, initial }: RoomModalProps) {
           }
           confirmText={confirmAction === "save" ? "Tallenna" : "Kyllä"}
           cancelText="Peruuta"
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          onConfirm={() => void handleConfirmConfirm()}
+          onClose={handleConfirmClose}
         />
-      </div>
-    </div>
+      )}
+    </dialog>
   );
 }
 

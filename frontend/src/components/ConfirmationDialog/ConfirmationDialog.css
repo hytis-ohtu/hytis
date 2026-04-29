@@ -1,61 +1,29 @@
-.confirmation-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-  display: grid;
-  place-items: center;
-}
-
-.confirmation-modal {
-  position: relative;
+.confirmation-dialog {
+  min-width: 250px;
   background: var(--color-background);
-  border: 1px solid var(--color-secondary);
-  border-radius: var(--border-radius-md);
-  padding: var(--gap);
-  min-width: 280px;
+  border: var(--border-md);
+  padding: 0.5rem;
   box-shadow: var(--box-shadow);
+
+  &[open] {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+  }
 }
 
-.confirmation-title {
-  color: var(--color-text-black);
-  font-size: 24px;
-  margin-bottom: var(--gap);
-  margin-right: 20px;
-  text-align: center;
+.confirmation-dialog > h2 {
+  font-weight: 500;
 }
 
 .confirmation-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  margin-top: var(--gap);
-}
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 
-.confirmation-button {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: var(--color-primary);
-  color: var(--color-text-white);
-  text-align: center;
-  cursor: pointer;
-  border-radius: var(--border-radius-md);
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.confirmation-button:hover {
-  background: var(--color-muted);
-  color: var(--color-primary);
-}
-
-.confirmation-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
+  & > .button:disabled {
+    background-color: var(--color-muted);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
