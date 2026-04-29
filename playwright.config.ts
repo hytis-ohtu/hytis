@@ -1,4 +1,13 @@
+/// <reference types="node" />
 import { defineConfig, devices } from "@playwright/test";
+
+const demoTestIgnore = ["**/demo.spec.ts"];
+
+const browserProjects = [
+  ["chromium", devices["Desktop Chrome"]],
+  ["firefox", devices["Desktop Firefox"]],
+  ["webkit", devices["Desktop Safari"]],
+] as const;
 
 export default defineConfig({
   webServer: [
@@ -47,23 +56,11 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-      testIgnore: ["**/demo.spec.ts"],
-    },
-
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-      testIgnore: ["**/demo.spec.ts"],
-    },
-
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-      testIgnore: ["**/demo.spec.ts"],
-    },
+    ...browserProjects.map(([name, use]) => ({
+      name,
+      use,
+      testIgnore: demoTestIgnore,
+    })),
 
     {
       name: "demo",
