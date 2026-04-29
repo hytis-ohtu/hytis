@@ -9,14 +9,14 @@ function ZoomButtons({ onZoom }: ZoomButtonsProps) {
   return (
     <div className="zoom-buttons">
       <button
-        className="button-icon"
+        className="button icon"
         aria-label="Suurenna"
         onClick={() => onZoom(true)}
       >
         <Plus size={20} />
       </button>
       <button
-        className="button-icon"
+        className="button icon"
         aria-label="Loitonna"
         onClick={() => onZoom(false)}
       >

@@ -1,48 +1,33 @@
-.settings-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: grid;
-  place-items: center;
+.settings-modal {
+  min-width: 300px;
+  gap: 0.5rem;
+  background: var(--color-background);
+  border: var(--border-md);
+  padding: var(--gap);
+  box-shadow: var(--box-shadow);
   z-index: 2;
 }
 
-.settings-modal {
-  position: relative;
-  background: var(--color-background);
-  border: var(--border-sm);
-  border-radius: var(--border-radius-md);
-  padding: var(--gap);
-  min-width: 280px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+.settings-modal[open] {
+  display: grid;
 }
 
-.settings-modal-title {
-  color: var(--color-text-black);
-  font-size: 16px;
-  margin-bottom: var(--gap);
-  margin-right: 20px;
-}
-
-.settings-modal-row {
+.settings-modal > header {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: var(--color-text-black);
-  font-size: 14px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-modal > header > h2 {
+  font-weight: 500;
 }
 
 .settings-modal-close-button {
-  padding: 4px;
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: transparent;
-  border: none;
-  color: var(--color-text-black);
-  cursor: pointer;
+  aspect-ratio: 1;
+  height: 100%;
 }
 
-.settings-modal-close-button:hover {
-  color: var(--color-primary);
+.settings-entry {
+  display: grid;
+  gap: 0.5rem;
 }

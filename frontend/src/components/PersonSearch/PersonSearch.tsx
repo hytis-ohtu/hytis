@@ -124,7 +124,6 @@ function PersonSearch() {
 
         <div className="person-search-type">
           <button
-            type="button"
             aria-label="Hakutyyppi"
             aria-haspopup="menu"
             aria-expanded={isTypeMenuOpen}
@@ -172,7 +171,7 @@ function PersonSearch() {
               }`}
             </p>
             <button
-              className="button-icon person-search-close"
+              className="button icon person-search-close"
               aria-label="Sulje hakutulokset"
               onClick={() => setIsResultsVisible(false)}
             >

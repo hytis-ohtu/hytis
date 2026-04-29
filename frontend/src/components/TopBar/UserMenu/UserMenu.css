@@ -18,14 +18,3 @@
   place-items: center;
   gap: 0.5rem;
 }
-
-.button-logout {
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  border: var(--border-md);
-  background: var(--color-primary);
-  cursor: pointer;
-}

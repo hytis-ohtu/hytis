@@ -18,15 +18,15 @@ interface FieldDef {
 const FIELDS: FieldDef[] = [
   {
     id: "capacity",
-    label: "Kapasiteetti:",
+    label: "Kapasiteetti",
     type: "number",
     required: true,
     min: 1,
     step: "1",
   },
-  { id: "roomType", label: "Huonetyyppi:", type: "select", required: true },
-  { id: "department", label: "Osasto:", type: "select", required: true },
-  { id: "freeText", label: "Lisätiedot:", type: "text", required: false },
+  { id: "roomType", label: "Huonetyyppi", type: "select", required: true },
+  { id: "department", label: "Osasto", type: "select", required: true },
+  { id: "freeText", label: "Lisätiedot", type: "text", required: false },
 ];
 
 interface SelectOptions {
@@ -50,10 +50,7 @@ function RoomForm({ initial, onChange }: RoomFormProps) {
   });
 
   useEffect(() => {
-    Promise.all([
-      findAllDepartments(),
-      findAllRoomTypes(), // Add this
-    ])
+    Promise.all([findAllDepartments(), findAllRoomTypes()])
       .then(([departments, roomTypes]) =>
         setOptions({ department: departments, roomType: roomTypes }),
       )
@@ -74,46 +71,42 @@ function RoomForm({ initial, onChange }: RoomFormProps) {
   };
 
   return (
-    <div className="roomform-container">
-      <div className="roomform-form">
-        {FIELDS.map(({ id, label, type, required, min, step }) => (
-          <div key={id} className="roomform-field">
-            <label className="roomform-label" htmlFor={id}>
-              {label}
-            </label>
-            {type === "select" ? (
-              <select
-                id={id}
-                name={id}
-                value={values[id] ?? ""}
-                onChange={handleChange}
-                required={required}
-                className="roomform-input"
-              >
-                <option value=""> Valitse </option>
-                {options[id as keyof SelectOptions].map((item) => (
-                  <option key={item.id} value={String(item.id)}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                id={id}
-                name={id}
-                type={type}
-                value={values[id] ?? ""}
-                onChange={handleChange}
-                required={required}
-                className="roomform-input"
-                {...(min !== undefined && { min })}
-                {...(step !== undefined && { step })}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+    <form className="room-form">
+      {FIELDS.map(({ id, label, type, required, min, step }) => (
+        <div key={id} className="room-form-entry">
+          <label htmlFor={id}>{label}</label>
+          {type === "select" ? (
+            <select
+              id={id}
+              name={id}
+              value={values[id] ?? ""}
+              onChange={handleChange}
+              required={required}
+              className="room-form-input"
+            >
+              <option value="">Valitse</option>
+              {options[id as keyof SelectOptions].map((option) => (
+                <option key={option.id} value={String(option.id)}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              id={id}
+              name={id}
+              type={type}
+              value={values[id] ?? ""}
+              onChange={handleChange}
+              required={required}
+              className="room-form-input"
+              {...(min !== undefined && { min })}
+              {...(step !== undefined && { step })}
+            />
+          )}
+        </div>
+      ))}
+    </form>
   );
 }
 

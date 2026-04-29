@@ -110,9 +110,13 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
     seenExpandReqId = expandReq.reqId;
   }, [activeRoom?.contracts, expandReq, state.contractsCollapsed]);
 
+  const handlePersonModalClose = () => {
+    dispatch({ type: "close-person-modal" });
+  };
+
   const submitPerson = async (values: Record<string, string>) => {
     if (!activeRoomId) {
-      return new Error("No active room selected");
+      throw new Error("No room selected");
     }
 
     try {
@@ -128,20 +132,16 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
       } else {
         await addPerson(values, activeRoomId);
       }
-
-      dispatch({ type: "close-person-modal" });
-      void onRoomUpdate();
-      void selectRoom(activeRoomId);
     } catch (error) {
       console.error(
         state.activePerson ? "Failed to edit person:" : "Failed to add person:",
         error,
       );
+      throw error;
     }
-  };
 
-  const handlePersonSubmit = (values: Record<string, string>) => {
-    void submitPerson(values);
+    void onRoomUpdate();
+    void selectRoom(activeRoomId);
   };
 
   const handleRemoveContract = async () => {
@@ -178,7 +178,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
           )}
         </h2>
         <button
-          className="button-icon"
+          className="button icon"
           onClick={() => dispatch({ type: "toggle-contracts" })}
           aria-label={
             state.contractsCollapsed
@@ -196,7 +196,7 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
           />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Sijoita henkilö huoneeseen"
           onClick={() => dispatch({ type: "open-add-person" })}
         >
@@ -249,10 +249,8 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
       {/* Person Modal */}
       {state.addPersonOpen && (
         <PersonModal
-          onClose={() => {
-            dispatch({ type: "close-person-modal" });
-          }}
-          onSubmit={handlePersonSubmit}
+          onSave={submitPerson}
+          onClose={handlePersonModalClose}
           initial={
             state.activePerson
               ? {
@@ -282,14 +280,16 @@ function RoomPeople({ onRoomUpdate }: RoomPeopleProps) {
       )}
 
       {/* Confirmation Button */}
-      <ConfirmationDialog
-        open={state.contractToRemove !== null}
-        title={`Poista ${state.contractToRemove?.person.firstName} ${state.contractToRemove?.person.lastName}?`}
-        confirmText="Poista"
-        cancelText="Peruuta"
-        onConfirm={() => void handleRemoveContract()}
-        onCancel={() => dispatch({ type: "cancel-remove-contract" })}
-      />
+
+      {state.contractToRemove && (
+        <ConfirmationDialog
+          title={`Poista ${state.contractToRemove?.person.firstName} ${state.contractToRemove?.person.lastName}?`}
+          confirmText="Poista"
+          cancelText="Peruuta"
+          onConfirm={() => void handleRemoveContract()}
+          onClose={() => dispatch({ type: "cancel-remove-contract" })}
+        />
+      )}
     </section>
   );
 }
