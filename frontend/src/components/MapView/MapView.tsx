@@ -3,8 +3,9 @@ import SidePanel from "@components/Sidepanel/SidePanel";
 import { useMapTransform } from "@hooks/useMapTransform";
 import { useRoomProperties } from "@hooks/useRoomProperties";
 import { useRoomSelection } from "@hooks/useRoomSelection";
+import { applyMapFontSize, getMapFontSize } from "@utils/mapFontSize";
 import { AnimatePresence } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import ColorToggle from "./ColorToggle/ColorToggle";
 import Legend from "./Legend/Legend";
 import "./MapView.css";
@@ -17,6 +18,11 @@ function MapView() {
   const { useAvailability, setUseAvailability, onRoomUpdate } =
     useRoomProperties();
   const { activeRoom, selectRoom, activeRoomId } = useRoomSelection();
+
+  useLayoutEffect(() => {
+    const fontSize = getMapFontSize();
+    applyMapFontSize(fontSize);
+  }, []);
 
   useEffect(() => {
     const roomPaths = document.querySelectorAll("path[data-room]");
