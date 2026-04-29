@@ -33,7 +33,7 @@ export async function searchPeople(
 
 const buildPersonPayload = (
   values: Record<string, string | undefined>,
-  roomId: string | number,
+  roomId: number,
 ) => ({
   firstName: values.firstName,
   lastName: values.lastName,
