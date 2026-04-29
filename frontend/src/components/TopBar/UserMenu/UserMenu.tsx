@@ -26,14 +26,14 @@ function UserMenu({ onClose }: UserMenuProps) {
       <header>
         <h2>{user ? user.name : "Ei käyttäjää"}</h2>
         <button
-          className="button-icon button-close"
+          className="button icon button-close"
           aria-label="Sulje käyttäjävalikko"
           onClick={onClose}
         >
           <X size={20} />
         </button>
       </header>
-      <button className="button-logout" onClick={() => void logout()}>
+      <button className="button combined" onClick={() => void logout()}>
         <LogOut size={20} />
         Kirjaudu ulos
       </button>

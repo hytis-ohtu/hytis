@@ -30,19 +30,15 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
 
   const toggleDetails = () => setDetailsCollapsed((previous) => !previous);
 
-  const handleEditRoom = async (values: Record<string, string>) => {
-    if (roomId == null) return;
-    try {
-      await editRoom(roomId, values);
-      void onRoomUpdate();
-      void selectRoom(roomId);
-    } catch (error) {
-      console.error("Failed to edit room:", error);
-    }
+  const handleEditRoomClose = () => {
+    setEditRoomOpen(false);
   };
 
-  const submitEditRoom = (values: Record<string, string>) => {
-    void handleEditRoom(values);
+  const handleEditRoomSave = async (values: Record<string, string>) => {
+    if (roomId == null) return;
+    await editRoom(roomId, values);
+    void onRoomUpdate();
+    void selectRoom(roomId);
   };
 
   return (
@@ -60,7 +56,7 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
           })}
         </h2>
         <button
-          className="button-icon"
+          className="button icon"
           onClick={toggleDetails}
           aria-label={
             detailsCollapsed ? "Avaa huoneen tiedot" : "Sulje huoneen tiedot"
@@ -74,14 +70,14 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
           />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Muokkaa huoneen tietoja"
           onClick={() => setEditRoomOpen(true)}
         >
           <SquarePen />
         </button>
         <button
-          className="button-icon"
+          className="button icon"
           aria-label="Sulje huone"
           onClick={() => void selectRoom(null)}
         >
@@ -153,8 +149,8 @@ function RoomInfo({ onRoomUpdate }: RoomInfoProps) {
       {/* Edit Room Modal */}
       {editRoomOpen && isLoaded && (
         <RoomModal
-          onClose={() => setEditRoomOpen(false)}
-          onSubmit={submitEditRoom}
+          onClose={handleEditRoomClose}
+          onSave={handleEditRoomSave}
           initial={{
             capacity: String(activeRoom.capacity ?? ""),
             roomType: String(activeRoom.roomType?.id ?? ""),

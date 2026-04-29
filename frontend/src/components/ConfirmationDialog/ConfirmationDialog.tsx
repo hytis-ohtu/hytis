@@ -1,40 +1,64 @@
+import { type KeyboardEvent, useEffect, useId, useRef } from "react";
 import "./ConfirmationDialog.css";
 
 interface ConfirmDialogProps {
-  open: boolean;
   title?: string;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
-  onCancel: () => void;
+  onClose: () => void;
 }
+
 export default function ConfirmDialog({
-  open,
   title = "Oletko varma?",
   confirmText = "Kyllä",
   cancelText = "Ei",
   onConfirm,
-  onCancel,
+  onClose,
 }: ConfirmDialogProps) {
-  if (!open) return null;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const handleEscape = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Escape") return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleCancel();
+  };
+
+  const handleCancel = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
+
+  const handleConfirm = () => {
+    dialogRef.current?.close();
+    onConfirm();
+  };
+
   return (
-    <div className="confirmation-overlay" onClick={onCancel}>
-      <div
-        className="confirmation-modal"
-        role="alertdialog"
-        aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2 className="confirmation-title">{title}</h2>
-        <div className="confirmation-buttons">
-          <button className="confirmation-button" onClick={onConfirm}>
-            {confirmText}
-          </button>
-          <button className="confirmation-button" onClick={onCancel}>
-            {cancelText}
-          </button>
-        </div>
+    <dialog
+      ref={dialogRef}
+      className="confirmation-dialog"
+      role="alertdialog"
+      aria-labelledby={titleId}
+      onKeyDown={handleEscape}
+    >
+      <h2 id={titleId} className="confirmation-title">
+        {title}
+      </h2>
+      <div className="confirmation-buttons">
+        <button className="button" onClick={handleConfirm}>
+          {confirmText}
+        </button>
+        <button className="button" onClick={handleCancel}>
+          {cancelText}
+        </button>
       </div>
-    </div>
+    </dialog>
   );
 }

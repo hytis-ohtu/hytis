@@ -6,10 +6,10 @@
   box-shadow: var(--box-shadow);
 }
 
-.zoom-buttons button {
+.zoom-buttons .button.icon {
   padding: 0.25rem 0.5rem;
 }
 
-.zoom-buttons button:first-of-type {
+.zoom-buttons .button.icon:first-of-type {
   border-right: 2px solid var(--color-text-black);
 }
